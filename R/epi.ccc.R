@@ -1,0 +1,59 @@
+epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
+   
+   N. <- 1 - ((1 - conf.level) / 2)
+   zv <- qnorm(N., mean = 0, sd = 1)
+   lower <- "lower"
+   upper <- "upper"
+
+   k <- length(y)
+   yb <- mean(y)
+   sy2 <- var(y) * (k - 1) / k
+   sd1 <- sd(y)
+
+   xb <- mean(x)
+   sx2 <- var(x) * (k - 1) / k
+   sd2 <- sd(x)
+
+   r <- cor(x, y)
+   sl <- r * sd1 / sd2
+
+   sxy <- r * sqrt(sx2 * sy2)
+   p <- 2 * sxy / (sx2 + sy2 + (yb - xb)^2)
+
+   delta <- (y - x)
+   mean <- apply(cbind(x, y), MARGIN = 1, FUN = mean)
+   blalt <- as.data.frame(cbind(mean, delta))
+
+   # Scale shift:
+   v <- sd1 / sd2
+   # Location shift:
+   u <- (yb - xb) / (sx2 * sy2)^0.25
+   # Accuracy:
+   C.b <- 1 / (((v + 1) / (v + u^2)) / 2)
+  
+   # Variance, test, and CI for asymptotic normal approximation (per Lin (March 2000) Biometrics 56:325-5):
+   sep = sqrt(((1 - ((r)^2)) * (p)^2 * (1 - ((p)^2)) / (r)^2 + (2 * (p)^3 * (1 - p) * (u)^2 / r) - 0.5 * (p)^4 * (u)^4 / (r)^2 ) / (k - 2))
+   ll = p - zv * sep
+   ul = p + zv * sep
+        
+   # Statistic, variance, test, and CI for inverse hyperbolic tangent transform to improve asymptotic normality:
+   t <- log((1 + p) / (1 - p)) / 2
+   set = sep / (1 - ((p)^2))
+   llt = t - zv * set
+   ult = t + zv * set
+   llt = (exp(2 * llt) - 1) / (exp(2 * llt) + 1)
+   ult = (exp(2 * ult) - 1) / (exp(2 * ult) + 1)
+   
+   if(ci == "asymptotic"){
+      rho.c <- as.data.frame(cbind(p, ll, ul))
+      names(rho.c) <- c("est", lower, upper)
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, acc = C.b, blalt = blalt)  
+   }
+   
+   else if(ci == "z-transform"){
+      rho.c <- as.data.frame(cbind(p, llt, ult))
+      names(rho.c) <- c("est", lower, upper)
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, acc = C.b, blalt = blalt)
+      }
+   return(rval)
+} 
