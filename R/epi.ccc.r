@@ -26,10 +26,13 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
 
    # Scale shift:
    v <- sd1 / sd2
-   # Location shift:
-   u <- (yb - xb) / (sx2 * sy2)^0.25
-   # Accuracy:
-   C.b <- 1 / (((v + 1) / (v + u^2)) / 2)
+   # Location shift relative to the scale:
+   u <- (yb - xb) / ((sx2 * sy2)^0.25)
+   # Variable C.b is a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees (a measure of accuracy). No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989 page 258).
+   # C.b <- (((v + 1) / (v + u^2)) / 2)^-1
+   
+   # The following taken from the Stata code for function "concord" (changed 290408):
+   C.b <- p / r
   
    # Variance, test, and CI for asymptotic normal approximation (per Lin (March 2000) Biometrics 56:325-5):
    sep = sqrt(((1 - ((r)^2)) * (p)^2 * (1 - ((p)^2)) / (r)^2 + (2 * (p)^3 * (1 - p) * (u)^2 / r) - 0.5 * (p)^4 * (u)^4 / (r)^2 ) / (k - 2))
@@ -47,13 +50,13 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
    if(ci == "asymptotic"){
       rho.c <- as.data.frame(cbind(p, ll, ul))
       names(rho.c) <- c("est", lower, upper)
-      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, acc = C.b, blalt = blalt)  
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt)  
    }
    
    else if(ci == "z-transform"){
       rho.c <- as.data.frame(cbind(p, llt, ult))
       names(rho.c) <- c("est", lower, upper)
-      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, acc = C.b, blalt = blalt)
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt)
       }
    return(rval)
 } 

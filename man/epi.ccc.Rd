@@ -31,7 +31,7 @@ A list containing the following:
   \item{rho.c}{the concordance correlation coefficient.}
   \item{s.shift}{the scale shift.}
   \item{l.shift}{the location shift.}
-  \item{acc}{the accuracy.}
+  \item{C.b}{a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees. No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page 258).}
   \item{blalt}{a data frame with two columns: \code{mean} the mean of each pair of measurements, \code{delta} vector \code{y} minus vector \code{x}.}
 }
 
