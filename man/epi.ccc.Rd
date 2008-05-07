@@ -42,6 +42,8 @@ A list containing the following:
 }
 
 \references{
+Bland J, Altman D (1986). Statistical methods for assessing agreement between two methods of clinical measurement. The Lancet 327: 307 - 310.
+
 Bradley E, Blackwood L (1989). Comparing paired data: a simultaneous test for means and variances. American Statistician 43: 234 - 235.
 
 Dunn G (2004). Statistical Evaluation of Measurement Errors: Design and Analysis of Reliability Studies. London: Arnold.
@@ -88,26 +90,26 @@ legend(x = -0.2, y = 4.75, legend = c("Line of perfect concordance",
    "Reduced major axis"), lty = c(2,1), lwd = c(1,1), bty = "n")
 text(x = 1.55, y = 3.8, labels = lab)
 
-## Bland and Altman plot:
+## Bland and Altman plot (Figure 2 from Bland and Altman 1986):
 x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
    478,178,423,427)
-y <- c(490,397,512,401,470,611,415,431,638,429,420,633,275,
-   492,165,372,421)
+
+y <- c(512,430,520,428,500,600,364,380,658,445,432,626,260,
+   477,259,350,451)
 
 tmp.ccc <- epi.ccc(x, y, ci = "z-transform", conf.level = 0.95)
-mean <- mean(tmp.ccc$blalt$delta)
-sd <- sqrt(var(tmp.ccc$blalt$delta))
+tmp.mean <- mean(tmp.ccc$blalt$delta)
+tmp.sd <- sqrt(var(tmp.ccc$blalt$delta))
 
-xlim <- c(min(tmp.ccc$blalt$mean), max(tmp.ccc$blalt$mean))
-ylim <- c(-100, 100)
-
-plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16, xlab = "Mean", 
-   ylab = "Difference", xlim = xlim, ylim = ylim) 
-abline(h = mean, lty = 1)
-abline(h = mean - (2 * sd), lty = 2)
-abline(h = mean + (2 * sd), lty = 2)
-legend(x = 200, y = 100, legend = c("Difference"), pch = 16, bty = "n")
-legend(x = 180, y = 90, legend = c("Mean difference", 
+plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16, 
+   xlab = "Average PEFR by two meters (L/min)", 
+   ylab = "Difference in PEFR (L/min)", xlim = c(0,800), 
+   ylim = c(-140,140)) 
+abline(h = tmp.mean, lty = 1)
+abline(h = tmp.mean - (2 * tmp.sd), lty = 2)
+abline(h = tmp.mean + (2 * tmp.sd), lty = 2)
+legend(x = 505, y = 125, legend = c("Difference"), pch = 16, bty = "n")
+legend(x = "topright", legend = c("Mean difference", 
    "Mean difference +/ 2SD"), lty = c(1,2), bty = "n")
 }
 
