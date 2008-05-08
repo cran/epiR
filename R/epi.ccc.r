@@ -20,7 +20,7 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
    sxy <- r * sqrt(sx2 * sy2)
    p <- 2 * sxy / (sx2 + sy2 + (yb - xb)^2)
 
-   delta <- (y - x)
+   delta <- (x - y)
    mean <- apply(cbind(x, y), MARGIN = 1, FUN = mean)
    blalt <- as.data.frame(cbind(mean, delta))
 
