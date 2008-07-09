@@ -51,6 +51,8 @@ When method equals \code{cohort.time} the following measures of association are 
 When method equals \code{case.control} the following measures of association are returned: odds ratio, attributable risk, and estimated attributable fraction, population attributable risk, estimated population attributable fraction.
 
 When method equals \code{cross.sectional} the following measures of association are returned: incidence risk ratio, odds ratio, attributable risk, attributable fraction, population attributable risk, and population attributable fraction.
+
+When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.summary}). \code{chisq} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.summary} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. The chi-squared test of homogeneity (e.g. \code{OR.homogeneity}) provides a test of homogeneity of the strata-level measures of association.
 }
 
 \references{
@@ -91,7 +93,7 @@ Point estimates and confidence intervals for the summary incidence risk ratio, i
 
 The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 
-The chi-squared test of homogeneity is equivalent to the Breslow Day test for interaction. 
+The chi-squared test of homogeneity is equivalent to the Breslow Day test for interaction. Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the chi-squared test of homogeneity is not significant.
 }
 
 \seealso{
@@ -175,12 +177,13 @@ epi.2by2(a, b, c, d, method = "case.control", conf.level = 0.95, verbose = TRUE)
 ## Test of homeogeneity of odds ratios:
 ## Test statistic 2.09; df = 2; P = 0.35
 
+## The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). The Mantel-Haenszel
+## adjusted odds ratio is 6.27 (95\% CI 3.52 to 11.17). The crude odds ratio 
+## is 1.05 times the magnitude of the Mantel-Haenszel adjusted odds ratio.
 ## We accept the null hypothesis that the strata level odds ratios 
-## are homogenous. The crude odds ratio is 1.05 times the magnitude of the 
-## Mantel-Haenszel adjusted odds ratio. We conclude that age does not 
-## confound the association between smoking and risk of cervical
-## cancer (using a ratio of greater than 1.10 or less than 0.90 as 
-## indicative of the presence of confounding.) 
+## are homogenous. We conclude that age does not confound the association 
+## between smoking and risk of cervical cancer (using a ratio of greater 
+## than 1.10 or less than 0.90 as indicative of the presence of confounding.) 
 }
 
 \keyword{univar}

@@ -35,8 +35,8 @@
         sd <- sqrt(var)
         se <- sd/sqrt(n)
         
-        P <- conf.level/2
-        t <- qt(P, n - 1)
+        P <- (1 - conf.level)/2
+        t <- abs(qt(P, n - 1))
           
         low <- mean - (t * se)
         up <- mean + (t * se)
@@ -58,8 +58,8 @@
         s <- sqrt(((n[1] - 1) * var[1]) + ((n[2] - 1) * var[2]) / (n[1] + n[2] - 2))
         se.diff <- s * sqrt(1/n[1] + 1/n[2])
         
-        P <- conf.level/2
-        t <- qt(P, (n[1] + n[2] - 2))
+        P <- (1 - conf.level)/2
+        t <- abs(qt(P, (n[1] + n[2] - 2)))
         
         low <- mean[1] - mean[2] - (t * se.diff)
         up <- mean[1] - mean[2] + (t * se.diff)
@@ -77,8 +77,8 @@
         sd.diff <- sqrt(var(diff))
         se.diff <- mean.diff/sqrt(n)
         
-        P <- conf.level/2
-        t <- qt(P, (n - 1))
+        P <- (1 - conf.level)/2
+        t <- abs(qt(P, (n - 1)))
         
         low <- mean.diff - (t * se.diff)
         up <- mean.diff + (t * se.diff)
