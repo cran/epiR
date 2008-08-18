@@ -48,8 +48,8 @@ Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample si
 \tabular{llll}{
  \tab Disease +	\tab Disease -  \tab Total\cr
 Test +\tab a\tab b \tab a + b\cr
-Test - \tab c\tab c \tab c + d\cr
-Total\tab a + c\tab b + c \tab a + b + c + d\cr
+Test - \tab c\tab d \tab c + d\cr
+Total\tab a + c\tab b + d \tab a + b + c + d\cr
    }
 }
 
