@@ -24,19 +24,25 @@ epi.tests(a, b, c, d, conf.level = 0.95, verbose = TRUE)
 \details{
 Confidence intervals for sensitivity and specificity are based on formulae provided by Altman, Machin, Bryant, and Gardner (2000).
 
-Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991). 
+Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
+
+Diagnostic accuracy is defined as the proportion of all tests that give a correct result. Diagnostic odds ratio is defined as how much more likely will the test make a correct diagnosis than an incorrect diagnosis in patients with the disease (Scott et al. 2008). The number needed to diagnose is defined as the number of paitents that need to be tested to give one correct positive test. Youden's index is the difference between the true positive rate and the false positive rate. Youden's index ranges from -1 to +1 with values closer to 1 if both sensitivity and specificity are high (i.e. close to 1).
 }
 
 \value{
 A list containing the following:
-  \item{prevalence}{the apparent and true prevalence.}
-  \item{performance}{the test sensitivity and specificity.}
-  \item{predictive.value}{the positive and negative predictive value.}
-  \item{likelihood.ratio}{the likelihood ratio of a positive and negative test.}
+  \item{prevalence}{apparent and true prevalence.}
+  \item{performance}{test sensitivity, test specificity, diagnostic accuracy, diagnostic odds ratio, number needed to diagnose, Youden's index.}
+  \item{predictive.value}{positive predictive value, negative predictive value.}
+  \item{likelihood.ratio}{likelihood ratio of a positive test, likelihood ratio of a negative test.}
 }
 
 \references{
 Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29.
+
+Bangdiwala SI, Haedo AS, Natal ML (2008). The agreement chart as an alternative to the receiver-operating characteristic curve for diagnostic tests. Journal of Clinical Epidemiology 61: 866 - 874.
+
+Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interpretation of studies of diagnostic tests. Internal Medicine Journal 38: 120 - 129.
 
 Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample size estimation for diagnostic test studies. Journal of Clinical Epidemiology 44: 763 - 770.
 }
@@ -57,15 +63,19 @@ Total\tab a + c\tab b + d \tab a + b + c + d\cr
 }
 
 \examples{
-## A new diagnostic test was trialled on 2000 patients. Of 1000 patients
-## that were disease positive, 750 tested positive. Of 1000 patients that 
-## were disease negative, 550 tested negative. What is the likeliood
-## ratio of a positive test?
+## Scott et al. 2008, Table 1:
+## A new diagnostic test was trialled on 1586 patients. Of 744 patients
+## that were disease positive, 670 tested positive. Of 842 patients that 
+## were disease negative, 640 tested negative. What is the likeliood
+## ratio of a positive test? What is the number needed to diagnose?
 
-epi.tests(a = 750, b =  450, c = 250, d = 550, conf.level = 0.95, 
+a <- 670; b <- 202; c <- 74; d <- 640
+epi.tests(a = a, b = b, c = c, d = d, conf.level = 0.95, 
    verbose = FALSE)
 
-## The likelihood ratio of a positive test is 1.67 (95\% CI 1.54 to 1.80).
+## The likelihood ratio of a positive test is 3.75 (95\% CI 3.32 to 4.24).
+## The number needed to diagnose is 1.51 (95\% CI 1.41 to 1.65).
+## Around 15 persons need to be tested to return 10 positive tests.
 
 }
 
