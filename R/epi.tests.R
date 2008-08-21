@@ -17,24 +17,24 @@
         total <- a + b + c + d
     
         # True prevalence:
-        p <- M1/total
-        q <- 1 - p
-        A <- (2 * M1) + (z * z)
-        B <- z * sqrt((z * z) + (4 * M1 * q))
-        C <- 2 * (total + (z * z))
+        r <- M1; n <- total
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         tp <- p
         tp.low <- (A - B) / C
         tp.up <- (A + B) / C
-        
+
         true <- as.data.frame(cbind(tp, tp.low, tp.up))
         names(true) <- c("est", lower, upper)
         
         # Apparent prevalence:
-        p <- N1/total
-        q <- 1 - p
-        A <- (2 * N1) + (z * z)
-        B <- z * sqrt((z * z) + (4 * N1 * q))
-        C <- 2 * (total + (z * z))
+        r <- N1; n <- total
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         ap <- p
         ap.low <- (A - B) / C
         ap.up <- (A + B) / C
@@ -43,11 +43,11 @@
         names(apparent) <- c("est", lower, upper)
 
         # Sensitivity:
-        p <- a/M1
-        q <- 1 - p
-        A <- (2 * a) + (z * z)
-        B <- z * sqrt((z * z) + (4 * a * q))
-        C <- 2 * (M1 + (z * z))
+        r <- a; n <- M1
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         se <- p
         se.low <- (A - B) / C
         se.up <- (A + B) / C
@@ -56,11 +56,11 @@
         names(sensitivity) <- c("est", lower, upper)
         
         # Specificity:
-        p <- d/M0
-        q <- 1 - p
-        A <- (2 * d) + (z * z)
-        B <- z * sqrt((z * z) + (4 * d * q))
-        C <- 2 * (M0 + (z * z))
+        r <- d; n <- M0
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         sp <- p
         sp.low <- (A - B) / C
         sp.up <- (A + B) / C
@@ -69,11 +69,11 @@
         names(specificity) <- c("est", lower, upper)
         
         # Positive predictive value:
-        p <- a/N1
-        q <- 1 - p
-        A <- (2 * a) + (z * z)
-        B <- z * sqrt((z * z) + (4 * a * q))
-        C <- 2 * (N1 + (z * z))
+        r <- a; n <- N1
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         ppv <- p
         ppv.low <- (A - B) / C
         ppv.up <- (A + B) / C
@@ -82,11 +82,11 @@
         names(positive) <- c("est", lower, upper)
         
         # Negative predictive value:
-        p <- d/N0
-        q <- 1 - p
-        A <- (2 * d) + (z * z)
-        B <- z * sqrt((z * z) + (4 * d * q))
-        C <- 2 * (N0 + (z * z))
+        r <- d; n <- N0
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
         npv <- p
         npv.low <- (A - B) / C
         npv.up <- (A + B) / C    
@@ -114,6 +114,52 @@
         lr.negative <- as.data.frame(cbind(lrneg, lrneg.low, lrneg.up))
         names(lr.negative) <- c("est", lower, upper)
       
+        # Diagnostic accuracy (from Scott et al. (2008)):
+        r <- (a + d); n <- total
+        p <- r/n; q <- 1 - p
+        A <- (2 * r) + (z * z)
+        B <- z * sqrt((z * z) + (4 * r * q))
+        C <- 2 * (n + (z * z))
+        da <- p
+        da.low <- (A - B) / C
+        da.up <- (A + B) / C
+        
+        da.acc <- as.data.frame(cbind(da, da.low, da.up))
+        names(da.acc) <- c("est", lower, upper)
+
+        # Diagnostic odds ratio (from Scott et al. (2008)):
+        dOR.p <- (a * d) / (b * c)
+        lndOR <- log(dOR.p)
+        lndOR.var <- 1/a + 1/b + 1/c + 1/d
+        lndOR.se <- sqrt(1/a + 1/b + 1/c + 1/d)
+        lndOR.l <- lndOR - (z * lndOR.se)
+        lndOR.u <- lndOR + (z * lndOR.se)
+        dOR.se <- exp(lndOR.se)
+        dOR.low <- exp(lndOR.l)
+        dOR.up <- exp(lndOR.u)
+
+        dor <- as.data.frame(cbind(dOR.p, dOR.low, dOR.up))
+        names(dor) <- c("est", lower, upper)
+
+        # Number needed to diagnose (from Scott et al. (2008)):
+        ndx <- 1/(se - (1 - sp))
+        ndx.1 <- 1/(se.low - (1 - sp.low))
+        ndx.2 <- 1/(se.up - (1 - sp.up))
+        ndx.low <- min(ndx.1, ndx.2)
+        ndx.up <- max(ndx.1, ndx.2)
+
+        nnd <- as.data.frame(cbind(ndx, ndx.low, ndx.up))
+        names(nnd) <- c("est", lower, upper)
+        
+        # Youden's index (from Bangdiwala et al. (2008)):
+        c.p <- se - (1 - sp)
+        c.1 <- se.low - (1 - sp.low)
+        c.2 <- se.up - (1 - sp.up)
+        c.low <- min(c.1, c.2)
+        c.up <- max(c.1, c.2)
+
+        youden <- as.data.frame(cbind(c.p, c.low, c.up))
+        names(youden) <- c("est", lower, upper)
         
         if(verbose == FALSE){
         
@@ -133,10 +179,14 @@
         cat("\nTrue prevalence:                       ", round(tp, digits = 2),   paste("(", round(tp.low, digits = 2), ", ", round(tp.up, digits = 2), ")", sep = ""))
         cat("\nSensitivity:                           ", round(se, digits = 2),   paste("(", round(se.low, digits = 2), ", ", round(se.up, digits = 2), ")", sep = ""))
         cat("\nSpecificity:                           ", round(sp, digits = 2),   paste("(", round(sp.low, digits = 2), ", ", round(sp.up, digits = 2), ")", sep = ""))
-        cat("\nPositive predictive value:             ", round(ppv, digits = 2),  paste("(", round(ppv.low, digits = 2), ", ", round(ppv.up, digits = 2), ")", sep = ""))
-        cat("\nNegative predictive value:             ", round(npv, digits = 2),  paste("(", round(npv.low, digits = 2), ", ", round(npv.up, digits = 2), ")", sep = ""))
-        cat("\nLikelihood ratio positive:             ", round(lrpos, digits = 2),  paste("(", round(lrpos.low, digits = 2), ", ", round(lrpos.up, digits = 2), ")", sep = ""))
-        cat("\nLikelihood ratio negative:             ", round(lrneg, digits = 2),  paste("(", round(lrneg.low, digits = 2), ", ", round(lrneg.up, digits = 2), ")", sep = ""))
+        cat("\nDiagnostic accuracy:                   ", round(da, digits = 2),   paste("(", round(da.low,  digits = 2),", ", round(da.up, digits = 2), ")", sep = ""))
+        cat("\nDiagnostic odds ratio:                 ", round(dOR.p, digits = 2),   paste("(", round(dOR.low,  digits = 2),", ", round(dOR.up, digits = 2), ")", sep = ""))
+        cat("\nYouden's index:                        ", round(c.p, digits = 2),   paste("(", round(c.low,  digits = 2),", ", round(c.up, digits = 2), ")", sep = ""))
+        cat("\nPositive predictive value:             ", round(ppv, digits = 2),  paste("(", round(ppv.low, digits = 2),", ", round(ppv.up,digits = 2), ")", sep = ""))
+        cat("\nNegative predictive value:             ", round(npv, digits = 2),  paste("(", round(npv.low, digits = 2),", ", round(npv.up,digits = 2), ")", sep = ""))
+        cat("\nPositive likelihood ratio:             ", round(lrpos, digits = 2),  paste("(", round(lrpos.low, digits = 2), ", ", round(lrpos.up, digits = 2), ")", sep = ""))
+        cat("\nNegative likelihood ratio:             ", round(lrneg, digits = 2),  paste("(", round(lrneg.low, digits = 2), ", ", round(lrneg.up, digits = 2), ")", sep = ""))
+        cat("\nNumber needed to diagnose:             ", round(ndx, digits = 2),  paste("(", round(ndx.low, digits = 2), ", ", round(ndx.up, digits = 2), ")", sep = ""))
         cat("\n---------------------------------------------------------", "\n")
         }
         
@@ -144,7 +194,7 @@
         
         # Results:
         prevalence <- as.data.frame(rbind(apparent = apparent, true = true))
-        performance <- as.data.frame(rbind(sens = sensitivity, spec = specificity))
+        performance <- as.data.frame(rbind(sens = sensitivity, spec = specificity, da = da.acc, dor = dor, nnd = nnd, youden = youden))
         predictive.value <- as.data.frame(rbind(pos = positive, neg = negative))
         likelihood.ratio <- as.data.frame(rbind(pos = lr.positive, neg = lr.negative))
         rval <- list(prevalence = prevalence, performance = performance, predictive.value = predictive.value, likelihood.ratio = likelihood.ratio)
