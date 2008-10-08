@@ -4,6 +4,29 @@
         z <- qnorm(N., mean = 0, sd = 1)
         lower <- "lower"
         upper <- "upper"
+
+        # From Greg Snow, R-sig-Epi, 3 Mar 2008:
+        # My prefered approach (not the only one), is to use the Bayesian interval using a uniform prior (beta(1,1) distribution) 
+        # with the binomial (it is easier to do than it looks). Basically find the HPD interval from a beta distribution with parameters s+1 and f+1,
+        # where s and f are successes (correct test results) and failures (incorrect test results).
+
+        # I use the hpd function from the TeachingDemos package, but there are others as well (I'm a bit biased towards that package).
+
+        # For example, to calculate the 95% confidence interval for sensitivity when you have 95 true positives and 5 false negatives you would just
+        # type (after installing and loading the package): 
+        # hpd(qbeta, shape1 = 96, shape2 = 6)
+
+        # And the 2 numbers are limits of a 95% confidence interval. I like this approach because it still gives sensible results when you
+        # have no false negatives (or false positives for specificity).
+
+        hpd. <- function(posterior.icdf, conf = conf.level, tol = 1e-08, ...){
+          conf <- min(conf, 1 - conf)
+          f <- function(x, posterior.icdf, conf, ...) {
+          posterior.icdf(1 - conf + x, ...) - posterior.icdf(x, ...)
+          }
+          out <- optimize(f, c(0, conf), posterior.icdf = posterior.icdf, conf = conf, tol = tol, ...)
+          return(c(posterior.icdf(out$minimum, ...), posterior.icdf(1 - conf + out$minimum, ...)))
+        }
         
         # Total disease pos:
         M1 <- a + c
@@ -18,20 +41,32 @@
     
         # True prevalence:
         r <- M1; n <- total
-        p <- r/n; q <- 1 - p
+        p <- r/n
+        # alpha1 <- r + 1
+        # alpha2 <- n - r + 1
+        # tp <- r/n
+        # tp.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        # tp.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        q <- 1 - p
         A <- (2 * r) + (z * z)
         B <- z * sqrt((z * z) + (4 * r * q))
         C <- 2 * (n + (z * z))
         tp <- p
         tp.low <- (A - B) / C
         tp.up <- (A + B) / C
-
+        
         true <- as.data.frame(cbind(tp, tp.low, tp.up))
         names(true) <- c("est", lower, upper)
         
         # Apparent prevalence:
         r <- N1; n <- total
-        p <- r/n; q <- 1 - p
+        p <- r/n
+        # alpha1 <- r + 1
+        # alpha2 <- n - r + 1
+        # ap <- r/n
+        # ap.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        # ap.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        q <- 1 - p
         A <- (2 * r) + (z * z)
         B <- z * sqrt((z * z) + (4 * r * q))
         C <- 2 * (n + (z * z))
@@ -44,52 +79,76 @@
 
         # Sensitivity:
         r <- a; n <- M1
-        p <- r/n; q <- 1 - p
-        A <- (2 * r) + (z * z)
-        B <- z * sqrt((z * z) + (4 * r * q))
-        C <- 2 * (n + (z * z))
-        se <- p
-        se.low <- (A - B) / C
-        se.up <- (A + B) / C
-        
+        p <- r/n
+        alpha1 <- r + 1
+        alpha2 <- n - r + 1
+        se <- r/n
+        se.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        se.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        # q <- 1 - p
+        # A <- (2 * r) + (z * z)
+        # B <- z * sqrt((z * z) + (4 * r * q))
+        # C <- 2 * (n + (z * z))
+        # se <- p
+        # se.low <- (A - B) / C
+        # se.up <- (A + B) / C
+                
         sensitivity <- as.data.frame(cbind(se, se.low, se.up))
         names(sensitivity) <- c("est", lower, upper)
         
         # Specificity:
         r <- d; n <- M0
-        p <- r/n; q <- 1 - p
-        A <- (2 * r) + (z * z)
-        B <- z * sqrt((z * z) + (4 * r * q))
-        C <- 2 * (n + (z * z))
-        sp <- p
-        sp.low <- (A - B) / C
-        sp.up <- (A + B) / C
+        p <- r/n
+        alpha1 <- r + 1
+        alpha2 <- n - r + 1
+        sp <- r/n
+        sp.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        sp.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        # q <- 1 - p
+        # A <- (2 * r) + (z * z)
+        # B <- z * sqrt((z * z) + (4 * r * q))
+        # C <- 2 * (n + (z * z))
+        # sp <- p
+        # sp.low <- (A - B) / C
+        # sp.up <- (A + B) / C
         
         specificity <- as.data.frame(cbind(sp, sp.low, sp.up))
         names(specificity) <- c("est", lower, upper)
         
         # Positive predictive value:
         r <- a; n <- N1
-        p <- r/n; q <- 1 - p
-        A <- (2 * r) + (z * z)
-        B <- z * sqrt((z * z) + (4 * r * q))
-        C <- 2 * (n + (z * z))
-        ppv <- p
-        ppv.low <- (A - B) / C
-        ppv.up <- (A + B) / C
+        p <- r/n
+        alpha1 <- r + 1
+        alpha2 <- n - r + 1
+        ppv <- r/n
+        ppv.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        ppv.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        # q <- 1 - p
+        # A <- (2 * r) + (z * z)
+        # B <- z * sqrt((z * z) + (4 * r * q))
+        # C <- 2 * (n + (z * z))
+        # ppv <- p
+        # ppv.low <- (A - B) / C
+        # ppv.up <- (A + B) / C
         
         positive <- as.data.frame(cbind(ppv, ppv.low, ppv.up))
         names(positive) <- c("est", lower, upper)
         
         # Negative predictive value:
         r <- d; n <- N0
-        p <- r/n; q <- 1 - p
-        A <- (2 * r) + (z * z)
-        B <- z * sqrt((z * z) + (4 * r * q))
-        C <- 2 * (n + (z * z))
-        npv <- p
-        npv.low <- (A - B) / C
-        npv.up <- (A + B) / C    
+        p <- r/n
+        alpha1 <- r + 1
+        alpha2 <- n - r + 1
+        npv <- r/n
+        npv.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        npv.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        # q <- 1 - p
+        # A <- (2 * r) + (z * z)
+        # B <- z * sqrt((z * z) + (4 * r * q))
+        # C <- 2 * (n + (z * z))
+        # npv <- p
+        # npv.low <- (A - B) / C
+        # npv.up <- (A + B) / C
         
         negative <- as.data.frame(cbind(npv, npv.low, npv.up))
         names(negative) <- c("est", lower, upper)
@@ -116,13 +175,19 @@
       
         # Diagnostic accuracy (from Scott et al. (2008)):
         r <- (a + d); n <- total
-        p <- r/n; q <- 1 - p
-        A <- (2 * r) + (z * z)
-        B <- z * sqrt((z * z) + (4 * r * q))
-        C <- 2 * (n + (z * z))
-        da <- p
-        da.low <- (A - B) / C
-        da.up <- (A + B) / C
+        p <- r/n
+        alpha1 <- r + 1
+        alpha2 <- n - r + 1
+        da <- r/n
+        da.low <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[1]
+        da.up <- hpd.(qbeta, shape1 = alpha1, shape2 = alpha2)[2]
+        # q <- 1 - p
+        # A <- (2 * r) + (z * z)
+        # B <- z * sqrt((z * z) + (4 * r * q))
+        # C <- 2 * (n + (z * z))
+        # da <- p
+        # da.low <- (A - B) / C
+        # da.up <- (A + B) / C
         
         da.acc <- as.data.frame(cbind(da, da.low, da.up))
         names(da.acc) <- c("est", lower, upper)
