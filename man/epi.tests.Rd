@@ -22,7 +22,7 @@ epi.tests(a, b, c, d, conf.level = 0.95, verbose = TRUE)
 }
 
 \details{
-Confidence intervals for sensitivity and specificity are based on formulae provided by Altman, Machin, Bryant, and Gardner (2000).
+Confidence intervals for sensitivity, specificity, and positive and negative predictive value are based on a Bayesian interval using a uniform prior (beta(1,1) distribution) with the binomial distribution. This method gives appropriate results when there are no false negatives or false positives.
 
 Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
 
@@ -45,6 +45,8 @@ Bangdiwala SI, Haedo AS, Natal ML (2008). The agreement chart as an alternative 
 Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interpretation of studies of diagnostic tests. Internal Medicine Journal 38: 120 - 129.
 
 Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample size estimation for diagnostic test studies. Journal of Clinical Epidemiology 44: 763 - 770.
+
+Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, specificity, PPV & NPV. R-sig-Epi Digest 23(1): 3March 2008.
 }
 
 \author{
