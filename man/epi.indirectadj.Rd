@@ -68,7 +68,6 @@ epi.indirectadj(obs, pop, std = "NA", type = "rate", conf.level = 0.05)
 
 ## The crude incidence risk of tuberculosis in area A was 0.058 cases per year.
 ## The crude incidence risk of tuberculosis in area B was 0.065 cases per year. 
-
 ## The indirectly adjusted incidence risk of tuberculosis in area A was 0.071 
 ## cases per year. The indirectly adjusted incidence risk of tuberculosis in 
 ## area B was 0.059 cases per year. 

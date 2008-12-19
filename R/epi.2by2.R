@@ -346,15 +346,18 @@
         # =============================
         
         # Crude incidence risk ratio (Rothman p 135 equation 7-3):
-        cRR.p <- (sa / sN1) / (sc /sN0)
+        cRR.p <- (sa / sN1) / (sc / sN0)
         clnRR <- log(cRR.p)
-        clnRR.se <- sqrt((1 / sa) - (1 / sN1) + (1 / sb) - (1 / sN0))
+        clnRR.var <- (1 / sa) - (1 / sN1) + (1 / sc) - (1 / sN0)
+        # This line incorrect. Fixed 191208:
+        # clnRR.se <- sqrt((1 / sa) - (1 / sN1) + (1 / sb) - (1 / sN0))
+        clnRR.se <- sqrt((1 / sa) - (1 / sN1) + (1 / sc) - (1 / sN0))
         clnRR.l <- clnRR - (z * clnRR.se)
         clnRR.u <- clnRR + (z * clnRR.se)
         cRR.se <- exp(clnRR.se)
         cRR.l <- exp(clnRR.l)
         cRR.u <- exp(clnRR.u)
-                   
+
         # Crude incidence rate ratio (Rothman p 137 equation 7-5):
         cIRR.p <- (sa / sb) / (sc / sd)
         clnIRR <- log(cIRR.p)

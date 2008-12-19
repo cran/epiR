@@ -33,7 +33,7 @@ A list containing the following:
 }
 
 \references{
-Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infectionscalculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
+Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
 
 Bennett S, Woods T, Liyanage WM, Smith DL (1991). A simplified general method for cluster-sample surveys of health in developing countries. Raport trimestriel de statistiques sanitaires modiales 44: 98 - 106.
 }

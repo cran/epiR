@@ -9,13 +9,12 @@ Computes the true prevalence of a disease in a population on the basis of an imp
 }
 
 \usage{
-epi.prev(pos, tested, N, se, sp, conf.level = 0.95)
+epi.prev(pos, tested, se, sp, conf.level = 0.95)
 }
 
 \arguments{
   \item{pos}{the number of positives.}
   \item{tested}{the number tested.}
-  \item{N}{the size of the population of interest.}
   \item{se}{test sensitivity (0 - 1).}
   \item{sp}{test specificity (0 - 1).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
@@ -25,22 +24,24 @@ epi.prev(pos, tested, N, se, sp, conf.level = 0.95)
 }
 
 \value{
-A data frame with four elements: \code{crude}: the apparent prevalence, \code{est}: the estimated true prevalence, \code{lower}: the lower bounds of the confidence interval of the estimated prevalence, and \code{upper}: the upper bounds of the confidence interval of the estimated prevalence.
+A list containing the following:
+   \item{ap}{the point estimate of apparent prevalence, the standard error of the apparent prevalence, and the lower and upper bounds of the apparent prevalence.}
+   \item{tp}{the point estimate of the true prevalence, the standard error of the true prevalence, and the lower and upper bounds of the true prevalence.}
 }
 
 \references{
+Abel U (1993). DieBewertung Diagnostischer Tests. hippkrates, Stuttgart.
+
+Gardener IA, Greiner M (1999). Advanced Methods for Test Validation and Interpretation in Veterinary Medicince. Freie Universitat Berlin, ISBN 3-929619-22-9; 80 pp.
+
 Rogan W, Gladen B (1978). Estimating prevalence from results of a screening test. American Journal of Epidemiology 107: 71 - 76.
-
-Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143. 
-
 }
 
 \author{
 }
 
 \note{
-This function uses the apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). Confidence limits for the true prevalence estimate are calculated using Wilson's approximation (Rothman 2002, page 132).  
-
+This function uses the apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). The standard error of the Rogan Gladen true prevalence estimate is based on Abel (1993).
 }
 
 \seealso{
@@ -53,7 +54,7 @@ This function uses the apparent prevalence, test sensitivity and test specificit
 ## 23 were positive to the screening test. What is the estimated prevalence 
 ## of brucellosis in this herd (and its 95\% confidence interval)?
 
-epi.prev(23, 150, 2560, se = 0.96, sp = 0.89, conf.level = 0.05)
+epi.prev(pos = 23, tested = 150, se = 0.96, sp = 0.89, conf.level = 0.95)
 
 ## The estimated true prevalence of brucellosis in this herd is 5.1 cases per 
 ## 100 cows (95\% CI 0 -- 12 cases per 100 cows).

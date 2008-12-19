@@ -23,7 +23,7 @@ Computes the instantaneous hazard of failure, equivalent to the proportion of th
 }
 
 \value{
-A data frame with three elements: \code{time}: the observed failure times, \code{est}: the proportion of the population failing per unit time, \code{lower}: the lower bounds of the confidence interval, and \code{upper} the upper bounds of the confidence interval.
+A data frame with three elements: \code{time} the observed failure times, \code{est} the proportion of the population failing per unit time, \code{lower} the lower bounds of the confidence interval, and \code{upper} the upper bounds of the confidence interval.
 }
 
 \references{

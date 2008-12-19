@@ -27,7 +27,7 @@ epi.herdtest(se, sp, P, N, n, k)
 }
 
 \value{
-A data frame with four elements: \code{APpos}: the probability of obtaining a positive test, \code{APneg}: the probability of obtaining a negative test, \code{HSe}: the estimated group (herd) sensitivity, and \code{HSp}: tThe estimated group (herd) specificity.
+A data frame with four elements: \code{APpos} the probability of obtaining a positive test, \code{APneg} the probability of obtaining a negative test, \code{HSe} the estimated group (herd) sensitivity, and \code{HSp} the estimated group (herd) specificity.
 }
 
 \references{

@@ -22,7 +22,7 @@ The gamma distribution is sometimes parameterised in terms of shape and rate par
 }
 
 \value{
-A data frame with four elements: \code{gamma}: mean observed event count, \code{phi}: variance of observed event count, \code{alpha}: shape parameter of gamma distribution, and \code{delta}: scale parameter of gamma distribution.
+A data frame with four elements: \code{gamma} mean observed event count, \code{phi} variance of observed event count, \code{alpha} shape parameter of gamma distribution, and \code{delta} scale parameter of gamma distribution.
 }
 
 \references{

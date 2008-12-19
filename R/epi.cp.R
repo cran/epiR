@@ -1,4 +1,4 @@
-epi.covpattern <- function(dat){
+epi.cp <- function(dat){
    obs <- as.data.frame(cbind(id = 1:nrow(dat), cp = rep(0, times = nrow(dat))))
    nvar <- dim(dat)[2]
    cp <- unique(dat)
