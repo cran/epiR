@@ -23,7 +23,7 @@ Lactation to date yields will only be calculated if there are four or more herd 
 }
 
 \value{
-A data frame with nine elements: \code{ckey}: cow identifier, \code{lact}: lactation number, \code{llen}: lactation length, \code{vltd}: milk volume (litres) to last herd test or dry off date (computed on the basis of lactation length, \code{fltd}: fat yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{pltd}: protein yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{vstd}: 305-day or 270-day milk volume yield (litres), \code{fstd}: 305-day or 270-day milk fat yield (kilograms), and \code{pstd}: 305-day or 270-day milk protein yield (kilograms).
+A data frame with nine elements: \code{ckey} cow identifier, \code{lact} lactation number, \code{llen} lactation length, \code{vltd} milk volume (litres) to last herd test or dry off date (computed on the basis of lactation length, \code{fltd} fat yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{pltd} protein yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{vstd} 305-day or 270-day milk volume yield (litres), \code{fstd} 305-day or 270-day milk fat yield (kilograms), and \code{pstd} 305-day or 270-day milk protein yield (kilograms).
 }
 
 \note{

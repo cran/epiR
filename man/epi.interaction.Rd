@@ -56,6 +56,7 @@ Rothman K, Keller AZ (1972). The effect of joint exposure to alcohol and tabacco
 ## Data from Rothman and Keller (1972) evaluating the effect of joint exposure 
 ## to alcohol and tabacco on risk of cancer of the mouth and pharynx (cited in
 ## Hosmer and Lemeshow, 1992):
+
 can <- c(rep(1, times = 231), rep(0, times = 178), rep(1, times = 11), 
    rep(0, times = 38))
 smk <- c(rep(1, times = 225), rep(0, times = 6), rep(1, times = 166), 
@@ -65,6 +66,7 @@ alc <- c(rep(1, times = 409), rep(0, times = 49))
 dat <- as.data.frame(cbind(alc, smk, can))
 
 ## Table 2 of Hosmer and Lemeshow (1992):
+
 dat.glm01 <- glm(can ~ alc + smk + alc:smk, family = binomial, data = dat)
 summary(dat.glm01)
 
@@ -86,6 +88,7 @@ dat$d[dat$alc == 1 & dat$smk == 1] <- 3
 dat$d <- factor(dat$d)
 
 ## Table 3 of Hosmer and Lemeshow (1992):
+
 dat.glm02 <- glm(can ~ d, family = binomial, data = dat)
 summary(dat.glm02)
 

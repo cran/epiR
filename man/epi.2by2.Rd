@@ -56,7 +56,7 @@ When there are multiple strata, the function returns the appropriate measure of 
 }
 
 \references{
-Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, pp. 266 - 293.
+Elwood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, pp. 266 - 293.
 
 Feychting M, Osterlund B, Ahlbom A (1998). Reduced cancer incidence among the blind. Epidemiology 9: 490 - 494.
 

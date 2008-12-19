@@ -42,7 +42,6 @@ Cannon RM, Roe RT (1982). Livestock Disease Surveys A Field Manual for Veterinar
 \seealso{
 }
 \examples{
-## EXAMPLE 1
 ## In a field survey 400 feral pigs are captured, marked and then released.
 ## On a second occassion 40 of the orignal capture are found when another 400    
 ## pigs are captured. Estimate the size of this feral pig population. Estimate     

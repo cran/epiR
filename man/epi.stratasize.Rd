@@ -15,9 +15,9 @@ epi.stratasize(strata.n, strata.mean, strata.var, epsilon,
 }
 
 \arguments{
-  \item{strata.n}{a vector identifying the size of the strata.}
-  \item{strata.mean}{a vector representing the estimated strata mean.}
-  \item{strata.var}{a vector representing the estimated strata variance.}
+  \item{strata.n}{vector, defining the size of each strata.}
+  \item{strata.mean}{vector, representing the mean of each strata.}
+  \item{strata.var}{vector, representing the variance of each strata.}
   \item{epsilon}{the maximum relative difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{mean}, \code{total}, \code{proportion}, or \code{pps}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}

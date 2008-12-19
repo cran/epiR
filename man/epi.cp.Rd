@@ -1,6 +1,6 @@
-\name{epi.covpattern}
+\name{epi.cp}
 
-\alias{epi.covpattern}
+\alias{epi.cp}
 
 \title{
 Extract unique covariate patterns from a data set
@@ -11,7 +11,7 @@ Extract the set of unique patterns from a set of covariates.
 }
 
 \usage{
-epi.covpattern(dat)
+epi.cp(dat)
 }
 
 \arguments{
@@ -19,7 +19,7 @@ epi.covpattern(dat)
 }
 
 \details{
-A covariate pattern is a unique combination of values of predictor variables. For example, if a model contains only two dichotomous predictors, there will be four covariate patterns possible: \code{(1,1)}, \code{(1,0)}, \code{(0,1)}, and \code{(0,0)}. This function extracts the \emph{n} unique covariate patterns from a data set comprised of \emph{i} observations, labelling them from 1 to \emph{n}. A vector of length \emph{m} is also returned, listing the covariate pattern identifier for each observation.
+A covariate pattern is a unique combination of values of predictor variables. For example, if a model contains two dichotomous predictors, there will be four covariate patterns possible: \code{(1,1)}, \code{(1,0)}, \code{(0,1)}, and \code{(0,0)}. This function extracts the \emph{n} unique covariate patterns from a data set comprised of \emph{i} observations, labelling them from 1 to \emph{n}. A vector of length \emph{m} is also returned, listing the covariate pattern identifier for each observation.
 }
 
 \value{
@@ -53,7 +53,7 @@ dat.glm <- glm(obs ~ v1 + v2, family = binomial, data = dat)
 dat.mf <- model.frame(dat.glm)
 
 ## Covariate pattern:
-epi.covpattern(dat.mf[-1])
+epi.cp(dat.mf[-1])
 
 ## There are 25 covariate patterns in this data set. Subject 100 has
 ## covariate pattern 21. 

@@ -22,7 +22,7 @@ epi.bohning(obs, exp, alpha = 0.05)
 }
 
 \value{
-A data frame with three elements: \code{test.statistic}: Bohning's test statistic, \code{p.value}: the associated P-value.
+A data frame with two elements: \code{test.statistic} Bohning's test statistic, \code{p.value} the associated P-value.
 }
 
 \references{
