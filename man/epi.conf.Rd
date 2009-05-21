@@ -15,12 +15,12 @@ epi.conf(dat, method = "mean.single", conf.level = 0.95)
 
 \arguments{
   \item{dat}{the data, either a vector or a matrix depending on the method chosen.}
-  \item{method}{a character string indicating the method to use. Options are \code{mean.single}, \code{mean.unpaired}, \code{mean.paired}, \code{prop.single}, \code{prop.unpaired}, \code{prop.paired}, \code{inc.risk}, \code{inc.rate}, and \code{smr}.}
+  \item{method}{a character string indicating the method to use. Options are \code{mean.single}, \code{mean.unpaired}, \code{mean.paired}, \code{prop.single}, \code{prop.unpaired}, \code{prop.paired}, \code{prevalence}, \code{inc.risk}, \code{inc.rate}, and \code{smr}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
-Returns confidence interval bounds at the alpha level specified. The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk} Wilson's approximation is used (Rothman 2002, page 132). Where method is \code{inc.rate} Byar's approximation is used (Rothman 2002, page 134). Where method is \code{smr} the method of Dobson et al. (1991) is used.
+Returns confidence interval bounds at the alpha level specified. The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk} or \code{prevalence} Wilson's approximation is used (Rothman 2002, page 132). Where method is \code{inc.rate} Byar's approximation is used (Rothman 2002, page 134). Where method is \code{smr} the method of Dobson et al. (1991) is used.
 }
 
 \value{
@@ -119,7 +119,7 @@ round(epi.conf(dat, method = "prop.paired", conf.level = 0.95), digits = 3)
 pos <- 2
 pop <- 200
 dat <- as.matrix(cbind(pos, pop))
-epi.conf(dat, method = "inc.risk") * 100
+epi.conf(dat, method = "prevalence") * 100
 
 ## The estimated prevalence of brucellosis in this herd is 1 case
 ## per 100 cattle (95\% CI 0 -- 4 cases per 100 cattle).

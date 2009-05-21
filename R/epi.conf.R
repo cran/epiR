@@ -196,6 +196,30 @@
         rval
      }
      
+     if(method == "prevalence"){
+        if (is.matrix(dat) == FALSE) 
+           stop("Error: dat must be a two-column matrix")
+        # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
+        N. <- 1 - ((1 - conf.level) / 2)
+        z <- qnorm(N., mean = 0, sd = 1)
+        a <- dat[,1]
+        n <- dat[,2]
+        p <- dat[,1] / dat[,2]
+        
+        a. <- n/(n + z^2)
+        b. <- a/n
+        c. <- z^2/(2 * n)
+        d. <- (a * (n - a)) / n^3
+        e. <- z^2 / (4 * n^2)
+        
+        low <- a. * (b. + c. - (z * sqrt(d. + e.)))
+        up <- a. * (b. + c. + (z * sqrt(d. + e.)))
+  
+        rval <- as.data.frame(cbind(p, low, up))
+        names(rval) <- c("est", "lower", "upper")
+        rval
+     }
+     
      if(method == "inc.rate"){
      if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")

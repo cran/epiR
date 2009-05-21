@@ -56,15 +56,17 @@ When there are multiple strata, the function returns the appropriate measure of 
 }
 
 \references{
-Elwood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, pp. 266 - 293.
+Elwood JM (2007). Critical Appraisal of Epidemiological Studies and Clinical Trials. Oxford University Press, London.
 
 Feychting M, Osterlund B, Ahlbom A (1998). Reduced cancer incidence among the blind. Epidemiology 9: 490 - 494.
 
 Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. Journal of Epidemiology and Community Health 55: 508 - 514.
 
-Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, London, pp. 123 -146.
+Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, London, pp. 123 - 146.
 
 Martin SW, Meek AH, Willeberg P (1987). Veterinary Epidemiology Principles and Methods. Iowa State University Press, Ames, Iowa, pp. 130. 
+
+McNutt L, Wu C, Xue X, Hafner JP (2003). Estimating the relative risk in cohort studies and clinical trials of common outcomes. American Journal of Epidemiology 157: 940 - 943.
 
 Robbins AS, Chao SY, Fonesca VP (2002). What's the relative risk? A method to directly estimate risk ratios in cohort studies of common outcomes. Annals of Epidemiology 12: 452 - 454. 
 

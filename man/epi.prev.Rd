@@ -34,6 +34,8 @@ Abel U (1993). DieBewertung Diagnostischer Tests. hippkrates, Stuttgart.
 
 Gardener IA, Greiner M (1999). Advanced Methods for Test Validation and Interpretation in Veterinary Medicince. Freie Universitat Berlin, ISBN 3-929619-22-9; 80 pp.
 
+Messam L, Branscum A, Collins M, Gardner I (2008) Frequentist and Bayesian approaches to prevalence estimation using examples from Johne's disease. Animal Health Research Reviews 9: 1 - 23.
+
 Rogan W, Gladen B (1978). Estimating prevalence from results of a screening test. American Journal of Epidemiology 107: 71 - 76.
 }
 
@@ -41,7 +43,9 @@ Rogan W, Gladen B (1978). Estimating prevalence from results of a screening test
 }
 
 \note{
-This function uses the apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). The standard error of the Rogan Gladen true prevalence estimate is based on Abel (1993).
+This function uses the apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). The standard error of the Rogan Gladen true prevalence estimate is based on Abel (1993) and discussed in Messam et al (2008). 
+
+Messam et al (2008) advise that the Rogan Gladen true prevalence estimate is unreliable for small sample sizes and when true prevalence is believed to be close to zero. If the estimated true prevalence value is less than 0 the function returns a 0; if the estimated true prevalence value is greater than 1 the function returns a 1. In this situation Bayesian approaches to true prevalence estimation are preferred (see Messam et al 2008 for a very readable introduction).
 }
 
 \seealso{
