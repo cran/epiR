@@ -11,13 +11,14 @@ Estimates the required sample size under under simple random sampling.
 }
 
 \usage{
-epi.simplesize(N = 1E+06, sd, epsilon, method = "mean", 
+epi.simplesize(N = 1E+06, sd, Py, epsilon, method = "mean", 
    conf.level = 0.95)
 }
 
 \arguments{
   \item{N}{scalar, representing the population size.}
-  \item{sd}{scalar, if method is \code{total} or \code{mean} this is the estimated standard deviation of the sampling variable. If method is \code{proportion} this is an estimate of the unknown population proportion.}
+  \item{sd}{scalar, if method is \code{total} or \code{mean} this is the estimated standard deviation of the sampling variable.}
+  \item{Py}{scalar, if method is \code{proportion} this is an estimate of the unknown population proportion.}
   \item{epsilon}{the maximum absolute difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{total}, \code{mean}, or \code{proportion}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
@@ -52,7 +53,7 @@ If the calculated sample size is greater than 10\% of the population, an adjuste
 ## around 30 kg. We would like to be 95\% certain that our estimate is within 
 ## 10 kg of the true mean. How many deer should be sampled?
 
-epi.simplesize(N = 278, sd = 30, epsilon = 10, method = "mean", 
+epi.simplesize(N = 278, sd = 30, Py = NA, epsilon = 10, method = "mean", 
    conf.level = 0.95)
 
 ## A sample of 31 deer are required.
@@ -65,12 +66,11 @@ epi.simplesize(N = 278, sd = 30, epsilon = 10, method = "mean",
 ## to B. abortus. Calculate the required sample size.
 
 ## Convert relative error into absolute error:
-sd <- 0.15
-epsilon.r <- 0.20
-epsilon <- epsilon.r * sd
+epsilon.r <- 0.20; Py = 0.15
+epsilon <- epsilon.r * Py
 
-epi.simplesize(N = 1E+06, sd = sd, epsilon = epsilon, method = "proportion", 
-   conf.level = 0.95)
+epi.simplesize(N = 1E+06, sd = NA, Py = Py, epsilon = epsilon, 
+   method = "proportion", conf.level = 0.95)
 
 ## A sample of 544 cattle are required.
 

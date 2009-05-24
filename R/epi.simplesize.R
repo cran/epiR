@@ -1,4 +1,4 @@
-epi.simplesize <- function(N = 1E+06, sd, epsilon, method = "mean", conf.level = 0.95) 
+epi.simplesize <- function(N = 1E+06, sd, Py, epsilon, method = "mean", conf.level = 0.95) 
 {
     N. <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N., mean = 0, sd = 1)
@@ -17,7 +17,6 @@ epi.simplesize <- function(N = 1E+06, sd, epsilon, method = "mean", conf.level =
         rval <- round(n, digits = 0)
     }
     if (method == "proportion") {
-        Py <- sd
         n <- (z^2 * (1 - Py) * Py) / (epsilon^2)
         f <- n / N
         if(f > 0.10){n <- n / (1 + n/N)}

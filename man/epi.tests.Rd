@@ -22,7 +22,7 @@ epi.tests(a, b, c, d, conf.level = 0.95, verbose = TRUE)
 }
 
 \details{
-Confidence intervals for sensitivity, specificity, and positive and negative predictive value are based on a Bayesian interval using a uniform prior (beta(1,1) distribution) with the binomial distribution. This method gives appropriate results when there are no false negatives or false positives.
+Confidence intervals for sensitivity, specificity, and positive and negative predictive value are based on a Bayesian interval using a uniform prior (beta(1,1) distribution) with the binomial distribution (see Snow 2008 for details).
 
 Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
 
