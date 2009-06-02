@@ -114,8 +114,8 @@ epi.2by2(a = 13, b = 2163, c = 5, d = 3349, method = "cross.sectional",
    conf.level = 0.95, verbose = FALSE)
 
 ## Risk ratio:
-## The incidence risk of FUS in DCF exposed cats is 4.01 times (95\% CI 2.33 to 
-## 6.89) greater than the incidence risk of FUS in non-DCF exposed cats.
+## The incidence risk of FUS in DCF exposed cats is 4.01 times (95\% CI 1.43 to 
+## 11.23) greater than the incidence risk of FUS in non-DCF exposed cats.
 
 ## Attributable fraction:
 ## In DCF exposed cats, 75\% of FUS is attributable to DCF (95\% CI 30\% to 91\%).
@@ -137,12 +137,12 @@ round(rval$AR * 1000, digits = 3)
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
 ## blind, compared with those who were not blind but had severe visual impairment
-## (90\% CI -8.2\% to -6.2\%).
+## (90\% CI 6.20 to 8.24 cases per 1000 person-years).
 
 round(rval$IRR, digits = 3)   
 
 ## The incidence rate of cancer in the blind group was less than half that of the 
-## comparison group (risk ratio 0.46, 90\% CI 0.40 to 0.53).
+## comparison group (incidence rate ratio 0.46, 90\% CI 0.40 to 0.53).
 
 ## EXAMPLE 3
 ## The results of an unmatched case control study of the association between
