@@ -1,54 +1,84 @@
-"epi.2by2" <- function(a, b, c, d, method = "cohort.count", conf.level = 0.95, verbose = FALSE)
-    
+"epi.2by2" <- function(a, b, c, d, method = "cohort.count", conf.level = 0.95, multiplier = 100, verbose = FALSE){ 
     # 040407: When there is only one strata, return crude risk (or rate) ratio and crude odds ratio.
-    
+
     # Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293. 
     # Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
     # Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55:508 - 514.
-    { 
-        # Incidence risk in exposed                       IRiske
-        # Incidence risk in unexposed                     IRisko
-        # Incidence risk in population                    IRpop
+    # Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, New York, p 84 - 85.
 
-        # Incidence rate in exposed                       IRatee
-        # Incidence rate in unexposed                     IRateo
-        # Incidence rate in population                    IRatepop
+    # Incidence risk in exposed                       IRiske
+    # Incidence risk in unexposed                     IRisko
+    # Incidence risk in population                    IRpop
 
-        # Odds in exposed                                 Oe
-        # Odds in unexposed                               Oo
-        # Odds in population                              Opop
+    # Incidence rate in exposed                       IRatee
+    # Incidence rate in unexposed                     IRateo
+    # Incidence rate in population                    IRatepop
 
-        # Incidence risk ratio                            RR.p
-        # Incidence rate ratio                            IRR.p
-        # Odds ratio                                      OR.p
-        # Corrected incidence risk ratio                  cRR.p
+    # Odds in exposed                                 Oe
+    # Odds in unexposed                               Oo
+    # Odds in population                              Opop
 
-        # Attributable risk                               ARisk.p
-        # Attributable rate                               ARate.p
+    # Incidence risk ratio                            RR.p
+    # Incidence rate ratio                            IRR.p
+    # Odds ratio                                      OR.p
+    # Corrected incidence risk ratio                  cRR.p
 
-        # Attributable fraction risk data                 AFRisk.p
-        # Attributable fraction rate data                 AFRate.p
-        # Estimated attributable fraction                 AFest.p
+    # Attributable risk                               ARisk.p
+    # Attributable rate                               ARate.p
 
-        # Population attributable risk                    PARisk.p
-        # Population attributable rate                    PARate.p
+    # Attributable fraction risk data                 AFRisk.p
+    # Attributable fraction rate data                 AFRate.p
+    # Estimated attributable fraction                 AFest.p
+
+    # Population attributable risk                    PARisk.p
+    # Population attributable rate                    PARate.p
         
-        # Population attributable fraction risk data      PAFRisk.p
-        # Population attributable fraction rate data      PAFRate.p
+    # Population attributable fraction risk data      PAFRisk.p
+    # Population attributable fraction rate data      PAFRate.p
 
-        # Crude incidence risk ratio (strata):            cRR.p
-        # Crude incidence rate ratio (strata):            cIRR.p
-        # Crude incidence odds ratio (strata):            cOR.p
-        # Crude attributable risk (strata):               cARisk.p
-        # Crude attributable rate (strata):               cARate.p
+    # Crude incidence risk ratio (strata):            cRR.p
+    # Crude incidence rate ratio (strata):            cIRR.p
+    # Crude incidence odds ratio (strata):            cOR.p
+    # Crude attributable risk (strata):               cARisk.p
+    # Crude attributable rate (strata):               cARate.p
 
-        # Summary incidence risk ratio:                   sRR.p
-        # Summary incidence rate ratio:                   sIRR.p
-        # Summary incidence odds ratio:                   sOR.p
-        # Summary attributable risk                       sARisk.p
-        # Summary attributable rate                       sARate.p
+    # Summary incidence risk ratio:                   sRR.p
+    # Summary incidence rate ratio:                   sIRR.p
+    # Summary incidence odds ratio:                   sOR.p
+    # Summary attributable risk                       sARisk.p
+    # Summary attributable rate                       sARate.p
  
-        # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
+ 		# Reporting - method == cohort.count:
+ 		# Inc risk ratio
+ 		# Odds ratio
+ 		# Inc risk difference
+ 		# Attributable fraction
+ 		# Population risk difference
+ 		# Population attributable fraction
+ 
+ 		# Reporting - method == cohort.time:
+ 		# Inc rate ratio
+ 		# Inc rate difference
+ 		# Attributable fraction
+ 		# Population rate difference
+ 		# Population attributable fraction
+ 				
+ 		# Reporting - method == case.control:
+ 		# Odds ratio
+ 		# Prevalence difference
+ 		# Attributable fraction (est)
+ 		# Population prevalence difference
+ 		# Population attributable fraction
+ 				
+ 		# Reporting - method == cross.sectional:
+ 		# Prevalence ratio
+ 		# Odds ratio
+ 		# Prevalence difference
+ 		# Attributable fraction
+ 		# Population prevalence difference
+ 		# Population attributable fraction
+ 
+    # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
         for(i in 1:length(a)){
            if(a[i] < 1 | b[i] < 1 | c[i] < 1 | d[i] < 1){
              a[i] <- a[i] + 0.5; b[i] <- b[i] + 0.5; c[i] <- c[i] + 0.5; d[i] <- d[i] + 0.5
@@ -144,103 +174,124 @@
         
         # Within-strata incidence risk in exposed:
         tmp <- .funincrisk(as.matrix(cbind(a, N1)), conf.level = conf.level)
-        IRiske.p <- as.numeric(tmp[,1])
-        IRiske.l <- as.numeric(tmp[,2])
-        IRiske.u <- as.numeric(tmp[,3])
+        IRiske.p <- as.numeric(tmp[,1]) * multiplier
+        IRiske.l <- as.numeric(tmp[,2]) * multiplier
+        IRiske.u <- as.numeric(tmp[,3]) * multiplier
         
         # Within-strata incidence risk in unexposed:
         tmp <- .funincrisk(as.matrix(cbind(c, N0)), conf.level = conf.level)
-        IRisko.p <- as.numeric(tmp[,1])
-        IRisko.l <- as.numeric(tmp[,2])
-        IRisko.u <- as.numeric(tmp[,3])
+        IRisko.p <- as.numeric(tmp[,1]) * multiplier
+        IRisko.l <- as.numeric(tmp[,2]) * multiplier
+        IRisko.u <- as.numeric(tmp[,3]) * multiplier 
         
         # Within-strata incidence risk in population:
         tmp <- .funincrisk(as.matrix(cbind(M1, total)), conf.level = conf.level)
-        IRiskpop.p <- as.numeric(tmp[,1])
-        IRiskpop.l <- as.numeric(tmp[,2])
-        IRiskpop.u <- as.numeric(tmp[,3])
+        IRiskpop.p <- as.numeric(tmp[,1]) * multiplier
+        IRiskpop.l <- as.numeric(tmp[,2]) * multiplier
+        IRiskpop.u <- as.numeric(tmp[,3]) * multiplier
         
         # Within-strata incidence rate in exposed:
         tmp <- .funincrate(as.matrix(cbind(a, b)), conf.level = conf.level)
-        IRatee.p <- as.numeric(tmp[,1])
-        IRatee.l <- as.numeric(tmp[,2])
-        IRatee.u <- as.numeric(tmp[,3])
+        IRatee.p <- as.numeric(tmp[,1]) * multiplier
+        IRatee.l <- as.numeric(tmp[,2]) * multiplier
+        IRatee.u <- as.numeric(tmp[,3]) * multiplier
         
         # Within-strata incidence rate in unexposed:
         tmp <- .funincrate(as.matrix(cbind(c, d)), conf.level = conf.level)
-        IRateo.p <- as.numeric(tmp[,1])
-        IRateo.l <- as.numeric(tmp[,2])
-        IRateo.u <- as.numeric(tmp[,3])
+        IRateo.p <- as.numeric(tmp[,1]) * multiplier
+        IRateo.l <- as.numeric(tmp[,2]) * multiplier
+        IRateo.u <- as.numeric(tmp[,3]) * multiplier
         
         # Within-strata incidence rate in population:
         tmp <- .funincrate(as.matrix(cbind(M1, M0)), conf.level = conf.level)
-        IRatepop.p <- as.numeric(tmp[,1])
-        IRatepop.l <- as.numeric(tmp[,2])
-        IRatepop.u <- as.numeric(tmp[,3])
+        IRatepop.p <- as.numeric(tmp[,1]) * multiplier
+        IRatepop.l <- as.numeric(tmp[,2]) * multiplier
+        IRatepop.u <- as.numeric(tmp[,3]) * multiplier
+        
+        # Within-strata odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables. 
+        # American Journal of Epidemiology 100: 165 - 167. 
+        # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
+        # Added 160609.
+        Al <- (qbinom(1 - N., size = a + b, prob = (a / (a + b)))) / (a + b)
+				Au <- (qbinom(N., size = a + b, prob = (a / (a + b)))) / (a + b)
+        Oe.p <- (a / b) 
+        Oe.l <- (Al / (1 - Al)) 
+        Oe.u <- (Au / (1 - Au))
+
+        # Within-strata odds in unexposed:
+        Al <- (qbinom(1 - N., size = c + d, prob = (c / (c + d)))) / (c + d)
+				Au <- (qbinom(N., size = c + d, prob = (c / (c + d)))) / (c + d)
+        Oo.p <- (c / d) 
+        Oo.l <- (Al / (1 - Al)) 
+        Oo.u <- (Au / (1 - Au)) 
+
+        # Within-strata odds in population:
+        Al <- (qbinom(1 - N., size = M1 + M0, prob = (M1 / (M1 + M0)))) / (M1 + M0)
+				Au <- (qbinom(N., size = M1 + M0, prob = (M1 / (M1 + M0)))) / (M1 + M0)
+        Opop.p <- (M1 / M0) 
+        Opop.l <- (Al / (1 - Al)) 
+        Opop.u <- (Au / (1 - Au)) 
         
         # Crude incidence risk in exposed:
         tmp <- .funincrisk(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
-        cIRiske.p <- as.numeric(tmp[,1])
-        cIRiske.l <- as.numeric(tmp[,2])
-        cIRiske.u <- as.numeric(tmp[,3])
+        cIRiske.p <- as.numeric(tmp[,1]) * multiplier
+        cIRiske.l <- as.numeric(tmp[,2]) * multiplier
+        cIRiske.u <- as.numeric(tmp[,3]) * multiplier
         
         # Crude incidence risk in unexposed:
         tmp <- .funincrisk(as.matrix(cbind(sc, sN0)), conf.level = conf.level)
-        cIRisko.p <- as.numeric(tmp[,1])
-        cIRisko.l <- as.numeric(tmp[,2])
-        cIRisko.u <- as.numeric(tmp[,3])
+        cIRisko.p <- as.numeric(tmp[,1]) * multiplier
+        cIRisko.l <- as.numeric(tmp[,2]) * multiplier
+        cIRisko.u <- as.numeric(tmp[,3]) * multiplier
         
         # Crude incidence risk in population:
         tmp <- .funincrisk(as.matrix(cbind(sM1, stotal)), conf.level = conf.level)
-        cIRiskpop.p <- as.numeric(tmp[,1])
-        cIRiskpop.l <- as.numeric(tmp[,2])
-        cIRiskpop.u <- as.numeric(tmp[,3])
+        cIRiskpop.p <- as.numeric(tmp[,1]) * multiplier
+        cIRiskpop.l <- as.numeric(tmp[,2]) * multiplier
+        cIRiskpop.u <- as.numeric(tmp[,3]) * multiplier
         
         # Crude incidence rate in exposed:
         tmp <- .funincrate(as.matrix(cbind(sa, sb)), conf.level = conf.level)
-        cIRatee.p <- as.numeric(tmp[,1])
-        cIRatee.l <- as.numeric(tmp[,2])
-        cIRatee.u <- as.numeric(tmp[,3])
+        cIRatee.p <- as.numeric(tmp[,1]) * multiplier
+        cIRatee.l <- as.numeric(tmp[,2]) * multiplier
+        cIRatee.u <- as.numeric(tmp[,3]) * multiplier
         
         # Crude incidence rate in unexposed:
         tmp <- .funincrate(as.matrix(cbind(sc, sd)), conf.level = conf.level)
-        cIRateo.p <- as.numeric(tmp[,1])
-        cIRateo.l <- as.numeric(tmp[,2])
-        cIRateo.u <- as.numeric(tmp[,3])
+        cIRateo.p <- as.numeric(tmp[,1]) * multiplier
+        cIRateo.l <- as.numeric(tmp[,2]) * multiplier
+        cIRateo.u <- as.numeric(tmp[,3]) * multiplier
         
         # Crude incidence risk in population:
         tmp <- .funincrate(as.matrix(cbind(sM1, sM0)), conf.level = conf.level)
-        cIRatepop.p <- as.numeric(tmp[,1])
-        cIRatepop.l <- as.numeric(tmp[,2])
-        cIRatepop.u <- as.numeric(tmp[,3])
+        cIRatepop.p <- as.numeric(tmp[,1]) * multiplier
+        cIRatepop.l <- as.numeric(tmp[,2]) * multiplier
+        cIRatepop.u <- as.numeric(tmp[,3]) * multiplier
       
-        # Odds in exposed:
-        Oe.p <- a / b
-        Oe.l <- a / b
-        Oe.u <- a / b
-        
+        # Crude odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables. 
+        # American Journal of Epidemiology 100: 165 - 167. 
+        # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
+        # Added 160609
+        Al <- (qbinom(1 - N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
+				Au <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
         cOe.p <- sa / sb
-        cOe.l <- sa / sb
-        cOe.u <- sa / sb
+        cOe.l <- Al / (1 - Al)
+        cOe.u <- Au / (1 - Au)
         
-        # Odds in unexposed:
-        Oo.p <- c / d
-        Oo.l <- c / d
-        Oo.u <- c / d
-        
+        # Crude odds in unexposed:
+        Al <- (qbinom(1 - N., size = sc + sd, prob = (sc / (sc + sd)))) / (sc + sd)
+				Au <- (qbinom(N., size = sc + sd, prob = (sc / (sc + sd)))) / (sc + sd)
         cOo.p <- sc / sd
-        cOo.l <- sc / sd
-        cOo.u <- sc / sd
-        
-        # Odds in population:
-        Opop.p <- M1 / M0 
-        Opop.l <- M1 / M0
-        Opop.u <- M1 / M0
-        
-        cOpop.p <- sM1 / sM0 
-        cOpop.l <- sM1 / sM0
-        cOpop.u <- sM1 / sM0
-        
+        cOo.l <- Al / (1 - Al)
+        cOo.u <- Au / (1 - Au)
+       
+        # Crude odds in population:
+        Al <- (qbinom(1 - N., size = sM1 + sM0, prob = (sM1 / (sM1 + sM0)))) / (sM1 + sM0)
+				Au <- (qbinom(N., size = sM1 + sM0, prob = (sM1 / (sM1 + sM0)))) / (sM1 + sM0)
+        cOpop.p <- sM1 / sM0
+        cOpop.l <- Al / (1 - Al)
+        cOpop.u <- Au / (1 - Au)
+
         
         # =========================================
         # INDIVIDUAL STRATA MEASURES OF ASSOCIATION
@@ -251,11 +302,9 @@
         lnRR <- log(RR.p)
         lnRR.var <- (1 / a) - (1 / N1) + (1 / c) - (1 / N0)
         lnRR.se <- sqrt((1 / a) - (1 / N1) + (1 / c) - (1 / N0))
-        lnRR.l <- lnRR - (z * lnRR.se)
-        lnRR.u <- lnRR + (z * lnRR.se)
         RR.se <- exp(lnRR.se)
-        RR.l <- exp(lnRR.l)
-        RR.u <- exp(lnRR.u)
+        RR.l <- exp(lnRR - (z * lnRR.se))
+        RR.u <- exp(lnRR + (z * lnRR.se))
         
         # Individual strata incidence rate ratio (Rothman p 137 equation 7-5):
         IRR.p <- (a / b) / (c / d)
@@ -285,61 +334,87 @@
         cRR.u <- OR.u / ((1 - N0) + (N0 * OR.u))
         
         # Individual strata attributable risk (Rothman p 135 equation 7-2):
-        ARisk.p <- (a / N1) - (c / N0)
-        ARisk.var <- ((a * b) / (N1^2 * (N1 - 1))) + ((c * d) / (N0^2 * (N0 - 1)))
-        ARisk.se <- sqrt(((a * (N1 - a))/N1^3) + ((c * (N0 - c))/N0^3))
-        ARisk.l <- ARisk.p - (z * ARisk.se)
-        ARisk.u <- ARisk.p + (z * ARisk.se)
+        ARisk.p <- ((a / N1) - (c / N0)) * multiplier
+        # ARisk.var <- (((a * b) / (N1^2 * (N1 - 1))) + ((c * d) / (N0^2 * (N0 - 1))))
+        ARisk.se <- (sqrt(((a * (N1 - a))/N1^3) + ((c * (N0 - c))/N0^3))) * multiplier
+        ARisk.l <- (ARisk.p - (z * ARisk.se))
+        ARisk.u <- (ARisk.p + (z * ARisk.se))
         
         # Individual strata attributable rate (Rothman p 137 equation 7-4):
-        ARate.p <- (a / b) - (c / d)
+        ARate.p <- ((a / b) - (c / d)) * multiplier
         ARate.var <- (a / b^2) + (c / d^2)
-        ARate.se <- sqrt((a / b^2) + (c / d^2))
+        ARate.se <- (sqrt((a / b^2) + (c / d^2))) * multiplier
         ARate.l <- ARate.p - (z * ARate.se)
         ARate.u <- ARate.p + (z * ARate.se)
 
         # Individual strata attributable fraction for risk data (from Hanley 2001):
-        AFRisk.p <- (RR.p - 1) / RR.p
-        AFRisk.l <- (RR.l - 1) / RR.l
-        AFRisk.u <- (RR.u - 1) / RR.u
+        AFRisk.p <- ((RR.p - 1) / RR.p)
+        AFRisk.l <- min((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
+        AFRisk.u <- max((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
                          
         # Individual strata attributable fraction for rate data (from Hanley 2001):
         AFRate.p <- (IRR.p - 1) / IRR.p
-        AFRate.l <- (IRR.l - 1) / IRR.l
-        AFRate.u <- (IRR.u - 1) / IRR.u
+        AFRate.l <- min((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
+        AFRate.u <- max((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
                 
         # Individual strata estimated attributable fraction (from Hanley 2001):
         AFest.p <- (OR.p - 1) / OR.p
-        AFest.l <- (OR.l - 1) / OR.l
-        AFest.u <- (OR.u - 1) / OR.u
-                
+        AFest.l <- min((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
+        AFest.u <- max((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
+        
         # Individual strata population attributable risk (same as Rothman p 135 equation 7-2):
-        PARisk.p <- (M1 / total) - (c / N0)
-        PARisk.se <- sqrt(((M1 * (total - M1))/total^3) + ((c * (N0 - c))/N0^3))
+        PARisk.p <- ((M1 / total) - (c / N0)) * multiplier
+        PARisk.se <- (sqrt(((M1 * (total - M1))/total^3) + ((c * (N0 - c))/N0^3))) * multiplier
         PARisk.l <- PARisk.p - (z * PARisk.se)
         PARisk.u <- PARisk.p + (z * PARisk.se)
         
         # Individual strata population attributable rate (same as Rothman p 137 equation 7-4):
-        PARate.p <- (M1 / M0) - (c / d)
-        PARate.se <- sqrt((M1 / M0^2) + (c / d^2))
+        PARate.p <- ((M1 / M0) - (c / d)) * multiplier
+        PARate.se <- (sqrt((M1 / M0^2) + (c / d^2))) * multiplier
         PARate.l <- PARate.p - (z * PARate.se)
         PARate.u <- PARate.p + (z * PARate.se)
 
         # Individual strata population attributable fractions for risk data (from Hanley, 2001):
-        PAFRisk.p <- ((RR.p - 1) / RR.p) * (a / M1)
-        PAFRisk.l <- ((RR.l - 1) / RR.l) * (a / M1)
-        PAFRisk.u <- ((RR.u - 1) / RR.u) * (a / M1)
-                
+        # PAFRisk.p <- ((RR.p - 1) / RR.p) * (a / M1)
+        # PAFRisk.l <- ((RR.l - 1) / RR.l) * (a / M1)
+        # PAFRisk.u <- ((RR.u - 1) / RR.u) * (a / M1)
+        # Individual strata population attributable fractions for risk data (from OpenEpi TwobyTwo):
+        # PAFRisk.p <- (IRiskpop.p - IRisko.p) / IRiskpop.p
+        # PAFRisk.l <- min((IRiskpop.l - IRisko.l) / IRiskpop.l, (IRiskpop.u - IRisko.u) / IRiskpop.u)
+        # PAFRisk.u <- max((IRiskpop.l - IRisko.l) / IRiskpop.l, (IRiskpop.u - IRisko.u) / IRiskpop.u)
+        
+        # Individual strata population attributable fractions for risk data (from Jewell, page 84):
+        PAFRisk.p <- ((a * d) - (b * c)) / ((a + c) * (c + d))
+        PAFRisk.var <- (b + (PAFRisk.p * (a + d))) / (total * c)
+        PAFRisk.l <- 1 - exp(log(1 - PAFRisk.p) + (z * sqrt(PAFRisk.var)))
+        PAFRisk.u <- 1 - exp(log(1 - PAFRisk.p) - (z * sqrt(PAFRisk.var)))
+        
         # Individual strata population attributable fractions for rate data (from Hanley, 2001):
-        PAFRate.p <- ((IRR.p - 1) / IRR.p) * (a / M1)
-        PAFRate.l <- ((IRR.l - 1) / IRR.l) * (a / M1)
-        PAFRate.u <- ((IRR.u - 1) / IRR.u) * (a / M1)
+        # PAFRate.p <- ((IRR.p - 1) / IRR.p) * (a / M1)
+        # PAFRate.l <- ((IRR.l - 1) / IRR.l) * (a / M1)
+        # PAFRate.u <- ((IRR.u - 1) / IRR.u) * (a / M1)
+        
+        # Individual strata population attributable fractions for rate data (from OpenEpi TwobyTwo - Jewell doesn't provide a method for rate data):
+        PAFRate.p <- (IRatepop.p - IRateo.p) / IRatepop.p
+        PAFRate.l <- min((IRatepop.l - IRateo.l) / IRatepop.l, (IRatepop.u - IRateo.u) / IRatepop.u)
+        PAFRate.u <- max((IRatepop.l - IRateo.l) / IRatepop.l, (IRatepop.u - IRateo.u) / IRatepop.u)
         
         # Individual strata estimated population attributable fraction (from Hanley, 2001):
-        PAFest.p <- ((OR.p - 1) / OR.p) * (a / M1)
-        PAFest.l <- ((OR.l - 1) / OR.l) * (a / M1)
-        PAFest.u <- ((OR.u - 1) / OR.u) * (a / M1)
-                
+        # PAFest.p <- ((OR.p - 1) / OR.p) * (a / M1)
+        # PAFest.l <- ((OR.l - 1) / OR.l) * (a / M1)
+        # PAFest.u <- ((OR.u - 1) / OR.u) * (a / M1)
+        
+        # Individual strata estimated population attributable fraction (from OpenEpi TwobyTwo):
+        # PAFest.p <- (Opop.p - Oo.p) / Opop.p
+        # PAFest.l <- min((Opop.l - Oo.l) / Opop.l, (Opop.u - Oo.u) / Opop.u)
+        # PAFest.u <- max((Opop.l - Oo.l) / Opop.l, (Opop.u - Oo.u) / Opop.u)
+        
+        # Individual strata population attributable fractions for risk data (from Jewell, page 84):
+        PAFest.p <- ((a * d) - (b * c)) / (d * (a + c))
+        PAFest.var <- (a / (c * (a + c))) + (b / (d * (b + d)))
+        PAFest.l <- 1 - exp(log(1 - PAFest.p) + (z * sqrt(PAFest.var)))
+        PAFest.u <- 1 - exp(log(1 - PAFest.p) - (z * sqrt(PAFest.var)))
+
         
         # =============================
         # CRUDE MEASURES OF ASSOCIATION
@@ -379,58 +454,76 @@
         cOR.u <- exp(clnOR.u)
         
         # Crude attributable risk (Rothman p 135 equation 7-2):
-        cARisk.p <- (sa / sN1) - (sc / sN0)
-        cARisk.se <- sqrt(((sa * (sN1 - sa))/sN1^3) + ((sc * (sN0 - sc))/sN0^3))
+        cARisk.p <- ((sa / sN1) - (sc / sN0)) * multiplier
+        cARisk.se <- (sqrt(((sa * (sN1 - sa))/sN1^3) + ((sc * (sN0 - sc))/sN0^3))) * multiplier
         cARisk.l <- cARisk.p - (z * cARisk.se)
         cARisk.u <- cARisk.p + (z * cARisk.se)
         
         # Crude attributable rate (Rothman p 137 equation 7-4):
-        cARate.p <- (sa / sb) - (sc / sd)
-        cARate.se <- sqrt((sa / sb^2) + (sc / sd^2))
+        cARate.p <- ((sa / sb) - (sc / sd)) * multiplier
+        cARate.se <- (sqrt((sa / sb^2) + (sc / sd^2))) * multiplier
         cARate.l <- cARate.p - (z * cARate.se)
         cARate.u <- cARate.p + (z * cARate.se)
 
         # Crude attributable fraction for risk data (from Hanley 2001):
         cAFRisk.p <- (cRR.p - 1) / cRR.p
-        cAFRisk.l <- (cRR.l - 1) / cRR.l
-        cAFRisk.u <- (cRR.u - 1) / cRR.u
+        cAFRisk.l <- min((cRR.l - 1) / cRR.l, (cRR.u - 1) / cRR.u)
+        cAFRisk.u <- max((cRR.l - 1) / cRR.l, (cRR.u - 1) / cRR.u)
         
         # Crude attributable fraction for rate data (from Hanley 2001):
         cAFRate.p <- (cIRR.p - 1) / cIRR.p
-        cAFRate.l <- (cIRR.l - 1) / cIRR.l
-        cAFRate.u <- (cIRR.u - 1) / cIRR.u
+        cAFRate.l <- min((cIRR.l - 1) / cIRR.l, (cIRR.u - 1) / cIRR.u)
+        cAFRate.u <- max((cIRR.l - 1) / cIRR.l, (cIRR.u - 1) / cIRR.u)
         
         # Crude estimated attributable fraction (from Hanley 2001):
         cAFest.p <- (cOR.p - 1) / cOR.p
-        cAFest.l <- (cOR.l - 1) / cOR.l
-        cAFest.u <- (cOR.u - 1) / cOR.u
+        cAFest.l <- min((cOR.l - 1) / cOR.l, (cOR.u - 1) / cOR.u)
+        cAFest.u <- max((cOR.l - 1) / cOR.l, (cOR.u - 1) / cOR.u)
                 
         # Crude population attributable risk (same as Rothman p 135 equation 7-2):
-        cPARisk.p <- (sM1 / stotal) - (sc / sN0)
-        cPARisk.se <- sqrt(((sM1 * (stotal - sM1))/stotal^3) + ((sc * (sN0 - sc))/sN0^3))
+        cPARisk.p <- ((sM1 / stotal) - (sc / sN0)) * multiplier
+        cPARisk.se <- (sqrt(((sM1 * (stotal - sM1))/stotal^3) + ((sc * (sN0 - sc))/sN0^3))) * multiplier
         cPARisk.l <- cPARisk.p - (z * cPARisk.se)
         cPARisk.u <- cPARisk.p + (z * cPARisk.se)
         
         # Crude population attributable rate (same as Rothman p 137 equation 7-4):
-        cPARate.p <- (sM1 / sM0) - (sc / sd)
-        cPARate.se <- sqrt((sM1 / sM0^2) + (sc / sd^2))
+        cPARate.p <- ((sM1 / sM0) - (sc / sd)) * multiplier
+        cPARate.se <- (sqrt((sM1 / sM0^2) + (sc / sd^2))) * multiplier
         cPARate.l <- cPARate.p - (z * cPARate.se)
         cPARate.u <- cPARate.p + (z * cPARate.se)
 
         # Crude population attributable fractions for risk data (from Hanley 2001):
-        cPAFRisk.p <- ((cRR.p - 1) / cRR.p) * (sa / sM1)
-        cPAFRisk.l <- ((cRR.l - 1) / cRR.l) * (sa / sM1)
-        cPAFRisk.u <- ((cRR.u - 1) / cRR.u) * (sa / sM1)
+        # cPAFRisk.p <- ((cRR.p - 1) / cRR.p) * (sa / sM1)
+        # cPAFRisk.l <- ((cRR.l - 1) / cRR.l) * (sa / sM1)
+        # cPAFRisk.u <- ((cRR.u - 1) / cRR.u) * (sa / sM1)
+        
+        # Crude population attributable fractions for risk data (from OpenEpi TwobyTwo):
+        # Changed 160609
+        cPAFRisk.p <- (cIRiskpop.p - cIRisko.p) / cIRiskpop.p
+        cPAFRisk.l <- min((cIRiskpop.l - cIRisko.l) / cIRiskpop.l, (cIRiskpop.u - cIRisko.u) / cIRiskpop.u)
+        cPAFRisk.u <- max((cIRiskpop.l - cIRisko.l) / cIRiskpop.l, (cIRiskpop.u - cIRisko.u) / cIRiskpop.u)
         
         # Crude population attributable fractions for rate data (from Hanley 2001):
         cPAFRate.p <- ((cIRR.p - 1) / cIRR.p) * (sa / sM1)
         cPAFRate.l <- ((cIRR.p - 1) / cIRR.p) * (sa / sM1)
         cPAFRate.u <- ((cIRR.p - 1) / cIRR.p) * (sa / sM1)
         
-        # Crude estimated population attributable fraction:
-        cPAFest.p <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
-        cPAFest.l <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
-        cPAFest.u <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
+        # Crude population attributable fractions for rate data (from OpenEpi TwobyTwo):
+        # Changed 160609
+        cPAFRate.p <- (cIRatepop.p - cIRateo.p) / cIRatepop.p
+        cPAFRate.l <- min((cIRatepop.l - cIRateo.l) / cIRatepop.l, (cIRatepop.u - cIRateo.u) / cIRatepop.u)
+        cPAFRate.u <- max((cIRatepop.l - cIRateo.l) / cIRatepop.l, (cIRatepop.u - cIRateo.u) / cIRatepop.u)
+        
+        # Crude estimated population attributable fraction (from Hanley, 2001):
+        # cPAFest.p <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
+        # cPAFest.l <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
+        # cPAFest.u <- ((cOR.p - 1) / cOR.p) * (sa / sM1)
+        
+        # Crude estimated population attributable fraction (from OpenEpi TwobyTwo):
+        # Changed 160609
+        cPAFest.p <- (cOpop.p - cOo.p) / cOpop.p
+        cPAFest.l <- min((cOpop.l - cOo.l) / cOpop.l, (cOpop.u - cOo.u) / cOpop.u)
+        cPAFest.u <- max((cOpop.l - cOo.l) / cOpop.l, (cOpop.u - cOo.u) / cOpop.u)
          
                       
         # ===============================
@@ -458,24 +551,23 @@
         # MANTEL-HAENZEL SUMMARY MEASURES
         # ================================
                 
-        # Summary incidence risk ratio (Rothman p152):
+        # Summary incidence risk ratio (Rothman 2002 p 148 and 152, equation 8-2):
         sRR.p <- sum((a * N0 / total)) / sum((c * N1 / total))
         varLNRR.s <- sum(((M1 * N1 * N0) / total^2) - ((a * c)/ total)) / 
            (sum((a * N0)/total) * sum((c * N1)/total))
         lnRR.s <- log(sRR.p)
-        sRR.se <- sqrt(varLNRR.s)
+        sRR.se <- (sqrt(varLNRR.s))
         sRR.l <- exp(lnRR.s - (z * sqrt(varLNRR.s)))
         sRR.u <- exp(lnRR.s + (z * sqrt(varLNRR.s)))
         
-        # Summary incidence rate ratio (Rothman p 152):
-        sIRR.p <- sum((a * N0 / total)) / sum((c * N1 / total))
-        varLNIRR.s <- sum(((M1 * N1 * N0) / total)^2) /
-           (sum((a * N0) / total) * sum((c * N1) / total))
+        # Summary incidence rate ratio (Rothman 2002 p 153, equation 8-5):
+        sIRR.p <- sum((a * d) / M0) / sum((c * b) / M0)
         lnIRR.s <- log(sIRR.p)
+        varLNIRR.s <- (sum((M1 * b * d) / M0^2)) / (sum((a * d) / M0) * sum((c * b) / M0))
         sIRR.se <- sqrt(varLNIRR.s)
         sIRR.l <- exp(lnIRR.s - (z * sqrt(varLNIRR.s)))
         sIRR.u <- exp(lnIRR.s + (z * sqrt(varLNIRR.s)))
-                     
+        
         # Summary odds ratio (Cord Heuer 211004):
         sOR.p <- sum((a * d / total)) / sum((b * c / total))
         G <- a * d / total
@@ -496,37 +588,24 @@
         sOR.l <- exp(lnOR.s - z * sqrt(varLNOR.s))
         sOR.u <- exp(lnOR.s + z * sqrt(varLNOR.s))
 
-        # Summary attributable risk (Rothman and Greenland p 271):
-        sARisk.p <- sum(((a * N0) - (c * N1)) / total) / sum((N1 * N0) / total)
+        # Summary attributable risk (Rothman 2002 p 147 and p 152, equation 8-1):
+        sARisk.p <- (sum(((a * N0) - (c * N1)) / total) / sum((N1 * N0) / total)) * multiplier
         w <- (N1 * N0) / total
         var.p1 <- (((a * d) / (N1^2 * (N1 - 1))) + ((c * b) / (N0^2 * (N0 - 1))))
         var.p1[N0 == 1] <- 0
         var.p1[N1 == 1] <- 0
         varARisk.s <- sum(w^2 * var.p1) / sum(w)^2
-        sARisk.se <- sqrt(varARisk.s)
-        sARisk.l <- sARisk.p - (z * sqrt(varARisk.s))
-        sARisk.u <- sARisk.p + (z * sqrt(varARisk.s))
+        sARisk.se <- (sqrt(varARisk.s)) * multiplier
+        sARisk.l <- sARisk.p - (z * sARisk.se)
+        sARisk.u <- sARisk.p + (z * sARisk.se)
 
-        # Summary attributable risk (Jewell p 137 - 138):
-        # sARisk.p <- sum(((a * (c + d)) / total) - ((c * (a + b)) / total)) / sum(((a + b) * (c + d)) / total)
-        # varARisk.s <- sum(((a * b * (c + d)^3) + (c * d * (a + b)^3)) / ((a + b) * (c + d) * total^2)) / sum(((a + b) * (c + d)) / total)^2
-        # sARisk.l <- sARisk.p - (z * sqrt(varARisk.s))
-        # sARisk.u <- sARisk.p + (z * sqrt(varARisk.s))
-        
-        # Summary attributable risk (Rothman p 147, 152):
-        # sARisk.p <- sum(((a * N0) - (c * N1)) / total) / sum((N1 * N0) / total)
-        # varARisk.s <- sum(((N1 * N0) / total)^2 * (((a * d)/(N1^2 * (N1 - 1))) + ((c * b)/(N0^2 * (N0 - 1))))) /
-        #  sum(((N1 * N0)/total))^2
-        # sARisk.l <- sARisk.p - (z * sqrt(varARisk.s))
-        # sARisk.u <- sARisk.p + (z * sqrt(varARisk.s))
-
-        # Summary attributable rate:
-        w <- 1 / ARate.se^2
-        sARate.p <- sum(w * ARate.p) / sum(w)
-        sARate.se <- 0
-        sARate.l <- sARate.p - (z / sqrt(chi2s))
-        sARate.u <- sARate.p + (z / sqrt(chi2s))
-
+        # Summary attributable rate (Rothman 2002 p 153, equation 8-4):
+        sARate.p <- sum(((a * d) - (c * b)) / M0) / sum((b * d) / M0) * multiplier
+        varARate.s <- sum(((b * d) / M0)^2 * ((a / b^2) + (c / d^2 ))) / sum((b * d) / M0)^2
+        sARate.se <- sqrt(varARate.s) * multiplier
+        sARate.l <- sARate.p - (z * sARate.se)
+        sARate.u <- sARate.p + (z * sARate.se)
+ 
 
         # ===============================
         # EFFECT OF CONFOUNDING
@@ -740,6 +819,9 @@
         chisq <- as.data.frame(cbind(test.statistic = chi2, df = 1, p.value = p.chi2)) 
         chisq.summary <- as.data.frame(cbind(test.statistic = chi2s, df = 1, p.value = p.chi2s))
 
+        # Labelling for incidence prevalence units:
+        count.units <- ifelse(multiplier == 1, "Cases per population unit", paste("Cases per ", multiplier, " population units", sep = ""))
+        time.units <- ifelse(multiplier == 1, "Cases per unit of population time at risk", paste("Cases per ", multiplier, " units of population time at risk", sep = ""))
 
         # Results for method == "cohort.count": 
         if(method == "cohort.count" & length(a) == 1 & verbose == TRUE){
@@ -759,20 +841,21 @@
             r2 <- c(c, d, N0, IRisko.p, Oo.p)
             r3 <- c(M1, M0, M0 + M1, IRiskpop.p, Opop.p)
             tab <- as.data.frame(rbind(r1, r2, r3))
-            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk", "       Odds") 
+            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk *", "       Odds") 
             rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-            tab <- format.data.frame(tab, digits = 2, justify = "right")
+            tab <- format.data.frame(tab, digits = 3, justify = "right")
         
             print(tab)
             cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
             cat("\n---------------------------------------------------------") 
-            cat("\nIncidence risk ratio                  ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
+            cat("\nInc risk ratio                        ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
             cat("\nOdds ratio                            ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
-            cat("\nAttrib risk                           ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))
+            cat("\nInc risk difference *                 ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))
             cat("\nAttrib fraction (%)                   ", round(AFRisk.p * 100, digits = 2), paste("(", round(AFRisk.l * 100, digits = 2), ", ", round(AFRisk.u * 100, digits = 2), ")", sep = ""))
-            cat("\nPopulation attrib risk                ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
+            cat("\nPopulation inc risk difference *      ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
             cat("\nPopulation attrib fraction (%)        ", round(PAFRisk.p * 100, digits = 2), paste("(", round(PAFRisk.l * 100, digits = 2), ", ", round(PAFRisk.u * 100, digits = 2), ")", sep = ""))
-            cat("\n---------------------------------------------------------", "\n")
+            cat("\n---------------------------------------------------------")
+            cat("\n", "*", count.units, "\n")
             }
             
             if(method == "cohort.count" & length(a) > 1 & verbose == TRUE){
@@ -801,28 +884,29 @@
         
         if(method == "cohort.count" & length(a) > 1 & verbose == FALSE){
            # Define tab:
-           r1 <- c(sum(a), sum(b), sum(N1), sum(a)/sum(N1), sum(a)/sum(b))
-           r2 <- c(sum(c), sum(d), sum(N0), sum(c)/sum(N0), sum(c)/sum(d))
-           r3 <- c(sum(M1), sum(M0), sum(M0 + M1), sum(M1)/sum(M0 + M1), sum(M1)/sum(M0))
+           r1 <- c(sum(a), sum(b), sum(N1), (sum(a)/sum(N1)) * multiplier, sum(a)/sum(b))
+           r2 <- c(sum(c), sum(d), sum(N0), (sum(c)/sum(N0)) * multiplier, sum(c)/sum(d))
+           r3 <- c(sum(M1), sum(M0), sum(M0 + M1), (sum(M1)/sum(M0 + M1)) * multiplier, sum(M1)/sum(M0))
            tab <- as.data.frame(rbind(r1, r2, r3))
-           colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk", "       Odds") 
+           colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk *", "       Odds") 
            rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-           tab <- format.data.frame(tab, digits = 2, justify = "right")
+           tab <- format.data.frame(tab, digits = 3, justify = "right")
            print(tab)
            
            cat("\n")
            cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
            cat("\n---------------------------------------------------------") 
-           cat("\nIncidence risk ratio (crude)           ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence risk ratio (M-H)             ", round(sRR.p, digits = 2), paste("(", round(sRR.l, digits = 2), ", ", round(sRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence risk ratio (crude:M-H)       ", round(RR.conf.p, digits = 2))
+           cat("\nInc risk ratio (crude)                 ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
+           cat("\nInc risk ratio (M-H)                   ", round(sRR.p, digits = 2), paste("(", round(sRR.l, digits = 2), ", ", round(sRR.u, digits = 2), ")", sep = ""))
+           cat("\nInc risk ratio (crude:M-H)             ", round(RR.conf.p, digits = 2))
            cat("\nOdds ratio (crude)                     ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (M-H)                       ", round(sOR.p, digits = 2), paste("(", round(sOR.l, digits = 2), ", ", round(sOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (crude:M-H)                 ", round(OR.conf.p, digits = 2))
-           cat("\nAttrib risk (crude)                    ", round(cARisk.p, digits = 2), paste("(", round(cARisk.l, digits = 2), ", ", round(cARisk.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib risk (M-H)                      ", round(sARisk.p, digits = 2), paste("(", round(sARisk.l, digits = 2), ", ", round(sARisk.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib risk (crude:M-H)                ", round(ARisk.conf.p, digits = 2))
-           cat("\n---------------------------------------------------------", "\n")
+           cat("\nInc risk difference (crude) *          ", round(cARisk.p, digits = 2), paste("(", round(cARisk.l, digits = 2), ", ", round(cARisk.u, digits = 2), ")", sep = ""))
+           cat("\nInc risk difference (M-H) *            ", round(sARisk.p, digits = 2), paste("(", round(sARisk.l, digits = 2), ", ", round(sARisk.u, digits = 2), ")", sep = ""))
+           cat("\nInc risk difference (crude:M-H)        ", round(ARisk.conf.p, digits = 2))
+           cat("\n---------------------------------------------------------")
+           cat("\n", "*", count.units, "\n")
         }
            
         # Results for method == "cohort.time": 
@@ -842,18 +926,19 @@
             r2 <- c(c, d, IRateo.p)
             r3 <- c(M1, M0, IRatepop.p)
             tab <- as.data.frame(rbind(r1, r2, r3))
-            colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate") 
+            colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate *") 
             rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-            tab <- format.data.frame(tab, digits = 2, justify = "right")
+            tab <- format.data.frame(tab, digits = 3, justify = "right")
             print(tab)
             cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
             cat("\n---------------------------------------------------------") 
-            cat("\nIncidence rate ratio                  ", round(cIRR.p, digits = 2), paste("(", round(cIRR.l, digits = 2), ", ", round(cIRR.u, digits = 2), ")", sep = ""))
-            cat("\nAttrib rate                           ", round(ARate.p, digits = 2), paste("(", round(ARate.l, digits = 2), ", ", round(ARate.u, digits = 2), ")", sep = ""))
+            cat("\nInc rate ratio                        ", round(cIRR.p, digits = 2), paste("(", round(cIRR.l, digits = 2), ", ", round(cIRR.u, digits = 2), ")", sep = ""))
+            cat("\nInc rate difference *                 ", round(ARate.p, digits = 2), paste("(", round(ARate.l, digits = 2), ", ", round(ARate.u, digits = 2), ")", sep = ""))
             cat("\nAttrib fraction (%)                   ", round(AFRate.p * 100, digits = 2), paste("(", round(AFRate.l * 100, digits = 2), ", ", round(AFRate.u * 100, digits = 2), ")", sep = ""))
-            cat("\nPopulation attrib rate                ", round(PARate.p, digits = 2), paste("(", round(PARate.l, digits = 2), ", ", round(PARate.u, digits = 2), ")", sep = ""))
+            cat("\nPopulation inc rate difference *      ", round(PARate.p, digits = 2), paste("(", round(PARate.l, digits = 2), ", ", round(PARate.u, digits = 2), ")", sep = ""))
             cat("\nPopulation attrib fraction (%)        ", round(PAFRate.p * 100, digits = 2), paste("(", round(PAFRate.l * 100, digits = 2), ", ", round(PAFRate.u * 100, digits = 2), ")", sep = ""))
-            cat("\n---------------------------------------------------------", "\n")
+            cat("\n---------------------------------------------------------")
+            cat("\n", "*", time.units, "\n")
         }
         
         if(method == "cohort.time" & length(a) > 1 & verbose == TRUE){
@@ -877,23 +962,24 @@
         
         if(method == "cohort.time" & length(a) > 1 & verbose == FALSE){
            # Define tab:
-           r1 <- c(sum(a), sum(b), sum(a)/sum(b))
-           r2 <- c(sum(c), sum(d), sum(c)/sum(d))
-           r3 <- c(sum(M1), sum(M0), sum(M1)/sum(M0))
+           r1 <- c(sum(a), sum(b), ((sum(a)/sum(b)) * multiplier))
+           r2 <- c(sum(c), sum(d), ((sum(c)/sum(d)) * multiplier))
+           r3 <- c(sum(M1), sum(M0), ((sum(M1)/sum(M0)) * multiplier))
            tab <- as.data.frame(rbind(r1, r2, r3))
-           colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate") 
+           colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate *") 
            rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-           tab <- format.data.frame(tab, digits = 2, justify = "right")
+           tab <- format.data.frame(tab, digits = 3, justify = "right")
            print(tab)
            cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
            cat("\n---------------------------------------------------------") 
-           cat("\nIncidence rate ratio (crude)           ", round(cIRR.p, digits = 2), paste("(", round(cIRR.l, digits = 2), ", ", round(cIRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence rate ratio (M-H)             ", round(sIRR.p, digits = 2), paste("(", round(sIRR.l, digits = 2), ", ", round(sIRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence rate ratio (crude:M-H)       ", round(IRR.conf.p, digits = 2))
-           cat("\nAttrib rate (crude)                    ", round(cARate.p, digits = 2), paste("(", round(cARate.l, digits = 2), ", ", round(cARate.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib rate (M-H)                      ", round(sARate.p, digits = 2), paste("(", round(sARate.l, digits = 2), ", ", round(sARate.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib rate (crude:M-H)                ", round(ARate.conf.p, digits = 2))
-           cat("\n---------------------------------------------------------", "\n")
+           cat("\nInc rate ratio (crude)                 ", round(cIRR.p, digits = 2), paste("(", round(cIRR.l, digits = 2), ", ", round(cIRR.u, digits = 2), ")", sep = ""))
+           cat("\nInc rate ratio (M-H)                   ", round(sIRR.p, digits = 2), paste("(", round(sIRR.l, digits = 2), ", ", round(sIRR.u, digits = 2), ")", sep = ""))
+           cat("\nInc rate ratio (crude:M-H)             ", round(IRR.conf.p, digits = 2))
+           cat("\nInc rate difference (crude) *          ", round(cARate.p, digits = 2), paste("(", round(cARate.l, digits = 2), ", ", round(cARate.u, digits = 2), ")", sep = ""))
+           cat("\nInc rate difference (M-H) *            ", round(sARate.p, digits = 2), paste("(", round(sARate.l, digits = 2), ", ", round(sARate.u, digits = 2), ")", sep = ""))
+           cat("\nInc rate difference (crude:M-H)        ", round(ARate.conf.p, digits = 2))
+           cat("\n---------------------------------------------------------")
+           cat("\n", "*", time.units, "\n")
         }
         
         # Results for method == "case.control": 
@@ -909,23 +995,24 @@
         
         if(method == "case.control" & length(a) == 1 & verbose == FALSE){
            # Define tab:
-            r1 <- c(a, b, N1, Oe.p)
-            r2 <- c(c, d, N0, Oo.p)
-            r3 <- c(M1, M0, M0 + M1, Opop.p)
+            r1 <- c(a, b, N1, IRiske.p, Oe.p)
+            r2 <- c(c, d, N0, IRisko.p, Oo.p)
+            r3 <- c(M1, M0, M0 + M1, IRiskpop.p, Opop.p)
             tab <- as.data.frame(rbind(r1, r2, r3))
-            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Odds") 
+            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds") 
             rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-            tab <- format.data.frame(tab, digits = 2, justify = "right")
+            tab <- format.data.frame(tab, digits = 3, justify = "right")
         
             print(tab)
             cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
             cat("\n---------------------------------------------------------") 
             cat("\nOdds ratio                            ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
-            cat("\nAttrib risk                           ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))
+            cat("\nPrevalence difference *               ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))
             cat("\nAttrib fraction (est) (%)             ", round(AFest.p * 100, digits = 2), paste("(", round(AFest.l * 100, digits = 2), ", ", round(AFest.u * 100, digits = 2), ")", sep = ""))
-            cat("\nPopulation attrib risk                ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
+            cat("\nPopulation prevalence difference *    ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
             cat("\nPopulation attrib fraction (est) (%)  ", round(PAFest.p * 100, digits = 2), paste("(", round(PAFest.l * 100, digits = 2), ", ", round(PAFest.u * 100, digits = 2), ")", sep = ""))
-            cat("\n---------------------------------------------------------", "\n")
+            cat("\n---------------------------------------------------------")
+            cat("\n", "*", count.units, "\n")
         }
         
         if(method == "case.control" & length(a) > 1 & verbose == TRUE){
@@ -949,13 +1036,13 @@
         
         if(method == "case.control" & length(a) > 1 & verbose == FALSE){
             # Define tab:
-            r1 <- c(sum(a), sum(b), sum(N1), sum(a)/sum(b))
-            r2 <- c(sum(c), sum(d), sum(N0), sum(c)/sum(d))
-            r3 <- c(sum(M1), sum(M0), sum(M0 + M1), sum(M1)/sum(M0))
+            r1 <- c(sum(a), sum(b), sum(N1), (sum(a)/sum(N1)) * multiplier, sum(a)/sum(b))
+            r2 <- c(sum(c), sum(d), sum(N0), (sum(c)/sum(N0)) * multiplier, sum(c)/sum(d))
+            r3 <- c(sum(M1), sum(M0), sum(M0 + M1), (sum(M1)/sum(M0 + M1)) * multiplier, sum(M1)/sum(M0))
             tab <- as.data.frame(rbind(r1, r2, r3))
-            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Odds") 
+            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds") 
             rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-            tab <- format.data.frame(tab, digits = 2, justify = "right")
+            tab <- format.data.frame(tab, digits = 3, justify = "right")
             print(tab)
            
            cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
@@ -963,16 +1050,17 @@
            cat("\nOdds ratio (crude)                     ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (M-H)                       ", round(sOR.p, digits = 2), paste("(", round(sOR.l, digits = 2), ", ", round(sOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (crude:M-H)                 ", round(OR.conf.p, digits = 2))
-           cat("\nAttrib rate (crude)                    ", round(cARate.p, digits = 2), paste("(", round(cARate.l, digits = 2), ", ", round(cARate.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib rate (M-H)                      ", round(sARate.p, digits = 2), paste("(", round(sARate.l, digits = 2), ", ", round(sARate.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib rate (crude:M-H)                ", round(ARate.conf.p, digits = 2))
-           cat("\n---------------------------------------------------------", "\n")
+           cat("\nPrevalence difference (crude) *        ", round(cARisk.p, digits = 2), paste("(", round(cARisk.l, digits = 2), ", ", round(cARisk.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence difference (M-H) *          ", round(sARisk.p, digits = 2), paste("(", round(sARisk.l, digits = 2), ", ", round(sARisk.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence difference (crude:M-H)      ", round(ARate.conf.p, digits = 2))
+           cat("\n---------------------------------------------------------")
+           cat("\n", "*", count.units, "\n")
         }
         
         # Results for method == "cross.sectional": 
         if(method == "cross.sectional" & length(a) == 1 & verbose == TRUE){
         rval <- list(
-           RR = RR.crude,
+           PR = RR.crude,
            OR = OR.crude,
            AR = ARisk, 
            AF = AFRisk,
@@ -987,20 +1075,21 @@
         r2 <- c(c, d, N0, IRisko.p, Oo.p)
         r3 <- c(M1, M0, M0 + M1, IRiskpop.p, Opop.p)
         tab <- as.data.frame(rbind(r1, r2, r3))
-        colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk", "       Odds") 
+        colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds") 
         rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-        tab <- format.data.frame(tab, digits = 2, justify = "right")
+        tab <- format.data.frame(tab, digits = 3, justify = "right")
         
         print(tab)
         cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
         cat("\n---------------------------------------------------------") 
-        cat("\nIncidence risk ratio                      ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
+        cat("\nPrevalence ratio                          ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
         cat("\nOdds ratio                                ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
-        cat("\nAttrib risk                               ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))                                      
+        cat("\nPrevalence difference *                   ", round(ARisk.p, digits = 2), paste("(", round(ARisk.l, digits = 2), ", ", round(ARisk.u, digits = 2), ")", sep = ""))                                      
         cat("\nAttrib fraction (%)                       ", round(AFRisk.p * 100, digits = 2), paste("(", round(AFRisk.l * 100, digits = 2), ", ", round(AFRisk.u * 100, digits = 2), ")", sep = ""))
-        cat("\nPopulation attrib risk                    ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
+        cat("\nPopulation prevalence difference *        ", round(PARisk.p, digits = 2), paste("(", round(PARisk.l, digits = 2), ", ", round(PARisk.u, digits = 2), ")", sep = ""))
         cat("\nPopulation attrib fraction (%)            ", round(PAFRisk.p * 100, digits = 2), paste("(", round(PAFRisk.l * 100, digits = 2), ", ", round(PAFRisk.u * 100, digits = 2), ")", sep = ""))
-        cat("\n---------------------------------------------------------", "\n")
+        cat("\n---------------------------------------------------------")
+        cat("\n", "*", count.units, "\n")
         }
         
         if(method == "cross.sectional" & length(a) > 1 & verbose == TRUE){
@@ -1028,27 +1117,28 @@
         
         else if(method == "cross.sectional" & length(a) > 1 & verbose == FALSE){
             # Define tab:
-            r1 <- c(sum(a), sum(b), sum(N1), sum(a)/sum(N1), sum(a)/sum(b))
-            r2 <- c(sum(c), sum(d), sum(N0), sum(c)/sum(N0), sum(c)/sum(d))
-            r3 <- c(sum(M1), sum(M0), sum(M0 + M1), sum(M1)/sum(M0 + M1), sum(M1)/sum(M0))
+            r1 <- c(sum(a), sum(b), sum(N1), (sum(a)/sum(N1)) * multiplier, sum(a)/sum(b))
+            r2 <- c(sum(c), sum(d), sum(N0), (sum(c)/sum(N0)) * multiplier, sum(c)/sum(d))
+            r3 <- c(sum(M1), sum(M0), sum(M0 + M1), (sum(M1)/sum(M0 + M1)) * multiplier, sum(M1)/sum(M0))
             tab <- as.data.frame(rbind(r1, r2, r3))
-            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk", "       Odds") 
+            colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds") 
             rownames(tab) <- c("Exposed +", "Exposed -", "Total") 
-            tab <- format.data.frame(tab, digits = 2, justify = "right")
+            tab <- format.data.frame(tab, digits = 3, justify = "right")
             print(tab)
            
            cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
            cat("\n---------------------------------------------------------") 
-           cat("\nIncidence risk ratio (crude)           ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence risk ratio (M-H)             ", round(sRR.p, digits = 2), paste("(", round(sRR.l, digits = 2), ", ", round(sRR.u, digits = 2), ")", sep = ""))
-           cat("\nIncidence risk ratio (crude:M-H)       ", round(RR.conf.p, digits = 2))
+           cat("\nPrevalence ratio (crude)               ", round(cRR.p, digits = 2), paste("(", round(cRR.l, digits = 2), ", ", round(cRR.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence ratio (M-H)                 ", round(sRR.p, digits = 2), paste("(", round(sRR.l, digits = 2), ", ", round(sRR.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence ratio (crude:M-H)           ", round(RR.conf.p, digits = 2))
            cat("\nOdds ratio (crude)                     ", round(cOR.p, digits = 2), paste("(", round(cOR.l, digits = 2), ", ", round(cOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (M-H)                       ", round(sOR.p, digits = 2), paste("(", round(sOR.l, digits = 2), ", ", round(sOR.u, digits = 2), ")", sep = ""))
            cat("\nOdds ratio (crude:M-H)                 ", round(OR.conf.p, digits = 2))
-           cat("\nAttrib risk (crude)                    ", round(cARisk.p, digits = 2), paste("(", round(cARisk.l, digits = 2), ", ", round(cARisk.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib risk (M-H)                      ", round(sARisk.p, digits = 2), paste("(", round(sARisk.l, digits = 2), ", ", round(sARisk.u, digits = 2), ")", sep = ""))
-           cat("\nAttrib risk (crude:M-H)                ", round(ARisk.conf.p, digits = 2))
-           cat("\n---------------------------------------------------------", "\n")
+           cat("\nPrevalence difference (crude) *        ", round(cARisk.p, digits = 2), paste("(", round(cARisk.l, digits = 2), ", ", round(cARisk.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence difference (M-H) *          ", round(sARisk.p, digits = 2), paste("(", round(sARisk.l, digits = 2), ", ", round(sARisk.u, digits = 2), ")", sep = ""))
+           cat("\nPrevalence difference (crude:M-H)      ", round(ARisk.conf.p, digits = 2))
+           cat("\n---------------------------------------------------------")
+           cat("\n", "*", count.units, "\n")
         }
 if(verbose == TRUE){
     return(rval)
