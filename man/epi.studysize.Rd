@@ -7,7 +7,7 @@ Estimate the sample size to compare means, proportions, and survival
 }
 
 \description{
-Computes the sample size, power, and minimum detectable difference when comparing means, proportions, and survivorship. 
+Computes the sample size, power, and minimum detectable difference for cohort studies (using count data), case control studies, when comparing means and survival. 
 }
 
 \usage{
@@ -16,28 +16,47 @@ epi.studysize(treat, control, n, sigma, power, r = 1,
 }
 
 \arguments{
-  \item{treat}{the expected value for the treatment group. When \code{method = "survival"} this is the the proportion of treated subjects that will have not experienced the event of interest at the end of the study.}
-  \item{control}{the expected value for the control group. When \code{method = "survival"} this is the the proportion of control subjects that will have not experienced the event of interest at the end of the study.}
-  \item{n}{scalar, defining the total number of subjects in the study.}
-  \item{sigma}{when \code{method = "means"} this is the expected standard deviation of the variable of interest, for both treatment and control groups. When \code{method = "case.control"} this is the expected proportion of study subjects that are exposed to the risk factor of interest. This argument is ignored when \code{method = "proportions"}, \code{method = "survival"}, or \code{method = "cohort"}.}
-  \item{power}{the required study power.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
+  \item{treat}{the expected value for the treatment group (see below).}
+  \item{control}{the expected value for the control group (see below).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in the treatment and control group).}
+  \item{sigma}{when \code{method = "means"} this is the expected standard deviation of the variable of interest for both treatment and control groups. When \code{method = "case.control"} this is the expected proportion of study subjects exposed to the risk factor of interest. This argument is ignored when \code{method = "proportions"}, \code{method = "survival"}, or \code{method = "cohort.count"}.}
+  \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group. This argument is ignored when \code{method = "proportions"}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the treatment group is better or worse than the control group. Use a one-sided test to evaluate whether or not the treatment group is better than the control group.}
-  \item{method}{a character string indicating the method to be used. Options are \code{means}, \code{proportions}, \code{survival}, \code{cohort}, or \code{case.control}.}
+  \item{method}{a character string indicating the method to be used. Options are \code{means}, \code{proportions}, \code{survival}, \code{cohort.count}, or \code{case.control}.}
 }
 
 \details{
+The methodologies adopted in this function follow closely the approach described in Chapter 8 of Woodward (2005).
+
+When \code{method = "means"} the argument \code{treat} defines the mean outcome for the treatment group, \code{control} defines the mean outcome for the control group, and \code{sigma} defines the standard deviation of the outcome, assumed to be the same across the treatment and control groups (see Woodward pp 397 - 403). 
+
+When \code{method = "proportions"} the argument \code{treat} defines the proportion in the treatment group and \code{control} defines the proportion in the control group. The arguments \code{sigma} and \code{r} are ignored. 
+
+When \code{method = "survival"} the argument \code{treat} is the proportion of treated subjects that will have not experienced the event of interest at the end of the study period and \code{control} is the proportion of control subjects that will have not experienced the event of interest at the end of the study period. The argument \code{sigma} is ignored (see Therneau and Grambsch pp 61 - 65).
+ 
+When \code{method = "cohort.count"} the argument \code{treat} defines the estimated incidence risk (cumulative incidence) of the event of interest in the treatment group and \code{control} defines the estimated incidence risk of the event of interest in the control group. The argument \code{sigma} is ignored (see Woodward pp 405 - 410).
+
+When \code{method = "case.control"} the argument \code{treat} defines the estimated incidence risk (cumulative incidence) of the event of interest in the treatment group and \code{control} defines the estimated incidence risk of the event of interest in the control group. The argument \code{sigma} is the expected proportion of study subjects exposed to the risk factor of interest (see Woodward pp 410 - 412).
+
+In case control studies sample size estimates are worked out on the basis of an expected odds (or risk) ratio. When \code{method = "case.control"} the estimated incidence risk estimates in the \code{treat} and \code{control} groups are used to define the expected risk ratio. See example 7 below, taken from Woodward p 412. 
+
+For \code{method = "proportions"} it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. In contrast, \code{method = "cohort.count"} relates to the two-sample problem where neither
+proportion is known (or assumed, at least). Thus, there is much more uncertainty in the \code{method = "cohort.count"} situation (compared with \code{method = "proportions"}) and correspondingly a requirement for a much larger sample size. Generally, \code{method = "cohort.count"} is more useful in practice. \code{method = "proportions"} is used in special situations, such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
 }
 
 \value{
 A list containing one of the following: 
   \item{n}{the total number of subjects required for the specified level of confidence and power.}
   \item{delta}{the minimum detectable difference given the specified level of confidence and power.}
+  \item{lambda}{the minimum detectable risk ratio >1 and the maximum detectable risk ratio <1.}
   \item{power}{the power of the study given the specified number of study subjects and power.}
 }
 
 \references{
+Fleiss JL (1981). Statistical Methods for Rates and Proportions. Wiley, New York.
+
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
 Therneau TM, Grambsch PM (2000). Modelling Survival Data - Extending the Cox Model. Springer, London, pp. 61 - 65.
@@ -51,16 +70,16 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 \note{
 The power of a study is its ability to demonstrate an association, given that an association actually exists.
 
-The odds ratio from a case-control study is an approximation of risk ratio when the disease of interest is rare. In these functions, we are considering the sample size needed to detect an approximate risk ratio in a case-control study. 
+The odds ratio and the risk ratio are approximately equal when the event of interest is rare. In this function \code{method = "case.control"} returns the sample size required to detect an approximate risk ratio in a case-control study (see Woodward p 412). 
 
-When \code{method} is set to  \code{proportions} or \code{cohort} values need to be entered for \code{treat}, \code{control}, \code{n}, and \code{power} to return the minimum detectable difference. 
+When \code{method = "proportions"} values need to be entered for \code{control}, \code{n}, and \code{power} to return a value for \code{delta}. When \code{method = "cohort.count"} values need to be entered for \code{control}, \code{n}, and \code{power} to return a value for \code{lambda} (see example 6 below).
 }
 
 \seealso{
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1 (from Woodward pp 399 - 400)
 ## Women taking oral contraceptives sometimes experience anaemia due to 
 ## impaired iron absorption. A study is planned to compare the use of iron
 ## tablets against a course of placebos. Oral contraceptive users are 
@@ -83,7 +102,7 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 ## times as many (56) to the iron treatment group.
 
 
-## EXAMPLE 2
+## EXAMPLE 2 (from Woodward pp 403 - 404)
 ## A government initiative has decided to reduce the prevalence of male  
 ## smoking to, at most, 0.30. A sample survey is planned to test, at the 
 ## 0.05 level, the hypothesis that the proportion of smokers in the male 
@@ -93,10 +112,11 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 
 epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90, 
    r = 1, conf.level = 0.95, sided.test = 1, method = "proportions")
+   
+## ## A total of 4568 men should be sampled: 2284 in the treatment group and
+## 2284 in the control group. 
 
-## A total of 4568 men should be sampled.
-
-## EXAMPLE 3
+## EXAMPLE 3 (from Therneau and Grambsch p 63)
 ## The 5-year survival probability of patients receiving a standard treatment 
 ## 0.30 and we anticipate that a new treatment will increase it to 0.45. 
 ## Assume that a study will use a two-sided test at the 0.05 level with 0.90
@@ -108,7 +128,7 @@ epi.studysize(treat = 0.45, control = 0.30, n = NA, sigma = NA, power = 0.90,
 ## A total of 250 events are required. Assuming one event per individual, 
 ## assign 125 individuals to the treatment group and 125 to the control group.
 
-## EXAMPLE 4
+## EXAMPLE 4 (from Therneau and Grambsch p 63)
 ## What is the minimum detectable hazard in a study involving 500 subjects where 
 ## the treatment to control ratio is 1:1, assuming a power of 0.90 and a
 ## 2-sided test at the 0.05 level?
@@ -120,12 +140,12 @@ epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90,
 ## minimum detectable hazard of a study involving 500 subjects (250 in the 
 ## treatment group and 250 in the controls) is 1.33.
 
-## EXAMPLE 5
+## EXAMPLE 5 (from Woodward p 406)
 ## A cohort study of smoking and coronary heart disease (CHD) in middle aged men
 ## is planned. A sample of men will be selected at random from the population
 ## and will be asked to complete a questionnaire. The follow-up period will be
 ## 5 years. The investigators would like to be 0.90 sure of being able to 
-## detect when the relative risk of CHD is 1.4 for smokers, using a 0.05
+## detect when the risk ratio of CHD is 1.4 for smokers, using a 0.05
 ## significance test. Previous evidence suggests that the death rate in 
 ## non-smokers is 413 per 100000 per year. Assuming equal numbers of smokers
 ## and non-smokers are sampled, how many should be sampled overall?
@@ -133,16 +153,28 @@ epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90,
 treat = 1.4 * (5 * 413)/100000
 control = (5 * 413)/100000
 epi.studysize(treat = treat, control = control, n = NA, sigma = NA, 
-   power = 0.90, r = 1, conf.level = 0.95, sided.test = 1, method = "cohort")
+   power = 0.90, r = 1, conf.level = 0.95, sided.test = 1, method = "cohort.count")
 
 ## A total of 12130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
-## EXAMPLE 6
+## EXAMPLE 6 (from Woodward p 406)
+## Say, for example, we are only able to enrol 5000 subjects into the study
+## described above. What is the minimum and maximum detectable risk ratio?
+
+control = (5 * 413)/100000
+epi.studysize(treat = NA, control = control, n = 5000, sigma = NA, power = 0.90, 
+   r = 1, conf.level = 0.95, sided.test = 1, method = "cohort.count")
+
+## The minimum detectable risk ratio >1 is 1.65. The maximum detectable
+## risk ratio <1 is 0.50.
+
+
+## EXAMPLE 7 (from Woodward p 412)
 ## A case-control study of the relationship between smoking and CHD is 
 ## planned. A sample of men with newly diagnosed CHD will be compared for
 ## smoking status with a sample of controls. Assuming an equal number of 
-## cases and controls, how many are needed to detect an approximate relative
-## risk of 2.0 with 0.90 power using a two-sided 0.05 test? Previous surveys
+## cases and controls, how many are needed to detect an approximate risk
+## ratio of 2.0 with 0.90 power using a two-sided 0.05 test? Previous surveys
 ## indicate that 0.30 of the male population are smokers.
 
 epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30, 
@@ -151,9 +183,9 @@ epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30,
 
 ## A total of 376 men need to be sampled: 188 cases and 188 controls.
 
-## EXAMPLE 7
-## Suppose we wish to determine the power to detect an approximate relative
-## risk of 2.0 using a two-sided 0.05 test when 188 cases and 940 controls
+## EXAMPLE 8 (from Woodward p 414)
+## Suppose we wish to determine the power to detect an approximate risk
+## ratio of 2.0 using a two-sided 0.05 test when 188 cases and 940 controls
 ## are available (that is, the ratio of cases to controls is 1:5). Assume 
 ## a 0.30 prevalence of smoking in the male population.
 

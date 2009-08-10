@@ -10,7 +10,7 @@ Computes descriptive statistics from a vector of numbers.
 }
 
 \usage{
-epi.descriptives(dat, quantile = c(0.05, 0.95))
+epi.descriptives(dat, quantile = c(0.025, 0.975))
 }
 
 \arguments{
@@ -38,7 +38,7 @@ epi.descriptives(dat, quantile = c(0.05, 0.95))
 
 \examples{
 tmp <- rnorm(1000, mean = 0, sd = 1)
-epi.descriptives(tmp, quantile = c(0.05, 0.95))
+epi.descriptives(tmp, quantile = c(0.025, 0.975))
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

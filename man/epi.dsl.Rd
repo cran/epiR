@@ -6,7 +6,7 @@
 }
 
 \description{
-Computes individual study odds or risk ratios for binary outcome data. Computes the pooled odds or risk ratio using the DerSimonian and Laird method. Performs a test for the overall difference between groups.
+Computes individual study odds or risk ratios for binary outcome data. Computes the summary odds or risk ratio using the DerSimonian and Laird method. Performs a test of heterogeneity among trials. Performs a test for the overall difference between groups (that is, after pooling the studies, do treated groups differ significantly from controls?).
 }
 
 \usage{
@@ -29,8 +29,10 @@ epi.dsl(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio",
 
 \value{
 A list containing the following:
-  \item{odds.ratio}{the names of the trials specified, the odds ratios for each trial, the lower and upper bounds of the confidence interval of the odds ratio for each trial and the pooled odds ratio and the lower and upper bounds of the confidence interval of the pooled odds ratio.}
-  \item{risk.ratio}{the names of the trials specified, the risk ratios for each trial, the lower and upper bounds of the confidence interval of the risk ratio for each trial and the pooled risk ratio and the lower and upper bounds of the confidence interval of the pooled risk ratio.}
+  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the DerSimonian and Laird summary odds ratio, the standard error of the DerSimonian and Laird summary odds ratio, the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary odds ratio.}
+  \item{RR.summary}{the DerSimonian and Laird summary risk ratio, the standard error of the DerSimonian and Laird summary risk ratio, the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary risk ratio.}
   \item{weights}{the inverse variance and DerSimonian and Laird weights for each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}
@@ -65,7 +67,7 @@ data(epi.epidural)
 epi.dsl(ev.trt = epi.epidural$ev.trt, n.trt = epi.epidural$n.trt, 
    ev.ctrl = epi.epidural$ev.ctrl, n.ctrl = epi.epidural$n.ctrl, 
    names = as.character(epi.epidural$trial), method = "odds.ratio", 
-   conf.level = 0.05)
+   conf.level = 0.95)
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

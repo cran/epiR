@@ -12,7 +12,7 @@ Estimates the required sample size to detect disease. The method adjusts sample 
 
 \usage{
 epi.detectsize(N, prev, se, sp, interpretation = "series", 
-   conf.level = 0.95, finite.correction = TRUE)
+   covar = c(0,0), conf.level = 0.95, finite.correction = TRUE)
 }
 
 \arguments{
@@ -21,6 +21,7 @@ epi.detectsize(N, prev, se, sp, interpretation = "series",
   \item{se}{a vector of length one or two defining the sensitivity of the test(s) used.}
   \item{sp}{a vector of length one or two defining the specificity of the test(s) used.}
   \item{interpretation}{a character string indicating how test results should be interpreted. Options are \code{series} or \code{parallel}.}
+  \item{covar}{a vector of length two defining the covariance between test results for disease positive and disease negative groups. The first element of the vector is the covariance between test results for disease positive subjects. The second element of the vector is the covariance between test results for disease negative subjects. Use \code{covar = c(0,0)} (the default) if these values are not known.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
   \item{finite.correction}{logial, should a finite correction factor be applied?}
 }
@@ -35,7 +36,7 @@ A list containing the following:
 }
 
 \references{
-Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47.
+Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47 and pp 102 - 103.
 }
 
 \author{
@@ -43,6 +44,8 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 
 \note{
 The finite correction factor reduces the variance of the sample as the sample size approaches the population size. As a rule of thumb, set \code{finite.correction = TRUE} when the sample size is greater than 5\% of the population size.
+
+Define \code{se1} and \code{se2} as the sensitivity for the first and second test, \code{sp1} and \code{sp2} as the specificity for the first and second test, \code{p111} as the proportion of disease-positive subjects with a positive test result to both tests and \code{p000} as the proportion of disease-negative subjects with a negative test result to both tests. The covariance between test results for the disease-positive group is \code{p111 - se1 * se2}. The covariance between test results for the disease-negative group is \code{p000 - sp1 * sp2}.
 }
 
 \seealso{
@@ -57,7 +60,7 @@ The finite correction factor reduces the variance of the sample as the sample si
 ## that, if all tests are negative, the disease is not present?
 
 epi.detectsize(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
-   "series", conf.level = 0.95, finite.correction = TRUE)
+   "series", covar = c(0,0), conf.level = 0.95, finite.correction = TRUE)
 
 ## We need to sample 59 cows.
 
@@ -73,8 +76,8 @@ epi.detectsize(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
 ## approximately 5000 herds and the average number of cows per herd is 100.
 
 epi.detectsize(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95), 
-   sp = c(0.80, 0.85), interpretation = "parallel", conf.level = 0.95, 
-   finite.correction = TRUE)
+   sp = c(0.80, 0.85), interpretation = "parallel", covar = c(0,0), 
+   conf.level = 0.95, finite.correction = TRUE)
 
 ## We need to sample 31 cows from 38 herds (a total of 1178 samples).
 ## The sensitivity of this testing regime is 99\%. The specificity of this 

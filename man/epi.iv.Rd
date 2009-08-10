@@ -6,7 +6,7 @@
 }
 
 \description{
-Computes odds ratios (or risk ratios) and confidence intervals for binary outcome data. Computes the pooled odds ratio (or risk ratios) using the inverse variance method. Performs a test of heterogeneity among trials. Performs a test for the overall difference between groups (that is, after pooling the studies, do treated groups differ significantly from controls?).
+Computes individual study odds or risk ratios for binary outcome data. Computes the summary odds or risk ratio using the inverse variance method. Performs a test of heterogeneity among trials. Performs a test for the overall difference between groups (that is, after pooling the studies, do treated groups differ significantly from controls?).
 }
 
 \usage{
@@ -30,8 +30,10 @@ Using this method, the inverse variance weights are used to compute the pooled o
 
 \value{
 A list containing:
-  \item{odds.ratio}{the names of the trials specified, the odds ratios for each trial, the lower and upper bounds of the confidence interval of the odds ratio for each trial and the pooled odds ratio and the lower and upper bounds of the confidence interval of the pooled odds ratio.}
-  \item{risk.ratio}{the names of the trials specified, the risk ratio for each trial, the lower and upper bounds of the confidence interval of the risk ratio for each trial and the pooled risk ratio and the lower and upper bounds of the confidence interval of the pooled risk ratio.}
+  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the inverse variance summary odds ratio, the standard error of the inverse variance summary odds ratio, the lower and upper bounds of the confidence interval of the inverse variance summary odds ratio.}
+  \item{RR.summary}{the inverse variance summary risk ratio, the standard error of the inverse variance summary risk ratio, the lower and upper bounds of the confidence interval of the inverse variance summary risk ratio.}
   \item{weights}{the raw and inverse variance weights assigned to each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}

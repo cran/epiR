@@ -30,8 +30,12 @@ epi.smd(mean.trt, sd.trt, n.trt, mean.ctrl, sd.ctrl, n.ctrl,
 }
 
 \value{
-A data frame containing the names of the trials specified, the standardised mean difference for each trial, the lower and upper bounds of the confidence interval of the standardised mean difference for each trial and the pooled standardised mean difference.
-  }
+A list containing the following:
+  \item{md}{standardised mean difference and its confidence interval computed for each trial.}
+  \item{md.invar}{the inverse variance (fixed effects) summary standardised mean difference.}
+  \item{md.dsl}{the DerSimonian and Laird (random effects) summary standardised mean difference.}
+  \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
+}
   
 \references{
 Deeks JJ, Altman DG, Bradburn MJ (2001). Statistical methods for examining heterogeneity and combining results from several studies in meta-analysis. In: Egger M, Davey Smith G, Altman D (eds). Systematic Review in Health Care Meta-Analysis in Context. British Medical Journal, London, pp. 290 - 291. 
@@ -65,7 +69,7 @@ n.trt <- c(30, 37, 67)
 n.ctrl <- c(28, 35, 58)
 
 epi.smd(mean.trt, sd.trt, n.trt, mean.ctrl, sd.ctrl, n.ctrl, 
-   names, method = "cohens", conf.level = 0.05)
+   names, method = "cohens", conf.level = 0.95)
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

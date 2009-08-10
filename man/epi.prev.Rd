@@ -21,16 +21,19 @@ epi.prev(pos, tested, se, sp, conf.level = 0.95)
 }
 
 \details{
+Exact binomial confidence limits are calculated for apparent prevalence (see Collett 1999 for details). 
 }
 
 \value{
 A list containing the following:
-   \item{ap}{the point estimate of apparent prevalence, the standard error of the apparent prevalence, and the lower and upper bounds of the apparent prevalence.}
-   \item{tp}{the point estimate of the true prevalence, the standard error of the true prevalence, and the lower and upper bounds of the true prevalence.}
+   \item{ap}{the point estimate of apparent prevalence, the standard error of the apparent prevalence, and the lower and upper bounds of the confidence interval around the apparent prevalence estimate.}
+   \item{tp}{the point estimate of the true prevalence, the standard error of the true prevalence, and the lower and upper bounds of the confidence interval around the true prevalence estimate.}
 }
 
 \references{
-Abel U (1993). DieBewertung Diagnostischer Tests. hippkrates, Stuttgart.
+Abel U (1993). DieBewertung Diagnostischer Tests. Hippokrates, Stuttgart.
+
+Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, p. 24. 
 
 Gardener IA, Greiner M (1999). Advanced Methods for Test Validation and Interpretation in Veterinary Medicince. Freie Universitat Berlin, ISBN 3-929619-22-9; 80 pp.
 
@@ -43,9 +46,9 @@ Rogan W, Gladen B (1978). Estimating prevalence from results of a screening test
 }
 
 \note{
-This function uses the apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). The standard error of the Rogan Gladen true prevalence estimate is based on Abel (1993) and discussed in Messam et al (2008). 
+This function uses apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). The standard error of the Rogan Gladen true prevalence estimate is based on Abel (1993) and discussed in Messam et al. (2008). It is assumed that test sensitivity and specificity are known with certainty.
 
-Messam et al (2008) advise that the Rogan Gladen true prevalence estimate is unreliable for small sample sizes and when true prevalence is believed to be close to zero. If the estimated true prevalence value is less than 0 the function returns a 0; if the estimated true prevalence value is greater than 1 the function returns a 1. In this situation Bayesian approaches to true prevalence estimation are preferred (see Messam et al 2008 for a very readable introduction).
+The Rogan Gladen true prevalence estimate is unreliable for small sample sizes and when true prevalence is believed to be close to zero. The algorithm implemented here makes no correction to the Rogan Gladen estimate of true prevalence if it is less than zero or greater than one (simply to remind the user that it provides unreliable estimates of true prevalence under these conditions). In this situation one is advised to adopt a Bayesian approach to true prevalence estimation. See Messam et al. (2008) for a very readable introduction.
 }
 
 \seealso{

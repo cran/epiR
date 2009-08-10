@@ -41,15 +41,30 @@
     lower.MD.iv <- MD.iv - (z * SE.MD.iv)
     upper.MD.iv <- MD.iv + (z * SE.MD.iv)
     
+    # Heterogeneity statistic:
+    Q <- sum(w.i * (MD.i - MD.iv)^2)
+    df <- k - 1
+    p.heterogeneity <- 1 - pchisq(Q, df)
+    
+    tau.sq <- (Q - (k - 1)) / (sum(w.i) - (sum((w.i)^2) / sum(w.i)))
+
+    # If Q is less than (k - 1) tau.sq equals zero:
+    tau.sq <- ifelse(Q < (k - 1), 0, tau.sq)
+    w.dsl.i <- 1 / (SE.MD.i^2 + tau.sq)
+    MD.dsl <- sum(w.dsl.i * MD.i) / sum(w.dsl.i)
+    SE.MD.dsl <- 1 / sqrt(sum(w.dsl.i))
+    lower.MD.dsl <- MD.dsl - (z * SE.MD.dsl)
+    upper.MD.dsl <- MD.dsl + (z * SE.MD.dsl)
     
     # Results:
-    result.01 <- cbind(MD.i, lower.MD.i, upper.MD.i)
-    result.02 <- cbind(MD.iv, lower.MD.iv, upper.MD.iv)
-    result.03 <- as.data.frame(rbind(result.01, result.02))
-    names(result.03) <- c("smd", "smd.lower", "smd.upper")
+    md <- as.data.frame(cbind(MD.i, SE.MD.i, lower.MD.i, upper.MD.i))
+    names(md) <- c("est", "se", "lower", "upper")
+    md.invar <- as.data.frame(cbind(MD.iv, SE.MD.iv, lower.MD.iv, upper.MD.iv))
+    names(md.invar) <- c("est", "se", "lower", "upper")
+    md.dsl <- as.data.frame(cbind(MD.dsl, lower.MD.dsl, upper.MD.dsl))
+    names(md.dsl) <- c("est", "lower", "upper")
+    heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity)
     
-    result.04 <- as.data.frame(cbind(c(names, "Pooled SMD (IV)")))
-    names(result.04) <- c("names")
-    rval <- as.data.frame(cbind(result.04, result.03))
+    rval <- list(md = md, md.invar = md.invar, md.dsl = md.dsl, heterogeneity = heterogeneity)
     return(rval)
 }
