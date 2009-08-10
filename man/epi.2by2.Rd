@@ -12,7 +12,7 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 
 \usage{
 epi.2by2(a, b, c, d, method = "cohort.count", conf.level = 0.95, 
-   multiplier = 100, verbose = FALSE)
+   units = 100, verbose = FALSE)
 }
 
 \arguments{
@@ -22,7 +22,7 @@ epi.2by2(a, b, c, d, method = "cohort.count", conf.level = 0.95,
   \item{d}{number of observations where exposure absent and outcome absent.}
   \item{method}{a character string indicating the experimental design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
-  \item{multiplier}{multiplier for prevalence and incidence estimates.}
+  \item{units}{multiplier for prevalence and incidence estimates.}
   \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
 }
 
@@ -45,13 +45,13 @@ Expose -  \tab c		\tab d		  	\cr
 }
 
 \value{
-When method equals \code{cohort.count} the following measures of association are returned: incidence risk ratio (RR), odds ratio (OR), incidence risk difference (attributable risk, AR), attributable fraction (AF), population incidence risk difference (population attributable risk, PAR), and the population attributable fraction (PAF).
+When method equals \code{cohort.count} the following measures of association are returned: the incidence risk ratio (RR), the odds ratio (OR), the attributable risk  (AR), the attributable risk in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
-When method equals \code{cohort.time} the following measures of association are returned: incidence rate ratio (IRR), incidence rate difference (attributable rate, AR), attributable fraction (AF), population incidence rate difference (population attributable rate, PAR), and the population attributable fraction (PAF).
+When method equals \code{cohort.time} the following measures of association are returned: the incidence rate ratio (IRR), the attributable rate (AR), the attributable rate in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
  
-When method equals \code{case.control} the following measures of association are returned: odds ratio (OR), prevalence difference (attributable risk, AR), estimated attributable fraction (AFest), population prevalence difference (population attributable risk, PAR), and the estimated population attributable fraction (PAFest).
+When method equals \code{case.control} the following measures of association are returned: the odds ratio (OR), the attributable prevalence (AR), the attributable prevalence in population (ARp), the estimated attributable fraction in the exposed (AFest), and the estimated attributable fraction in the population (AFp).
 
-When method equals \code{cross.sectional} the following measures of association are returned: prevalence ratio (PR), odds ratio (OR), prevalence difference (attributable risk, AR), attributable fraction (AF), population prevalence difference (population attributable risk, PAR), and population attributable fraction (PAF).
+When method equals \code{cross.sectional} the following measures of association are returned: the prevalence ratio (PR), the odds ratio (OR), the attributable prevalence (AR), the attributable prevalence in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
 When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.summary}). \code{chisq} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.summary} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. The chi-squared test of homogeneity (e.g. \code{OR.homogeneity}) provides a test of homogeneity of the strata-level measures of association.
 }
@@ -88,11 +88,11 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 Mark Stevenson and Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand).
 }
 
-\note{Measures of strength of association include the prevalence ratio (PR), the incidence risk ratio (RR), the incidence rate ratio (IRR) and the odds ratio (OR). The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
+\note{Measures of strength of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
 
-Measures of effect include the incidence-prevalence risk difference (also known as the attributable risk) and the attributable fraction. The incidence risk difference is the risk of disease in the exposed group minus the risk of disease in the unexposed group. Incidence risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction (also known as the attributable proportion in the exposed) is the proportion of disease in the exposed group attributable to exposure. 
+Measures of effect include the attributable risk (or prevalence) and the attributable fraction. The attributable risk is the risk of disease in the exposed group minus the risk of disease in the unexposed group. The attributable risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction is the proportion of disease in the exposed group attributable to exposure. 
 
-Measures of total effect include the population risk difference (also known as the population attributable risk, PAR) and the population attributable fraction (PAF). The population risk difference is the risk of disease in the population that may be attributed to exposure. The population attributable fraction (also known as the aetiologic fraction) is the proportion of the disease in the population that is attributable to exposure.
+Measures of total effect include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of disease in the population that may be attributed to exposure. The population attributable fraction is the proportion of the disease in the population that is attributable to exposure.
 
 Point estimates and confidence intervals for the summary prevalence ratio, incidence risk ratio, incidence rate ratio, and odds ratio are based on formulae provided by Rothman (2002, p 152). The point estimate and confidence intervals for the population attributable fraction are based on formulae provided by Jewell (2004, p 84 - 85). The point estimate and confidence intervals for the summary risk differences are based on formulae provided by Rothman and Greenland (1998, p 271). 
 
@@ -114,7 +114,7 @@ The chi-squared test of homogeneity is equivalent to the Breslow Day test for in
 ## Non DCF-exposed cats (cases, non-cases) 5, 3349
 
 epi.2by2(a = 13, b = 2163, c = 5, d = 3349, method = "cross.sectional", 
-   conf.level = 0.95, multiplier = 100, verbose = FALSE)
+   conf.level = 0.95, units = 100, verbose = FALSE)
 
 ## Risk ratio:
 ## The incidence risk of FUS in DCF exposed cats is 4.01 times (95\% CI 1.43 to 
@@ -135,7 +135,7 @@ epi.2by2(a = 13, b = 2163, c = 5, d = 3349, method = "cross.sectional",
 ## years among those who were visually impaired but not blind.
 
 rval <- epi.2by2(a = 136, b = 22050, c = 1709, d = 127650, method = 
-   "cohort.time", conf.level = 0.90, multiplier = 1000, verbose = TRUE)
+   "cohort.time", conf.level = 0.90, units = 1000, verbose = TRUE)
 round(rval$AR, digits = 3)
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
@@ -169,7 +169,7 @@ b <- c(6, 25, 14)
 c <- c(13, 37, 37)
 d <- c(53, 83, 62)
 epi.2by2(a, b, c, d, method = "case.control", conf.level = 0.95, 
-   multiplier = 100, verbose = TRUE)
+   units = 100, verbose = TRUE)
 
 ## Crude odds ratio:
 ## 6.57 (95\% CI 4.31 to 10.03)

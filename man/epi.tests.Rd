@@ -9,7 +9,7 @@ Computes true and apparent prevalence, sensitivity, specificity, positive and ne
 }
 
 \usage{
-epi.tests(a, b, c, d, conf.level = 0.95, verbose = TRUE)
+epi.tests(a, b, c, d, conf.level = 0.95)
 }
 
 \arguments{
@@ -18,11 +18,10 @@ epi.tests(a, b, c, d, conf.level = 0.95, verbose = TRUE)
   \item{c}{number of observations where true disease status positive and test is negative.}
   \item{d}{number of observations where true disease status is negative and test is negative.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
-  \item{verbose}{logical, indicating whether detailed or summary results are to be returned.}
 }
 
 \details{
-Confidence intervals for sensitivity, specificity, and positive and negative predictive value are based on a Bayesian interval using a uniform prior (beta(1,1) distribution) with the binomial distribution (see Snow 2008 for details).
+Exact binomial confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Collett 1999 for details).
 
 Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
 
@@ -31,16 +30,26 @@ Diagnostic accuracy is defined as the proportion of all tests that give a correc
 
 \value{
 A list containing the following:
-  \item{prevalence}{apparent and true prevalence.}
-  \item{performance}{test sensitivity, test specificity, diagnostic accuracy, diagnostic odds ratio, number needed to diagnose, Youden's index.}
-  \item{predictive.value}{positive predictive value, negative predictive value.}
-  \item{likelihood.ratio}{likelihood ratio of a positive test, likelihood ratio of a negative test.}
+  \item{aprev}{apparent prevalence.}
+  \item{tprev}{true prevalence.}
+  \item{se}{test sensitivity.}
+  \item{sp}{test specificity.}
+  \item{da}{diagnostic accuracy.}
+  \item{dor}{diagnostic odds ratio.}
+  \item{nnd}{number needed to diagnose.}
+  \item{youden}{Youden's index.}
+  \item{ppv}{positive predictive value.}
+  \item{npv}{negative predictive value.}
+  \item{lr.pos}{likelihood ratio of a positive test.}
+  \item{lr.neg}{likelihood ratio of a negative test.}
 }
 
 \references{
 Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29.
 
 Bangdiwala SI, Haedo AS, Natal ML (2008). The agreement chart as an alternative to the receiver-operating characteristic curve for diagnostic tests. Journal of Clinical Epidemiology 61: 866 - 874.
+
+Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
 
 Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interpretation of studies of diagnostic tests. Internal Medicine Journal 38: 120 - 129.
 
@@ -72,13 +81,13 @@ Total\tab a + c\tab b + d \tab a + b + c + d\cr
 ## ratio of a positive test? What is the number needed to diagnose?
 
 a <- 670; b <- 202; c <- 74; d <- 640
-epi.tests(a = a, b = b, c = c, d = d, conf.level = 0.95, 
-   verbose = FALSE)
+epi.tests(a = a, b = b, c = c, d = d, conf.level = 0.95)
 
-## The likelihood ratio of a positive test is 3.75 (95\% CI 3.32 to 4.24).
-## The number needed to diagnose is 1.51 (95\% CI 1.41 to 1.65).
-## Around 15 persons need to be tested to return 10 positive tests.
-
+## Test sensitivity is 0.90 (95\% CI 0.88 -- 0.92). Test specificity is 
+## 0.76 (95\% CI 0.73 -- 0.79). The likelihood ratio of a positive test 
+## is 3.75 (95\% CI 3.32 to 4.24). The number needed to diagnose is 
+## 1.51 (95\% CI 1.41 to 1.65). Around 15 persons need to be tested 
+## to return 10 positive tests.
 }
 
 \keyword{univar}

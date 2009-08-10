@@ -17,6 +17,7 @@
         OR.i <- (a.i * d.i)/(b.i * c.i)
         lnOR.i <- log(OR.i)
         SE.lnOR.i <- sqrt(1/a.i + 1/b.i + 1/c.i + 1/d.i)
+        SE.OR.i <- exp(SE.lnOR.i)
         lower.lnOR.i <- lnOR.i - (z * SE.lnOR.i)
         upper.lnOR.i <- lnOR.i + (z * SE.lnOR.i)
         lower.OR.i <- exp(lower.lnOR.i)
@@ -30,6 +31,7 @@
         lnOR.iv <- sum(w.i * lnOR.i)/sum(w.iv.i)
         OR.iv <- exp(lnOR.iv)
         SE.lnOR.iv <- 1/sqrt((sum(w.iv.i)))
+        SE.OR.iv <- exp(SE.lnOR.iv)
         lower.lnOR.iv <- lnOR.iv - (z * SE.lnOR.iv)
         upper.lnOR.iv <- lnOR.iv + (z * SE.lnOR.iv)
         lower.OR.iv <- exp(lower.lnOR.iv)
@@ -62,28 +64,25 @@
         p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
     
         # Results:
-        result.01 <- cbind(OR.i, lower.OR.i, upper.OR.i)
-        result.02 <- cbind(OR.iv, lower.OR.iv, upper.OR.iv)
-        result.03 <- as.data.frame(rbind(result.01, result.02))
-        names(result.03) <- c("est", "lower", "upper")
+        OR <- as.data.frame(cbind(OR.i, SE.OR.i, lower.OR.i, upper.OR.i))
+        names(OR) <- c("est", "se", "lower", "upper")
+
+        OR.summary <- as.data.frame(cbind(OR.iv, SE.OR.iv, lower.OR.iv, upper.OR.iv))
+        names(OR.summary) <- c("est", "se", "lower", "upper")
+
+        weights <- as.data.frame(cbind(w.i, w.iv.i))
+        names(weights) <- c("raw", "inv.var")
         
-        result.04 <- as.data.frame(cbind(c(names, "Pooled OR (IV)")))
-        names(result.04) <- c("names")
-        result.05 <- as.data.frame(cbind(result.04, result.03))
+        Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+        names(Hsq) <- c("est", "lower", "upper")
         
-        result.06 <- as.data.frame(cbind(w.i, w.iv.i))
-        names(result.06) <- c("raw", "inv.var")
+        Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+        names(Isq) <- c("est", "lower", "upper")
         
-        result.07 <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
-        names(result.07) <- c("est", "lower", "upper")
-        
-        result.08 <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
-        names(result.08) <- c("est", "lower", "upper")
-        
-        rval <- list(odds.ratio = result.05, weights = result.06,
+        rval <- list(OR = OR, OR.summary = OR.summary, weights = weights,
         heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity),
-        Hsq = result.07,
-        Isq = result.08,
+        Hsq = Hsq,
+        Isq = Isq,
         effect = c(z = effect.z, p.value = p.effect))
     }
     
@@ -92,6 +91,7 @@
         RR.i <- (a.i/n.1i)/(c.i/n.2i)
         lnRR.i <- log(RR.i)
         SE.lnRR.i <- sqrt(1/a.i + 1/c.i - 1/n.1i - 1/n.2i)
+        SE.RR.i <- exp(SE.lnRR.i)
         lower.lnRR.i <- lnRR.i - (z * SE.lnRR.i)
         upper.lnRR.i <- lnRR.i + (z * SE.lnRR.i)
         lower.RR.i <- exp(lower.lnRR.i)
@@ -105,6 +105,7 @@
         lnRR.iv <- sum(w.iv.i * lnRR.i)/sum(w.iv.i)
         RR.iv <- exp(lnRR.iv)
         SE.lnRR.iv <- 1/sqrt((sum(w.iv.i)))
+        SE.RR.iv <- exp(SE.lnRR.iv)
         lower.lnRR.iv <- lnRR.iv - (z * SE.lnRR.iv)
         upper.lnRR.iv <- lnRR.iv + (z * SE.lnRR.iv)
         lower.RR.iv <- exp(lower.lnRR.iv)
@@ -137,28 +138,25 @@
         p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
         
         # Results:
-        result.01 <- cbind(RR.i, lower.RR.i, upper.RR.i)
-        result.02 <- cbind(RR.iv, lower.RR.iv, upper.RR.iv)
-        result.03 <- as.data.frame(rbind(result.01, result.02))
-        names(result.03) <- c("RR", "RR.lower", "RR.upper")
+        RR <- as.data.frame(cbind(RR.i, SE.RR.i, lower.RR.i, upper.RR.i))
+        names(RR) <- c("est", "se", "lower", "upper")
+
+        RR.summary <- as.data.frame(cbind(RR.iv, SE.RR.iv, lower.RR.iv, upper.RR.iv))
+        names(RR.summary) <- c("est", "se", "lower", "upper")
+
+        weights <- as.data.frame(cbind(w.i, w.iv.i))
+        names(weights) <- c("raw", "inv.var")
         
-        result.04 <- as.data.frame(cbind(c(names, "Pooled RR (IV)")))
-        names(result.04) <- c("names")
-        result.05 <- as.data.frame(cbind(result.04, result.03))
+        Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+        names(Hsq) <- c("est", "lower", "upper")
         
-        result.06 <- as.data.frame(cbind(w.i, w.iv.i))
-        names(result.06) <- c("raw", "inv.var")
+        Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+        names(Isq) <- c("est", "lower", "upper")
         
-        result.07 <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
-        names(result.07) <- c("est", "lower", "upper")
-        
-        result.08 <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
-        names(result.08) <- c("est", "lower", "upper")
-        
-        rval <- list(risk.ratio = result.05, weights = result.06,
+        rval <- list(RR = RR, RR.summary = RR.summary, weights = weights,
         heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity),
-        Hsq = result.07,
-        Isq = result.08,
+        Hsq = Hsq,
+        Isq = Isq,
         effect = c(z = effect.z, p.value = p.effect))
           }
     return(rval)

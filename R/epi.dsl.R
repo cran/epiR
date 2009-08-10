@@ -11,6 +11,7 @@
         N.i <- n.trt + n.ctrl
         N <- 1 - ((1 - conf.level) / 2)
         z <- qnorm(N, mean = 0, sd = 1)
+        # For summary odds ratio:
         R <-  sum((a.i * d.i) / N.i)
         S <-  sum((b.i * c.i) / N.i)
         E <-  sum(((a.i + d.i) * a.i * d.i) / N.i^2)
@@ -18,14 +19,16 @@
         G <-  sum(((b.i + c.i) * a.i * d.i) / N.i^2) 
         H <-  sum(((b.i + c.i) * b.i * c.i) / N.i^2)
         P <- sum(((n.1i * n.2i * (a.i + c.i)) - (a.i * c.i * N.i)) / N.i^2)
-        R <- sum((a.i * n.2i) / N.i)
-        S <- sum((c.i * n.1i) / N.i)
+        # For summary risk ratio:
+        R. <- sum((a.i * n.2i) / N.i)
+        S. <- sum((c.i * n.1i) / N.i)
 
         # Individual study odds ratios:
         if(method == "odds.ratio")
           {OR.i <- (a.i * d.i) / (b.i * c.i)   
            lnOR.i <- log(OR.i)
            SE.lnOR.i <- sqrt(1/a.i + 1/b.i + 1/c.i + 1/d.i)
+           SE.OR.i <- exp(SE.lnOR.i)
            lower.lnOR.i <- lnOR.i - (z * SE.lnOR.i)
            upper.lnOR.i <- lnOR.i + (z * SE.lnOR.i)
            lower.OR.i <- exp(lower.lnOR.i)
@@ -53,6 +56,7 @@
            lnOR.dsl <- sum(w.dsl.i * lnOR.i) / sum(w.dsl.i)
            OR.dsl <- exp(lnOR.dsl)
            SE.lnOR.dsl <- 1 / sqrt(sum(w.dsl.i))
+           SE.OR.dsl <- exp(SE.lnOR.dsl)
            lower.lnOR.dsl <- log(OR.dsl) - (z * SE.lnOR.dsl)
            upper.lnOR.dsl <- log(OR.dsl) + (z * SE.lnOR.dsl)
            lower.OR.dsl <- exp(lower.lnOR.dsl)
@@ -80,28 +84,25 @@
            p.effect <- 1 - pnorm(effect.z, mean=0, sd=1)
 
            # Results:
-           result.01 <- cbind(OR.i, lower.OR.i, upper.OR.i)
-           result.02 <- cbind(OR.dsl, lower.OR.dsl, upper.OR.dsl)
-           result.03 <- as.data.frame(rbind(result.01, result.02))
-           names(result.03) <- c("est", "lower", "upper")
+           OR <- as.data.frame(cbind(OR.i, SE.OR.i, lower.OR.i, upper.OR.i))
+           names(OR) <- c("est", "se", "lower", "upper")
+           
+           OR.summary <- as.data.frame(cbind(OR.dsl, SE.OR.dsl, lower.OR.dsl, upper.OR.dsl))
+           names(OR.summary) <- c("est", "se", "lower", "upper")
         
-           result.04 <- as.data.frame(cbind(c(names, "Pooled OR (DSL)")))
-           names(result.04) <- c("names")
-           result.05 <- as.data.frame(cbind(result.04, result.03))
-        
-           result.06 <- as.data.frame(cbind(w.iv.i, w.dsl.i))
-           names(result.06) <- c("inv.var", "dsl")
+           weights <- as.data.frame(cbind(w.iv.i, w.dsl.i))
+           names(weights) <- c("inv.var", "dsl")
 
-           result.07 <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
-           names(result.07) <- c("est", "lower", "upper")
+           Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+           names(Hsq) <- c("est", "lower", "upper")
         
-           result.08 <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
-           names(result.08) <- c("est", "lower", "upper")
+           Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+           names(Isq) <- c("est", "lower", "upper")
         
-           rval <- list(odds.ratio = result.05, weights = result.06,
+           rval <- list(OR = OR, OR.summary = OR.summary, weights = weights,
            heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity),
-           Hsq = result.07,
-           Isq = result.08,
+           Hsq = Hsq,
+           Isq = Isq,
            tau.sq = tau.sq,
            effect = c(z = effect.z, p.value = p.effect))
            return(rval)
@@ -125,7 +126,7 @@
            # MH pooled risk ratios (relative effect measures combined in their natural scale):
            RR.mh <- sum(w.i * RR.i) / sum(w.i)
            lnRR.mh <- log(RR.mh)
-           SE.lnRR.mh <- sqrt(P / (R * S))
+           SE.lnRR.mh <- sqrt(P / (R. * S.))
            SE.RR.mh <- exp(SE.lnRR.mh)
            lower.lnRR.mh <- log(RR.mh) - (z * SE.lnRR.mh)
            upper.lnRR.mh <- log(RR.mh) + (z * SE.lnRR.mh)
@@ -145,6 +146,7 @@
            lnRR.dsl <- sum(w.dsl.i * lnRR.i) / sum(w.dsl.i)
            RR.dsl <- exp(lnRR.dsl)
            SE.lnRR.dsl <- 1 / sqrt(sum(w.dsl.i))
+           SE.RR.dsl <- exp(SE.lnRR.dsl)
            lower.lnRR.dsl <- log(RR.dsl) - (z * SE.lnRR.dsl)
            upper.lnRR.dsl <- log(RR.dsl) + (z * SE.lnRR.dsl)
            lower.RR.dsl <- exp(lower.lnRR.dsl)
@@ -172,30 +174,27 @@
            p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
 
            # Results:
-           result.01 <- cbind(RR.i, lower.RR.i, upper.RR.i)
-           result.02 <- cbind(RR.dsl, lower.RR.dsl, upper.RR.dsl)
-           result.03 <- as.data.frame(rbind(result.01, result.02))
-           names(result.03) <- c("est", "lower", "upper")
+           RR <- as.data.frame(cbind(RR.i, SE.RR.i, lower.RR.i, upper.RR.i))
+           names(RR) <- c("est", "se", "lower", "upper")
+           
+           RR.summary <- as.data.frame(cbind(RR.dsl, SE.RR.dsl, lower.RR.dsl, upper.RR.dsl))
+           names(RR.summary) <- c("est", "se", "lower", "upper")
         
-           result.04 <- as.data.frame(cbind(c(names, "Pooled RR (DSL)")))
-           names(result.04) <- c("names")
-           result.05 <- as.data.frame(cbind(result.04, result.03))
-        
-           result.06 <- as.data.frame(cbind(w.iv.i, w.dsl.i))
-           names(result.06) <- c("inv.var", "dsl")
+           weights <- as.data.frame(cbind(w.iv.i, w.dsl.i))
+           names(weights) <- c("inv.var", "dsl")
 
-           result.07 <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
-           names(result.07) <- c("est", "lower", "upper")
+           Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+           names(Hsq) <- c("est", "lower", "upper")
         
-           result.08 <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
-           names(result.08) <- c("est", "lower", "upper")
+           Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+           names(Isq) <- c("est", "lower", "upper")
         
-           rval <- list(risk.ratio = result.05, weights = result.06,
+           rval <- list(RR = RR, RR.summary = RR.summary, weights = weights,
            heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity),
-           Hsq = result.07,
-           Isq = result.08,
+           Hsq = Hsq,
+           Isq = Isq,
            tau.sq = tau.sq,
            effect = c(z = effect.z, p.value = p.effect))
            return(rval)
-           }
+          }
 }

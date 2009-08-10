@@ -175,66 +175,99 @@
      if(method == "inc.risk"){
         if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
-        # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
-        N. <- 1 - ((1 - conf.level) / 2)
-        z <- qnorm(N., mean = 0, sd = 1)
-        a <- dat[,1]
-        n <- dat[,2]
-        p <- dat[,1] / dat[,2]
+          # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):
+          N. <- 1 - ((1 - conf.level) / 2)
+          a <- dat[,1]
+          n <- dat[,2]
+          b <- n - a
+          p <- a / n
+          
+          # Exact binomial confidence limits (D. Collett (1999): Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24).
+          a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b) 
+          low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
+          up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
+          low <- ifelse(a == 0, 0, low)
+          up <- ifelse(a == n, 1, up)
         
-        a. <- n/(n + z^2)
-        b. <- a/n
-        c. <- z^2/(2 * n)
-        d. <- (a * (n - a)) / n^3
-        e. <- z^2 / (4 * n^2)
+          # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
+          # N. <- 1 - ((1 - conf.level) / 2)
+          # z <- qnorm(N., mean = 0, sd = 1)
+          # a <- dat[,1]
+          # n <- dat[,2]
+          # p <- dat[,1] / dat[,2]
         
-        low <- a. * (b. + c. - (z * sqrt(d. + e.)))
-        up <- a. * (b. + c. + (z * sqrt(d. + e.)))
+          # a. <- n/(n + z^2)
+          # b. <- a/n
+          # c. <- z^2/(2 * n)
+          # d. <- (a * (n - a)) / n^3
+          # e. <- z^2 / (4 * n^2)
+          # low <- a. * (b. + c. - (z * sqrt(d. + e.)))
+          # up <- a. * (b. + c. + (z * sqrt(d. + e.)))
   
-        rval <- as.data.frame(cbind(p, low, up))
-        names(rval) <- c("est", "lower", "upper")
-        rval
+          rval <- as.data.frame(cbind(p, low, up))
+          names(rval) <- c("est", "lower", "upper")
+          rval
      }
      
      if(method == "prevalence"){
         if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
-        # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
-        N. <- 1 - ((1 - conf.level) / 2)
-        z <- qnorm(N., mean = 0, sd = 1)
-        a <- dat[,1]
-        n <- dat[,2]
-        p <- dat[,1] / dat[,2]
-        
-        a. <- n/(n + z^2)
-        b. <- a/n
-        c. <- z^2/(2 * n)
-        d. <- (a * (n - a)) / n^3
-        e. <- z^2 / (4 * n^2)
-        
-        low <- a. * (b. + c. - (z * sqrt(d. + e.)))
-        up <- a. * (b. + c. + (z * sqrt(d. + e.)))
+          # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):
+          N. <- 1 - ((1 - conf.level) / 2)
+          a <- dat[,1]
+          n <- dat[,2]
+          b <- n - a
+          p <- a / n
+
+          # Exact binomial confidence limits (D. Collett (1999): Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24).
+          a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b) 
+          low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
+          up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
+          low <- ifelse(a == 0, 0, low)
+          up <- ifelse(a == n, 1, up)
+          
+          # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
+          # N. <- 1 - ((1 - conf.level) / 2)
+          # z <- qnorm(N., mean = 0, sd = 1)
+          # a <- dat[,1]
+          # n <- dat[,2]
+          # p <- dat[,1] / dat[,2]
+          # a. <- n/(n + z^2)
+          # b. <- a/n
+          # c. <- z^2/(2 * n)
+          # d. <- (a * (n - a)) / n^3
+          # e. <- z^2 / (4 * n^2)
+          # low <- a. * (b. + c. - (z * sqrt(d. + e.)))
+          # up <- a. * (b. + c. + (z * sqrt(d. + e.)))
   
-        rval <- as.data.frame(cbind(p, low, up))
-        names(rval) <- c("est", "lower", "upper")
-        rval
-     }
+          rval <- as.data.frame(cbind(p, low, up))
+          names(rval) <- c("est", "lower", "upper")
+          rval     }
      
      if(method == "inc.rate"){
      if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
-        # Byar's method (see Rothman, Epidemiology An Introduction, page 134): 
-        N. <- 1 - ((1 - conf.level) / 2)
-        z <- qnorm(N., mean = 0, sd = 1)
-        a.prime <- dat[,1] + 0.5
-        p <- dat[,1]/dat[,2]
-        PT <- dat[,2]
-        low <- (a.prime * (1 - (1/(9 * a.prime)) - (z/3 * sqrt(1/a.prime)))^3)/PT
-        up <- (a.prime * (1 - (1/(9 * a.prime)) + (z/3 * sqrt(1/a.prime)))^3)/PT
+          # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):          
+          N. <- 1 - ((1 - conf.level) / 2)
+          a <- dat[,1]
+          n <- dat[,2]
+          p <- a / n
+          # If numerator equals zero set lower bound of confidence limit to zero:
+          low <- ifelse(a == 0, 0, (0.5 * qchisq(p = N., df = 2 * a + 2, lower.tail = FALSE) / n))
+          up <- 0.5 * qchisq(p = 1 - N., df = 2 * a + 2, lower.tail = FALSE) / n
+          
+          # Byar's method (see Rothman, Epidemiology An Introduction, page 134): 
+          # N. <- 1 - ((1 - conf.level) / 2)
+          # z <- qnorm(N., mean = 0, sd = 1)
+          # a.prime <- dat[,1] + 0.5
+          # p <- dat[,1]/dat[,2]
+          # PT <- dat[,2]
+          # low <- (a.prime * (1 - (1/(9 * a.prime)) - (z/3 * sqrt(1/a.prime)))^3)/PT
+          # up <- (a.prime * (1 - (1/(9 * a.prime)) + (z/3 * sqrt(1/a.prime)))^3)/PT
         
-        rval <- as.data.frame(cbind(p, low, up))
-        names(rval) <- c("est", "lower", "upper")
-        rval
+          rval <- as.data.frame(cbind(p, low, up))
+          names(rval) <- c("est", "lower", "upper")
+          rval
      }
      
      else if(method == "smr"){

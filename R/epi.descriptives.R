@@ -1,4 +1,4 @@
-epi.descriptives <- function(dat, quantile = c(0.05, 0.95)){
+epi.descriptives <- function(dat, quantile = c(0.025, 0.975)){
     lower.q <- paste("q.", quantile[1] * 100, sep="")
     upper.q <- paste("q.", quantile[2] * 100, sep="")
     

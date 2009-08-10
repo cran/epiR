@@ -6,7 +6,7 @@
 \title{Fixed-effects meta-analysis of binary outcomes using the Mantel-Haenszel method}
 
 \description{
-Computes odds ratios (or risk ratios) and confidence intervals for binary outcome data. Computes the pooled odds ratio (or risk ratio) using the Mantel-Haenszel method. Performs a test of heterogeneity among trials. Performs a test for the overall difference between groups.
+Computes individual study odds or risk ratios for binary outcome data. Computes the summary odds or risk ratio using the Mantel-Haenszel method. Performs a test of heterogeneity among trials. Performs a test for the overall difference between groups (that is, after pooling the studies, do treated groups differ significantly from controls?).
 }
 
 \usage{
@@ -25,13 +25,15 @@ epi.mh(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio",
 }
 
 \details{
-Under the random-effects model, the assumption of a common treatment effect is relaxed, and the effect sizes are assumed to have a normal distribution with variance \code{tau.sq}. 
 }
 
 \value{
 A list containing the following:
-  \item{odds.ratio}{the names of the trials, the odds ratio for each trial, the standard error of the odds ratio for each trial, the lower and upper bounds of the confidence interval of the odds ratio for each trial, the pooled odds ratio, the standard error of the pooled odds ratio, and the lower and upper bounds of the confidence interval of the pooled odds ratio.}
-  \item{risk.ratio}{the names of the trials, the risk ratio for each trial, the standard error of the risk ratio for each trial, the lower and upper bounds of the confidence interval of the risk ratio for each trial, the pooled risk ratio, the standard error of the pooled risk ratio, and the lower and upper bounds of the confidence interval of the pooled risk ratio.}
+  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the Mantel-Haenszel summary odds ratio, the standard error of the Mantel-Haenszel summary odds ratio, the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary odds ratio.}
+  \item{RR.summary}{the Mantel-Haenszel summary risk ratio, the standard error of the Mantel-Haenszel summary risk ratio, the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary risk ratio.}
+  \item{weights}{the raw and inverse variance weights assigned to each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}
   \item{Isq}{the percentage of total variation in study estimates that is due to heterogeneity rather than chance.} 
@@ -39,6 +41,8 @@ A list containing the following:
 }
 
 \references{
+Deeks JJ, Altman DG, Bradburn MJ (2001). Statistical methods for examining heterogeneity and combining results from several studies in meta-analysis. In: Egger M, Davey Smith G, Altman D (eds). Systematic Review in Health Care Meta-Analysis in Context. British Medical Journal, London, 2001, pp. 291 - 299.
+
 Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. Statistics in Medicine 21: 1539 - 1558. 
 }
 
@@ -46,7 +50,7 @@ Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. St
 }
 
 \note{
-Using this method, the raw weights are used to compute the pooled odds ratios and risk ratios.
+Using this method, the pooled odds and risk ratios are computed using the raw individual study weights. The methodology for computing the Mantel-Haenszel summary odds ratio follows the approach decribed in Deeks, Altman and Bradburn MJ (2001, pp 291 - 299).
 }
 
 \seealso{
@@ -58,7 +62,7 @@ data(epi.epidural)
 epi.mh(ev.trt = epi.epidural$ev.trt, n.trt = epi.epidural$n.trt, 
    ev.ctrl = epi.epidural$ev.ctrl, n.ctrl = epi.epidural$n.ctrl, 
    names = as.character(epi.epidural$trial), method = "odds.ratio",
-   conf.level = 0.05)
+   conf.level = 0.95)
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

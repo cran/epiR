@@ -20,7 +20,7 @@ epi.conf(dat, method = "mean.single", conf.level = 0.95)
 }
 
 \details{
-Returns confidence interval bounds at the alpha level specified. The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk} or \code{prevalence} Wilson's approximation is used (Rothman 2002, page 132). Where method is \code{inc.rate} Byar's approximation is used (Rothman 2002, page 134). Where method is \code{smr} the method of Dobson et al. (1991) is used.
+Returns confidence interval bounds at the alpha level specified. The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Exact binomial confidence limits are calculated for \code{inc.risk}, \code{prevalence} and \code{inc.rate} (see Collett 1999 for details). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used.
 }
 
 \value{
@@ -28,6 +28,8 @@ Returns confidence interval bounds at the alpha level specified. The methodology
 
 \references{
 Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29 and pp. 45 - 56.
+
+Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
 
 Dobson AJ, Kuulasmaa K, Eberle E, and Scherer J (1991). Confidence intervals for weighted sums of Poisson parameters. Statistics in Medicine 10: 457 - 462.
 
@@ -116,18 +118,18 @@ round(epi.conf(dat, method = "prop.paired", conf.level = 0.95), digits = 3)
 ## specificity, what is the estimated prevalence of brucellosis in this 
 ## group of animals?
 
-pos <- 2
+pos <- 4
 pop <- 200
 dat <- as.matrix(cbind(pos, pop))
 epi.conf(dat, method = "prevalence") * 100
 
-## The estimated prevalence of brucellosis in this herd is 1 case
-## per 100 cattle (95\% CI 0 -- 4 cases per 100 cattle).
+## The estimated prevalence of brucellosis in this herd is 2 cases
+## per 100 cattle (95\% CI 0.54 -- 5.0 cases per 100 cattle).
 
 ## EXAMPLE 8
 ## The observed disease counts and population size in four areas are provided
 ## below. What are the the standardised morbidity ratios of disease for each
-## area and their 95\% confidence interval?
+## area and their 95\% confidence intervals?
 
 obs <- c(5, 10, 12, 18)
 pop <- c(234, 189, 432, 812)
