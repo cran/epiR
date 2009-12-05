@@ -54,6 +54,8 @@ Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. St
 The inverse variance method performs poorly when data are sparse, both in terms of event rates being low and trials being small. The Mantel-Haenszel method (\code{\link{epi.mh}}) is more robust when data are sparse.
 
 Using this method, the inverse variance weights are used to compute the pooled odds ratios and risk ratios. 
+
+The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata. 
 }
 
 \seealso{

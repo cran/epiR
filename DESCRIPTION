@@ -1,6 +1,6 @@
 Package: epiR
-Version: 0.9-19
-Date: 2009-8-10
+Version: 0.9-22
+Date: 2009-12-5
 Title: Functions for analysing epidemiological data
 Author: Mark Stevenson <M.Stevenson@massey.ac.nz> with contributions
         from Telmo Nunes, Javier Sanchez, and Ron Thornton.
@@ -16,6 +16,6 @@ Description: A package for analysing epidemiological data. Contains
 Depends: R (>= 2.0.0)
 License: GPL (>= 2)
 URL: http://epicentre.massey.ac.nz
-Packaged: Mon Aug 10 09:53:42 2009; Mark
+Packaged: 2009-12-07 21:04:10 UTC; Mark
 Repository: CRAN
-Date/Publication: 2009-08-10 06:34:07
+Date/Publication: 2009-12-09 08:53:41
