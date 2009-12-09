@@ -6,11 +6,20 @@
     b.i <- n.trt - ev.trt
     c.i <- ev.ctrl
     d.i <- n.ctrl - ev.ctrl
-    n.1i <- n.trt
-    n.2i <- n.ctrl
-    N.i <- n.trt + n.ctrl
+
     N <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N, mean = 0, sd = 1)
+    
+    # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
+    for(i in 1:k){
+       if(a.i[i] < 1 | b.i[i] < 1 | c.i[i] < 1 | d.i[i] < 1){
+          a.i[i] <- a.i[i] + 0.5; b.i[i] <- b.i[i] + 0.5; c.i[i] <- c.i[i] + 0.5; d.i[i] <- d.i[i] + 0.5
+       }
+    }
+    
+    n.1i <- a.i + b.i
+    n.2i <- c.i + d.i
+    N.i <- a.i + b.i + c.i + d.i
     
     if(method == "odds.ratio") {
         # Individual study odds ratios:

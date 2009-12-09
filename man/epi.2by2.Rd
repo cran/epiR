@@ -48,12 +48,12 @@ Expose -  \tab c		\tab d		  	\cr
 When method equals \code{cohort.count} the following measures of association are returned: the incidence risk ratio (RR), the odds ratio (OR), the attributable risk  (AR), the attributable risk in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
 When method equals \code{cohort.time} the following measures of association are returned: the incidence rate ratio (IRR), the attributable rate (AR), the attributable rate in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
- 
+
 When method equals \code{case.control} the following measures of association are returned: the odds ratio (OR), the attributable prevalence (AR), the attributable prevalence in population (ARp), the estimated attributable fraction in the exposed (AFest), and the estimated attributable fraction in the population (AFp).
 
 When method equals \code{cross.sectional} the following measures of association are returned: the prevalence ratio (PR), the odds ratio (OR), the attributable prevalence (AR), the attributable prevalence in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
-When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.summary}). \code{chisq} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.summary} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. The chi-squared test of homogeneity (e.g. \code{OR.homogeneity}) provides a test of homogeneity of the strata-level measures of association.
+When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.summary}). Strata-level weights (i.e. inverse variance of the strata-level measures of assocation) are provided --- these are useful to understand the relationship between the crude strata-level measures of association and the Mantel-Haenszel adjusted measure of association. \code{chisq} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.summary} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. The chi-squared test of homogeneity (e.g. \code{OR.homogeneity}) provides a test of homogeneity of the strata-level measures of association.
 }
 
 \references{
@@ -168,8 +168,9 @@ a <- c(41, 66, 23)
 b <- c(6, 25, 14)
 c <- c(13, 37, 37)
 d <- c(53, 83, 62)
-epi.2by2(a, b, c, d, method = "case.control", conf.level = 0.95, 
+tmp.2by2 <- epi.2by2(a, b, c, d, method = "case.control", conf.level = 0.95, 
    units = 100, verbose = TRUE)
+tmp.2by2
 
 ## Crude odds ratio:
 ## 6.57 (95\% CI 4.31 to 10.03)
@@ -183,13 +184,43 @@ epi.2by2(a, b, c, d, method = "case.control", conf.level = 0.95,
 ## Test of homeogeneity of odds ratios:
 ## Test statistic 2.09; df = 2; P = 0.35
 
-## The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). The Mantel-Haenszel
-## adjusted odds ratio is 6.27 (95\% CI 3.52 to 11.17). The crude odds ratio 
-## is 1.05 times the magnitude of the Mantel-Haenszel adjusted odds ratio.
 ## We accept the null hypothesis that the strata level odds ratios 
-## are homogenous. We conclude that age does not confound the association 
+## are homogenous. The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). 
+## The Mantel-Haenszel adjusted odds ratio is 6.27 (95\% CI 3.52 to 11.17). 
+## The crude odds ratio is 1.05 times the magnitude of the Mantel-Haenszel 
+## adjusted odds ratio so we conclude that age does not confound the association 
 ## between smoking and risk of cervical cancer (using a ratio of greater 
-## than 1.10 or less than 0.90 as indicative of the presence of confounding.) 
+## than 1.10 or less than 0.90 as indicative of the presence of confounding).
+
+## Now plot the individual strata-level odds ratio and compare them with the 
+## Mantel-Haenszel adjusted odds ratio.
+
+## Not run: 
+\dontrun{library(latticeExtra)
+nstrata <- 1:length(a)
+strata.lab <- paste("Strata ", nstrata, sep = "")
+y.at <- c(nstrata, max(nstrata) + 1)
+y.labels <- c("Mantel-Haenszel", strata.lab)
+x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
+
+or.l <- c(tmp.2by2$OR.summary$lower, tmp.2by2$OR$lower)
+or.u <- c(tmp.2by2$OR.summary$upper, tmp.2by2$OR$upper)
+or.p <- c(tmp.2by2$OR.summary$est, tmp.2by2$OR$est)
+vert <- 1:length(or.p)
+ 
+segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
+   aspect = 1/2, col = "grey", 
+   ylim = c(0,vert + 1), 
+   xlab = "Odds ratio", ylab = "", 
+   scales = list(y = list(at = y.at, labels = y.labels, ticks = FALSE)), 
+   main = "Strata level and summary measures of association")}
+## End(Not run)
+
+## In this example the precision of both strata 2 and 3 odds ratio estimates is
+## high (i.e. the confidence intervals are narrow) so strata 2 and 3 carry most 
+## of the weight in determining the value of the Mantel-Haenszel adjusted 
+## odds ratio. 
+
 }
 
 \keyword{univar}

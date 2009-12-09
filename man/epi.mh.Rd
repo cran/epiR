@@ -51,6 +51,8 @@ Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. St
 
 \note{
 Using this method, the pooled odds and risk ratios are computed using the raw individual study weights. The methodology for computing the Mantel-Haenszel summary odds ratio follows the approach decribed in Deeks, Altman and Bradburn MJ (2001, pp 291 - 299).
+
+The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata. 
 }
 
 \seealso{

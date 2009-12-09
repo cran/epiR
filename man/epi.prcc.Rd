@@ -11,11 +11,13 @@ Compute partial rank correlation coefficients.
 }
 
 \usage{
-epi.prcc(dat)
+epi.prcc(dat, sided.test = 2)
 }
 
 \arguments{
   \item{dat}{a data frame comprised of \code{K + 1} columns and \code{N} rows, where \code{K} represents the number of model parameters being evaluated and \code{N} represents the number of replications of the model. The last column of the data frame (i.e. column \code{K + 1}) provides the model output.}
+  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the partial rank correlation coefficient is greater than or less than zero. Use a one-sided test to evaluate whether or not the partial rank correlation coefficient is greater than zero.}
+  
 }
 
 \details{
@@ -27,7 +29,7 @@ A data frame with three elements: \code{gamma} the partial rank corellation coef
 }
 
 \references{
-Blower S, Dowlatabladi H (1994). Sensitivity ans uncertainty analysis of complex models of disease transmission: an HIV model, as an example. International Statistical Review 62: 229 - 243.
+Blower S, Dowlatabladi H (1994). Sensitivity and uncertainty analysis of complex models of disease transmission: an HIV model, as an example. International Statistical Review 62: 229 - 243.
 
 Sanchez M, Blower S (1997) Uncertainty and sensitivity analysis of the basic reproductive rate. American Journal of Epidemiology, 145: 1127 - 1137.
 }
@@ -51,7 +53,7 @@ y <- 2 + (0.5 * x1) + (0.7 * x2) + (0.2 * x3)
 dat <- as.data.frame(cbind(x1, x2, x3, y))
 names(dat) <- c("X1", "X2", "X3", "Y")
 
-epi.prcc(dat)
+epi.prcc(dat, sided.test = 2)
 
 }
 

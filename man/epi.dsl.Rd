@@ -56,6 +56,8 @@ Higgins J, Thompson S (2002). Quantifying heterogeneity in a meta-analysis. Stat
 Under the random-effects model, the assumption of a common treatment effect is relaxed, and the effect sizes are assumed to have a normal distribution with variance \code{tau.sq}.
 
 Using this method, the DerSimonian and Laird weights are used to compute the pooled odds ratio.
+
+The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 }
 
 \seealso{
