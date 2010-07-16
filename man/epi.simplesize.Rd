@@ -11,7 +11,7 @@ Estimates the required sample size under under simple random sampling.
 }
 
 \usage{
-epi.simplesize(N = 1E+06, sd, Py, epsilon, method = "mean", 
+epi.simplesize(N = 1E+06, sd, Py, epsilon.a, method = "mean", 
    conf.level = 0.95)
 }
 
@@ -19,7 +19,7 @@ epi.simplesize(N = 1E+06, sd, Py, epsilon, method = "mean",
   \item{N}{scalar, representing the population size.}
   \item{sd}{scalar, if method is \code{total} or \code{mean} this is the estimated standard deviation of the sampling variable.}
   \item{Py}{scalar, if method is \code{proportion} this is an estimate of the unknown population proportion.}
-  \item{epsilon}{the maximum absolute difference between our estimate and the unknown population value.}
+  \item{epsilon.a}{the maximum absolute difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{total}, \code{mean}, or \code{proportion}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
@@ -53,10 +53,10 @@ If the calculated sample size is greater than 10\% of the population, an adjuste
 ## around 30 kg. We would like to be 95\% certain that our estimate is within 
 ## 10 kg of the true mean. How many deer should be sampled?
 
-epi.simplesize(N = 278, sd = 30, Py = NA, epsilon = 10, method = "mean", 
+epi.simplesize(N = 278, sd = 30, Py = NA, epsilon.a = 10, method = "mean", 
    conf.level = 0.95)
 
-## A sample of 31 deer are required.
+## A total of 31 deer need to be sampled to meet the survey requirements.
 
 ## EXAMPLE 2
 ## We want to estimate the seroprevalence of Brucella abortus in a population 
@@ -67,12 +67,12 @@ epi.simplesize(N = 278, sd = 30, Py = NA, epsilon = 10, method = "mean",
 
 ## Convert relative error into absolute error:
 epsilon.r <- 0.20; Py = 0.15
-epsilon <- epsilon.r * Py
+epsilon.a <- epsilon.r * Py
 
-epi.simplesize(N = 1E+06, sd = NA, Py = Py, epsilon = epsilon, 
+epi.simplesize(N = 1E+06, sd = NA, Py = Py, epsilon.a = epsilon.a, 
    method = "proportion", conf.level = 0.95)
 
-## A sample of 544 cattle are required.
+## A total of 544 cattle need to be sampled to meet the survey requirements.
 
 }
 

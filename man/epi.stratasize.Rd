@@ -10,15 +10,16 @@ Estimates the required sample size under under stratified random sampling.
 }
 
 \usage{
-epi.stratasize(strata.n, strata.mean, strata.var, epsilon, 
+epi.stratasize(strata.n, strata.mean, strata.var, strata.Py, epsilon.r, 
    method = "mean", conf.level = 0.95)
 }
 
 \arguments{
   \item{strata.n}{vector, defining the size of each strata.}
-  \item{strata.mean}{vector, representing the mean of each strata.}
-  \item{strata.var}{vector, representing the variance of each strata.}
-  \item{epsilon}{the maximum relative difference between our estimate and the unknown population value.}
+  \item{strata.mean}{vector, representing the expected means in each strata. Only used when \code{method = "mean", "total" or "pps"}.}
+  \item{strata.var}{vector, representing the expected variance in each strata. Only used when \code{method = "mean", "total" or "pps"}.}
+  \item{strata.Py}{vector, representing the expected proportions in each strata. Only used when \code{method = "proportion"}.}
+  \item{epsilon.r}{the maximum relative difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{mean}, \code{total}, \code{proportion}, or \code{pps}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
@@ -46,7 +47,7 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 \note{
 Use method \code{proportion} to estimate sample size using stratified random sampling with equal weights (see Levy and Lemeshow, page 176). Use method \code{pps} to estimate sample size using proportional stratified random sampling with proportional allocation (see Levy and Lemeshow, page 179).
 
-Where \code{method = "proportion"} the estimated proportions for each strata are entered into the vector \code{strata.mean}. The vector \code{strata.var} is ignored. 
+Where \code{method = "proportion"} the vectors \code{strata.mean} and \code{strata.var} are ignored. 
 }
 
 \seealso{
@@ -70,8 +71,8 @@ Where \code{method = "proportion"} the estimated proportions for each strata are
 strata.n <- c(600, 500, 400)
 strata.mean <- c(0.164, 0.166, 0.236)
 strata.var <- c(0.245, 0.296, 0.436)
-epi.stratasize(strata.n, strata.mean, strata.var, epsilon = 0.20, method = 
-   "mean", conf.level = 0.95)
+epi.stratasize(strata.n, strata.mean, strata.var, strata.Py, 
+   epsilon.r = 0.20, method = "mean", conf.level = 0.95)
 
 ## The number allocated to the under 45 years, 45 -- 64 years, and 65 years 
 ## and over stratums should be 223, 186, and 149 (a total of 558). These 
@@ -87,9 +88,9 @@ epi.stratasize(strata.n, strata.mean, strata.var, epsilon = 0.20, method =
 ## as herds get larger. How many dairies should be sampled?
 
 strata.n <- c(1500, 2500, 4000)
-strata.mean <- c(0.50, 0.60, 0.70)
-epi.stratasize(strata.n, strata.mean, epsilon = 0.20, method = 
-   "proportion", conf.level = 0.95)
+strata.Py <- c(0.50, 0.60, 0.70)
+epi.stratasize(strata.n, strata.mean, strata.var, strata.Py, 
+   epsilon.r = 0.20, method = "proportion", conf.level = 0.95)
 
 ## A total of 54 herds should be sampled: 10 small, 17 medium, and 27 large.
 

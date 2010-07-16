@@ -22,8 +22,9 @@ epi.ccc(x, y, ci = "z-transform", conf.level = 0.95)
 }
 
 \details{
-Computes Lin's (1989, 2000) concordance correlation coefficient for agreement on a continuous measure obtained by two methods. The
-concordance correlation coefficient combines measures of both precision and accuracy to determine how far the observed data deviate from the line of perfect concordance (that is, the line at 45 degrees on a square scatter plot). Lin's coefficient increases in value as a function of the nearness of the data's reduced major axis to the line of perfect concordance (the accuracy of the data) and of the tightness of the data about its reduced major axis (the precision of the data).
+Computes Lin's (1989, 2000) concordance correlation coefficient for agreement on a continuous measure obtained by two methods. The concordance correlation coefficient combines measures of both precision and accuracy to determine how far the observed data deviate from the line of perfect concordance (that is, the line at 45 degrees on a square scatter plot). Lin's coefficient increases in value as a function of the nearness of the data's reduced major axis to the line of perfect concordance (the accuracy of the data) and of the tightness of the data about its reduced major axis (the precision of the data).
+
+Both \code{x} and \code{y} values need to be present for a measurement pair to be included in the analysis. If either or both values are missing (i.e. coded \code{NA}) then the measurement pair is deleted before analysis.
 }
 
 \value{
@@ -33,6 +34,7 @@ A list containing the following:
   \item{l.shift}{the location shift.}
   \item{C.b}{a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees. No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page 258).}
   \item{blalt}{a data frame with two columns: \code{mean} the mean of each pair of measurements, \code{delta} vector \code{y} minus vector \code{x}.}
+  \item{nmissing}{a count of the number of measurement pairs ignored due to missingness.}
 }
 
 \note{
@@ -73,6 +75,10 @@ set.seed(seed = 1234)
 method1 <- rnorm(n = 100, mean = 0, sd = 1)
 method2 <- method1 + runif(n = 100, min = 0, max = 1)
 
+## Introduce some missing values:
+method1[50] <- NA
+method2[75] <- NA
+
 tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform",
    conf.level = 0.95)
 
@@ -86,7 +92,7 @@ plot(method1, method2, xlim = c(0, 5), ylim = c(0,5), xlab = "Method 1",
    ylab = "Method 2", pch = 16)
 abline(a = 0, b = 1, lty = 2)
 abline(z, lty = 1)
-legend(x = -0.2, y = 4.75, legend = c("Line of perfect concordance", 
+legend(x = "topleft", legend = c("Line of perfect concordance", 
    "Reduced major axis"), lty = c(2,1), lwd = c(1,1), bty = "n")
 text(x = 1.55, y = 3.8, labels = lab)
 
@@ -105,12 +111,13 @@ plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16,
    xlab = "Average PEFR by two meters (L/min)", 
    ylab = "Difference in PEFR (L/min)", xlim = c(0,800), 
    ylim = c(-140,140)) 
-abline(h = tmp.mean, lty = 1)
-abline(h = tmp.mean - (2 * tmp.sd), lty = 2)
-abline(h = tmp.mean + (2 * tmp.sd), lty = 2)
-legend(x = 505, y = 125, legend = c("Difference"), pch = 16, bty = "n")
-legend(x = "topright", legend = c("Mean difference", 
+abline(h = tmp.mean, lty = 1, col = "gray")
+abline(h = tmp.mean - (2 * tmp.sd), lty = 2, col = "gray")
+abline(h = tmp.mean + (2 * tmp.sd), lty = 2, col = "gray")
+legend(x = "topleft", legend = c("Mean difference", 
    "Mean difference +/ 2SD"), lty = c(1,2), bty = "n")
+legend(x = 0, y = 125, legend = c("Difference"), pch = 16, 
+    bty = "n")
 }
 
 \keyword{univar}

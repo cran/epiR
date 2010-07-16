@@ -1,28 +1,34 @@
 epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
    
+   dat <- data.frame(x, y)
+   id <- complete.cases(dat)
+   nmissing <- sum(!complete.cases(dat))
+   dat <- dat[id,]
+   
+   
    N. <- 1 - ((1 - conf.level) / 2)
    zv <- qnorm(N., mean = 0, sd = 1)
    lower <- "lower"
    upper <- "upper"
 
-   k <- length(y)
-   yb <- mean(y)
-   sy2 <- var(y) * (k - 1) / k
-   sd1 <- sd(y)
+   k <- length(dat$y)
+   yb <- mean(dat$y)
+   sy2 <- var(dat$y) * (k - 1) / k
+   sd1 <- sd(dat$y)
 
-   xb <- mean(x)
-   sx2 <- var(x) * (k - 1) / k
-   sd2 <- sd(x)
+   xb <- mean(dat$x)
+   sx2 <- var(dat$x) * (k - 1) / k
+   sd2 <- sd(dat$x)
 
-   r <- cor(x, y)
+   r <- cor(dat$x, dat$y)
    sl <- r * sd1 / sd2
 
    sxy <- r * sqrt(sx2 * sy2)
    p <- 2 * sxy / (sx2 + sy2 + (yb - xb)^2)
 
-   delta <- (x - y)
-   mean <- apply(cbind(x, y), MARGIN = 1, FUN = mean)
-   blalt <- as.data.frame(cbind(mean, delta))
+   delta <- (dat$x - dat$y)
+   rmean <- apply(dat, MARGIN = 1, FUN = mean)
+   blalt <- data.frame(mean = rmean, delta)
 
    # Scale shift:
    v <- sd1 / sd2
@@ -50,13 +56,13 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95){
    if(ci == "asymptotic"){
       rho.c <- as.data.frame(cbind(p, ll, ul))
       names(rho.c) <- c("est", lower, upper)
-      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt)  
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt, nmissing = nmissing)  
    }
    
    else if(ci == "z-transform"){
       rho.c <- as.data.frame(cbind(p, llt, ult))
       names(rho.c) <- c("est", lower, upper)
-      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt)
+      rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt, nmissing = nmissing)
       }
    return(rval)
 } 
