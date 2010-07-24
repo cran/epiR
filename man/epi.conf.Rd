@@ -20,7 +20,9 @@ epi.conf(dat, method = "mean.single", conf.level = 0.95)
 }
 
 \details{
-Returns confidence interval bounds at the alpha level specified. The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Exact binomial confidence limits are calculated for \code{inc.risk}, \code{prevalence} and \code{inc.rate} (see Collett 1999 for details). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used.
+Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
+
+The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Exact binomial confidence limits are calculated for \code{inc.risk}, \code{prevalence} and \code{inc.rate} (see Collett 1999 for details). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used.
 }
 
 \value{
@@ -53,16 +55,16 @@ dat <- rnorm(n = 100, mean = 0, sd = 1)
 epi.conf(dat, method = "mean.single")
 
 ## EXAMPLE 2
-group <- c(rep(1, times = 5), rep(2, times = 5))
+group <- c(rep("A", times = 5), rep("B", times = 5))
 val = round(c(rnorm(n = 5, mean = 10, sd = 5), 
    rnorm(n = 5, mean = 7, sd = 5)), digits = 0)
-dat <- as.data.frame(cbind(group, val))
+dat <- data.frame(group = group, val = val)
 epi.conf(dat, method = "mean.unpaired")
 
 ## EXAMPLE 3
 grp1 <- as.vector(round(rnorm(n = 100, mean = 10, sd = 5), digits = 0))
 grp2 <- as.vector(round(rnorm(n = 100, mean = 7, sd = 5), digits = 0))
-dat <- as.data.frame(cbind(grp1, grp2))
+dat <- data.frame(cbind(grp1 = grp1, grp2 = grp2))
 epi.conf(dat, method = "mean.paired")
 
 ## EXAMPLE 4
@@ -105,6 +107,15 @@ round(epi.conf(dat, method = "prop.unpaired"), digits = 3)
 ## 5 were identified as ischaemic by the laboratory. Of the 22 samples 
 ## identified as normal by clinical investigators 0 were identified as 
 ## ischaemic by the laboratory. 
+
+## Clinic       | Laboratory    |             |   
+##              | Ischaemic     | Normal      | Total
+## ---------------------------------------------------------
+##  Ischaemic   | 14            | 5           | 19
+##  Normal      | 0             | 22          | 22
+## ---------------------------------------------------------
+##  Total       | 14            | 27          | 41
+## ---------------------------------------------------------
 
 dat <- as.matrix(cbind(14, 5, 0, 22))
 round(epi.conf(dat, method = "prop.paired", conf.level = 0.95), digits = 3)

@@ -52,10 +52,13 @@
      
      if (length(n) > 2) 
            stop("Error: there must be only two groups")
+     if (is.factor(dat[,1] == FALSE)) 
+           stop("Error: the first column of the data frame must be factor")
+        sum <- as.vector(by(dat[,2], dat[,1], sum))
         mean <- as.vector(by(dat[,2], dat[,1], mean))
         mean.diff <- mean[1] - mean[2]   
         var <- as.vector(by(dat[,2], dat[,1], var))
-        s <- sqrt(((n[1] - 1) * var[1]) + ((n[2] - 1) * var[2]) / (n[1] + n[2] - 2))
+        s <- sqrt((((n[1] - 1) * var[1]) + ((n[2] - 1) * var[2])) / (n[1] + n[2] - 2))
         se.diff <- s * sqrt(1/n[1] + 1/n[2])
         
         P <- (1 - conf.level)/2
