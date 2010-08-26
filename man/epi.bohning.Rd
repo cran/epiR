@@ -19,6 +19,7 @@ epi.bohning(obs, exp, alpha = 0.05)
 }
 
 \details{
+
 }
 
 \value{

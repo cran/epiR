@@ -11,7 +11,7 @@ Computes individual study odds or risk ratios for binary outcome data. Computes 
 
 \usage{
 epi.iv(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio", 
-   conf.level = 0.95)
+   alternative = c("two.sided", "less", "greater"), conf.level = 0.95)
 }
 
 \arguments{
@@ -21,11 +21,15 @@ epi.iv(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio",
   \item{n.ctrl}{number in the control group.}
   \item{names}{character string identifying each trial.}
   \item{method}{a character string indicating the method to be used. Options are \code{odds.ratio} or \code{risk.ratio}.}
+  \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{two.sided}, \code{greater} or \code{less}. }
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
 Using this method, the inverse variance weights are used to compute the pooled odds ratios and risk ratios. The inverse variance weights should be used to indicate the weight each trial contributes to the meta-analysis.
+
+\code{alternative = "greater"} tests the hypothesis that the inverse variance summary measure of association is greater than 1. 
+
 }
 
 \value{
@@ -67,7 +71,7 @@ data(epi.epidural)
 epi.iv(ev.trt = epi.epidural$ev.trt, n.trt = epi.epidural$n.trt, 
    ev.ctrl = epi.epidural$ev.ctrl, n.ctrl = epi.epidural$n.ctrl, 
    names = as.character(epi.epidural$trial), method = "odds.ratio", 
-   conf.level = 0.95)
+   alternative = "two.sided", conf.level = 0.95)
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS
