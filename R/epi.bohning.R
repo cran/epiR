@@ -1,7 +1,5 @@
-epi.bohning <- function(obs, exp, alpha = 0.05){
-   N. <- 1 - alpha/2
-   z <- qnorm(N., mean = 0, sd = 1)
-   
+"epi.bohning" <- function(obs, exp, alpha = 0.05){
+  
    J <- length(obs)
    smr <- obs / exp
    smr.bar <- sum(smr) / J

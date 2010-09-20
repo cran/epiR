@@ -1,5 +1,6 @@
-"epi.iv" <- function(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio", conf.level = 0.95)
+"epi.iv" <- function(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio", alternative = c("two.sided", "less", "greater"), conf.level = 0.95)
 {
+
     # Declarations:
     k <- length(names)
     a.i <- ev.trt
@@ -7,8 +8,8 @@
     c.i <- ev.ctrl
     d.i <- n.ctrl - ev.ctrl
 
-    N <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N, mean = 0, sd = 1)
+    N. <- 1 - ((1 - conf.level) / 2)
+    z <- qnorm(N., mean = 0, sd = 1)
     
     # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
     for(i in 1:k){
@@ -68,9 +69,10 @@
         Isq.l <- ((Hsq.l - 1) / Hsq.l) * 100
         Isq.u <- ((Hsq.u - 1) / Hsq.u) * 100      
             
-        # Test of effect:
-        effect.z <- abs(lnOR.iv/SE.lnOR.iv)
-        p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
+        # Test of effect. Code for p-value taken from z.test function in TeachingDemos package:
+        effect.z <- lnOR.iv/SE.lnOR.iv
+        alternative <- match.arg(alternative)
+        p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
     
         # Results:
         OR <- as.data.frame(cbind(OR.i, SE.OR.i, lower.OR.i, upper.OR.i))
@@ -142,9 +144,10 @@
         Isq.l <- ((Hsq.l - 1) / Hsq.l) * 100
         Isq.u <- ((Hsq.u - 1) / Hsq.u) * 100
         
-        # Test of effect:
-        effect.z <- abs(lnRR.iv/SE.lnRR.iv)
-        p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
+        # Test of effect. Code for p-value taken from z.test function in TeachingDemos package:
+        effect.z <- lnRR.iv/SE.lnRR.iv
+        alternative <- match.arg(alternative)
+        p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
         
         # Results:
         RR <- as.data.frame(cbind(RR.i, SE.RR.i, lower.RR.i, upper.RR.i))

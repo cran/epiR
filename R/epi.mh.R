@@ -1,4 +1,4 @@
-"epi.mh" <- function(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio", conf.level = 0.95)
+"epi.mh" <- function(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio", alternative = c("two.sided", "less", "greater"), conf.level = 0.95)
     {
         # Declarations:
         k <- length(names)
@@ -7,9 +7,9 @@
         c.i <- ev.ctrl
         d.i <- n.ctrl - ev.ctrl
 
-        N <- 1 - ((1 - conf.level) / 2)
-        z <- qnorm(N, mean = 0, sd = 1)
-        
+        N. <- 1 - ((1 - conf.level) / 2)
+        z <- qnorm(N., mean = 0, sd = 1)
+                
         # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
         for(i in 1:k){
         if(a.i[i] < 1 | b.i[i] < 1 | c.i[i] < 1 | d.i[i] < 1){
@@ -53,7 +53,7 @@
             OR.mh <- sum(w.i * OR.i) / sum(w.i)                
             lnOR.mh <- sum(w.i * log(OR.i)) / sum(w.i)
             
-            # Same method for calculating confidence intervals around pooled OR as epi.2by2:            
+            # Same method for calculating confidence intervals around pooled OR as epi.2by2 so results differ from page 304 of Egger, Smith and Altman:            
             G <- a.i * d.i / N.i
             H <- b.i * c.i / N.i
             P <- (a.i + d.i) / N.i
@@ -94,9 +94,10 @@
             Isq.l <- ((Hsq.l - 1) / Hsq.l) * 100
             Isq.u <- ((Hsq.u - 1) / Hsq.u) * 100      
             
-            # Test of effect:
-            effect.z <- abs(lnOR.mh / SE.lnOR.mh)
-            p.effect <- 1 - pnorm(effect.z, mean = 0, sd = 1)
+            # Test of effect. Code for p-value taken from z.test function in TeachingDemos package:
+            effect.z <- lnOR.mh / SE.lnOR.mh
+            alternative <- match.arg(alternative)
+            p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
                 
             # Results:
             OR <- as.data.frame(cbind(OR.i, SE.OR.i, lower.OR.i, upper.OR.i))
@@ -169,9 +170,10 @@
             Isq.l <- ((Hsq.l - 1) / Hsq.l) * 100
             Isq.u <- ((Hsq.u - 1) / Hsq.u) * 100
                 
-            # Test of effect:
-            effect.z <- abs(log(RR.mh) / SE.lnRR.mh)
-            p.effect <- 1 - pnorm(effect.z, mean=0, sd=1)
+            # Test of effect. Code for p-value taken from z.test function in TeachingDemos package:
+            effect.z <- log(RR.mh) / SE.lnRR.mh
+            alternative <- match.arg(alternative)
+            p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
                
             # Results:
             RR <- as.data.frame(cbind(RR.i, SE.RR.i, lower.RR.i, upper.RR.i))
