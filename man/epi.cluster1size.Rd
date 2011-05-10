@@ -11,7 +11,7 @@ Returns the required number of clusters to be sampled using a one-stage cluster 
 }
 
 \usage{
-epi.cluster1size(n, mean, var, epsilon, method = "mean", 
+epi.cluster1size(n, mean, var, epsilon.r, method = "mean", 
    conf.level = 0.95)
 }
 
@@ -19,7 +19,7 @@ epi.cluster1size(n, mean, var, epsilon, method = "mean",
   \item{n}{integer, representing the total number of clusters in the population.}
   \item{mean}{number, representing the population mean of the variable of interest.}
   \item{var}{number, representing the population variance of the variable of interest.}
-  \item{epsilon}{the maximum relative difference between our estimate and the unknown population value.}
+  \item{epsilon.r}{the maximum relative difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{total}, \code{mean} or \code{mean.per.unit}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
@@ -53,7 +53,7 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 ## that is within 10\% of the true value. How many housing complexes (clusters)
 ## should be sampled?
 
-epi.cluster1size(n = 5, mean = 34, var = 6.8, epsilon = 0.10, method = 
+epi.cluster1size(n = 5, mean = 34, var = 6.8, epsilon.r = 0.10, method = 
    "total", conf.level = 0.999)
 
 ## We would need to sample 3 housing complexes to meet the specifications 

@@ -44,9 +44,9 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 \note{
 \tabular{llll}{
  		\tab Obs1 +	\tab Obs1 - 	 \tab Total	\cr
-Obs 2 +		\tab a		\tab b		 \tab a + b	\cr
-Obs 2 -     	\tab c		\tab c		 \tab c + d	\cr
-Total		\tab a + c	\tab b + c	 \tab a + b + c + d\cr
+Obs 2 +		\tab a		  \tab b		   \tab a + b	\cr
+Obs 2 -   \tab c		  \tab d		   \tab c + d	\cr
+Total		  \tab a + c	\tab b + d	 \tab a + b + c + d\cr
 }
 
 McNemar's test is used to test for the presence of bias. Bias would be present if the proportion positive to each test differed. A non-significant McNemar's test would indicate that the two proportions do not differ, and that the kappa statistic is a valid measure of agreeement

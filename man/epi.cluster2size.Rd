@@ -10,7 +10,7 @@ Returns the required number of clusters to be sampled using a two-stage cluster 
 }
 
 \usage{
-epi.cluster2size(nbar, n, mean, var, epsilon, method = "mean", 
+epi.cluster2size(nbar, n, mean, var, epsilon.r, method = "mean", 
    conf.level = 0.95)
 }
 
@@ -20,7 +20,7 @@ epi.cluster2size(nbar, n, mean, var, epsilon, method = "mean",
   \item{n}{vector of length two, specifying the total number of clusters in the population and the total number of primary sampling units in each cluster, respectively.}
   \item{mean}{vector of length two, specifying the mean of the variable of interest at the cluster level and the mean of the variable of interest at the primary sampling unit level, respectively.}
   \item{var}{vector of length two, specifying the variance of the variable of interest at the cluster level and the variance of the variable of interest at the primary sampling unit level, respectively.}
-  \item{epsilon}{the maximum relative difference between our estimate and the unknown population value.}
+  \item{epsilon.r}{the maximum relative difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{total}, or \code{mean}.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
@@ -51,16 +51,13 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 ## average number of patients seen by each nurse. There are five health
 ## centres in the study area, each with three nurses. We intend to sample
 ## two nurses from each health centre. We would like to be 95\% confident
-## of obtaining an estimate that is within 30\% of the true value. We 
-## expect that the mean number of patients seen at the health centre level 
+## of obtaining an estimate that is within 30\% of the true population value. 
+## We expect that the mean number of patients seen at the health centre level 
 ## is 84 (var 567) and the mean number of patients seen at the nurse 
 ## level is 28 (var 160). How many health centres should we sample?
 
-nbar <- 2
-n <- c(5, 3)
-mean <- c(84, 28)
-var <- c(567, 160)
-epi.cluster2size(nbar, n, mean, var, epsilon = 0.3, method = "mean", 
+nbar <- 2; n <- c(5, 3); mean <- c(84, 28); var <- c(567, 160)
+epi.cluster2size(nbar, n, mean, var, epsilon.r = 0.3, method = "mean", 
    conf.level = 0.95)
 
 ## We would need a simple two-stage cluster sample of 3 health centres to 
