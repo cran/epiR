@@ -23,7 +23,7 @@ epi.stratasize <- function (strata.n, strata.mean, strata.var, strata.Py, epsilo
             sigma.wx = sigma.wx, sigma.x = sigma.x, rel.var = V, 
             gamma = gamma)
         
-        rval <- list(srata.sample = result.01, total.sample = result.02, stats = result.03)
+        rval <- list(strata.sample = result.01, total.sample = result.02, stats = result.03)
     }
     
     if (method == "mean") {

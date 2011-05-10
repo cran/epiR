@@ -1,4 +1,4 @@
-"epi.2by2" <- function(a, b, c, d, method = "cohort.count", conf.level = 0.95, units = 100, verbose = FALSE){ 
+"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, verbose = FALSE){ 
     # Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293. 
     # Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
     # Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55:508 - 514.
@@ -68,8 +68,21 @@
  
     # Make a copy of the original data. These values used when sums of cells across all strata are greater than zero but 
     # some strata contain zero cell frequencies.
-    A <- a; B <- b; C <- c; D <- d
- 
+    
+    if(length(dim(dat)) == 2){
+    a <- dat[1]; A <- a
+    b <- dat[3]; B <- b
+    c <- dat[2]; C <- c
+    d <- dat[4]; D <- d
+    }
+    
+    if(length(dim(dat)) > 2){
+    a <- dat[1,1,]; A <- a
+    b <- dat[1,2,]; B <- b
+    c <- dat[2,1,]; C <- c
+    d <- dat[2,2,]; D <- d
+    }
+
     # Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
     for(i in 1:length(a)){
        if(a[i] < 1 | b[i] < 1 | c[i] < 1 | d[i] < 1){

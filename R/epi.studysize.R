@@ -8,8 +8,11 @@
   z.beta <- qnorm(power, mean = 0, sd = 1) 
   delta <- abs(treat - control)
   n <- ((r + 1)^2 * (z.alpha + z.beta)^2 * sigma^2) / (delta^2 * r)
-  n <- 2 * ceiling(0.5 * n)
-  rval <- list(n = n)
+  n.crude <- ceiling(n)
+  n.treat <- ceiling(n / (r + 1)) * r
+  n.control <- ceiling(n / (r + 1)) * 1
+  n.total <- n.treat + n.control
+  rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
   }
 
  else 
@@ -35,10 +38,9 @@
   # Sample size.
   z.beta <- qnorm(power, mean = 0, sd = 1)
   delta <- abs(treat - control)
-  n <- (1/delta^2) * ((z.alpha * sqrt(treat * (1 - treat))) + 
-   (z.beta * sqrt(control * (1 - control))))^2
-  n <- 2 * ceiling(0.5 * n)
-  rval <- list(n = n)
+  n <- (1/delta^2) * ((z.alpha * sqrt(treat * (1 - treat))) + (z.beta * sqrt(control * (1 - control))))^2
+  n.total <- 2 * ceiling(0.5 * n)
+  rval <- list(n.total = n.total)
   }
 
  else
@@ -98,9 +100,12 @@
   # p <- 0.5; q <- 1 - p
   exp.beta <- log(treat) / log(control)
   n <- ((z.alpha + z.beta)^2) / (p * q * log(exp.beta)^2)
-  n <- 2 * ceiling(0.5 * n)
-  rval <- list(n = n)
-     }
+  n.crude <- ceiling(n)
+  n.treat <- ceiling(n / (r + 1)) * r
+  n.control <- ceiling(n / (r + 1)) * 1
+  n.total <- n.treat + n.control
+  rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
+  }
 
   else 
   if(method == "survival" & !is.na(treat) & !is.na(control) & !is.na(n) & is.na(power)){
@@ -131,14 +136,16 @@
   lambda <- treat / control
   pi <- control
   pc <- (pi * ((r * lambda) + 1)) / (r + 1)
-
   p1 <- (r + 1) / (r * (lambda - 1)^2 * pi^2)
   p2 <- z.alpha * sqrt((r + 1) * pc * (1 - pc))
   p3 <- z.beta * sqrt((lambda * pi * (1 - (lambda * pi))) + (r * pi * (1 - pi)))
   n <- p1 * (p2 + p3)^2
-  n <- 2 * ceiling(0.5 * n)
-  rval <- list(n = n)
-     }
+  n.crude <- ceiling(n)
+  n.treat <- ceiling(n / (r + 1)) * r
+  n.control <- ceiling(n / (r + 1)) * 1
+  n.total <- n.treat + n.control
+  rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
+  }
 
   else 
   if(method == "cohort.count" & !is.na(treat) & !is.na(control) & !is.na(n) & is.na(power)){
@@ -185,9 +192,12 @@
   p2 <- z.alpha * sqrt((r + 1) * pc. * (1 - pc.))
   p3 <- z.beta * sqrt(((lambda * P * (1 - P)) / ((1 + (lambda - 1) * P)^2)) + (r * P * (1 - P)))
   n <- p1 * (p2 + p3)^2
-  n <- 2 * ceiling(0.5 * n)
-  rval <- list(n = n)
-     }
+  n.crude <- ceiling(n)
+  n.treat <- ceiling(n / (r + 1)) * r
+  n.control <- ceiling(n / (r + 1)) * 1
+  n.total <- n.treat + n.control
+  rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
+  }
 
  else 
  if(method == "case.control" & !is.na(treat) & !is.na(control) & !is.na(n) & is.na(power)){
@@ -219,9 +229,5 @@
   lambda.neg <- 1 + ((-b - sqrt(b^2 - (4 * a * (r + 1)))) / (2 * a))
   rval <- list(lambda = c(lambda.neg, lambda.pos))
      }
-  
-
-
-# ------------------------------------------------------------------------------
 rval
 }

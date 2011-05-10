@@ -1,4 +1,4 @@
-"epi.cluster2size" <- function(nbar, n, mean, var, epsilon, method = "mean", conf.level = 0.95){
+"epi.cluster2size" <- function(nbar, n, mean, var, epsilon.r, method = "mean", conf.level = 0.95){
     N. <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N., mean = 0, sd = 1)
     
@@ -11,7 +11,7 @@
            stop("Error: var must be of length 2")
            
         numerator <- (var[1]/mean[1]^2) * (n[1]/(n[1] - 1)) + (1/nbar) * (var[2]/mean[2]^2) * ((n[2] - nbar)/(n[2] - 1))
-        denominator <- (epsilon^2/z^2) + (var[1]/(mean[1]^2*(n[1] - 1)))
+        denominator <- (epsilon.r^2/z^2) + (var[1]/(mean[1]^2*(n[1] - 1)))
         rval <- round(numerator/denominator, digits = 0)
         }
     
@@ -24,7 +24,7 @@
            stop("Error: var must be of length 2")
            
         numerator <- (var[1]/mean[1]^2) * (n[1]/(n[1] - 1)) + (1/nbar) * (var[2]/mean[2]^2) * ((n[2] - nbar)/(n[2] - 1))
-        denominator <- (epsilon^2/z^2) + (var[1]/(mean[1]^2*(n[1] - 1)))
+        denominator <- (epsilon.r^2/z^2) + (var[1]/(mean[1]^2*(n[1] - 1)))
         rval <- round(numerator/denominator, digits = 0)
        }
        

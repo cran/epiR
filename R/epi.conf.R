@@ -1,4 +1,4 @@
-"epi.conf" <- function(dat, method = "mean.single", conf.level = 0.95){
+"epi.conf" <- function(dat, ctype = "mean.single", method, N, design = 1, conf.level = 0.95){
    
     # Define function to calculate confidence interval for a single proportion.
     # This is used on several occasions in this function:
@@ -26,7 +26,7 @@
         tmp.rval
         }
         
-     if(method == "mean.single"){
+     if(ctype == "mean.single"){
         if (is.vector(dat) == FALSE) 
            stop("Error: dat must be a vector")
         mean <- mean(dat)
@@ -45,7 +45,7 @@
         rval
      }
      
-     if(method == "mean.unpaired"){
+     if(ctype == "mean.unpaired"){
      if (is.data.frame(dat) == FALSE) 
            stop("Error: dat must be a two-column data frame")
         n <- as.vector(by(dat[,2], dat[,1], length))
@@ -71,7 +71,7 @@
         rval
      }
      
-     if(method == "mean.paired"){
+     if(ctype == "mean.paired"){
      if (is.data.frame(dat) == FALSE) 
            stop("Error: dat must be a two-column data frame")
         diff <- as.vector(dat[,2] - dat[,1])
@@ -90,12 +90,12 @@
         rval
      }
           
-     if(method == "prop.single"){
+     if(ctype == "prop.single"){
         rval <- .propsingle(tmp.dat = dat, conf.level = conf.level)
         rval
         }
      
-     if(method == "prop.unpaired"){
+     if(ctype == "prop.unpaired"){
      if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a four-column matrix")
         
@@ -123,7 +123,7 @@
         rval
      }
      
-     if(method == "prop.paired"){
+     if(ctype == "prop.paired"){
         if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a four-column matrix")
        
@@ -175,9 +175,11 @@
         rval
         }
      
-     if(method == "inc.risk"){
+     if(ctype == "inc.risk" | ctype == "prevalence"){
         if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
+          
+          if(method == "exact"){
           # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):
           N. <- 1 - ((1 - conf.level) / 2)
           a <- dat[,1]
@@ -191,65 +193,66 @@
           up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
           low <- ifelse(a == 0, 0, low)
           up <- ifelse(a == n, 1, up)
-        
-          # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
-          # N. <- 1 - ((1 - conf.level) / 2)
-          # z <- qnorm(N., mean = 0, sd = 1)
-          # a <- dat[,1]
-          # n <- dat[,2]
-          # p <- dat[,1] / dat[,2]
-        
-          # a. <- n/(n + z^2)
-          # b. <- a/n
-          # c. <- z^2/(2 * n)
-          # d. <- (a * (n - a)) / n^3
-          # e. <- z^2 / (4 * n^2)
-          # low <- a. * (b. + c. - (z * sqrt(d. + e.)))
-          # up <- a. * (b. + c. + (z * sqrt(d. + e.)))
-  
+
           rval <- as.data.frame(cbind(p, low, up))
           names(rval) <- c("est", "lower", "upper")
           rval
-     }
-     
-     if(method == "prevalence"){
-        if (is.matrix(dat) == FALSE) 
-           stop("Error: dat must be a two-column matrix")
-          # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):
+          }
+        
+          if(method == "wilson"){
+          # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
           N. <- 1 - ((1 - conf.level) / 2)
+          z <- qnorm(N., mean = 0, sd = 1)
           a <- dat[,1]
           n <- dat[,2]
-          b <- n - a
-          p <- a / n
-
-          # Exact binomial confidence limits (D. Collett (1999): Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24).
-          a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b) 
-          low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
-          up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
-          low <- ifelse(a == 0, 0, low)
-          up <- ifelse(a == n, 1, up)
+          p <- dat[,1] / dat[,2]
+        
+          a. <- n/(n + z^2)
+          b. <- a/n
+          c. <- z^2/(2 * n)
+          d. <- (a * (n - a)) / n^3
+          e. <- z^2 / (4 * n^2)
+          var.wil <- sqrt(d. + e.)
           
-          # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
-          # N. <- 1 - ((1 - conf.level) / 2)
-          # z <- qnorm(N., mean = 0, sd = 1)
-          # a <- dat[,1]
-          # n <- dat[,2]
-          # p <- dat[,1] / dat[,2]
-          # a. <- n/(n + z^2)
-          # b. <- a/n
-          # c. <- z^2/(2 * n)
-          # d. <- (a * (n - a)) / n^3
-          # e. <- z^2 / (4 * n^2)
-          # low <- a. * (b. + c. - (z * sqrt(d. + e.)))
-          # up <- a. * (b. + c. + (z * sqrt(d. + e.)))
-  
-          rval <- as.data.frame(cbind(p, low, up))
-          names(rval) <- c("est", "lower", "upper")
-          rval     }
+          # Design effect equals [var.obs] / [var.srs]. 
+          # var.wil has been computed assuming simple random sampling so if an argument for design effect is provided we need to adjust se.wil accordingly:
+          se.wil <- sqrt(design * var.wil)
+          low <- a. * (b. + c. - (z * se.wil))
+          up <- a. * (b. + c. + (z * se.wil))
+
+          rval <- as.data.frame(cbind(p, se.wil, low, up))
+          names(rval) <- c("est", "se", "lower", "upper")
+          rval
+          }
+          
+          if(method == "fleiss"){
+          # Sampling for Epidemiologists, Kevin M Sullivan
+          a <- dat[,1]
+          n <- dat[,2]
+          p <- dat[,1] / dat[,2]
+          q <- (1 - p)
+          var.fl <- ((p * q) / (n - 1)) * ((N - n) / N)
+          # Design effect equals [var.obs] / [var.srs]. 
+          # var.fl has been computed assuming simple random sampling so if an argument for design effect is provided we need to adjust se.wil accordingly:
+          se.fl <- sqrt(design * var.fl)
+          
+          df <- n - 1
+          N. <- 1 - ((1 - conf.level) / 2)
+          t <- abs(qt(p = N., df = df))
+          low <- p - (t * se.fl)
+          up <- p + (t * se.fl)
+          
+          rval <- as.data.frame(cbind(p, se.fl, low, up))
+          names(rval) <- c("est", "se", "lower", "upper")
+          rval
+          }
+     }
      
-     if(method == "inc.rate"){
+     if(ctype == "inc.rate"){
      if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
+          
+          if(method == "exact"){
           # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):          
           N. <- 1 - ((1 - conf.level) / 2)
           a <- dat[,1]
@@ -259,21 +262,28 @@
           low <- ifelse(a == 0, 0, (0.5 * qchisq(p = N., df = 2 * a + 2, lower.tail = FALSE) / n))
           up <- 0.5 * qchisq(p = 1 - N., df = 2 * a + 2, lower.tail = FALSE) / n
           
+          rval <- as.data.frame(cbind(p, low, up))
+          names(rval) <- c("est", "lower", "upper")
+          rval
+          }          
+          
+          if(method == "byar"){
           # Byar's method (see Rothman, Epidemiology An Introduction, page 134): 
-          # N. <- 1 - ((1 - conf.level) / 2)
-          # z <- qnorm(N., mean = 0, sd = 1)
-          # a.prime <- dat[,1] + 0.5
-          # p <- dat[,1]/dat[,2]
-          # PT <- dat[,2]
-          # low <- (a.prime * (1 - (1/(9 * a.prime)) - (z/3 * sqrt(1/a.prime)))^3)/PT
-          # up <- (a.prime * (1 - (1/(9 * a.prime)) + (z/3 * sqrt(1/a.prime)))^3)/PT
+          N. <- 1 - ((1 - conf.level) / 2)
+          z <- qnorm(N., mean = 0, sd = 1)
+          a.prime <- dat[,1] + 0.5
+          p <- dat[,1]/dat[,2]
+          PT <- dat[,2]
+          low <- (a.prime * (1 - (1/(9 * a.prime)) - (z/3 * sqrt(1/a.prime)))^3)/PT
+          up <- (a.prime * (1 - (1/(9 * a.prime)) + (z/3 * sqrt(1/a.prime)))^3)/PT
         
           rval <- as.data.frame(cbind(p, low, up))
           names(rval) <- c("est", "lower", "upper")
           rval
+          }
      }
      
-     else if(method == "smr"){
+     else if(ctype == "smr"){
      if (is.matrix(dat) == FALSE) 
            stop("Error: dat must be a two-column matrix")
         
