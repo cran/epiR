@@ -26,9 +26,6 @@ epi.smd(mean.trt, sd.trt, n.trt, mean.ctrl, sd.ctrl, n.ctrl,
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
-\details{
-}
-
 \value{
 A list containing the following:
   \item{md}{standardised mean difference and its confidence interval computed for each trial.}
@@ -39,9 +36,6 @@ A list containing the following:
   
 \references{
 Deeks JJ, Altman DG, Bradburn MJ (2001). Statistical methods for examining heterogeneity and combining results from several studies in meta-analysis. In: Egger M, Davey Smith G, Altman D (eds). Systematic Review in Health Care Meta-Analysis in Context. British Medical Journal, London, pp. 290 - 291. 
-}
-
-\author{
 }
 
 \note{

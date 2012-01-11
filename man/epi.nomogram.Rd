@@ -19,9 +19,6 @@ epi.nomogram(se, sp, pre.pos, verbose = FALSE)
   \item{verbose}{logical, indicating whether detailed or summary results are to be returned.}
 }
 
-\details{
-}
-
 \value{
 A list containing the following:
   \item{likelihood.ratio}{the likelihood ratio of a positive and negative test.}
@@ -30,15 +27,6 @@ A list containing the following:
 
 \references{
 Hunink M, Glasziou P (2001). Decision Making in Health and Medicine - Integrating Evidence and Values. Cambridge University Press, pp. 128 - 156.
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{

@@ -58,9 +58,6 @@ Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample si
 Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, specificity, PPV & NPV. R-sig-Epi Digest 23(1): 3March 2008.
 }
 
-\author{
-}
-
 \note{
 \tabular{llll}{
  \tab Disease +	\tab Disease -  \tab Total\cr
@@ -68,9 +65,6 @@ Test +\tab a\tab b \tab a + b\cr
 Test - \tab c\tab d \tab c + d\cr
 Total\tab a + c\tab b + d \tab a + b + c + d\cr
    }
-}
-
-\seealso{
 }
 
 \examples{

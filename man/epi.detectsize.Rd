@@ -26,9 +26,6 @@ epi.detectsize(N, prev, se, sp, interpretation = "series",
   \item{finite.correction}{logial, should a finite correction factor be applied?}
 }
 
-\details{
-}
-
 \value{
 A list containing the following: 
   \item{performance}{The sensitivity and specificity of the testing strategy.}
@@ -39,16 +36,10 @@ A list containing the following:
 Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47 and pp 102 - 103.
 }
 
-\author{
-}
-
 \note{
 The finite correction factor reduces the variance of the sample as the sample size approaches the population size. As a rule of thumb, set \code{finite.correction = TRUE} when the sample size is greater than 5\% of the population size.
 
 Define \code{se1} and \code{se2} as the sensitivity for the first and second test, \code{sp1} and \code{sp2} as the specificity for the first and second test, \code{p111} as the proportion of disease-positive subjects with a positive test result to both tests and \code{p000} as the proportion of disease-negative subjects with a negative test result to both tests. The covariance between test results for the disease-positive group is \code{p111 - se1 * se2}. The covariance between test results for the disease-negative group is \code{p000 - sp1 * sp2}.
-}
-
-\seealso{
 }
 
 \examples{

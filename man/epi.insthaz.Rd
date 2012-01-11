@@ -32,17 +32,8 @@ Venables W, Ripley B (2002). Modern Applied Statistics with S, fourth edition. S
 Singer J, Willett J (2003). Applied Longitudinal Data Analysis Modeling Change and Event Occurrence. Oxford University Press, London, pp. 348.
 }
 
-\author{ 
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
-library(survival)
+require(survival)
 ovarian.km <- survfit(Surv(futime,fustat) ~ 1, data = ovarian)
 
 ovarian.haz <- epi.insthaz(ovarian.km, conf.level = 0.95)

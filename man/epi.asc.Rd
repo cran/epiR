@@ -23,17 +23,8 @@ epi.asc(dat, file, xllcorner, yllcorner, cellsize, na = -9999)
   \item{na}{scalar, defines null values in the matrix. NAs are converted to this value.}
 }
 
-\details{
-}
-
 \value{
 Writes an ASCII raster file (typically with \code{*.asc} extension), suitable for display in a GIS package.
-}
-
-\references{
-}
-
-\author{
 }
 
 \note{
@@ -52,13 +43,6 @@ is displayed (using \code{image}) as:
  }
 
 It is recommended that the source data for this function is a matrix. Replacement of \code{NA}s in a data frame extends processing time for this function. 
-}
-
-\seealso{
-}
-
-\examples{
-
 }
 
 \keyword{univar}

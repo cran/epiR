@@ -21,24 +21,12 @@ epi.RtoBUGS(datalist, towhere)
 Does not check to ensure that only numbers are being produced. In particular, factor labels in a data frame will be output to the file, which normally won't be desired.
 }
 
-\value{
-}
-
 \references{
 Best, NG. WinBUGS 1.3.1 Short Course, Brisbane, November 2000. 
 }
 
 \author{
 Terry Elrod (Terry.Elrod@UAlberta.ca), Kenneth Rice.
-}
-
-\note{
-}
-
-\seealso{
-}
-
-\examples{
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

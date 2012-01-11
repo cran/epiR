@@ -20,21 +20,12 @@ epi.cpresids(obs, fit, covpattern)
   \item{covpattern}{a \code{\link{epi.cp}} object.}
 }
 
-\details{
-}
-
 \value{
 A data frame with 13 elements: \code{cpid} the covariate pattern identifier, \code{n} the number of subjects in this covariate pattern, \code{obs} the observed number of successes, \code{pred} the predicted number of successes, \code{raw} the raw residuals, \code{sraw} the standardised raw residuals, \code{pearson} the Pearson residuals, \code{spearson} the standardised Pearson residuals, \code{deviance} the deviance residuals, \code{leverage} leverage, \code{deltabeta} the delta-betas, \code{sdeltabeta} the standardised delta-betas, and \code{deltachi} delta chi statistics.
 }
 
 \references{
 Hosmer DW, Lemeshow S (1989). Applied Logistic Regression. John Wiley & Sons, New York, USA, pp. 137 - 138.
-}
-
-\author{
-}
-
-\note{
 }
 
 \seealso{

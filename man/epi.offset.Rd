@@ -32,15 +32,6 @@ Langford IH (1994). Using empirical Bayes estimates in the geographical analysis
 
 }
 
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 dat <- c(1,1,1,2,2,2,2,3,3,3)
 dat <- as.factor(dat)

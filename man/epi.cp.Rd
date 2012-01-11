@@ -28,17 +28,8 @@ A list containing the following:
   \item{id}{a vector listing the covariate pattern identifier for each observation.}
 }
 
-\note{
-}
-
-\author{
-}
-
 \references{
 Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada.
-}
-
-\seealso{
 }
 
 \examples{

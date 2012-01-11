@@ -51,9 +51,6 @@ Deeks JJ, Altman DG, Bradburn MJ (2001). Statistical methods for examining heter
 Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. Statistics in Medicine 21: 1539 - 1558. 
 }
 
-\author{
-}
-
 \note{
 The inverse variance method performs poorly when data are sparse, both in terms of event rates being low and trials being small. The Mantel-Haenszel method (\code{\link{epi.mh}}) is more robust when data are sparse.
 

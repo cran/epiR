@@ -49,12 +49,6 @@ Sahai H, Khurshid A (1996). Statistics in Epidemiology. Methods, Techniques and 
 Thanks to Dr. Telmo Nunes (UISEE/DETSA, Faculdade de Medicina Veterinaria - UTL, Rua Prof. Cid dos Santos, 1300-477 Lisboa Portugal) for details and code for the confidence interval calculations.
 }
 
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 ## EXAMPLE 1
 ## Data have been collected on the incidence of tuberculosis in two

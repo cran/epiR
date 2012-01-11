@@ -65,18 +65,12 @@ Therneau TM, Grambsch PM (2000). Modelling Survival Data - Extending the Cox Mod
 Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 381 - 426.
 }
 
-\author{
-}
-
 \note{
 The power of a study is its ability to demonstrate an association, given that an association actually exists.
 
 The odds ratio and the risk ratio are approximately equal when the event of interest is rare. In this function \code{method = "case.control"} returns the sample size required to detect an approximate risk ratio in a case-control study (see Woodward p 412). 
 
 When \code{method = "proportions"} values need to be entered for \code{control}, \code{n}, and \code{power} to return a value for \code{delta}. When \code{method = "cohort.count"} values need to be entered for \code{control}, \code{n}, and \code{power} to return a value for \code{lambda} (see example 6 below).
-}
-
-\seealso{
 }
 
 \examples{

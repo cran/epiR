@@ -50,9 +50,6 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be done on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
 }
 
-\value{
-}
-
 \references{
 Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29 and pp. 45 - 56.
 
@@ -67,15 +64,6 @@ Killip S, Mahfoud Z, Pearce K (2004). What is an intracluster correlation coeffi
 Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
 
 Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
-}
-
-\author{ 
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{

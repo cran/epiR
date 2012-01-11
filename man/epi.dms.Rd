@@ -17,24 +17,6 @@ epi.dms(dat)
   \item{dat}{the data. A one-column matrix is assumed when converting decimal degrees to degrees, minutes, and seconds. A two-column matrix is assumed when converting degrees and decimal minutes to decimal degrees. A three-column matrix is assumed when converting degrees, minutes and seconds to decimal degrees.}
 }
 
-\details{
-}
-
-\value{
-}
-
-\references{
-}
-
-\author{ 
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 ## EXAMPLE 1 Degrees, minutes, seconds to decimal degrees:
 dat <- matrix(c(41, 38, 7.836, -40, 40, 27.921), 

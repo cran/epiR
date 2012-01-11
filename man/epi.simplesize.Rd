@@ -24,9 +24,6 @@ epi.simplesize(N = 1E+06, Vsq, Py, epsilon.r, method = "mean",
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
-\details{
-}
-
 \value{
 Returns an integer defining the size of the sample is required.
 }
@@ -40,17 +37,12 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 
 }
 
-\author{
-}
-
 \note{
 If the calculated sample size is greater than 10\% of the population, an adjusted sample size is returned.
 
 \code{epsilon.r} defines the maximum relative difference between our estimate and the unknown population value. The sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
 }
 
-\seealso{
-}
 \examples{
 ## EXAMPLE 1
 ## A city contains 20 neighbourhood health clinics and it is desired to take a 

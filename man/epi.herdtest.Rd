@@ -23,9 +23,6 @@ epi.herdtest(se, sp, P, N, n, k)
   \item{k}{scalar, defining the critical number of individuals testing positive that will denote the group as test positive.}
 }
 
-\details{
-}
-
 \value{
 A data frame with four elements: \code{APpos} the probability of obtaining a positive test, \code{APneg} the probability of obtaining a negative test, \code{HSe} the estimated group (herd) sensitivity, and \code{HSp} the estimated group (herd) specificity.
 }
@@ -40,9 +37,6 @@ Ron Thornton, MAF New Zealand, PO Box 2526 Wellington, New Zealand.
 
 \note{
 The method implemented in this function is based on the hypergeometric distribution.
-}
-
-\seealso{
 }
 
 \examples{

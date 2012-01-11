@@ -37,12 +37,6 @@ A list containing the following:
   \item{nmissing}{a count of the number of measurement pairs ignored due to missingness.}
 }
 
-\note{
-}
-
-\author{
-}
-
 \references{
 Bland J, Altman D (1986). Statistical methods for assessing agreement between two methods of clinical measurement. The Lancet 327: 307 - 310.
 
@@ -64,9 +58,6 @@ Pitman E (1939). A note on normal correlation. Biometrika 31: 9 - 12.
 Reynolds M, Gregoire T (1991). Comment on Bradley and Blackwood. American Statistician 45: 163 - 164.
 
 Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University Press.
-}
-
-\seealso{
 }
 
 \examples{

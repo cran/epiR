@@ -43,15 +43,6 @@ Rothman K, Greenland S (1998). Modern Epidemiology. Lippincott - Raven Philadelp
 Rothman K, Keller AZ (1972). The effect of joint exposure to alcohol and tabacco on risk of cancer of the mouth and pharynx. Journal of Chronic Diseases 23: 711 - 716.
 }
 
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 ## Data from Rothman and Keller (1972) evaluating the effect of joint exposure 
 ## to alcohol and tabacco on risk of cancer of the mouth and pharynx (cited in
