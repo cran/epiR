@@ -2,7 +2,10 @@
 {
    ver <- read.dcf(file.path(libname, pkgname, "DESCRIPTION"), "Version")
    ver <- as.character(ver)	
-   message("Package epiR ", ver, " is loaded")
-   message("Type help(epi.about) for summary information")
-   message("\n")
+   packageStartupMessage("Package epiR ", ver, " is loaded", appendLF = TRUE)
+   packageStartupMessage("Type help(epi.about) for summary information")
+   packageStartupMessage("\n")
 }
+
+
+

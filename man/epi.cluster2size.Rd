@@ -37,15 +37,6 @@ Returns an integer defining the required number of clusters to be sampled.
 Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wiley Series in Probability and Statistics, London, pp. 292.
 }
 
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 ## We intend to conduct a survey of nurse practitioners to estimate the 
 ## average number of patients seen by each nurse. There are five health

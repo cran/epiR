@@ -32,18 +32,6 @@ A simulation approach is used to calculate confidence intervals around each dail
 Returns the point estimate of the EDR and the lower and upper bounds of the confidence interval of the EDR.
 }
 
-\references{
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 set.seed(123)
 dat <- rpois(n = 50, lambda = 2) 

@@ -26,18 +26,12 @@ Lactation to date yields will only be calculated if there are four or more herd 
 A data frame with nine elements: \code{ckey} cow identifier, \code{lact} lactation number, \code{llen} lactation length, \code{vltd} milk volume (litres) to last herd test or dry off date (computed on the basis of lactation length, \code{fltd} fat yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{pltd} protein yield (kilograms) to last herd test or dry off date (computed on the basis of lactation length, \code{vstd} 305-day or 270-day milk volume yield (litres), \code{fstd} 305-day or 270-day milk fat yield (kilograms), and \code{pstd} 305-day or 270-day milk protein yield (kilograms).
 }
 
-\note{
-}
-
 \author{
 Nicolas Lopez-Villalobos and Mark Stevenson (IVABS, Massey University, Palmerston North New Zealand). 
 }
 
 \references{
 Kirkpatrick M, Lofsvold D, Bulmer M (1990). Analysis of the inheritance, selection and evolution of growth trajectories. Genetics 124: 979 - 993.
-}
-
-\seealso{
 }
 
 \examples{

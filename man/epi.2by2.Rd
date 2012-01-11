@@ -98,9 +98,6 @@ The function checks each strata for cells with zero frequencies. If a zero frequ
 The chi-squared test of homogeneity is equivalent to the Breslow Day test for interaction. Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the chi-squared test of homogeneity is not significant.
 }
 
-\seealso{
-}
-
 \examples{
 ## EXAMPLE 1
 ## A cross sectional study investigating the relationship between dry cat 

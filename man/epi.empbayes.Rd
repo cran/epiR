@@ -31,15 +31,6 @@ Bailey TC,  Gatrell AC (1995). Interactive Spatial Data Analysis. Longman Scient
 Langford IH (1994). Using empirical Bayes estimates in the geographical analysis of disease risk. Area 26: 142 - 149. 
 }
 
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
-
 \examples{
 data(epi.SClip)
 obs <- epi.SClip$cases

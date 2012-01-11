@@ -24,24 +24,12 @@ epi.cluster1size(n, mean, var, epsilon.r, method = "mean",
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
-\details{
-}
-
 \value{
 Returns an integer defining the required number of clusters to be sampled.
 }
 
 \references{
 Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wiley Series in Probability and Statistics, London, pp. 258.
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{

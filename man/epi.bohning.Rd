@@ -18,10 +18,6 @@ epi.bohning(obs, exp, alpha = 0.05)
   \item{alpha}{alpha level to be used for the test of significance. Must be a single number between 0 and 1.}
 }
 
-\details{
-
-}
-
 \value{
 A data frame with two elements: \code{test.statistic} Bohning's test statistic, \code{p.value} the associated P-value.
 }
@@ -30,15 +26,6 @@ A data frame with two elements: \code{test.statistic} Bohning's test statistic, 
 Bohning D (2000). Computer-assisted Analysis of Mixtures and Applications. Chapman and Hall, Boca Raton.
 
 Ugarte MD, Ibanez B, Militino AF (2006). Modelling risks in disease mapping. Statistical Methods in Medical Research 15: 21 - 35. 
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{

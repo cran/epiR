@@ -16,24 +16,8 @@ epi.convgrid(os.refs)
   \item{os.refs}{a vector of character strings listing the British National Grid georeferences to be converted.}
 }
 
-\details{
-
-}
-
-\value{
-}
-
-\references{
-}
-
-\author{
-}
-
 \note{
 If an invalid georeference is encountered in the vector \code{os.ref} the method returns a \code{NA}. 
-}
-
-\seealso{
 }
 
 \examples{

@@ -18,9 +18,6 @@ epi.directadj(obs, pop, std, conf.level = 0.95)
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
-\details{
-}
-
 \value{
 A list containing the following:
   \item{crude.strata}{the crude rates for each strata.}
@@ -32,13 +29,6 @@ A list containing the following:
 \references{
 Fay M, Feuer E (1997). Confidence intervals for directly standardized rates: A method based on the gamma distribution. Statistics in Medicine 16: 791 - 801.
 }
-
-\author{}
-
-\note{
-}
-
-\seealso{}
 
 \examples{
 ## A study was conducted to estimate the seroprevalence of leptospirosis

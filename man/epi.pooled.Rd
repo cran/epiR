@@ -22,9 +22,6 @@ epi.pooled(se, sp, P, m, r)
   \item{r}{scalar, defining the number of pooled samples per group (or herd).}
 }
 
-\details{
-}
-
 \value{
 A list containing the following: 
   \item{HAPneg}{the apparent prevalence in a disease negative herd.}
@@ -37,15 +34,6 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 .
 
 Christensen J, Gardner IA (2000). Herd-level interpretation of test results for epidemiologic studies of animal diseases. Preventive Veterinary Medicine 45: 83 - 106.  
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{

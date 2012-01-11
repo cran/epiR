@@ -22,9 +22,6 @@ epi.popsize(T1, T2, T12, conf.level = 0.95, verbose = FALSE)
  \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
 }
 
-\details{
-}
-
 \value{
 Returns the estimated population size and an estimate of the numbers of individuals that remain untested.
 }
@@ -33,14 +30,6 @@ Returns the estimated population size and an estimate of the numbers of individu
 Cannon RM, Roe RT (1982). Livestock Disease Surveys A Field Manual for Veterinarians. Australian Government Publishing Service, Canberra, pp. 34.  
 }
 
-\author{
-}
-
-\note{
-}
-
-\seealso{
-}
 \examples{
 ## In a field survey 400 feral pigs are captured, marked and then released.
 ## On a second occassion 40 of the orignal capture are found when another 400    

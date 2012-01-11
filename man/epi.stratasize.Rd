@@ -24,9 +24,6 @@ epi.stratasize(strata.n, strata.mean, strata.var, strata.Py, epsilon.r,
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
-\details{
-}
-
 \value{
 A list containing the following:
   \item{strata.sample}{the estimated sample size for each strata.}
@@ -48,9 +45,6 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 Use method \code{proportion} to estimate sample size using stratified random sampling with equal weights (see Levy and Lemeshow, page 176). Use method \code{pps} to estimate sample size using proportional stratified random sampling with proportional allocation (see Levy and Lemeshow, page 179).
 
 Where \code{method = "proportion"} the vectors \code{strata.mean} and \code{strata.var} are ignored. 
-}
-
-\seealso{
 }
 
 \examples{

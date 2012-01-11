@@ -49,9 +49,6 @@ Deeks JJ, Altman DG, Bradburn MJ (2001). Statistical methods for examining heter
 Higgins JP, Thompson SG (2002). Quantifying heterogeneity in a meta-analysis. Statistics in Medicine 21: 1539 - 1558. 
 }
 
-\author{
-}
-
 \note{
 Using this method, the pooled odds and risk ratios are computed using the raw individual study weights. The methodology for computing the Mantel-Haenszel summary odds ratio follows the approach decribed in Deeks, Altman and Bradburn MJ (2001, pp 291 - 299).
 

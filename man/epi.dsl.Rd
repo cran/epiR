@@ -51,9 +51,6 @@ DerSimonian R, Laird N (1986). Meta-analysis in clinical trials. Controlled Clin
 Higgins J, Thompson S (2002). Quantifying heterogeneity in a meta-analysis. Statistics in Medicine 21: 1539 - 1558. 
 }
 
-\author{
-}
-
 \note{
 Under the random-effects model, the assumption of a common treatment effect is relaxed, and the effect sizes are assumed to have a normal distribution with variance \code{tau.sq}.
 

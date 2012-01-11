@@ -17,8 +17,6 @@ epi.dgamma(rr, quantiles = c(0.05, 0.95))
   \item{rr}{the lower and upper limits of relative risk, estimated \emph{a priori}.}
   \item{quantiles}{a vector of length two defining the quantiles of the lower and upper relative risk estimates.}
 }
-\details{
-}
 
 \value{
 Returns the precision (the inverse variance) of the heterogeneity term.
@@ -26,15 +24,6 @@ Returns the precision (the inverse variance) of the heterogeneity term.
 
 \references{
 Best, NG. WinBUGS 1.3.1 Short Course, Brisbane, November 2000.
-}
-
-\author{
-}
-
-\note{
-}
-
-\seealso{
 }
 
 \examples{
