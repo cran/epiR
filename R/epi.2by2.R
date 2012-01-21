@@ -523,7 +523,7 @@
    cARate.se <- (sqrt((sa / sb^2) + (sc / sd^2))) * units
    cARate.l <- cARate.p - (z * cARate.se)
    cARate.u <- cARate.p + (z * cARate.se)
-    # Crude attributable fraction for risk data (from Hanley 2001):
+   # Crude attributable fraction for risk data (from Hanley 2001):
    cAFRisk.p <- (cRR.p - 1) / cRR.p
    cAFRisk.l <- min((cRR.l - 1) / cRR.l, (cRR.u - 1) / cRR.u)
    cAFRisk.u <- max((cRR.l - 1) / cRR.l, (cRR.u - 1) / cRR.u)
@@ -684,7 +684,8 @@
    ARisk.conf.p <- (cARisk.p/sARisk.p)
    ARisk.conf.l <- (cARisk.l/sARisk.l)
    ARisk.conf.u <- (cARisk.u/sARisk.u)
-    # Effect of confounding for attributable rate (Woodward p 172):
+   
+   # Effect of confounding for attributable rate (Woodward p 172):
    ARate.conf.p <- (cARate.p/sARate.p)
    ARate.conf.l <- (cARate.l/sARate.l)
    ARate.conf.u <- (cARate.u/sARate.u)
@@ -695,17 +696,19 @@
    # ===============================        
    
    if(length(a) > 1){
-   # Test of relative risk homogeneity:
+   # Test of homogeneity of risk ratios:
    RR.homogeneity <- sum((lnRR - lnRR.s)^2 / lnRR.var)
    # Test of effect:
    RR.homogeneity.p <- 1 - pchisq(RR.homogeneity, df = n.strata - 1)
    RR.homog <- as.data.frame(cbind(test.statistic = RR.homogeneity, df = n.strata - 1, p.value = RR.homogeneity.p))
    
-   # Test of odds ratio homogeneity:
-   OR.homogeneity <- sum((lnOR - lnOR.s)^2) / var(lnOR)
+   # Test of homogeneityof odds ratios:
+   # OR.homogeneity <- sum((lnOR - lnOR.s)^2) / var(lnOR)
+   OR.homogeneity <- sum((lnOR - lnOR.s)^2 / lnOR.var)
    # Test of effect:
    OR.homogeneity.p <- 1 - pchisq(OR.homogeneity, df = n.strata - 1)
    OR.homog <- as.data.frame(cbind(test.statistic = OR.homogeneity, df = n.strata - 1, p.value = OR.homogeneity.p))
+   
    # Test of attributable risk homogeneity (see Woodward p 207):
    # AR.homogeneity <- sum(AR.p - AR.s)^2 / SE.AR^2
    # Test of effect:
