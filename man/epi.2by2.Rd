@@ -172,6 +172,7 @@ round(rval$IRR, digits = 3)
 
 
 ## EXAMPLE 4
+## Adapted from Elwood (2007, pages 194 -- 295):
 ## The results of an unmatched case control study of the association between
 ## smoking and cervical cancer were stratified by age. Counts of individuals 
 ## in each group were as follows: 
@@ -188,9 +189,13 @@ round(rval$IRR, digits = 3)
 ## Smokers: 23, 14
 ## Non-smokers: 37, 62
 
-## Coerce the count data that has been provided into tabular format:
-dat <- data.frame(strata = rep(c("20-29 yrs", "30-39 yrs", "+40 yrs"), each = 2), 
-   exp = rep(c("+","-"), times = 3), dis = rep(c("+","-"), times = 3))
+## Coerce the count data that has been provided into tabular format (take
+## care when setting strata labels to make sure they match up with appropriate
+## contingency table data):
+slabel <- c("20-29 yrs", "30-39 yrs", "40+ yrs")
+dat <- data.frame(strata = rep(slabel, each = 2), 
+   exp = rep(c("+","-"), times = length(slabel)), dis = rep(c("+","-"), 
+   times = length(slabel)))
 dat$exp <- factor(dat$exp, levels = c("+", "-"))
 dat$dis <- factor(dat$dis, levels = c("+", "-"))
 dat <- table(dat$exp, dat$dis, dat$strata, 
@@ -215,10 +220,10 @@ tmp.2by2
 ## Test statistic 83.31; df = 1; P < 0.01
 
 ## Test of homeogeneity of odds ratios:
-## Test statistic 2.09; df = 2; P = 0.35
+## Test statistic 12.1; df = 2; P < 0.01
 
-## We accept the null hypothesis that the strata level odds ratios 
-## are homogenous. The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). 
+## We reject the null hypothesis and conclude that the strata level odds ratios 
+## are inhomogenous. The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). 
 ## The Mantel-Haenszel adjusted odds ratio is 6.27 (95\% CI 3.52 to 11.17). 
 ## The crude odds ratio is 1.05 times the magnitude of the Mantel-Haenszel 
 ## adjusted odds ratio so we conclude that age does not confound the association 

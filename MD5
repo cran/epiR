@@ -1,6 +1,6 @@
-53fffe5b2a59f0b7c50284f995d9e003 *DESCRIPTION
+56fdfdd2d0e5e4a06dcb4a94f59ce54b *DESCRIPTION
 0a4e8e061710e3f096a2680b29052184 *NAMESPACE
-c8027a6125850ec843396a594c81a774 *R/epi.2by2.R
+62502b030265ea29f80da4f395e84a3b *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 4143d9aadd82daa5f9a33b817998cef6 *R/epi.about.R
 35dd233e3feeceefc29040363acdbadd *R/epi.asc.R
@@ -44,8 +44,8 @@ cd50653e02989845155aa6dcde63fb42 *R/epi.tests.R
 e21ab6f2a8b2c8ed12468ce39757977e *data/epi.SClip.RData
 fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 64af3548130a5495e0aed3c2b58f864f *data/epi.incin.RData
-cde856be23666d38abe383f0ccddf285 *doc/epiR.pdf
-e47af1409bb1684fa940613ca11bbfbf *man/epi.2by2.Rd
+80fcbdb1ff3d26968de853d89463c3dc *doc/epiR.pdf
+e84169dbab9cecd4fc9c843210e8ff92 *man/epi.2by2.Rd
 bf7ef9dbf069d206b52f03ccf25f4744 *man/epi.RtoBUGS.Rd
 0c9b04bc2d19935d734fa660831e0aff *man/epi.SClip.Rd
 ec7191ec9f1ffd27c6ae77c20d15c147 *man/epi.about.Rd
