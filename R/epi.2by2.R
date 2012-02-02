@@ -1,4 +1,4 @@
-"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, verbose = FALSE){ 
+"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, homogeneity = "breslow.day", verbose = FALSE){ 
     # Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293. 
     # Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
     # Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55:508 - 514.
@@ -118,7 +118,7 @@
    up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
    low <- ifelse(a == 0, 0, low)
    up <- ifelse(a == n, 1, up)
-   rval <- as.data.frame(cbind(p, low, up))
+   rval <- data.frame(p, low, up)
    names(rval) <- c("est", "lower", "upper")
    rval
    }
@@ -150,7 +150,7 @@
    # low <- a. * (b. + c. - (z * sqrt(d. + e.)))
    # up <- a. * (b. + c. + (z * sqrt(d. + e.)))
    
-   rval <- as.data.frame(cbind(p, low, up))
+   rval <- data.frame(p, low, up)
    names(rval) <- c("est", "lower", "upper")
    rval
    }
@@ -169,8 +169,6 @@
         
    N. <- 1 - ((1 - conf.level) / 2)
    z <- qnorm(N., mean = 0, sd = 1)
-   lower <- "lower"
-   upper <- "upper"
 
    # For large numbers you need to use floating point rather than integer representation. This will avoid "integer overflow" messages:
    a <- as.numeric(a); A <- as.numeric(A) 
@@ -479,7 +477,7 @@
    cRR.p <- (sa / sN1) / (sc / sN0)
    clnRR <- log(cRR.p)
    clnRR.var <- (1 / sa) - (1 / sN1) + (1 / sc) - (1 / sN0)
-   # This line incorrect. Fixed 191208:
+   # Line below incorrect. Fixed 191208:
    # clnRR.se <- sqrt((1 / sa) - (1 / sN1) + (1 / sb) - (1 / sN0))
    clnRR.se <- sqrt((1 / sa) - (1 / sN1) + (1 / sc) - (1 / sN0))
    clnRR.l <- clnRR - (z * clnRR.se)
@@ -587,7 +585,7 @@
    # CHI-SQUARED TESTS
    # ===============================
    
-   # Dawson Saunders and Trapp page 151:
+   # Chi-squared test statistic for individual strata. See Dawson Saunders and Trapp page 151:
    exp.a <- (N1 * M1) / total
    exp.b <- (N1 * M0) / total 
    exp.c <- (N0 * M1) / total
@@ -595,14 +593,20 @@
    chi2 <- (((a - exp.a)^2)/ exp.a) + (((b - exp.b)^2)/ exp.b) + (((c - exp.c)^2)/ exp.c) + (((d - exp.d)^2)/ exp.d)      
    p.chi2 <- 1 - pchisq(chi2, df = 1)
    
-   # Summary chi-squared test statistic with 1 degree of freedom:
+   # Crude summary chi-squared test statistic with 1 degree of freedom:
    exp.sa <- (sN1 * sM1) / stotal
    exp.sb <- (sN1 * sM0) / stotal 
    exp.sc <- (sN0 * sM1) / stotal
    exp.sd <- (sN0 * sM0) / stotal
    chi2s <- (((sa - exp.sa)^2)/ exp.sa) + (((sb - exp.sb)^2)/ exp.sb) + (((sc - exp.sc)^2)/ exp.sc) + (((sd - exp.sd)^2)/ exp.sd)      
    p.chi2s <- 1 - pchisq(chi2s, df = 1)
-    
+   
+   # Mantel-Haenszel X-squared test:
+   if(length(a) > 1){
+      chi2m <- as.numeric(mantelhaen.test(dat)$statistic)
+      p.chi2m <- as.numeric(mantelhaen.test(dat)$p.value)
+   }
+   
    # ===============================
    # MANTEL-HAENZEL SUMMARY MEASURES
    # ================================
@@ -696,181 +700,203 @@
    # ===============================        
    
    if(length(a) > 1){
-   # Test of homogeneity of risk ratios:
-   RR.homogeneity <- sum((lnRR - lnRR.s)^2 / lnRR.var)
-   # Test of effect:
-   RR.homogeneity.p <- 1 - pchisq(RR.homogeneity, df = n.strata - 1)
-   RR.homog <- as.data.frame(cbind(test.statistic = RR.homogeneity, df = n.strata - 1, p.value = RR.homogeneity.p))
-   
-   # Test of homogeneityof odds ratios:
-   # OR.homogeneity <- sum((lnOR - lnOR.s)^2) / var(lnOR)
-   OR.homogeneity <- sum((lnOR - lnOR.s)^2 / lnOR.var)
-   # Test of effect:
-   OR.homogeneity.p <- 1 - pchisq(OR.homogeneity, df = n.strata - 1)
-   OR.homog <- as.data.frame(cbind(test.statistic = OR.homogeneity, df = n.strata - 1, p.value = OR.homogeneity.p))
-   
+      if(homogeneity == "woolf"){
+      # Test of homogeneity of risk ratios (Jewell 2004, page 154). First work out the Woolf estimate of the adjusted risk ratio (labelled lnRR.s. here) based on Jewell (2004, page 134):
+      lnRR. <- log((a / (a + b)) / (c / (c + d)))
+      lnRR.var. <- (b / (a * (a + b))) + (d / (c * (c + d)))
+      wRR. <- 1 / lnRR.var.
+      lnRR.s. <- sum(wRR. * lnRR.) / sum(wRR.)
+
+      # Equation 10.3 from Jewell (2004):
+      RR.homogeneity <- sum(wRR. * (lnRR. - lnRR.s.)^2)
+      RR.homogeneity.p <- 1 - pchisq(RR.homogeneity, df = n.strata - 1)
+      RR.homog <- data.frame(test.statistic = RR.homogeneity, df = n.strata - 1, p.value = RR.homogeneity.p)
+
+      # Test of homogeneity of odds ratios (Jewell 2004, page 154). First work out the Woolf estimate of the adjusted odds ratio (labelled lnOR.s. here) based on Jewell (2004, page 129):
+      lnOR. <- log(((a + 0.5) * (d + 0.5)) / ((b + 0.5) * (c + 0.5)))
+      lnOR.var. <- (1 / (a + 0.5)) + (1 / (b + 0.5)) + (1 / (c + 0.5)) + (1 / (d + 0.5))
+      wOR. <- 1 / lnOR.var.
+      lnOR.s. <- sum((wOR. * lnOR.)) / sum(wOR.)
+
+      # Equation 10.3 from Jewell (2004):
+      OR.homogeneity <- sum(wOR. * (lnOR. - lnOR.s.)^2)
+      OR.homogeneity.p <- 1 - pchisq(OR.homogeneity, df = n.strata - 1)
+      OR.homog <- data.frame(test.statistic = OR.homogeneity, df = n.strata - 1, p.value = OR.homogeneity.p)
+      }
+      
+    if(homogeneity == "breslow.day"){
+      # Setup calculations. From Jim Robison-Cox, based on Jewell (2004, page 154).
+      n11k = dat[1,1,]
+      n21k = dat[2,1,]
+      n12k = dat[1,2,]
+      n22k = dat[2,2,]
+      row1sums = n11k + n12k
+      row2sums = n21k + n22k
+      col1sums = n11k + n21k
+      Amax = apply(cbind(row1sums, col1sums), 1, min)
+
+      # Breslow-Day test of homogeneity of risk ratios. Astar must be no more than col1sums and no more than row1sums:
+      bb = row2sums + row1sums * sRR.p - col1sums * (1 - sRR.p)
+      determ = sqrt(bb^2 + 4 * (1 - sRR.p) *  sRR.p * row1sums * col1sums)
+      Astar = (-bb + cbind(-determ, determ)) / (2 - 2 * sRR.p)
+      Astar = ifelse(Astar[,1] <= Amax & Astar[,1] >= 0, Astar[,1], Astar[,2])
+      # print(Astar)
+      Bstar = row1sums - Astar
+      Cstar = col1sums - Astar
+      Dstar = row2sums - col1sums + Astar
+      Var = apply(1 / cbind(Astar, Bstar, Cstar, Dstar), 1, sum)^(-1)
+      # print(Var)
+      RR.homogeneity = sum((dat[1,1,] - Astar)^2 / Var)
+      RR.homogeneity.p = 1 - pchisq(RR.homogeneity, df = n.strata - 1)
+      RR.homog <- data.frame(test.statistic = RR.homogeneity, df = n.strata - 1, p.value = RR.homogeneity.p)
+
+      # Breslow-Day test of homogeneity of odds ratios. Astar must be no more than col1sums and no more than row1sums:
+      bb = row2sums + row1sums * sOR.p - col1sums * (1 - sOR.p)
+      determ = sqrt(bb^2 + 4 * (1 - sOR.p) *  sOR.p * row1sums * col1sums)
+      Astar = (-bb + cbind(-determ, determ)) / (2 - 2 * sOR.p)
+      Astar = ifelse(Astar[,1] <= Amax & Astar[,1] >= 0, Astar[,1], Astar[,2])
+      # print(Astar)
+      Bstar = row1sums - Astar
+      Cstar = col1sums - Astar
+      Dstar = row2sums - col1sums + Astar
+      Var = apply(1 / cbind(Astar, Bstar, Cstar, Dstar), 1, sum)^(-1)
+      # print(Var)
+      OR.homogeneity = sum((dat[1,1,] - Astar)^2 / Var)
+      OR.homogeneity.p = 1 - pchisq(OR.homogeneity, df = n.strata - 1)
+      OR.homog <- data.frame(test.statistic = OR.homogeneity, df = n.strata - 1, p.value = OR.homogeneity.p)
+      }
+     }
+        
    # Test of attributable risk homogeneity (see Woodward p 207):
    # AR.homogeneity <- sum(AR.p - AR.s)^2 / SE.AR^2
    # Test of effect:
    # AR.homogeneity.p <- 1 - pchisq(AR.homogeneity, df = n.strata - 1)
-   # AR.homog <- as.data.frame(cbind(test.statistic = AR.homogeneity, df = n.strata - 1, p.value = AR.homogeneity.p))
-   }
+   # AR.homog <- data.frame(test.statistic = AR.homogeneity, df = n.strata - 1, p.value = AR.homogeneity.p)
+   #}
    
    # ===============================
    # RESULTS
    # ================================
    
    # Incidence risk ratio:
-   RR <- as.data.frame(cbind(RR.p, RR.se, RR.w, RR.l, RR.u))
-   names(RR) <- c("est", "se", "weight", lower, upper)
+   RR.strata <- data.frame(est = RR.p, se = RR.se, weight = RR.w, lower = RR.l, upper = RR.u)
    
    # Incidence rate ratio:
-   IRR <- as.data.frame(cbind(IRR.p, IRR.se, IRR.w, IRR.l, IRR.u))
-   names(IRR) <- c("est", "se", "weight", lower, upper)
+   IRR.strata <- data.frame(est = IRR.p, se = IRR.se, weight = IRR.w, lower = IRR.l, upper = IRR.u)
    
    # Odds ratio:
-   OR <- as.data.frame(cbind(OR.p, OR.se, OR.w, OR.l, OR.u))
-   names(OR) <- c("est", "se", "weight", lower, upper)
+   OR.strata <- data.frame(est = OR.p, se = OR.se, weight = OR.w, lower = OR.l, upper = OR.u)
    
    # Corrected incidence risk ratio:
-   cRR <- as.data.frame(cbind(cRR.p, cRR.l, cRR.u))
-   names(cRR) <- c("est", lower, upper)
+   cRR.strata <- data.frame(est = cRR.p, lower = cRR.l, upper = cRR.u)
    
    # Attributable risk:
-   ARisk <- as.data.frame(cbind(ARisk.p, ARisk.se, ARisk.w, ARisk.l, ARisk.u))
-   names(ARisk) <- c("est", "se", "weight", lower, upper)
+   ARisk.strata <- data.frame(est = ARisk.p, se = ARisk.se, weight = ARisk.w, lower = ARisk.l, upper = ARisk.u)
    
    # Attributable rate:
-   ARate <- as.data.frame(cbind(ARate.p, ARate.se, ARate.l, ARate.u))
-   names(ARate) <- c("est", "se", lower, upper)
+   ARate.strata <- data.frame(est = ARate.p, se = ARate.se, lower = ARate.l, upper = ARate.u)
    
    # Attributable fraction for risk data:
-   AFRisk <- as.data.frame(cbind(AFRisk.p, AFRisk.l, AFRisk.u))
-   names(AFRisk) <- c("est", lower, upper)
+   AFRisk.strata <- data.frame(est = AFRisk.p, lower = AFRisk.l, upper = AFRisk.u)
    
    # Attributable fraction for rate data:
-   AFRate <- as.data.frame(cbind(AFRate.p, AFRate.l, AFRate.u))
-   names(AFRate) <- c("est", lower, upper)
+   AFRate.strata <- data.frame(est = AFRate.p, lower = AFRate.l, upper = AFRate.u)
    
    # Estimated attributable fraction:
-   AFest <- as.data.frame(cbind(AFest.p, AFest.l, AFest.u))
-   names(AFest) <- c("est", lower, upper)
+   AFest.strata <- data.frame(est = AFest.p, lower = AFest.l, upper = AFest.u)
    
    # Population attributable risk:
-   PARisk <- as.data.frame(cbind(PARisk.p, PARisk.se, PARisk.l, PARisk.u))
-   names(PARisk) <- c("est", "se", lower, upper)
+   PARisk.strata <- data.frame(est = PARisk.p, se = PARisk.se, lower = PARisk.l, upper = PARisk.u)
    
    # Population attributable rate:
-   PARate <- as.data.frame(cbind(PARate.p, PARate.se, PARate.l, PARate.u))
-   names(PARate) <- c("est", "se", lower, upper)
+   PARate.strata <- data.frame(est = PARate.p, se = PARate.se, lower = PARate.l, upper = PARate.u)
    
    # Population attributable fraction for risk data:
-   PAFRisk <- as.data.frame(cbind(PAFRisk.p, PAFRisk.l, PAFRisk.u))
-   names(PAFRisk) <- c("est", lower, upper)
+   PAFRisk.strata <- data.frame(est = PAFRisk.p, lower = PAFRisk.l, upper = PAFRisk.u)
    
    # Population attributable fraction for rate data:
-   PAFRate <- as.data.frame(cbind(PAFRate.p, PAFRate.l, PAFRate.u))
-   names(PAFRate) <- c("est", lower, upper)
+   PAFRate.strata <- data.frame(est = PAFRate.p, lower = PAFRate.l, upper = PAFRate.u)
    
    # Estimated population attributable fraction:
-   PAFest <- as.data.frame(cbind(PAFest.p, PAFest.l, PAFest.u))
-   names(PAFest) <- c("est", lower, upper)
+   PAFest.strata <- data.frame(est = PAFest.p, lower = PAFest.l, upper = PAFest.u)
    
    # Crude incidence risk ratio:
-   RR.crude <- as.data.frame(cbind(cRR.p, cRR.se, cRR.l, cRR.u))
-   names(RR.crude) <- c("est", "se", lower, upper)
+   RR.crude <- data.frame(est = cRR.p, se = cRR.se, lower = cRR.l, upper = cRR.u)
    
    # Crude incidence rate ratio:
-   IRR.crude <- as.data.frame(cbind(cIRR.p, cIRR.se, cIRR.l, cIRR.u))
-   names(IRR.crude) <- c("est", "se", lower, upper)
+   IRR.crude <- data.frame(est = cIRR.p, se = cIRR.se, lower = cIRR.l, upper = cIRR.u)
    
    # Crude odds ratio:
-   OR.crude <- as.data.frame(cbind(cOR.p, cOR.se, cOR.l, cOR.u))
-   names(OR.crude) <- c("est", "se", lower, upper)
+   OR.crude <- data.frame(est = cOR.p, se = cOR.se, lower = cOR.l, upper = cOR.u)
    
    # Crude attributable risk:
-   ARisk.crude <- as.data.frame(cbind(cARisk.p, cARisk.se, cARisk.l, cARisk.u))
-   names(ARisk.crude) <- c("est", "se", lower, upper)
+   ARisk.crude <- data.frame(est = cARisk.p, se = cARisk.se, lower = cARisk.l, upper = cARisk.u)
    
    # Crude attributable rate:
-   ARate.crude <- as.data.frame(cbind(cARate.p, cARate.se, cARate.l, cARate.u))
-   names(ARate.crude) <- c("est", "se", lower, upper)
+   ARate.crude <- data.frame(est = cARate.p, se = cARate.se, lower = cARate.l, upper = cARate.u)
    
    # Crude attributable fraction for risk data:
-   AFRisk.crude <- as.data.frame(cbind(cAFRisk.p, cAFRisk.l, cAFRisk.u))
-   names(AFRisk.crude) <- c("est", lower, upper)
+   AFRisk.crude <- data.frame(est = cAFRisk.p, lower = cAFRisk.l, upper = cAFRisk.u)
    
    # Crude attributable fraction for rate data:
-   AFRate.crude <- as.data.frame(cbind(cAFRate.p, cAFRate.l, cAFRate.u))
-   names(AFRate.crude) <- c("est", lower, upper)
+   AFRate.crude <- data.frame(est = cAFRate.p, lower = cAFRate.l, upper = cAFRate.u)
    
    # Crude estimated attributable fraction:
-   AFest.crude <- as.data.frame(cbind(cAFest.p, cAFest.l, cAFest.u))
-   names(AFest.crude) <- c("est", lower, upper)
+   AFest.crude <- data.frame(est = cAFest.p, lower = cAFest.l, upper = cAFest.u)
    
    # Crude population attributable risk:
-   PARisk.crude <- as.data.frame(cbind(cPARisk.p, cPARisk.se, cPARisk.l, cPARisk.u))
-   names(PARisk.crude) <- c("est", "se", lower, upper)
+   PARisk.crude <- data.frame(est = cPARisk.p, se = cPARisk.se, lower = cPARisk.l, upper = cPARisk.u)
    
    # Crude population attributable rate:
-   PARate.crude <- as.data.frame(cbind(cPARate.p, cPARate.se, cPARate.l, cPARate.u))
-   names(PARate.crude) <- c("est", "se", lower, upper)
+   PARate.crude <- data.frame(est = cPARate.p, se = cPARate.se, lower = cPARate.l, upper = cPARate.u)
    
    # Crude population attributable fraction for risk data:
-   PAFRisk.crude <- as.data.frame(cbind(cPAFRisk.p, cPAFRisk.l, cPAFRisk.u))
-   names(PAFRisk.crude) <- c("est", lower, upper)
+   PAFRisk.crude <- data.frame(est = cPAFRisk.p, lower = cPAFRisk.l, upper = cPAFRisk.u)
    
    # Crude population attributable fraction for rate data:
-   PAFRate.crude <- as.data.frame(cbind(cPAFRate.p, cPAFRate.l, cPAFRate.u))
-   names(PAFRate.crude) <- c("est", lower, upper)
+   PAFRate.crude <- data.frame(est = cPAFRate.p, lower = cPAFRate.l, upper = cPAFRate.u)
    
    # Crude estimated population attributable fraction:
-   PAFest.crude <- as.data.frame(cbind(cPAFest.p, cPAFest.l, cPAFest.u))
-   names(PAFest.crude) <- c("est", lower, upper)
+   PAFest.crude <- data.frame(est = cPAFest.p, lower = cPAFest.l, upper = cPAFest.u)
    
-   # Summary incidence risk ratio:  
-   RR.summary <- as.data.frame(cbind(sRR.p, sRR.se, sRR.l, sRR.u))
-   names(RR.summary) <- c("est", "se", lower, upper)
+   # Mantel-Haenszel adjusted incidence risk ratio:  
+   RR.mh <- data.frame(est = sRR.p, se = sRR.se, lower = sRR.l, upper = sRR.u)
    
-   # Summary incidence rate ratio:
-   IRR.summary <- as.data.frame(cbind(sIRR.p, sIRR.se, sIRR.l, sIRR.u))
-   names(IRR.summary) <- c("est", "se", lower, upper)
+   # Mantel-Haenszel adjusted incidence rate ratio:
+   IRR.mh <- data.frame(est = sIRR.p, se = sIRR.se, lower = sIRR.l, upper = sIRR.u)
    
-   # Summary odds ratio:
-   OR.summary <- as.data.frame(cbind(sOR.p, sOR.se, sOR.l, sOR.u))
-   names(OR.summary) <- c("est", "se", lower, upper)
+   # Mantel-Haenszel adjusted odds ratio:
+   OR.mh <- data.frame(est = sOR.p, se = sOR.se, lower = sOR.l, upper = sOR.u)
    
-   # Summary attributable risk:  
-   ARisk.summary <- as.data.frame(cbind(sARisk.p, sARisk.se, sARisk.l, sARisk.u))
-   names(ARisk.summary) <- c("est", "se", lower, upper)
+   # Mantel-Haenszel adjusted attributable risk:  
+   ARisk.mh <- data.frame(est = sARisk.p, se = sARisk.se, lower = sARisk.l, upper = sARisk.u)
    
-   # Summary attributable rate:
-   ARate.summary <- as.data.frame(cbind(sARate.p, sARate.se, sARate.l, sARate.u))
-   names(ARate.summary) <- c("est", "se", lower, upper)                   
+   # Mantel-Haenszel adjusted attributable rate:
+   ARate.mh <- data.frame(est = sARate.p, se = sARate.se, lower = sARate.l, upper = sARate.u)
    
    # Effect of confounding for risk ratio (Woodward p 172):
-   RR.conf <- as.data.frame(cbind(RR.conf.p, RR.conf.l, RR.conf.u))
-   names(RR.conf) <- c("est", lower, upper) 
+   RR.conf <- data.frame(est = RR.conf.p, lower = RR.conf.l, upper = RR.conf.u)
    
    # Effect of confounding for risk ratio (Woodward p 172):
-   IRR.conf <- as.data.frame(cbind(IRR.conf.p, IRR.conf.l, IRR.conf.u))
-   names(IRR.conf) <- c("est", lower, upper)
+   IRR.conf <- data.frame(est = IRR.conf.p, lower = IRR.conf.l, upper = IRR.conf.u)
    
    # Effect of confounding for odds ratio (Woodward p 172):
-   OR.conf <- as.data.frame(cbind(OR.conf.p, OR.conf.l, OR.conf.u))
-   names(OR.conf) <- c("est", lower, upper)         
+   OR.conf <- data.frame(est = OR.conf.p, lower = OR.conf.l, upper = OR.conf.u)
    
    # Effect of confounding for attributable risk (Woodward p 172):
-   ARisk.conf <- as.data.frame(cbind(ARisk.conf.p, ARisk.conf.l, ARisk.conf.u))
-   names(ARisk.conf) <- c("est", lower, upper)   
+   ARisk.conf <- data.frame(est = ARisk.conf.p, lower = ARisk.conf.l, upper = ARisk.conf.u)
    
    # Effect of confounding for attributable risk (Woodward p 172):
-   ARate.conf <- as.data.frame(cbind(ARate.conf.p, ARate.conf.l, ARate.conf.u))
-   names(ARate.conf) <- c("est", lower, upper) 
-   
-   chisq <- as.data.frame(cbind(test.statistic = chi2, df = 1, p.value = p.chi2)) 
-   chisq.summary <- as.data.frame(cbind(test.statistic = chi2s, df = 1, p.value = p.chi2s))
-   
+   ARate.conf <- data.frame(est = ARate.conf.p, lower = ARate.conf.l, upper = ARate.conf.u)
+
+   # Chi-squared tests:   
+   chisq.strata <- data.frame(test.statistic = chi2, df = 1, p.value = p.chi2)
+   chisq.crude <- data.frame(test.statistic = chi2s, df = 1, p.value = p.chi2s)
+
+   if(length(dim(dat)) > 2){
+      chisq.mh <- data.frame(test.statistic = chi2m, df = 1, p.value = p.chi2m)
+   }
+
    # Labelling for incidence prevalence units:
    count.units <- ifelse(units == 1, "Cases per population unit", paste("Cases per ", units, " population units", sep = ""))
    time.units <- ifelse(units == 1, "Cases per unit of population time at risk", paste("Cases per ", units, " units of population time at risk", sep = ""))
@@ -878,13 +904,13 @@
    # Results for method == "cohort.count": 
    if(method == "cohort.count" & length(a) == 1 & verbose == TRUE){
        rval <- list(
-       RR = RR.crude,
-       OR = OR.crude, 
-       AR = ARisk, 
-       ARp = PARisk,
-       AFe = AFRisk,
-       AFp = PAFRisk,
-       chisq = chisq)
+       RR = RR.strata,
+       OR = OR.strata, 
+       AR = ARisk.strata, 
+       ARp = PARisk.strata,
+       AFe = AFRisk.strata,
+       AFp = PAFRisk.strata,
+       chisq = chisq.strata)
    }
    
    if(method == "cohort.count" & length(a) == 1 & verbose == FALSE){
@@ -912,24 +938,26 @@
        
        if(method == "cohort.count" & length(a) > 1 & verbose == TRUE){
        rval <- list(
-       RR = RR,
+       RR.strata = RR.strata,
        RR.crude = RR.crude,
-       RR.summary = RR.summary,
+       RR.mh = RR.mh,
        
-       OR = OR,
+       OR.strata = OR.strata,
        OR.crude = OR.crude, 
-       OR.summary = OR.summary,
+       OR.mh = OR.mh,
        
-       AR = ARisk,
+       AR.strata = ARisk.strata,
        AR.crude = ARisk.crude, 
-       AR.summary = ARisk.summary,
-       ARp = PARisk,
+       AR.mh = ARisk.mh,
+
+       ARp.strata = PARisk.strata,
+       AFe.strata = AFRisk.strata,
+       AFp.strata = PAFRisk.strata,
        
-       AFe = AFRisk,
-       AFp = PAFRisk,
+       chisq.strata = chisq.strata,
+       chisq.crude = chisq.crude,
+       chisq.mh = chisq.mh,
        
-       chisq = chisq,
-       chisq.summary = chisq.summary,
        RR.homog = RR.homog, 
        OR.homog = OR.homog)
    }
@@ -960,16 +988,16 @@
       cat("\n---------------------------------------------------------")
       cat("\n", "*", count.units, "\n")
    }
-      
+
    # Results for method == "cohort.time": 
    if(method == "cohort.time" & length(a) == 1 & verbose == TRUE){
        rval <- list(
-       IRR = IRR.crude,
-       AR = ARate,
-       ARp = PARate,
-       AFe = AFRate,
-       AFp = PAFRate,
-       chisq = chisq)
+       IRR = IRR.strata,
+       AR = ARate.strata,
+       ARp = PARate.strata,
+       AFe = AFRate.strata,
+       AFp = PAFRate.strata,
+       chisq = chisq.strata)
    }
    
    if(method == "cohort.time" & length(a) == 1 & verbose == FALSE){
@@ -995,19 +1023,20 @@
    
    if(method == "cohort.time" & length(a) > 1 & verbose == TRUE){
    rval <- list(
-      IRR = IRR,
+      IRR.strata = IRR.strata,
       IRR.crude = IRR.crude,
-      IRR.summary = IRR.summary,
+      IRR.mh = IRR.mh,
       
-      AR = ARate,
+      AR.strata = ARate.strata,
       AR.crude = ARate.crude, 
-      AR.summary = ARate.summary,
+      AR.mh = ARate.mh,
       
-      ARp = PARate,
-      AFp = PAFRate,
+      ARp.strata = PARate.strata,
+      AFp.strata = PAFRate.strata,
       
-      chisq = chisq,
-      chisq.summary = chisq.summary)
+      chisq.strata = chisq.strata,
+      chisq.crude = chisq.crude,
+      chisq.mh = chisq.mh)
       # RR.homog = RR.homog, 
       # OR.homog = OR.homog)
    }
@@ -1037,13 +1066,13 @@
    # Results for method == "case.control": 
    if(method == "case.control" & length(a) == 1 & verbose == TRUE){ 
    rval <- list(
-      OR = OR.crude,
-      AR = ARisk,
-      ARp = PARisk,
+      OR = OR.strata,
+      AR = ARisk.strata,
+      ARp = PARisk.strata,
       
-      AFest = AFest,
-      AFp = PAFest,
-      chisq = chisq)
+      AFest = AFest.strata,
+      AFp = PAFest.strata,
+      chisq = chisq.strata)
    }
    
    if(method == "case.control" & length(a) == 1 & verbose == FALSE){
@@ -1070,20 +1099,21 @@
    
    if(method == "case.control" & length(a) > 1 & verbose == TRUE){
        rval <- list(
-       OR = OR,
+       OR.strata = OR.strata,
        OR.crude = OR.crude,
-       OR.summary = OR.summary,
+       OR.mh = OR.mh,
       
-       AR = ARisk,
+       AR.strata = ARisk.strata,
        AR.crude = ARisk.crude,
-       AR.summary = ARisk.summary,
+       AR.mh = ARisk.mh,
       
-       ARp = PARisk,
-       AFest = AFest,
-       AFpest = PAFest,
+       ARp.strata = PARisk.strata,
+       AFest.strata = AFest.strata,
+       AFpest.strata = PAFest.strata,
       
-       chisq = chisq,
-       chisq.summary = chisq.summary, 
+       chisq.strata = chisq.strata,
+       chisq.crude = chisq.crude,
+       chisq.mh = chisq.mh, 
        OR.homog = OR.homog)
    }
    
@@ -1113,13 +1143,13 @@
    # Results for method == "cross.sectional": 
    if(method == "cross.sectional" & length(a) == 1 & verbose == TRUE){
    rval <- list(
-      RR = RR.crude,
-      OR = OR.crude,
-      AR = ARisk, 
-      ARp = PARisk,
-      AFe = AFRisk,
-      AFp = PAFRisk,
-      chisq = chisq)
+      RR = RR.strata,
+      OR = OR.strata,
+      AR = ARisk.strata, 
+      ARp = PARisk.strata,
+      AFe = AFRisk.strata,
+      AFp = PAFRisk.strata,
+      chisq = chisq.strata)
    }
    
    if(method == "cross.sectional" & length(a) == 1 & verbose == FALSE){
@@ -1147,24 +1177,26 @@
    
    if(method == "cross.sectional" & length(a) > 1 & verbose == TRUE){
    rval <- list(
-       RR = RR,
+       RR.strata = RR.strata,
        RR.crude = RR.crude, 
-       RR.summary = RR.summary,
+       RR.mh = RR.mh,
       
-       OR = OR,
+       OR.strata = OR.strata,
        OR.crude = OR.crude, 
-       OR.summary = OR.summary,
+       OR.mh = OR.mh,
       
-       AR = ARisk,
+       AR.strata = ARisk.strata,
        AR.crude = ARisk.crude,
-       AR.summary = ARisk.summary,
-       ARp = PARisk,
+       AR.mh = ARisk.mh,
+       ARp.strata = PARisk.strata,
        
-       AFe = AFRisk,
-       AFp = PAFRisk,
+       AFe.strata = AFRisk.strata,
+       AFp.strata = PAFRisk.strata,
        
-       chisq = chisq,
-       chisq.summary = chisq.summary,  
+       chisq.strata = chisq.strata,
+       chisq.crude = chisq.crude,
+       chisq.mh = chisq.mh,  
+
        RR.homog = RR.homog, 
        OR.homog = OR.homog)
    }

@@ -77,8 +77,8 @@
         diff <- as.vector(dat[,2] - dat[,1])
         n <- length(dat[,1])
         mean.diff <- mean(diff)
-        sd.diff <- sqrt(var(diff))
-        se.diff <- mean.diff/sqrt(n)
+        sd.diff <- sd(diff)
+        se.diff <- sd.diff / sqrt(n)
         
         P <- (1 - conf.level)/2
         t <- abs(qt(P, (n - 1)))
@@ -87,7 +87,7 @@
         up <- mean.diff + (t * se.diff)
         rval <- as.data.frame(cbind(mean.diff, se.diff, low, up))
         names(rval) <- c("est", "se", "lower", "upper")
-        rval
+       rval
      }
           
      if(ctype == "prop.single"){

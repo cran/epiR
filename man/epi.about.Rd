@@ -5,7 +5,7 @@
 \title{The library epiR: summary information}
 
 \description{
-Functions for quantitative epidemiology.
+An R package for the analysis of epidemiological data.
 }
 
 \usage{

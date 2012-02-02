@@ -79,10 +79,21 @@ dat <- data.frame(group = group, val = val)
 epi.conf(dat, ctype = "mean.unpaired")
 
 ## EXAMPLE 3
-grp1 <- as.vector(round(rnorm(n = 100, mean = 10, sd = 5), digits = 0))
-grp2 <- as.vector(round(rnorm(n = 100, mean = 7, sd = 5), digits = 0))
-dat <- data.frame(cbind(grp1 = grp1, grp2 = grp2))
-epi.conf(dat, ctype = "mean.paired")
+## Two paired samples (Altman et al. 2000, page 31):
+## Systolic blood pressure levels were measured in 16 middle-aged men
+## before and after a standard exercise test. The mean rise in systolic 
+## blood pressure was 6.6 mmHg. The standard deviation of the difference
+## was 6.0 mm Hg. The standard error of the mean difference was 1.49 mm Hg.
+
+before <- c(148,142,136,134,138,140,132,144,128,170,162,150,138,154,126,116)
+after <- c(152,152,134,148,144,136,144,150,146,174,162,162,146,156,132,126)
+dat <- data.frame(before, after)
+dat <- data.frame(cbind(before, after))
+epi.conf(dat, ctype = "mean.paired", conf.level = 0.95)
+
+## The 95\% confidence interval for the population value of the mean 
+## systolic blood pressure increase after standard exercise was 3.4 to 9.8
+## mm Hg.
 
 ## EXAMPLE 4
 ## Single sample (Altman et al. 2000, page 47):
