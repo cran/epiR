@@ -7,12 +7,12 @@ Summary measures for count data presented in a 2 by 2 table
 }
 
 \description{
-Computes summary measures of risk and a chi-squared test for difference in the observed proportions from count data presented in a 2 by 2 table. Multiple strata may be represented by additional rows of count data and in this case crude and Mantel-Haenszel adjusted measures of risk are calculated and chi-squared tests of homogeneity are performed.
+Computes summary measures of risk and a chi-squared test for difference in the observed proportions from count data presented in a 2 by 2 table. Multiple strata may be represented by additional rows of count data and in this case crude and Mantel-Haenszel adjusted measures of association are calculated and chi-squared tests of homogeneity are performed.
 }
 
 \usage{
 epi.2by2(dat, method = "cohort.count", conf.level = 0.95, 
-   units = 100, verbose = FALSE)
+   units = 100, homogeneity = "breslow.day", verbose = FALSE)
 }
 
 \arguments{
@@ -20,6 +20,7 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95,
   \item{method}{a character string indicating the experimental design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence estimates.}
+  \item{homogeneity}{a character string indicating the type of homogeneity test to perform. Options are \code{breslow.day} or \code{woolf}.}
   \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
 }
 
@@ -50,7 +51,9 @@ When method equals \code{case.control} the following measures of association are
 
 When method equals \code{cross.sectional} the following measures of association are returned: the prevalence ratio (PR), the odds ratio (OR), the attributable prevalence (AR), the attributable prevalence in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
-When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.summary}). Strata-level weights (i.e. inverse variance of the strata-level measures of assocation) are provided --- these are useful to understand the relationship between the crude strata-level measures of association and the Mantel-Haenszel adjusted measure of association. \code{chisq} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.summary} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. The chi-squared test of homogeneity (e.g. \code{OR.homogeneity}) provides a test of homogeneity of the strata-level measures of association.
+When there are multiple strata, the function returns the appropriate measure of association for each strata (e.g. \code{OR.strata}), the crude measure of association across all strata (e.g. \code{OR.crude}) and the Mantel-Haenszel adjusted measure of association (e.g. \code{OR.mh}). Strata-level weights (i.e. inverse variance of the strata-level measures of assocation) are provided --- these are useful to understand the relationship between the crude strata-level measures of association and the Mantel-Haenszel adjusted measure of association. \code{chisq.strata} returns the results of a chi-squared test for difference in exposed and non-exposed proportions for each strata. \code{chisq.crude} returns the results of a chi-squared test for difference in exposed and non-exposed proportions across all strata. \code{chisq.mh} returns the results of the Mantel-Haenszel chi-squared test. 
+
+The tests of homogeneity (e.g. \code{OR.homogeneity}) assess the similarity of the strata-level measures of association.
 }
 
 \references{
@@ -82,7 +85,7 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 }
 
 \author{
-Mark Stevenson and Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand).
+Mark Stevenson, Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA).
 }
 
 \note{Measures of strength of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
@@ -95,7 +98,9 @@ Point estimates and confidence intervals for the summary prevalence ratio, incid
 
 The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 
-The chi-squared test of homogeneity is equivalent to the Breslow Day test for interaction. Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the chi-squared test of homogeneity is not significant.
+The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not significant.
+
+The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "breslow.day"} and \code{homogeneity = "woolf"} are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these analyses.
 }
 
 \examples{
@@ -109,7 +114,8 @@ The chi-squared test of homogeneity is equivalent to the Breslow Day test for in
 
 dat <- as.table(matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE))
 epi.2by2(dat = dat, method = "cross.sectional", 
-   conf.level = 0.95, units = 100, verbose = FALSE)
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   verbose = FALSE)
 
 ## Prevalence ratio:
 ## The prevalence of FUS in DCF exposed cats is 4.01 times (95\% CI 1.43 to 
@@ -146,7 +152,8 @@ dat
 
 ## 2 by 2 table analysis:
 epi.2by2(dat = dat, method = "case.control", 
-   conf.level = 0.95, units = 100, verbose = FALSE)
+   conf.level = 0.95, units = 100, homogeneity = "breslow.day",
+   verbose = FALSE)
    
 
 ## EXAMPLE 3
@@ -158,7 +165,7 @@ epi.2by2(dat = dat, method = "case.control",
 
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
 rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.90, 
-   units = 1000, verbose = TRUE)
+   units = 1000,  homogeneity = "breslow.day", verbose = TRUE)
 round(rval$AR, digits = 3)
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
@@ -207,7 +214,7 @@ dat[2,1,] <- c(13,37,37)
 dat[2,2,] <- c(53,83,62)
 
 tmp.2by2 <- epi.2by2(dat = dat, method = "case.control", conf.level = 0.95, 
-   units = 100, verbose = TRUE)
+   units = 100, homogeneity = "breslow.day", verbose = TRUE)
 tmp.2by2
 
 ## Crude odds ratio:
@@ -216,11 +223,11 @@ tmp.2by2
 ## Mantel-Haenszel adjusted odds ratio:
 ## 6.27 (95\% CI 3.52 to 11.17)
 
-## Summary chi-squared test for difference in proportions:
+## Mantel-Haenszel chi-squared test for difference in proportions:
 ## Test statistic 83.31; df = 1; P < 0.01
 
-## Test of homeogeneity of odds ratios:
-## Test statistic 12.1; df = 2; P < 0.01
+## Breslow Day test of homeogeneity of odds ratios:
+## Test statistic 12.66; df = 2; P < 0.01
 
 ## We reject the null hypothesis and conclude that the strata level odds ratios 
 ## are inhomogenous. The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). 
@@ -241,16 +248,16 @@ y.at <- c(nstrata, max(nstrata) + 1)
 y.labels <- c("Mantel-Haenszel", strata.lab)
 x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
 
-or.l <- c(tmp.2by2$OR.summary$lower, tmp.2by2$OR$lower)
-or.u <- c(tmp.2by2$OR.summary$upper, tmp.2by2$OR$upper)
-or.p <- c(tmp.2by2$OR.summary$est, tmp.2by2$OR$est)
+or.l <- c(tmp.2by2$OR.mh$lower, tmp.2by2$OR.strata$lower)
+or.u <- c(tmp.2by2$OR.mh$upper, tmp.2by2$OR.strata$upper)
+or.p <- c(tmp.2by2$OR.mh$est, tmp.2by2$OR.strata$est)
 vert <- 1:length(or.p)
  
 segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
    aspect = 1/2, col = "grey", 
    ylim = c(0,vert + 1), 
    xlab = "Odds ratio", ylab = "", 
-   scales = list(y = list(at = y.at, labels = y.labels, ticks = FALSE)), 
+   scales = list(y = list(at = y.at, labels = y.labels)), 
    main = "Strata level and summary measures of association")}
 ## End(Not run)
 
