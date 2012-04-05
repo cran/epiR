@@ -22,19 +22,14 @@
    adj.cl <- pmax(adj.cl, c(0, 0))
    adj.cl <- pmin(adj.cl, c(1, 1))
 
-   result.01 <- as.data.frame(cbind(ap.p, ap.cl[1], ap.cl[2]))
-   names(result.01) <- NULL
-   names(result.01) <- c("est", "lower", "upper")
-
-   result.02 <- as.data.frame(cbind(tp.p, adj.cl[1], adj.cl[2]))
-   names(result.02) <- NULL
-   names(result.02) <- c("est", "lower", "upper")     
+   result.01 <- data.frame(est = ap.p, lower = ap.cl[1], upper = ap.cl[2])
+   result.02 <- data.frame(est = tp.p, lower = adj.cl[1], upper = adj.cl[2])
      
    rval <- list(ap = result.01, tp = result.02)
    return(rval)
 }
 
-library(Hmisc)
+# library(Hmisc)
 
 # -----------------------------------
 # Blaker's interval (by Helge Blaker). Computes the Blaker exact CI (Canadian J. Stat 2000) for a binomial success probability for x successes out of n trials with confidence coefficient = conf.level.
