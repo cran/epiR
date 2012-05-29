@@ -16,7 +16,7 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95,
 }
 
 \arguments{
-  \item{dat}{an object of class \code{table} with the individual cell frequencies.}
+  \item{dat}{an object of class \code{table} containing the individual cell frequencies.}
   \item{method}{a character string indicating the experimental design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence estimates.}

@@ -9,15 +9,13 @@ Computes true and apparent prevalence, sensitivity, specificity, positive and ne
 }
 
 \usage{
-epi.tests(a, b, c, d, conf.level = 0.95)
+epi.tests(dat, conf.level = 0.95, verbose = FALSE)
 }
 
 \arguments{
-  \item{a}{number of observations where true disease status positive and test is positive.}
-  \item{b}{number of observations where true disease status negative and test is positive.}
-  \item{c}{number of observations where true disease status positive and test is negative.}
-  \item{d}{number of observations where true disease status is negative and test is negative.}
+  \item{dat}{an object of class \code{table} containing the individual cell frequencies (see below).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
+  \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
 }
 
 \details{
@@ -34,14 +32,14 @@ A list containing the following:
   \item{tprev}{true prevalence.}
   \item{se}{test sensitivity.}
   \item{sp}{test specificity.}
-  \item{da}{diagnostic accuracy.}
-  \item{dor}{diagnostic odds ratio.}
+  \item{diag.acc}{diagnostic accuracy.}
+  \item{diag.or}{diagnostic odds ratio.}
   \item{nnd}{number needed to diagnose.}
   \item{youden}{Youden's index.}
   \item{ppv}{positive predictive value.}
   \item{npv}{negative predictive value.}
-  \item{lr.pos}{likelihood ratio of a positive test.}
-  \item{lr.neg}{likelihood ratio of a negative test.}
+  \item{plr}{likelihood ratio of a positive test.}
+  \item{nlr}{likelihood ratio of a negative test.}
 }
 
 \references{
@@ -74,8 +72,10 @@ Total\tab a + c\tab b + d \tab a + b + c + d\cr
 ## were disease negative, 640 tested negative. What is the likeliood
 ## ratio of a positive test? What is the number needed to diagnose?
 
-a <- 670; b <- 202; c <- 74; d <- 640
-epi.tests(a = a, b = b, c = c, d = d, conf.level = 0.95)
+dat <- as.table(matrix(c(670,202,74,640), nrow = 2, byrow = TRUE))
+colnames(dat) <- c("Dis+","Dis-")
+rownames(dat) <- c("Test+","Test-")
+epi.tests(dat, conf.level = 0.95, verbose = FALSE)
 
 ## Test sensitivity is 0.90 (95\% CI 0.88 -- 0.92). Test specificity is 
 ## 0.76 (95\% CI 0.73 -- 0.79). The likelihood ratio of a positive test 

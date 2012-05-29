@@ -1,159 +1,65 @@
-"epi.indirectadj" <- function(obs, pop, std = "NA", type = "risk", conf.level = 0.95)
-    {   
+"epi.indirectadj" <- function(obs, pop, std, units, conf.level = 0.95){   
     # How many strata (rows) are there?
-    n.strata <- dim(obs)[1]
+    n.strata <- dim(pop)[1]
         
     # How many covariates are there?
-    n.cov <- dim(obs)[2]
+    n.cov <- dim(pop)[2]
 
     N <- 1 - ((1 - conf.level) / 2)
     alpha <- 1 - conf.level
     z <- qnorm(N, mean = 0, sd = 1)
-    lower <- "lower"
-    upper <- "upper"
-            
-    if(type == "rate"){
-       strata.obs <- apply(obs, 1, sum) 
-       strata.pop <- apply(pop, 1, sum)
-       cov.obs <- apply(obs, 2, sum)
-       cov.pop <- apply(pop, 2, sum)
-       tot.obs <- sum(obs)
-       tot.pop <- sum(pop) 
+    
+    tmp <- data.frame(strata = rep(rownames(pop), times = n.cov), cov = rep(colnames(pop), each = n.strata), 
+       pop = as.vector(pop), std = rep(as.vector(std[1:n.cov]), each = n.strata))
 
-       # Population breakdown:
-       pop.prop <- (pop / strata.pop) 
-       cov.prop <- (cov.pop / tot.pop)
-       
-       # Crude rate by strata:
-       strata.crp <- strata.obs / strata.pop
-       strata.crse <- strata.crp / sqrt(strata.pop)
-       strata.crl <- qpois((alpha / 2), strata.obs) / strata.pop
-       strata.cru <- qpois((1 - alpha / 2), strata.obs) / strata.pop
+    # Expected events (equals std incidence multiplied by population size):
+    tmp$exp <- (tmp$pop * tmp$std)
+    # tmp <- tmp[order(tmp$strata, tmp$cov),] 
+    
+    # Crude risk by strata:
+    # Turn 'obs' into a table object so calculations can easily be done by strata:
+    t.obs <- by(data = obs, INDICES = obs, FUN = sum)
+    t.exp <- by(data = tmp$exp, INDICES = tmp$strata, FUN = sum)
+    t.pop <- by(data = tmp$pop, INDICES = tmp$strata, FUN = sum)
+    
+    # Confidence interval for crude incidence risk estimates corrected following email from Gillian Raab:
+    crude.p <- t.obs / t.pop
+    # crude.se <- crude.p / sqrt(t.pop)                            ## Incorrect.
+    crude.se <- crude.p / sqrt(t.obs)                              ## replaced pop by obs
+    crude.l <- qchisq(alpha / 2, 2 * t.obs) / 2 / t.pop            ## next 2 lines changed
+    crude.u <- qchisq(1 - alpha / 2, 2 *(t.obs + 1)) / 2 / t.pop
+    crude.strata <- data.frame(est = as.vector(crude.p) * units, lower = as.vector(crude.l) * units, 
+       upper = as.vector(crude.u) * units)
+    rownames(crude.strata) <- names(t.exp)
+    
+    # Indirectly adjusted risk for each strata (see page 378 of Stata manual):
+    t.obs <- by(data = obs, INDICES = obs, FUN = sum)
+    t.exp <- by(data = tmp$exp, INDICES = tmp$strata, FUN = sum)
+    t.pop <- by(data = tmp$pop, INDICES = tmp$strata, FUN = sum)
+    
+    if(n.cov > 1){
+       adj.p <- (std[n.cov + 1] * (t.obs / t.exp))
+       adj.l <- (std[n.cov + 1] * (qpois((1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp))
+       adj.u <- (std[n.cov + 1] * (qpois(1 - (1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp))
+       adj.strata <- data.frame(est = as.vector(adj.p) * units, lower = as.vector(adj.l) * units, upper = as.vector(adj.u) * units)
+       rownames(adj.strata) <- names(t.exp)
+       }
 
-       # Crude standardised mortality ratio (confidence intervals based on Dohoo, Martin, Stryhn p 78):
-       strata.cexp <- strata.pop * (tot.obs / tot.pop) 
-       strata.csmrp <- strata.obs / strata.cexp
-       strata.csmrse <- 1 / sqrt(strata.obs)
-       strata.csmrl <- exp(log(strata.csmrp) - (z * strata.csmrse))
-       strata.csmru <- exp(log(strata.csmrp) + (z * strata.csmrse))
-
-       if(length(std) < n.cov | n.cov == 1){
-          # Reference rate:
-          cov.rr <- matrix(rep(cov.obs / cov.pop, times = n.strata), byrow = TRUE, nrow = n.strata)
-          tot.rr <- sum(cov.prop * cov.rr[1,])
-          }
-
-       if (length(std) == n.cov + 1){
-          # Reference rate:
-          cov.rr <- matrix(rep(std[1:n.cov], times = n.strata), byrow = TRUE, nrow = n.strata)
-          tot.rr <- std[n.cov + 1]
-          }   
-       
-       # Standardised rate:
-       strata.sr <- apply(pop.prop * cov.rr, 1, sum)
-       
-       # Adjusted expected counts:
-       strata.aexp <- strata.sr * strata.pop
-       
-       # Adjusted standardised mortality ratio (confidence intervals based on Dohoo, Martin, Stryhn p 78):
-       strata.asmrp <- strata.obs / strata.aexp
-       strata.asmrse <- 1 / sqrt(strata.obs)
-       strata.asmrl <- exp(log(strata.asmrp) - (z * strata.asmrse))
-       strata.asmru <- exp(log(strata.asmrp) + (z * strata.asmrse))
-
-       # Adjusted (indirectly standardised) rate:
-       strata.arp <- strata.asmrp * tot.rr
-       strata.arse <- strata.arp / sqrt(strata.obs)
-       strata.arl <- strata.arp - (z * strata.arse)
-       strata.aru <- strata.arp + (z * strata.arse)
-
-       cruderate <- as.data.frame(cbind(strata.crp, strata.crse, strata.crl, strata.cru))
-       names(cruderate) <- c("est", "se", lower, upper)
-       adjrate <- as.data.frame(cbind(strata.arp, strata.arse, strata.arl, strata.aru))
-       names(adjrate) <- c("est", "se", lower, upper)
-       crudesmr <- as.data.frame(cbind(strata.obs, round(strata.cexp, digits = 0), strata.csmrp, strata.csmrse, strata.csmrl, strata.csmru))
-       names(crudesmr) <- c("obs", "exp", "est", "se", lower, upper)
-       adjsmr <- as.data.frame(cbind(strata.obs, round(strata.aexp, digits = 0), strata.asmrp, strata.asmrse, strata.asmrl, strata.asmru))
-       names(adjsmr) <- c("obs", "exp", "est", "se", lower, upper)
-       
-       if(n.cov == 1){
-          rval <- list(cruderate = cruderate, crudesmr = crudesmr)
-          }
-       if(n.cov > 1){
-          rval <- list(cruderate = cruderate, adjrate = adjrate, crudesmr = crudesmr, adjsmr = adjsmr)
-          }
+   if(n.cov == 1){
+      adj.p <- (std * (t.obs / t.exp))
+      adj.l <- (std * (qpois((1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp))
+      adj.u <- (std * (qpois(1 - (1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp))
+      adj.strata <- data.frame(est = as.vector(adj.p) * units, lower = as.vector(adj.l) * units, upper = as.vector(adj.u) * units)
+      rownames(adj.strata) <- names(t.exp)
       }
-      
-      if(type == "risk"){
-       strata.obs <- apply(obs, 1, sum) 
-       strata.pop <- apply(pop, 1, sum)
-       cov.obs <- apply(obs, 2, sum)
-       cov.pop <- apply(pop, 2, sum)
-       tot.obs <- sum(obs)
-       tot.pop <- sum(pop) 
 
-       # Population breakdown:
-       pop.prop <- (pop / strata.pop) 
-       cov.prop <- (cov.pop / tot.pop)
-       
-       # Crude risk by strata (confidence intervals based on Poisson method):
-       strata.crp <- strata.obs / strata.pop
-       strata.crse <- strata.crp / sqrt(strata.pop)
-       strata.crl <- qpois((alpha / 2), strata.obs) / strata.pop
-       strata.cru <- qpois((1 - alpha / 2), strata.obs) / strata.pop
-       
-       # Crude standardised mortality ratio (confidence intervals based on Poisson method):
-       strata.cexp <- strata.pop * (tot.obs / tot.pop) 
-       strata.csmrp <- strata.obs / strata.cexp
-       strata.csmrse <- 1 / sqrt(strata.obs)
-       strata.csmrl <- qpois((alpha / 2), strata.obs) / strata.cexp
-       strata.csmru <- qpois((1 - alpha / 2), strata.obs) / strata.cexp
-
-       if(length(std) < n.cov | n.cov == 1){
-          # Reference risk:
-          cov.rr <- matrix(rep(cov.obs / cov.pop, times = n.strata), byrow = TRUE, nrow = n.strata)
-          tot.rr <- sum(cov.prop * cov.rr[1,])
-          }
-
-       if (length(std) == n.cov + 1){
-          # Reference risk:
-          cov.rr <- matrix(rep(std[1:n.cov], times = n.strata), byrow = TRUE, nrow = n.strata)
-          tot.rr <- std[n.cov + 1]
-          }   
-       
-       # Standardised risk:
-       strata.sr <- apply(pop.prop * cov.rr, 1, sum)
-       
-       # Adjusted expected counts:
-       strata.aexp <- strata.sr * strata.pop
-       
-       # Adjusted standardised mortality ratio (confidence intervals based on Poisson method):
-       strata.asmrp <- strata.obs / strata.aexp
-       strata.asmrse <- 1 / sqrt(strata.obs)
-       strata.asmrl <- qpois((alpha / 2), strata.obs) / strata.aexp
-       strata.asmru <- qpois((1 - alpha / 2), strata.obs) / strata.aexp
-
-       # Adjusted (indirectly standardised) risk:
-       strata.arp <- strata.asmrp * tot.rr
-       strata.arse <- strata.arp / sqrt(strata.obs)
-       strata.arl <- qpois((alpha / 2), strata.obs) / strata.pop
-       strata.aru <- qpois((1 - alpha / 2), strata.obs) / strata.pop
-
-       cruderisk <- as.data.frame(cbind(strata.crp, strata.crse, strata.crl, strata.cru))
-       names(cruderisk) <- c("est", "se", lower, upper)
-       adjrisk <- as.data.frame(cbind(strata.arp, strata.arse, strata.arl, strata.aru))
-       names(adjrisk) <- c("est", "se", lower, upper)
-       crudesmr <- as.data.frame(cbind(strata.obs, round(strata.cexp, digits = 0), strata.csmrp, strata.csmrse, strata.csmrl, strata.csmru))
-       names(crudesmr) <- c("obs", "exp", "est", "se", lower, upper)
-       adjsmr <- as.data.frame(cbind(strata.obs, round(strata.aexp, digits = 0), strata.asmrp, strata.asmrse, strata.asmrl, strata.asmru))
-       names(adjsmr) <- c("obs", "exp", "est", "se", lower, upper)
-       
-       if(n.cov == 1){
-          rval <- list(cruderisk = cruderisk, crudesmr = crudesmr)
-          }
-       if(n.cov > 1){
-          rval <- list(cruderisk = cruderisk, adjrisk = adjrisk, crudesmr = crudesmr, adjsmr = adjsmr)
-          }
-      }
-  return(rval)
+    # Crude standardised mortality ratio (confidence intervals based on Breslow and Day 1987 p 69-71): 
+    smr.p <- t.obs / t.exp
+    smr.l <- qpois((1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
+    smr.u <- qpois(1 - (1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
+    smr.strata <- data.frame(obs = as.vector(t.obs), exp = as.vector(t.exp), est = as.vector(smr.p), lower = as.vector(smr.l), upper = as.vector(smr.u))
+    rownames(smr.strata) <- names(t.exp)   
+    
+    rval <- list(crude.strata = crude.strata, adj.strata = adj.strata, smr.strata = smr.strata)
+    return(rval)  
 }

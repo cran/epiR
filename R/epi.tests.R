@@ -1,15 +1,13 @@
-"epi.tests" <- function(a, b, c, d, conf.level = 0.95)
+"epi.tests" <- function(dat, conf.level = 0.95, verbose = FALSE)
     {
         N. <- 1 - ((1 - conf.level) / 2)
         z <- qnorm(N., mean = 0, sd = 1)
-        lower <- "lower"
-        upper <- "upper"
 
         # Exact binomial confidence limits from D. Collett (1999) Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
-        .funincrisk <- function(dat, conf.level){
+        .funincrisk <- function(cdat, conf.level){
            N. <- 1 - ((1 - conf.level) / 2)
-           a <- dat[,1]
-           n <- dat[,2]
+           a <- cdat[,1]
+           n <- cdat[,2]
            b <- n - a
            p <- a / n
 
@@ -18,8 +16,7 @@
            up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
            low <- ifelse(a == 0, 0, low)
            up <- ifelse(a == n, 1, up)
-           rval <- as.data.frame(cbind(p, low, up))
-           names(rval) <- c("est", lower, upper)
+           rval <- data.frame(est = p, lower = low, upper = up)
            rval
             }
 
@@ -50,11 +47,16 @@
         # DECLARE VARIABLES
         # =================
         
-        # -------| D+ --| D- --| Total
-        # Exp +  | a    | b    | N1
-        # Exp -  | c    | d    | N0
-        # -------|------|------|------
+        # ----_---| D+ --| D- --| Total
+        # Test +  | a    | b    | N1
+        # Test -  | c    | d    | N0
+        # --------|------|------|------
         # Total  | M1   | M0   | total
+        
+        a <- dat[1]
+        b <- dat[3]
+        c <- dat[2]
+        d <- dat[4]        
         
         # Total disease pos:
         M1 <- a + c
@@ -89,9 +91,8 @@
         # tp.low <- (A - B) / C
         # tp.up <- (A + B) / C
         
-        tprev <- as.data.frame(cbind(tp, tp.low, tp.up))
-        names(tprev) <- c("est", lower, upper)
-        
+        tprev <- data.frame(est = tp, lower = tp.low, upper = tp.up)
+                
         # Apparent prevalence:
         tdat <- as.matrix(cbind(N1, total))
         trval <- .funincrisk(tdat, conf.level)
@@ -114,9 +115,8 @@
         # ap.low <- (A - B) / C
         # ap.up <- (A + B) / C
 
-        aprev <- as.data.frame(cbind(ap, ap.low, ap.up))
-        names(aprev) <- c("est", lower, upper)
-
+        aprev <- data.frame(est = ap, lower = ap.low, upper = ap.up)
+        
         # Sensitivity:
         tdat <- as.matrix(cbind(a, M1))
         trval <- .funincrisk(tdat, conf.level)
@@ -139,9 +139,8 @@
         # se.low <- (A - B) / C
         # se.up <- (A + B) / C
                 
-        sensitivity <- as.data.frame(cbind(se, se.low, se.up))
-        names(sensitivity) <- c("est", lower, upper)
-        
+        sensitivity <- data.frame(est = se, lower = se.low, upper = se.up)
+                
         # Specificity:
         tdat <- as.matrix(cbind(d, M0))
         trval <- .funincrisk(tdat, conf.level)
@@ -164,9 +163,8 @@
         # sp.low <- (A - B) / C
         # sp.up <- (A + B) / C
         
-        specificity <- as.data.frame(cbind(sp, sp.low, sp.up))
-        names(specificity) <- c("est", lower, upper)
-        
+        specificity <- data.frame(est = sp, lower = sp.low, upper = sp.up)
+                
         # Positive predictive value:
         tdat <- as.matrix(cbind(a, N1))
         trval <- .funincrisk(tdat, conf.level)
@@ -189,9 +187,8 @@
         # ppv.low <- (A - B) / C
         # ppv.up <- (A + B) / C
         
-        positive <- as.data.frame(cbind(ppv, ppv.low, ppv.up))
-        names(positive) <- c("est", lower, upper)
-        
+        pv.positive <- data.frame(est = ppv, lower = ppv.low, upper = ppv.up)
+                
         # Negative predictive value:
         tdat <- as.matrix(cbind(d, N0))
         trval <- .funincrisk(tdat, conf.level)
@@ -214,24 +211,25 @@
         # npv.low <- (A - B) / C
         # npv.up <- (A + B) / C
         
-        negative <- as.data.frame(cbind(npv, npv.low, npv.up))
-        names(negative) <- c("est", lower, upper)
-
+        pv.negative <- data.frame(est = npv, lower = npv.low, upper = npv.up)
+        
         # Likelihood ratio of a positive test. Confidence intervals from Simel et al. (1991)
         # lrpos <- se / (1 - sp)
         lrpos <- (a/M1) / (1 - (d/M0))
         lrpos.low <- exp(log(lrpos) - z * sqrt((1 - se) / (M1 * se) + (sp)/(M0 * (1 - sp))))
         lrpos.up <-  exp(log(lrpos) + z * sqrt((1 - se) / (M1 * se) + (sp)/(M0 * (1 - sp))))
-        lr.positive <- as.data.frame(cbind(lrpos, lrpos.low, lrpos.up))
-        names(lr.positive) <- c("est", lower, upper)
-
+        
+        lr.positive <- data.frame(est = lrpos, lower = lrpos.low, upper = lrpos.up)
+        
+        
         # Likelihood ratio of a negative test. Confidence intervals from Simel et al. (1991)
         # lrpos <- se / (1 - sp)
         lrneg <- (1 - (a/M1)) / (d/M0)
         lrneg.low <- exp(log(lrneg) - z * sqrt((se)/(M1 * (1 - se)) + (1 - sp)/(M0 * (sp))))
         lrneg.up <-  exp(log(lrneg) + z * sqrt((se)/(M1 * (1 - se)) + (1 - sp)/(M0 * (sp))))
-        lr.negative <- as.data.frame(cbind(lrneg, lrneg.low, lrneg.up))
-        names(lr.negative) <- c("est", lower, upper)
+        
+        lr.negative <- data.frame(est = lrneg, lower = lrneg.low, upper = lrneg.up)
+        
       
         # Diagnostic accuracy (from Scott et al. (2008)):
         tdat <- as.matrix(cbind((a + d), total))
@@ -256,8 +254,8 @@
         # da.low <- (A - B) / C
         # da.up <- (A + B) / C
         
-        da.acc <- as.data.frame(cbind(da, da.low, da.up))
-        names(da.acc) <- c("est", lower, upper)
+        diag.acc <- data.frame(est = da, lower = da.low, upper = da.up)
+        
 
         # Diagnostic odds ratio (from Scott et al. (2008)):
         dOR.p <- (a * d) / (b * c)
@@ -270,9 +268,9 @@
         dOR.low <- exp(lndOR.l)
         dOR.up <- exp(lndOR.u)
 
-        dor <- as.data.frame(cbind(dOR.p, dOR.low, dOR.up))
-        names(dor) <- c("est", lower, upper)
-
+        diag.or <- data.frame(est = dOR.p, lower = dOR.low, upper = dOR.up)
+        
+        
         # Number needed to diagnose (from Scott et al. (2008)):
         ndx <- 1 / (se - (1 - sp))
         ndx.1 <- 1 / (se.low - (1 - sp.low))
@@ -280,8 +278,7 @@
         ndx.low <- min(ndx.1, ndx.2)
         ndx.up <- max(ndx.1, ndx.2)
 
-        nnd <- as.data.frame(cbind(ndx, ndx.low, ndx.up))
-        names(nnd) <- c("est", lower, upper)
+        nnd <- data.frame(est = ndx, lower = ndx.low, upper = ndx.up)
         
         # Youden's index (from Bangdiwala et al. (2008)):
         c.p <- se - (1 - sp)
@@ -290,22 +287,47 @@
         c.low <- min(c.1, c.2)
         c.up <- max(c.1, c.2)
 
-        youden <- as.data.frame(cbind(c.p, c.low, c.up))
-        names(youden) <- c("est", lower, upper)
+        youden <- data.frame(est = c.p, lower = c.low, upper = c.up)
         
-        # Results:
-        aprev <- as.data.frame(aprev)
-        tprev <- as.data.frame(tprev)
-        se <- as.data.frame(sensitivity)
-        sp <- as.data.frame(specificity)
-        da <- as.data.frame(da.acc)
-        dor <- as.data.frame(dor)
-        nnd <- as.data.frame(nnd)
-        youden <- as.data.frame(youden)
-        ppv <- as.data.frame(positive)
-        npv <- as.data.frame(negative)
-        lr.pos <- as.data.frame(lr.positive)
-        lr.neg <- as.data.frame(lr.negative)
-        rval <- list(aprev = aprev, tprev = tprev, se = se, sp = sp, da = da, dor = dor, nnd = nnd, youden = youden, ppv = ppv, npv = npv, lr.pos = lr.pos, lr.neg = lr.neg)
+        
+        if(verbose == TRUE){
+        rval <- list(
+          aprev = aprev, 
+          tprev = tprev, 
+          se = sensitivity, 
+          sp = specificity, 
+          diag.acc = diag.acc, 
+          diag.or = diag.or, 
+          nnd = nnd, 
+          youden = youden, 
+          ppv = pv.positive, 
+          npv = pv.negative, 
+          plr = lr.positive, 
+          nlr = lr.negative)
         return(rval)
+        }
+        
+        if(verbose == FALSE){
+          # Define tab:
+          r1 <- c(a, b, N1)
+          r2 <- c(c, d, N0)
+          r3 <- c(M1, M0, M0 + M1)
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Disease +", "   Disease -", "     Total") 
+          rownames(tab) <- c("Test +", "Test -", "Total") 
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          
+          print(tab)
+          cat("\nPoint estimates and", conf.level * 100, "%", "CIs:")
+          cat("\n---------------------------------------------------------") 
+          cat("\nApparent prevalence                   ", round(aprev$est, digits = 2), paste("(", round(aprev$lower, digits = 2), ", ", round(aprev$upper, digits = 2), ")", sep = ""))
+          cat("\nTrue prevalence                       ", round(tprev$est, digits = 2), paste("(", round(tprev$lower, digits = 2), ", ", round(tprev$upper, digits = 2), ")", sep = ""))
+          
+          cat("\nSensitivity                           ", round(sensitivity$est, digits = 2), paste("(", round(sensitivity$lower, digits = 2), ", ", round(sensitivity$upper, digits = 2), ")", sep = ""))
+          cat("\nSpecificity                           ", round(specificity$est, digits = 2), paste("(", round(specificity$lower, digits = 2), ", ", round(specificity$upper, digits = 2), ")", sep = ""))
+          cat("\nPositive predictive value             ", round(pv.positive$est, digits = 2), paste("(", round(pv.positive$lower, digits = 2), ", ", round(pv.positive$upper, digits = 2), ")", sep = ""))
+          cat("\nNegative predictive value             ", round(pv.negative$est, digits = 2), paste("(", round(pv.negative$lower, digits = 2), ", ", round(pv.negative$upper, digits = 2), ")", sep = ""))
+          cat("\n---------------------------------------------------------")
+          cat("\n")
+        }
 }
