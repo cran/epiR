@@ -366,16 +366,47 @@
    # Incidence rate ratio weights (equal to precision, the inverse of the variance of the IRR. See Woodward page 168):
    IRR.w <- 1 / (exp(lnIRR.var))
    
+   # Individual strata odds ratios (using fisher.test function):
+   # Replaced 130612.  
+   OR.p <- c(); OR.l <- c(); OR.u <- c()
+   if(length(dim(dat)) == 3){
+     for(i in 1:dim(dat)[3]){
+       OR.tmp <- fisher.test(dat[,,i], conf.int = TRUE, conf.level = conf.level)
+       
+       tOR.p <- as.numeric(OR.tmp$estimate)
+       OR.p <- c(OR.p, tOR.p)
+       
+       tOR.l <- as.numeric(OR.tmp$conf.int)[1]
+       OR.l <- c(OR.l, tOR.l)
+       
+       tOR.u <- as.numeric(OR.tmp$conf.int)[2] 
+       OR.u <- c(OR.u, tOR.u)
+     }
+   }
+   
+    if(length(dim(dat)) == 2){
+      OR.tmp <- fisher.test(dat, conf.int = TRUE, conf.level = conf.level)
+        
+      tOR.p <- as.numeric(OR.tmp$estimate)
+      OR.p <- c(OR.p, tOR.p)
+        
+      tOR.l <- as.numeric(OR.tmp$conf.int)[1]
+      OR.l <- c(OR.l, tOR.l)
+        
+      tOR.u <- as.numeric(OR.tmp$conf.int)[2] 
+      OR.u <- c(OR.u, tOR.u)
+    }
+    
    # Individual strata odds ratios (Rothman p 139 equation 7-6):
-   OR.p <- (a * d) / (b * c)
+   # OR.p <- (a * d) / (b * c)
    lnOR <- log(OR.p)
    lnOR.var <- 1/a + 1/b + 1/c + 1/d
    lnOR.se <- sqrt(1/a + 1/b + 1/c + 1/d)
    lnOR.l <- lnOR - (z * lnOR.se)
    lnOR.u <- lnOR + (z * lnOR.se)
    OR.se <- exp(lnOR.se)
-   OR.l <- exp(lnOR.l)
-   OR.u <- exp(lnOR.u)
+   # OR.l <- exp(lnOR.l)
+   # OR.u <- exp(lnOR.u)
    # Odds ratio weights (equal to precision, the inverse of the variance of the OR. See Woodward page 168):
    OR.w <- 1 / (exp(lnOR.var))
    
@@ -500,15 +531,22 @@
    # cIRR.l <- exp(clnIRR.l)
    # cIRR.u <- exp(clnIRR.u)
    
+   # Individual strata odds ratios (using fisher.test function:
+   # Replaced 130612.  
+   cOR.tmp <- fisher.test(apply(dat, MARGIN = c(1,2), FUN = sum), conf.int = TRUE, conf.level = conf.level)
+   cOR.p <- as.numeric(cOR.tmp$estimate)
+   cOR.l <- as.numeric(cOR.tmp$conf.int)[1]
+   cOR.u <- as.numeric(cOR.tmp$conf.int)[2]
+    
    # Crude odds ratios (Rothman p 139 equation 7-6):
-   cOR.p <- (sa * sd) / (sb * sc)
+   # cOR.p <- (sa * sd) / (sb * sc)
    clnOR <- log(cOR.p)
    clnOR.se <- sqrt(1/sa + 1/sb + 1/sc + 1/sd)
    clnOR.l <- clnOR - (z * clnOR.se)
    clnOR.u <- clnOR + (z * clnOR.se)
    cOR.se <- exp(clnOR.se)
-   cOR.l <- exp(clnOR.l)
-   cOR.u <- exp(clnOR.u)
+   # cOR.l <- exp(clnOR.l)
+   # cOR.u <- exp(clnOR.u)
    
    # Crude attributable risk (Rothman p 135 equation 7-2):
    cARisk.p <- ((sa / sN1) - (sc / sN0)) * units
@@ -642,7 +680,9 @@
    sumHQ <- sum(H * Q)
    sumGQ <- sum(G * Q)
    sumGQ.HP <- sum(GQ.HP)
-   varLNOR.s <- sumGP / (2 * sumG^2) + sumGQ.HP/(2 * sumGH) + sumHQ/(2 * sumH^2)
+   # Correction from Richard Bourgon 29 September 2010:
+   varLNOR.s <- sumGP/(2 * sumG^2) + sumGQ.HP/(2 * sumG * sumH) + sumHQ/(2 * sumH^2)
+   # varLNOR.s <- sumGP / (2 * sumG^2) + sumGQ.HP/(2 * sumGH) + sumHQ/(2 * sumG * sumH)
    lnOR.s <- log(sOR.p)
    sOR.se <- sqrt(varLNOR.s)
    sOR.l <- exp(lnOR.s - z * sqrt(varLNOR.s))

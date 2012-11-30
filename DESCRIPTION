@@ -1,6 +1,6 @@
 Package: epiR
-Version: 0.9-43
-Date: 2012-05-29
+Version: 0.9-45
+Date: 2012-11-30
 Title: An R package for the analysis of epidemiological data
 Author: Mark Stevenson <M.Stevenson@massey.ac.nz> with contributions
         from Telmo Nunes, Javier Sanchez, Ron Thornton, Jeno Reiczigel,
@@ -17,6 +17,6 @@ Description: An R package for the analysis of epidemiological data.
 Depends: R (>= 2.14.0), survival
 License: GPL (>= 2)
 URL: http://epicentre.massey.ac.nz
-Packaged: 2012-05-28 23:51:14 UTC; mstevens
+Packaged: 2012-12-05 02:57:39 UTC; mstevens
 Repository: CRAN
-Date/Publication: 2012-05-29 06:37:42
+Date/Publication: 2012-12-05 07:57:55

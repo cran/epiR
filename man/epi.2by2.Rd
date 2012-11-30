@@ -94,13 +94,13 @@ Measures of effect include the attributable risk (or prevalence) and the attribu
 
 Measures of total effect include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of disease in the population that may be attributed to exposure. The population attributable fraction is the proportion of the disease in the population that is attributable to exposure.
 
-Point estimates and confidence intervals for the summary prevalence ratio, incidence risk ratio, incidence rate ratio, and odds ratio are based on formulae provided by Rothman (2002, p 152). The point estimate and confidence intervals for the population attributable fraction are based on formulae provided by Jewell (2004, p 84 - 85). The point estimate and confidence intervals for the summary risk differences are based on formulae provided by Rothman and Greenland (1998, p 271). 
+Point estimates and confidence intervals for the prevalence ratio, incidence risk ratio and incidence rate ratio are calculated using formulae provided by Rothman (2002, p 152). Point estimates and confidence intervals the odds ratio are calculated using the exact method (using function \code{fisher.test}). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the summary risk differences are calculated using formulae provided by Rothman and Greenland (1998, p 271).
 
 The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 
 The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not significant.
 
-The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "breslow.day"} and \code{homogeneity = "woolf"} are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these analyses.
+The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "breslow.day"} and \code{homogeneity = "woolf"} are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these functions.
 }
 
 \examples{
@@ -213,12 +213,12 @@ dat[1,2,] <- c(6,25,14)
 dat[2,1,] <- c(13,37,37)
 dat[2,2,] <- c(53,83,62)
 
-tmp.2by2 <- epi.2by2(dat = dat, method = "case.control", conf.level = 0.95, 
+rval <- epi.2by2(dat = dat, method = "case.control", conf.level = 0.95,
    units = 100, homogeneity = "breslow.day", verbose = TRUE)
-tmp.2by2
+rval
 
 ## Crude odds ratio:
-## 6.57 (95\% CI 4.31 to 10.03)
+## 6.57 (95\% CI 4.22 to 10.28)
   
 ## Mantel-Haenszel adjusted odds ratio:
 ## 6.27 (95\% CI 3.52 to 11.17)
