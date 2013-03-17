@@ -248,9 +248,9 @@ y.at <- c(nstrata, max(nstrata) + 1)
 y.labels <- c("Mantel-Haenszel", strata.lab)
 x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
 
-or.l <- c(tmp.2by2$OR.mh$lower, tmp.2by2$OR.strata$lower)
-or.u <- c(tmp.2by2$OR.mh$upper, tmp.2by2$OR.strata$upper)
-or.p <- c(tmp.2by2$OR.mh$est, tmp.2by2$OR.strata$est)
+or.l <- c(rval$OR.mh$lower, rval$OR.strata$lower)
+or.u <- c(rval$OR.mh$upper, rval$OR.strata$upper)
+or.p <- c(rval$OR.mh$est, rval$OR.strata$est)
 vert <- 1:length(or.p)
  
 segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
@@ -261,10 +261,10 @@ segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE,
    main = "Strata level and summary measures of association")}
 ## End(Not run)
 
-## In this example the precision of both strata 2 and 3 odds ratio estimates is
-## high (i.e. the confidence intervals are narrow) so strata 2 and 3 carry most 
-## of the weight in determining the value of the Mantel-Haenszel adjusted 
-## odds ratio. 
+## In this example the precision of the odds ratio estimate for both strata 
+## 2 and 3 is high (i.e. the confidence intervals are narrow) so strata 2 
+## and 3 carry most of the weight in determining the value of the 
+## Mantel-Haenszel adjusted odds ratio. 
 
 }
 

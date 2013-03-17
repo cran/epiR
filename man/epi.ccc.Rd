@@ -60,6 +60,10 @@ Reynolds M, Gregoire T (1991). Comment on Bradley and Blackwood. American Statis
 Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University Press.
 }
 
+\seealso{
+  \code{\link[epiR]{epi.occc}}
+}
+
 \examples{
 ## Concordance correlation plot:
 set.seed(seed = 1234)
