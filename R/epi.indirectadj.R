@@ -33,7 +33,7 @@
     rownames(crude.strata) <- names(t.exp)
     
     # Indirectly adjusted risk for each strata (see page 378 of Stata manual):
-    t.obs <- by(data = obs, INDICES = obs, FUN = sum)
+    t.obs <- by(data = obs, INDICES = rownames(obs), FUN = sum)
     t.exp <- by(data = tmp$exp, INDICES = tmp$strata, FUN = sum)
     t.pop <- by(data = tmp$pop, INDICES = tmp$strata, FUN = sum)
     

@@ -10,14 +10,14 @@ Estimates the number of clusters to be sampled using a cluster-sample design.
 }
 
 \usage{
-epi.clustersize(p, b, rho, epsilon, conf.level = 0.95)
+epi.clustersize(p, b, rho, epsilon.r, conf.level = 0.95)
 }
 
 \arguments{
   \item{p}{the estimated prevalence of disease in the population.}
   \item{b}{the number of units to be sampled per cluster.}
   \item{rho}{the intra-cluster correlation, a measure of the variation between clusters compared with the variation within clusters.}
-  \item{epsilon}{scalar, the acceptable absolute error.}
+  \item{epsilon.r}{scalar, the acceptable relative error.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -30,9 +30,9 @@ A list containing the following:
 }
 
 \references{
-Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
+Bennett S, Woods T, Liyanage WM, Smith DL (1991). A simplified general method for cluster-sample surveys of health in developing countries. World Health Statistics Quarterly 44: 98 - 106.
 
-Bennett S, Woods T, Liyanage WM, Smith DL (1991). A simplified general method for cluster-sample surveys of health in developing countries. Raport trimestriel de statistiques sanitaires modiales 44: 98 - 106.
+Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
 }
 
 \note{
@@ -47,11 +47,10 @@ The intra-cluster correlation (\code{rho}) will be higher for those situations w
 ## We wish to be 95\% certain of being within 10\% of the true population
 ## prevalence of disease. How many herds should be sampled?
 
-p <- 0.10
-b <- 50
-D <- 7
+p <- 0.10; b <- 50; D <- 7
 rho <- (D - 1) / (b - 1)
-epi.clustersize(p = 0.10, b = 50, rho = rho, epsilon = 0.10, conf.level = 0.95)
+epi.clustersize(p = 0.10, b = 50, rho = rho, epsilon.r = 0.10, 
+   conf.level = 0.95)
 
 ## We need to sample 485 herds (24250 samples in total).
 }
