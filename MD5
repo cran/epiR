@@ -1,4 +1,4 @@
-bbab319e211ea564b92a7117161f4049 *DESCRIPTION
+21581317d8ce0853e0dd1ce9c4196de9 *DESCRIPTION
 e70b2425c5531ecb7ea21426fd3ace8c *NAMESPACE
 94f113e43a63ed06128e02253b91de55 *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
@@ -8,7 +8,7 @@ ed840c4783c7ad2e191bb64a3a8ca4d1 *R/epi.about.R
 b0409b337ea6dd9275f69b8c9374f616 *R/epi.ccc.r
 52927695dc6e0d0002c6ab70a12ac926 *R/epi.cluster1size.R
 aed994d4e585e092089481c32bc12835 *R/epi.cluster2size.R
-2330869a852f557102195a608f39c84e *R/epi.clustersize.R
+c3ff42af84bb01e927867d54b4ac4334 *R/epi.clustersize.R
 47460c42035831c646be2c2fd50e3e1b *R/epi.conf.R
 d535d0aaae250f95c38e00ccbba0b7ca *R/epi.convgrid.R
 4eb1a96f7427ea81382d37754d717f49 *R/epi.cp.R
@@ -22,7 +22,7 @@ da3832a85a8085b34f75455e6defbf24 *R/epi.dgamma.R
 276cc7e048b9b12cad3c16fe60190600 *R/epi.edr.R
 658381258fe39d7cdbe6253c66a49034 *R/epi.empbayes.R
 e935ed017215d39b2225f61b23de3bfd *R/epi.herdtest.R
-918c2bc50bdf0bb68b8aacf25061ba23 *R/epi.indirectadj.R
+4c623da6adf1b9356ebcec299700c58c *R/epi.indirectadj.R
 9c2fdb99c5701dca5359dca3e651e5a2 *R/epi.insthaz.R
 f3d340bc5cd457e8600cbe24390c5ab8 *R/epi.interaction.r
 2a952ef6d504f5a1d6d1e39fd3d42666 *R/epi.iv.R
@@ -45,7 +45,7 @@ f4ed15fbc7ba23b3f40ca334c40e2900 *R/epi.tests.R
 e21ab6f2a8b2c8ed12468ce39757977e *data/epi.SClip.RData
 fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 64af3548130a5495e0aed3c2b58f864f *data/epi.incin.RData
-9c55e77e42510f4bc478d47ca326d553 *doc/epiR.pdf
+94e751c672768e0734ed08cab46dda62 *doc/epiR.pdf
 1b5971f552cfd1e660fdccf6dfd435d1 *man/epi.2by2.Rd
 bf7ef9dbf069d206b52f03ccf25f4744 *man/epi.RtoBUGS.Rd
 0c9b04bc2d19935d734fa660831e0aff *man/epi.SClip.Rd
@@ -54,8 +54,8 @@ bf7ef9dbf069d206b52f03ccf25f4744 *man/epi.RtoBUGS.Rd
 e369812dc14ce31c04d6ac0cb91ca2e4 *man/epi.bohning.Rd
 f2590484d82cca9cf53f382b1c2321f7 *man/epi.ccc.Rd
 9a93fd71d9b2044c1057e38037d28764 *man/epi.cluster1size.Rd
-e506ef0141a6bc31ef5b7fa536d6eae0 *man/epi.cluster2size.Rd
-83aacc3e94529a8b88cf93882127d7bb *man/epi.clustersize.Rd
+5489af5beec8bd59c37d10400218bfb9 *man/epi.cluster2size.Rd
+c32f51bcd0b5726b0515d1a0ed5fe5ad *man/epi.clustersize.Rd
 5c412d9f30fd50d8edbba75ef3281be9 *man/epi.conf.Rd
 07e702fd65b9cc6710d27c133b94f89f *man/epi.convgrid.Rd
 73fa76a196667326289eb68551a7d06f *man/epi.cp.Rd

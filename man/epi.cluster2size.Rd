@@ -17,7 +17,7 @@ epi.cluster2size(nbar, R, n, mean, sigma2.x, sigma2.y, sigma2.xy,
 \arguments{
   \item{nbar}{integer, representing the total number of listing units to be selected from each cluster.}
 
-  \item{R}{scalar, representing an estimate of the unknown population prevalence to be estimated. Only used when method = \code{method = "proportion"}.}
+  \item{R}{scalar, representing an estimate of the unknown population prevalence to be estimated. Only used when \code{method = "proportion"}.}
 
   \item{n}{vector of length two, specifying the total number of clusters in the population and the total number of listing units within each cluster, respectively.}
 
