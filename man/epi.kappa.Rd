@@ -9,7 +9,8 @@ Computes the kappa statistic and its confidence interval.
 }
 
 \usage{
-epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less", "greater"), conf.level = 0.95)
+epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less", "greater"), 
+   conf.level = 0.95)
 }
 
 \arguments{

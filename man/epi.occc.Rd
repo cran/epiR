@@ -82,7 +82,7 @@ Lin L (2000). A note on the concordance correlation coefficient. Biometrics 56: 
 }
 
 \author{
-Peter Solymos, solymos@ualberta.ca
+Peter Solymos, solymos@ualberta.ca.
 }
 
 \examples{

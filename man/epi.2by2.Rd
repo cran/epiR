@@ -128,33 +128,91 @@ epi.2by2(dat = dat, method = "cross.sectional",
 ## Fifty-four percent of FUS cases in the cat population are attributable 
 ## to DCF (95\% CI 4\% to 78\%).
 
-
 ## EXAMPLE 2
 ## This example shows how the table function can be used to pass data to
-## epi.2by2. Generate a case-control data set comprise of 1000 subjects. 
-## The probability of exposure is 0.50. The probability of disease in the 
-## exposed is 0.75, the probability of disease in the unexposed is 0.45.
+## epi.2by2. Here we use the birthwgt data from the MASS package.
 
-n <- 1000; p.exp <- 0.50; pd.exp <- 0.75; pd.exn <- 0.45 
-dat <- data.frame(exp = rep(0, times = n), stat = rep(0, times = n))
-dat$exp <- rbinom(n = n, size = 1, prob = p.exp)
-dat$stat[dat$exp == 1] <- rbinom(n = length(dat$stat[dat$exp == 1]), 
-   size = 1, prob = pd.exp)
-dat$stat[dat$exp == 0] <- rbinom(n = length(dat$stat[dat$exp == 0]), 
-   size = 1, prob = pd.exn)
-dat$exp <- factor(dat$exp, levels = c("1", "0"))
-dat$stat <- factor(dat$stat, levels = c("1", "0"))
-head(dat)
+library(MASS)
+dat1 <- birthwt; head(dat1)
 
-## Create a 2 by 2 table from this simulated data set:
-dat <- table(dat$exp, dat$stat, dnn = c("Exposure", "Disease"))
-dat
+## Generate a table of cell frequencies. First set the levels of the outcome 
+## and the exposure so the frequencies in the 2 by 2 table come out in the 
+## conventional format:
+dat1$low <- factor(dat1$low, levels = c(1,0))
+dat1$smoke <- factor(dat1$smoke, levels = c(1,0))
+dat1$race <- factor(dat1$race, levels = c(1,2,3))
 
-## 2 by 2 table analysis:
-epi.2by2(dat = dat, method = "case.control", 
-   conf.level = 0.95, units = 100, homogeneity = "breslow.day",
+## Generate the 2 by 2 table. Exposure (rows) = smoke. Outcome (columns) = low.
+tab1 <- table(dat1$smoke, dat1$low, 
+   dnn = c("Smoke", "Low BW"))
+print(tab1)
+
+## Compute the odds ratio and other measures of association:
+epi.2by2(dat = tab1, method = "cohort.count", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
    verbose = FALSE)
-   
+
+## Stratify by race:
+tab2 <- table(dat1$smoke, dat1$low, dat1$race, 
+   dnn = c("Smoke", "Low BW", "Race"))
+print(tab2)
+
+## Compute the crude and Mantel-Haenszel adjusted odds ratio and other 
+## measures of association:
+epi.2by2(dat = tab2, method = "cohort.count", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   verbose = FALSE)
+
+## Now turn tab2 into a data frame. Often your data will be presented to
+## you in this summary format:
+dat2 <- data.frame(tab2)
+print(dat2)
+
+## Re-format dat2 (a summary count data frame) into tabular format using the 
+## xtabs function:
+tab3 <- xtabs(Freq ~ Smoke + Low.BW + Race, data = dat2)
+print(tab3)
+
+# tab3 can now be passed to epi.2by2:
+rval <- epi.2by2(dat = tab3, method = "cohort.count", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   verbose = TRUE)
+print(rval)
+
+## Crude odds ratio:
+## 2.01 (95\% CI 1.03 to 3.96)
+
+## Mantel-Haenszel adjusted odds ratio:
+## 3.09 (95\% CI 1.49 to 6.39)
+
+## Plot the individual strata-level odds ratios and compare them with the 
+## Mantel-Haenszel adjusted odds ratio.
+
+\dontrun{
+library(latticeExtra)
+nstrata <- 1:dim(tab3)[3]
+strata.lab <- paste("Strata ", nstrata, sep = "")
+y.at <- c(nstrata, max(nstrata) + 1)
+y.labels <- c("Mantel-Haenszel", strata.lab)
+x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
+
+or.l <- c(rval$OR.mh$lower, rval$OR.strata$lower)
+or.u <- c(rval$OR.mh$upper, rval$OR.strata$upper)
+or.p <- c(rval$OR.mh$est, rval$OR.strata$est)
+vert <- 1:length(or.p)
+ 
+segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
+   aspect = 1/2, col = "grey", 
+   ylim = c(0,vert + 1), 
+   xlab = "Odds ratio", ylab = "", 
+   scales = list(y = list(at = y.at, labels = y.labels)), 
+   main = "Strata level and summary measures of association")
+}
+
+## In this example the precision of the odds ratio estimate for strata 3
+## is high (i.e. the confidence interval around the point estimate of the odds
+## ratio is narrow). The inference here is that strata 3 carries most of the
+## weight in determining the value of the Mantel-Haenszel adjusted odds ratio. 
 
 ## EXAMPLE 3
 ## A study was conducted by Feychting et al (1998) comparing cancer occurrence
@@ -176,95 +234,6 @@ round(rval$IRR, digits = 3)
 
 ## The incidence rate of cancer in the blind group was less than half that of the 
 ## comparison group (incidence rate ratio 0.46, 90\% CI 0.40 to 0.53).
-
-
-## EXAMPLE 4
-## Adapted from Elwood (2007, pages 194 -- 295):
-## The results of an unmatched case control study of the association between
-## smoking and cervical cancer were stratified by age. Counts of individuals 
-## in each group were as follows: 
-
-## Age group 20 - 29 years (cases, controls)
-## Smokers: 41, 6
-## Non-smokers: 13, 53
-
-## Age group 30 - 39 years (cases, controls)
-## Smokers: 66, 25
-## Non-smokers: 37, 83
-
-## Age +40 years (cases, controls)
-## Smokers: 23, 14
-## Non-smokers: 37, 62
-
-## Coerce the count data that has been provided into tabular format (take
-## care when setting strata labels to make sure they match up with appropriate
-## contingency table data):
-slabel <- c("20-29 yrs", "30-39 yrs", "40+ yrs")
-dat <- data.frame(strata = rep(slabel, each = 2), 
-   exp = rep(c("+","-"), times = length(slabel)), dis = rep(c("+","-"), 
-   times = length(slabel)))
-dat$exp <- factor(dat$exp, levels = c("+", "-"))
-dat$dis <- factor(dat$dis, levels = c("+", "-"))
-dat <- table(dat$exp, dat$dis, dat$strata, 
-   dnn = c("Exposure", "Disease", "Strata"))
-
-dat[1,1,] <- c(41,66,23)
-dat[1,2,] <- c(6,25,14)
-dat[2,1,] <- c(13,37,37)
-dat[2,2,] <- c(53,83,62)
-
-rval <- epi.2by2(dat = dat, method = "case.control", conf.level = 0.95,
-   units = 100, homogeneity = "breslow.day", verbose = TRUE)
-rval
-
-## Crude odds ratio:
-## 6.57 (95\% CI 4.22 to 10.28)
-  
-## Mantel-Haenszel adjusted odds ratio:
-## 6.27 (95\% CI 3.52 to 11.17)
-
-## Mantel-Haenszel chi-squared test for difference in proportions:
-## Test statistic 83.31; df = 1; P < 0.01
-
-## Breslow Day test of homeogeneity of odds ratios:
-## Test statistic 12.66; df = 2; P < 0.01
-
-## We reject the null hypothesis and conclude that the strata level odds ratios 
-## are inhomogenous. The crude odds ratio is 6.57 (95\% CI 4.31 -- 10.03). 
-## The Mantel-Haenszel adjusted odds ratio is 6.27 (95\% CI 3.52 to 11.17). 
-## The crude odds ratio is 1.05 times the magnitude of the Mantel-Haenszel 
-## adjusted odds ratio so we conclude that age does not confound the association 
-## between smoking and risk of cervical cancer (using a ratio of greater 
-## than 1.10 or less than 0.90 as indicative of the presence of confounding).
-
-## Now plot the individual strata-level odds ratio and compare them with the 
-## Mantel-Haenszel adjusted odds ratio.
-
-## Not run: 
-\dontrun{library(latticeExtra)
-nstrata <- 1:dim(dat)[3]
-strata.lab <- paste("Strata ", nstrata, sep = "")
-y.at <- c(nstrata, max(nstrata) + 1)
-y.labels <- c("Mantel-Haenszel", strata.lab)
-x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
-
-or.l <- c(rval$OR.mh$lower, rval$OR.strata$lower)
-or.u <- c(rval$OR.mh$upper, rval$OR.strata$upper)
-or.p <- c(rval$OR.mh$est, rval$OR.strata$est)
-vert <- 1:length(or.p)
- 
-segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
-   aspect = 1/2, col = "grey", 
-   ylim = c(0,vert + 1), 
-   xlab = "Odds ratio", ylab = "", 
-   scales = list(y = list(at = y.at, labels = y.labels)), 
-   main = "Strata level and summary measures of association")}
-## End(Not run)
-
-## In this example the precision of the odds ratio estimate for both strata 
-## 2 and 3 is high (i.e. the confidence intervals are narrow) so strata 2 
-## and 3 carry most of the weight in determining the value of the 
-## Mantel-Haenszel adjusted odds ratio. 
 
 }
 

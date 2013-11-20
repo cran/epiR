@@ -435,18 +435,27 @@
 
    # Individual strata attributable fraction for risk data (from Hanley 2001):
    AFRisk.p <- ((RR.p - 1) / RR.p)
-   AFRisk.l <- min((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
-   AFRisk.u <- max((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
+   # Bug found 031013. The following two lines of code replace those on lines 441 and 442.
+   AFRisk.l <- (RR.l - 1) / RR.l
+   AFRisk.u <- (RR.u - 1) / RR.u
+   # AFRisk.l <- min((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
+   # AFRisk.u <- max((RR.l - 1) / RR.l, (RR.u - 1) / RR.u)
                     
    # Individual strata attributable fraction for rate data (from Hanley 2001):
    AFRate.p <- (IRR.p - 1) / IRR.p
-   AFRate.l <- min((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
-   AFRate.u <- max((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
+   # Bug found 031013. The following two lines of code replace those on lines 449 and 450.
+   AFRate.l <- (IRR.l - 1) / IRR.l
+   AFRate.u <- (IRR.u - 1) / IRR.u
+   # AFRate.l <- min((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
+   # AFRate.u <- max((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
            
    # Individual strata estimated attributable fraction (from Hanley 2001):
    AFest.p <- (OR.p - 1) / OR.p
-   AFest.l <- min((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
-   AFest.u <- max((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
+   AFest.l <- (OR.l - 1) / OR.l
+   AFest.u <- (OR.u - 1) / OR.u
+   # Bug found 031013. The following two lines of code replace those on lines 457 and 458.
+   # AFest.l <- min((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
+   # AFest.u <- max((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
    
    # Individual strata population attributable risk (same as Rothman p 135 equation 7-2):
    PARisk.p <- ((M1 / total) - (c / N0)) * units
@@ -1183,7 +1192,7 @@
    # Results for method == "cross.sectional": 
    if(method == "cross.sectional" & length(a) == 1 & verbose == TRUE){
    rval <- list(
-      RR = RR.strata,
+      PR = RR.strata,
       OR = OR.strata,
       AR = ARisk.strata, 
       ARp = PARisk.strata,
@@ -1217,9 +1226,9 @@
    
    if(method == "cross.sectional" & length(a) > 1 & verbose == TRUE){
    rval <- list(
-       RR.strata = RR.strata,
-       RR.crude = RR.crude, 
-       RR.mh = RR.mh,
+       PR.strata = RR.strata,
+       PR.crude = RR.crude, 
+       PR.mh = RR.mh,
       
        OR.strata = OR.strata,
        OR.crude = OR.crude, 
@@ -1237,7 +1246,7 @@
        chisq.crude = chisq.crude,
        chisq.mh = chisq.mh,  
 
-       RR.homog = RR.homog, 
+       PR.homog = RR.homog, 
        OR.homog = OR.homog)
    }
    
@@ -1270,3 +1279,4 @@ if(verbose == TRUE){
     return(rval)
     }  
 }
+
