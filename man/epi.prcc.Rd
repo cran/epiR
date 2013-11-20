@@ -34,6 +34,10 @@ Blower S, Dowlatabladi H (1994). Sensitivity and uncertainty analysis of complex
 Sanchez M, Blower S (1997) Uncertainty and sensitivity analysis of the basic reproductive rate. American Journal of Epidemiology, 145: 1127 - 1137.
 }
 
+\author{
+Jonathon Marshall, J.C.Marshall@massey.ac.nz.
+}
+
 \examples{
 ## Create a matrix of simulation results:
 x1 <- as.data.frame(rnorm(n = 10, mean = 120, sd = 10))
