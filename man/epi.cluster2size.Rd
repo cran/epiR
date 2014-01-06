@@ -49,7 +49,7 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 }
 
 \examples{
-## EXAMPLE 1 (from Levy and Lemeshow p 292)
+## EXAMPLE 1 (from Levy and Lemeshow p 292):
 ## We intend to conduct a survey of nurse practitioners to estimate the 
 ## average number of patients seen by each nurse. There are five health
 ## centres in the study area, each with three nurses. We intend to sample
@@ -69,7 +69,7 @@ epi.cluster2size(nbar = 2, n = tn, mean = tmean, sigma2.x = tsigma2.x,
 ## specifications.
 
 
-## EXAMPLE 2 (from Levy and Lemeshow p 294)
+## EXAMPLE 2 (from Levy and Lemeshow p 294):
 ## Same scenario as above, but this time we want to estimate the proportion
 ## of patients referred to a general practitioner from each clinic. As before, 
 ## we want to be 95\% confident that our estimate of the proportion of referred 
@@ -82,7 +82,7 @@ epi.cluster2size(nbar = 2, n = tn, mean = tmean, sigma2.x = tsigma2.x,
 ## demonstration) we use the actual patient data to calculate sigma2.x, 
 ## sigma2.y and sigma2.xy.
 
-# Nurse-level data. The following code reproduces Table 10.4 of Levy and 
+## Nurse-level data. The following code reproduces Table 10.4 of Levy and 
 ## Lemeshow (page 293).
 clinic <- rep(1:5, each = 3)
 nurse <- 1:15
@@ -110,18 +110,18 @@ psudat$Xi.Xbar <- (psudat$Xi - mean(psudat$Xi))^2
 psudat$Yi.Ybar <- (psudat$Yi - mean(psudat$Yi))^2
 psudat$XY <- (psudat$Xi - mean(psudat$Xi)) * (psudat$Yi - mean(psudat$Yi))
 
-# Number of primary and secondary sampling units:
+## Number of primary and secondary sampling units:
 npsu <- nrow(psudat)
 nssu <- mean(by(ssudat$nurse, INDICES = ssudat$clinic, FUN = length))
 tn <- c(npsu, nssu)
 
-# Mean of X at primary sampling unit and secondary sampling unit level:
+## Mean of X at primary sampling unit and secondary sampling unit level:
 tmean <- c(mean(psudat$Xi), mean(ssudat$Xij))
 
-# Variance of number of patients seen:
+## Variance of number of patients seen:
 tsigma2.x <- c(mean(psudat$Xi.Xbar), mean(ssudat$Xij.Xbar))
 
-# Variance of number of patients referred:
+## Variance of number of patients referred:
 tsigma2.y <- c(mean(psudat$Yi.Ybar), mean(ssudat$Yij.Ybar))
 tsigma2.xy <- c(mean(psudat$XY), mean(ssudat$XY))
 
@@ -133,7 +133,7 @@ epi.cluster2size(nbar = 2, R = 0.36, n = tn, mean = tmean,
 ## specifications.
 
 
-## EXAMPLE 3
+## EXAMPLE 3:
 ## We want to determine the prevalence of brucellosis in dairy cattle in a
 ## country comprised of 20 provinces. The number of dairy herds per province 
 ## ranges from 50 to 1200. Herd size ranges from 25 to 900. We suspect that
@@ -150,11 +150,11 @@ epi.simplesize(N = 1200, Vsq = NA, Py = 0.10, epsilon.r = 0.30,
 ## A total of 234 herds should be sampled from each province.
 
 ## Next we work out the number of provinces that need to be sampled. 
-## Again, we'd like to be 95\% confident that our estimate is within 
+## Again, we would like to be 95\% confident that our estimate is within 
 ## 30\% of the true population value. Simulate some data to derive appropriate
 ## estimates of sigma2.x, sigma2.y and sigma2.xy.
 
-# Number of herds per province:
+## Number of herds per province:
 npsu <- 20
 nherds.p <- as.integer(runif(n = npsu, min = 50, max = 1200))
 
@@ -207,7 +207,7 @@ for(i in 1:npsu){
 ssudat <- data.frame(prov, herd, Xij, Yij, Xbar, Ybar, Xij.Xbar, Yij.Ybar)
 ssudat$XY <- (ssudat$Xij - ssudat$Xbar) * (ssudat$Yij - ssudat$Ybar)
 
-## Collapse the herd-level data (created above) to the province level. 
+## Collapse the herd-level data (created above) to the province level: 
 prov <- as.vector(by(ssudat$prov, INDICES = ssudat$prov, FUN = min))
 Xi <- as.vector(by(ssudat$Xij, INDICES = ssudat$prov, FUN = sum))
 Yi <- as.vector(by(ssudat$Yij, INDICES = ssudat$prov, FUN = sum))
@@ -217,23 +217,23 @@ psudat$Xi.Xbar <- (psudat$Xi - mean(psudat$Xi))^2
 psudat$Yi.Ybar <- (psudat$Yi - mean(psudat$Yi))^2
 psudat$XY <- (psudat$Xi - mean(psudat$Xi)) * (psudat$Yi - mean(psudat$Yi))
 
-# Number of primary and secondary sampling units:
+## Number of primary and secondary sampling units:
 npsu <- nrow(psudat)
 nssu <- round(mean(by(ssudat$herd, INDICES = ssudat$prov, FUN = length)),
    digits = 0)
 tn <- c(npsu, nssu)
 
-# Mean of X at primary sampling unit and secondary sampling unit level:
+## Mean of X at primary sampling unit and secondary sampling unit level:
 tmean <- c(mean(psudat$Xi), mean(ssudat$Xij))
 
-# Variance of herd size:
+## Variance of herd size:
 tsigma2.x <- c(mean(psudat$Xi.Xbar), mean(ssudat$Xij.Xbar))
 
-# Variance of number of brucellosis-positive cows:
+## Variance of number of brucellosis-positive cows:
 tsigma2.y <- c(mean(psudat$Yi.Ybar), mean(ssudat$Yij.Ybar))
 tsigma2.xy <- c(mean(psudat$XY), mean(ssudat$XY))
 
-# Finally, calculate the number of provinces to be sampled:
+## Finally, calculate the number of provinces to be sampled:
 tR <- sum(psudat$Yi) / sum(psudat$Xi)
 
 epi.cluster2size(nbar = 234, R = tR, n = tn, mean = tmean, 

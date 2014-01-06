@@ -1,7 +1,10 @@
 # Export all names
 exportPattern(".")
 
+S3method(print, epi.2by2)
+S3method(summary, epi.2by2)
+S3method(print, epi.tests)
+S3method(summary, epi.tests)
+
 # Import all packages listed as Imports or Depends
-import(
-  survival
-)
+import(survival)

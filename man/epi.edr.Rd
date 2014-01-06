@@ -23,7 +23,7 @@ epi.edr(dat, n = 4, conf.level = 0.95, nsim = 99, na.zero = TRUE)
 }
 
 \details{
-In infectious disease epidemics the \emph{n}-day estimated dissemination ratio (EDR) at day \emph{i} equals the total number of incident cases between day \code{i} and day \code{[i - (n - 1)]} (inclusive) divided by the total number of incident cases between day \code{(i - n)} and day \code{(i - 2n) + 1} (inclusive). EDR values are often calculated for each day of an epidemic and presented as a time series analysis. If the EDR is consistently less than unity, the epidemic is said to be `under control.' 
+In infectious disease epidemics the \emph{n}-day estimated dissemination ratio (EDR) at day \emph{i} equals the total number of incident cases between day \code{i} and day \code{[i - (n - 1)]} (inclusive) divided by the total number of incident cases between day \code{(i - n)} and day \code{(i - 2n) + 1} (inclusive). EDR values are often calculated for each day of an epidemic and presented as a time series analysis. If the EDR is consistently less than unity, the epidemic is said to be `under control'. 
 
 A simulation approach is used to calculate confidence intervals around each daily EDR estimate. The numerator and denominator of the EDR estimate for each day is taken in turn and a random number drawn from a Poisson distribution, using the calculated numerator and denominator value as the mean. EDR is then calculated for these simulated values and the process repeated \code{nsim} times. Confidence intervals are then derived from the vector of simulated values for each day.
 }
@@ -31,6 +31,13 @@ A simulation approach is used to calculate confidence intervals around each dail
 \value{
 Returns the point estimate of the EDR and the lower and upper bounds of the confidence interval of the EDR.
 }
+
+\references{
+Miller W (1976). A state-transition model of epidemic foot-and-mouth disease. In: Proceedings of an International Symposium: New Techniques in Veterinary Epidemiology and Economics, University of Reading, Reading, 56 - 72.
+
+Morris R, Sanson R, Stern M, Stevenson M, Wilesmith J (2002). Decision-support tools for foot-and-mouth disease control. Revue Scientifique et Technique de l'Office International des Epizooties 21, 557 - 567.
+}
+
 
 \examples{
 set.seed(123)

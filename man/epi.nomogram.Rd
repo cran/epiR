@@ -31,7 +31,7 @@ Hunink M, Glasziou P (2001). Decision Making in Health and Medicine - Integratin
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## You are presented with a dog with lethargy, exercise intolerance, 
 ## weight gain and bilaterally symmetric truncal alopecia. You are 
 ## suspicious of hypothyroidism and take a blood sample to measure 
@@ -48,7 +48,7 @@ epi.nomogram(se = 0.89, sp = 0.85, lr = NA, pre.pos = 0.05, verbose = FALSE)
 
 ## The post-test probability that this dog is hypothyroid is 24\%.
 
-## EXAMPLE 2
+## EXAMPLE 2:
 ## A dog is presented to you with severe pruritis. You suspect sarcoptic 
 ## mange and decide to take a skin scraping (LR+ 9000; LR- 0.1). The scrape 
 ## returns a negative result (no mites are seen). What is the post-test 

@@ -1,6 +1,8 @@
 \name{epi.tests}
 
 \alias{epi.tests}
+\alias{print.epi.tests}
+\alias{summary.epi.tests}
 
 \title{Sensitivity, specificity and predictive value of a diagnostic test}
 
@@ -9,13 +11,18 @@ Computes true and apparent prevalence, sensitivity, specificity, positive and ne
 }
 
 \usage{
-epi.tests(dat, conf.level = 0.95, verbose = FALSE)
+epi.tests(dat, conf.level = 0.95)
+
+\method{print}{epi.tests}(x, ...)
+
+\method{summary}{epi.tests}(object, ...)
 }
 
 \arguments{
   \item{dat}{an object of class \code{table} containing the individual cell frequencies (see below).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
-  \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
+  \item{x, object}{an object of class \code{epi.tests}.}
+  \item{...}{Ignored.}
 }
 
 \details{
@@ -27,7 +34,7 @@ Diagnostic accuracy is defined as the proportion of all tests that give a correc
 }
 
 \value{
-A list containing the following:
+An object of class \code{epi.tests} containing the following:
   \item{aprev}{apparent prevalence.}
   \item{tprev}{true prevalence.}
   \item{se}{test sensitivity.}
@@ -53,7 +60,11 @@ Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interp
 
 Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample size estimation for diagnostic test studies. Journal of Clinical Epidemiology 44: 763 - 770.
 
-Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, specificity, PPV & NPV. R-sig-Epi Digest 23(1): 3March 2008.
+Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, specificity, PPV & NPV. R-sig-Epi Digest 23(1): 3 March 2008.
+}
+
+\author{
+Mark Stevenson (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand).
 }
 
 \note{
@@ -75,7 +86,8 @@ Total\tab a + c\tab b + d \tab a + b + c + d\cr
 dat <- as.table(matrix(c(670,202,74,640), nrow = 2, byrow = TRUE))
 colnames(dat) <- c("Dis+","Dis-")
 rownames(dat) <- c("Test+","Test-")
-epi.tests(dat, conf.level = 0.95, verbose = FALSE)
+rval <- epi.tests(dat, conf.level = 0.95)
+print(rval); summary(rval)
 
 ## Test sensitivity is 0.90 (95\% CI 0.88 -- 0.92). Test specificity is 
 ## 0.76 (95\% CI 0.73 -- 0.79). The likelihood ratio of a positive test 

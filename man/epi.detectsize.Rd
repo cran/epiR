@@ -43,7 +43,7 @@ Define \code{se1} and \code{se2} as the sensitivity for the first and second tes
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## We would like to confirm the absence of disease in a single 1000-cow 
 ## dairy herd. We expect the prevalence of disease in the herd to be 5\%.
 ## We intend to use a single test with a sensitivity of 0.90 and a 
@@ -55,7 +55,7 @@ epi.detectsize(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
 
 ## We need to sample 59 cows.
 
-## EXAMPLE 2
+## EXAMPLE 2:
 ## We would like to confirm the absence of disease in a study area. If the 
 ## disease is present we expect the between-herd prevalence to be 8\% and the 
 ## within-herd prevalence to be 5\%. We intend to use two tests: the first has 
@@ -74,7 +74,7 @@ epi.detectsize(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95),
 ## The sensitivity of this testing regime is 99\%. The specificity of this 
 ## testing regime is 68\%.
 
-## EXAMPLE 3
+## EXAMPLE 3:
 ## You want to document the absence of Mycoplasma from a 200-sow pig herd.
 ## Based on your experience and the literature, a minimum of 20\% of sows  
 ## would have seroconverted if Mycoplasma were present in the herd. How many 

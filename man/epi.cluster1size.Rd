@@ -33,8 +33,8 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 }
 
 \examples{
-## We intend to conduct a survey of residents to estimate the total number
-## over 65 years of age that require the services of a nurse. There are 
+## A survey to estimate the total number of residents over 65 years of 
+## age that require the services of a nurse is to be carried out. There are 
 ## five housing complexes in the study area and we expect that there might
 ## be a total of around 34 residents meeting this criteria (variance 6.8).
 ## We would like the estimated sample size to provide us with an estimate

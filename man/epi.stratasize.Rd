@@ -16,8 +16,8 @@ epi.stratasize(strata.n, strata.mean, strata.var, strata.Py, epsilon.r,
 
 \arguments{
   \item{strata.n}{vector, defining the size of each strata.}
-  \item{strata.mean}{vector, representing the expected means in each strata. Only used when \code{method = "mean", "total" or "pps"}.}
-  \item{strata.var}{vector, representing the expected variance in each strata. Only used when \code{method = "mean", "total" or "pps"}.}
+  \item{strata.mean}{vector, representing the expected means in each strata. Only used when \code{method = "mean"}, \code{"total"} or \code{"pps"}.}
+  \item{strata.var}{vector, representing the expected variance in each strata. Only used when \code{method = "mean"}, \code{"total"} or \code{"pps"}.}
   \item{strata.Py}{vector, representing the expected proportions in each strata. Only used when \code{method = "proportion"}.}
   \item{epsilon.r}{the maximum relative difference between our estimate and the unknown population value.}
   \item{method}{a character string indicating the method to be used. Options are \code{mean}, \code{total}, \code{proportion}, or \code{pps}.}
@@ -44,11 +44,11 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 \note{
 Use method \code{proportion} to estimate sample size using stratified random sampling with equal weights (see Levy and Lemeshow, page 176). Use method \code{pps} to estimate sample size using proportional stratified random sampling with proportional allocation (see Levy and Lemeshow, page 179).
 
-Where \code{method = "proportion"} the vectors \code{strata.mean} and \code{strata.var} are ignored. 
+When \code{method = "proportion"} the vectors \code{strata.mean} and \code{strata.var} are ignored. 
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## Hospital episodes (Levy and Lemeshow 1999, page 176 -- 178)
 ## We plan to take a sample of the members of a health maintenance 
 ## organisation (HMO) for purposes of estimating the average number
@@ -73,7 +73,7 @@ epi.stratasize(strata.n, strata.mean, strata.var, strata.Py,
 ## results differ from the worked example provided in Levy and Lemeshow where 
 ## certainty is set to approximately 99\%.
 
-## EXAMPLE 2
+## EXAMPLE 2:
 ## Dairies are to be sampled to determine the proportion of herd managers 
 ## using foot bathes. Herds are stratified according to size (small, medium, 
 ## and large). The number of herds in each strata are 1500, 2500, and 4000

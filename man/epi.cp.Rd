@@ -38,7 +38,7 @@ set.seed(seed = 1234)
 obs <- round(runif(n = 100, min = 0, max = 1), digits = 0)
 v1 <- round(runif(n = 100, min = 0, max = 4), digits = 0)
 v2 <- round(runif(n = 100, min = 0, max = 4), digits = 0)
-dat <- as.data.frame(cbind(obs, v1, v2))
+dat <- data.frame(obs, v1, v2)
 
 dat.glm <- glm(obs ~ v1 + v2, family = binomial, data = dat)
 dat.mf <- model.frame(dat.glm)
