@@ -26,7 +26,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 \details{
 Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
 
-The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations is as follows:
+The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 
 \tabular{ll}{
 \code{ctype-method}                 \tab Reference             \cr
@@ -67,18 +67,18 @@ Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 dat <- rnorm(n = 100, mean = 0, sd = 1)
 epi.conf(dat, ctype = "mean.single")
 
-## EXAMPLE 2
+## EXAMPLE 2:
 group <- c(rep("A", times = 5), rep("B", times = 5))
 val = round(c(rnorm(n = 5, mean = 10, sd = 5), 
    rnorm(n = 5, mean = 7, sd = 5)), digits = 0)
 dat <- data.frame(group = group, val = val)
 epi.conf(dat, ctype = "mean.unpaired")
 
-## EXAMPLE 3
+## EXAMPLE 3:
 ## Two paired samples (Altman et al. 2000, page 31):
 ## Systolic blood pressure levels were measured in 16 middle-aged men
 ## before and after a standard exercise test. The mean rise in systolic 
@@ -95,7 +95,7 @@ epi.conf(dat, ctype = "mean.paired", conf.level = 0.95)
 ## systolic blood pressure increase after standard exercise was 3.4 to 9.8
 ## mm Hg.
 
-## EXAMPLE 4
+## EXAMPLE 4:
 ## Single sample (Altman et al. 2000, page 47):
 ## Out of 263 giving their views on the use of personal computers in 
 ## general practice, 81 thought that the privacy of their medical file
@@ -109,7 +109,7 @@ round(epi.conf(dat, ctype = "prop.single"), digits = 3)
 ## The 95\% confidence interval for the population value of the proportion
 ## of patients thinking their privacy was reduced was from 0.255 to 0.366. 
 
-## EXAMPLE 5
+## EXAMPLE 5:
 ## Two samples, unpaired (Altman et al. 2000, page 49):
 ## Goodfield et al. report adverse effects in 85 patients receiving either
 ## terbinafine or placebo treatment for dermatophyte onchomychois.
@@ -125,7 +125,7 @@ round(epi.conf(dat, ctype = "prop.unpaired"), digits = 3)
 ## The 95\% confidence interval for the difference between the two groups is
 ## from -0.038 to +0.193.
 
-## EXAMPLE 6
+## EXAMPLE 6:
 ## Two samples, paired (Altman et al. 2000, page 53):
 ## In a reliability exercise, 41 patients were randomly selected from those
 ## who had undergone a thalium-201 stress test. The 41 sets of images were
@@ -151,8 +151,8 @@ round(epi.conf(dat, ctype = "prop.paired", conf.level = 0.95), digits = 3)
 ## The 95\% confidence interval for the population difference in 
 ## proportions is 0.011 to 0.226 or approximately +1\% to +23\%.
 
-## EXAMPLE 7
-## A herd of 1000 cattle were tested for brucellosis. Two samples out of 200
+## EXAMPLE 7:
+## A herd of 1000 cattle were tested for brucellosis. Four samples out of 200
 ## test returned a positive result. Assuming 100\% test sensitivity and 
 ## specificity, what is the estimated prevalence of brucellosis in this 
 ## group of animals?
@@ -165,7 +165,7 @@ epi.conf(dat, ctype = "prevalence", method = "exact", N = 1000,
 ## The estimated prevalence of brucellosis in this herd is 2 cases
 ## per 100 cattle (95\% CI 0.54 -- 5.0 cases per 100 cattle).
 
-## EXAMPLE 8
+## EXAMPLE 8:
 ## The observed disease counts and population size in four areas are provided
 ## below. What are the the standardised morbidity ratios of disease for each
 ## area and their 95\% confidence intervals?
@@ -174,7 +174,7 @@ obs <- c(5, 10, 12, 18); pop <- c(234, 189, 432, 812)
 dat <- as.matrix(cbind(obs, pop))
 round(epi.conf(dat, ctype = "smr"), digits = 2)
 
-## EXAMPLE 9
+## EXAMPLE 9:
 ## A survey has been conducted to determine the proportion of broilers
 ## protected from a given disease following vaccination. We assume that 
 ## the intra-cluster correlation coefficient for protection (also known as the 

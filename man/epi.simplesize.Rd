@@ -44,7 +44,7 @@ If the calculated sample size is greater than 10\% of the population, an adjuste
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## A city contains 20 neighbourhood health clinics and it is desired to take a 
 ## sample of clinics to estimate the total number of persons from all these 
 ## clinics who have been given, during the past 12 month period, prescriptions 
@@ -60,7 +60,7 @@ epi.simplesize(N = 20, Vsq = (pvar / pmean^2), Py = NA, epsilon.r = 0.20,
 
 ## Three clinics need to be sampled to meet the survey requirements. 
 
-## EXAMPLE 2
+## EXAMPLE 2:
 ## We want to estimate the mean bodyweight of deer on a farm. There are 278
 ## animals present. We anticipate the mean body weight to be around 200 kg
 ## and the standard deviation of body weight to be 30 kg. We would like to
@@ -72,7 +72,7 @@ epi.simplesize(N = 278, Vsq = 30^2 / 200^2, Py = NA, epsilon.r = 10/200,
 
 ## A total of 28 deer need to be sampled to meet the survey requirements.
 
-## EXAMPLE 3
+## EXAMPLE 3:
 ## We want to estimate the seroprevalence of Brucella abortus in a population 
 ## of cattle. An estimate of the unknown prevalence of B. abortus in this 
 ## population is 0.15. We would like to be 95\% certain that our estimate is 
@@ -85,7 +85,7 @@ n.crude
 
 ## A total of 544 cattle need to be sampled to meet the survey requirements.
 
-## EXAMPLE 3 (continued)
+## EXAMPLE 3 (continued):
 ## Being seropositive to brucellosis is likely to cluster within herds.
 ## Otte and Gumm (1997) cite the intraclass correlation coefficient of
 ## Brucella abortus to be in the order of 0.09. Adjust the sample size

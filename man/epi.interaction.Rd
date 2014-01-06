@@ -54,10 +54,9 @@ smk <- c(rep(1, times = 225), rep(0, times = 6), rep(1, times = 166),
    rep(0, times = 12), rep(1, times = 8), rep(0, times = 3), rep(1, times = 18), 
    rep(0, times = 20))
 alc <- c(rep(1, times = 409), rep(0, times = 49))
-dat <- as.data.frame(cbind(alc, smk, can))
+dat <- data.frame(alc, smk, can)
 
 ## Table 2 of Hosmer and Lemeshow (1992):
-
 dat.glm01 <- glm(can ~ alc + smk + alc:smk, family = binomial, data = dat)
 summary(dat.glm01)
 
@@ -79,7 +78,6 @@ dat$d[dat$alc == 1 & dat$smk == 1] <- 3
 dat$d <- factor(dat$d)
 
 ## Table 3 of Hosmer and Lemeshow (1992):
-
 dat.glm02 <- glm(can ~ d, family = binomial, data = dat)
 summary(dat.glm02)
 

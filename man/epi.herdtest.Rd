@@ -7,7 +7,7 @@ Estimate herd test characteristics
 }
 
 \description{
-When tests are applied to individuals within a group we may wish to designate the group as being either diseased or non-diseased on the basis of these individual test results. This function estimates sensitivity and specificity of this testing regime at the group (or herd) level. 
+When tests are applied to individuals within a group we may wish to designate the group as being either diseased or non-diseased on the basis of the individual test results. This function estimates sensitivity and specificity of this testing regime at the group (or herd) level. 
 }
 
 \usage{
@@ -40,7 +40,7 @@ The method implemented in this function is based on the hypergeometric distribut
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## We wish to estimate the herd-level sensitivity and specificity of 
 ## a testing regime using an individual animal test of sensitivity 0.391 
 ## and specificity 0.964. The estimated true prevalence of disease is 0.12.

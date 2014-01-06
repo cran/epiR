@@ -54,7 +54,7 @@ Thanks to Dr. Telmo Nunes (UISEE/DETSA, Faculdade de Medicina Veterinaria - UTL,
 }
 
 \examples{
-## EXAMPLE 1 - without covariates
+## EXAMPLE 1 (without covariates):
 ## Adapted from Dohoo, Martin and Stryhn (2009). In this example the frequency
 ## of tuberculosis is expressed as incidence risk (i.e. the number of 
 ## tuberculosis positive herds divided by the size of the herd population at 
@@ -75,7 +75,7 @@ std <- 0.060
 epi.indirectadj(obs = obs, pop = pop, std = std, units = 100,
    conf.level = 0.95)
 
-## EXAMPLE 2 - with covariates
+## EXAMPLE 2 (with covariates):
 ## We now have, for each area, data stratified by herd type (dairy, beef).
 ## The standard incidence rates for beef herds, dairy herds, and the total
 ## population are 0.025, 0.085, and 0.060 cases per herd, respectively:

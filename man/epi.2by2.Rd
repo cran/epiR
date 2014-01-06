@@ -1,6 +1,8 @@
 \name{epi.2by2}
 
 \alias{epi.2by2}
+\alias{print.epi.2by2}
+\alias{summary.epi.2by2}
 
 \title{
 Summary measures for count data presented in a 2 by 2 table
@@ -11,8 +13,12 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 }
 
 \usage{
-epi.2by2(dat, method = "cohort.count", conf.level = 0.95, 
-   units = 100, homogeneity = "breslow.day", verbose = FALSE)
+epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100, 
+   homogeneity = "breslow.day")
+
+\method{print}{epi.2by2}(x, ...)
+
+\method{summary}{epi.2by2}(object, ...)
 }
 
 \arguments{
@@ -21,7 +27,8 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95,
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence estimates.}
   \item{homogeneity}{a character string indicating the type of homogeneity test to perform. Options are \code{breslow.day} or \code{woolf}.}
-  \item{verbose}{logical indicating whether detailed or summary results are to be returned.}
+  \item{x, object}{an object of class \code{epi.2by2}.}
+  \item{...}{Ignored.}
 }
 
 \details{
@@ -43,6 +50,8 @@ Expose -  \tab c		\tab d		  	\cr
 }
 
 \value{
+An object of class \code{epi.2by2} containing the following:
+
 When method equals \code{cohort.count} the following measures of association are returned: the incidence risk ratio (RR), the odds ratio (OR), the attributable risk  (AR), the attributable risk in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
 
 When method equals \code{cohort.time} the following measures of association are returned: the incidence rate ratio (IRR), the attributable rate (AR), the attributable rate in the population (ARp), the attributable fraction in the exposed (AFe), and the attributable fraction in the population (AFp).
@@ -85,7 +94,7 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 }
 
 \author{
-Mark Stevenson, Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA).
+Mark Stevenson, Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA) and Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
 }
 
 \note{Measures of strength of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
@@ -104,7 +113,7 @@ The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "bre
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## A cross sectional study investigating the relationship between dry cat 
 ## food (DCF) and feline urologic syndrome (FUS) was conducted (Willeberg 
 ## 1977). Counts of individuals in each group were as follows:
@@ -113,9 +122,9 @@ The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "bre
 ## Non DCF-exposed cats (cases, non-cases) 5, 3349
 
 dat <- as.table(matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE))
-epi.2by2(dat = dat, method = "cross.sectional", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   verbose = FALSE)
+rval <- epi.2by2(dat = dat, method = "cross.sectional", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
+print(rval)
 
 ## Prevalence ratio:
 ## The prevalence of FUS in DCF exposed cats is 4.01 times (95\% CI 1.43 to 
@@ -128,7 +137,7 @@ epi.2by2(dat = dat, method = "cross.sectional",
 ## Fifty-four percent of FUS cases in the cat population are attributable 
 ## to DCF (95\% CI 4\% to 78\%).
 
-## EXAMPLE 2
+## EXAMPLE 2:
 ## This example shows how the table function can be used to pass data to
 ## epi.2by2. Here we use the birthwgt data from the MASS package.
 
@@ -149,8 +158,7 @@ print(tab1)
 
 ## Compute the odds ratio and other measures of association:
 epi.2by2(dat = tab1, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   verbose = FALSE)
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
 
 ## Stratify by race:
 tab2 <- table(dat1$smoke, dat1$low, dat1$race, 
@@ -160,8 +168,7 @@ print(tab2)
 ## Compute the crude and Mantel-Haenszel adjusted odds ratio and other 
 ## measures of association:
 epi.2by2(dat = tab2, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   verbose = FALSE)
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
 
 ## Now turn tab2 into a data frame. Often your data will be presented to
 ## you in this summary format:
@@ -175,8 +182,7 @@ print(tab3)
 
 # tab3 can now be passed to epi.2by2:
 rval <- epi.2by2(dat = tab3, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   verbose = TRUE)
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
 print(rval)
 
 ## Crude odds ratio:
@@ -189,32 +195,31 @@ print(rval)
 ## Mantel-Haenszel adjusted odds ratio.
 
 \dontrun{
-library(latticeExtra)
+library(ggplot2); library(scales)
+
 nstrata <- 1:dim(tab3)[3]
 strata.lab <- paste("Strata ", nstrata, sep = "")
 y.at <- c(nstrata, max(nstrata) + 1)
-y.labels <- c("Mantel-Haenszel", strata.lab)
-x.labels <- c(0.5, 1, 2, 4, 8, 16, 32, 64, 128)
+y.lab <- c("M-H", strata.lab)
+x.at <- c(0.25, 0.5, 1, 2, 4, 8, 16, 32)
 
-or.l <- c(rval$OR.mh$lower, rval$OR.strata$lower)
-or.u <- c(rval$OR.mh$upper, rval$OR.strata$upper)
-or.p <- c(rval$OR.mh$est, rval$OR.strata$est)
-vert <- 1:length(or.p)
- 
-segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE, 
-   aspect = 1/2, col = "grey", 
-   ylim = c(0,vert + 1), 
-   xlab = "Odds ratio", ylab = "", 
-   scales = list(y = list(at = y.at, labels = y.labels)), 
-   main = "Strata level and summary measures of association")
+or.l <- c(rval$res$OR.mh$lower, rval$res$OR.strata$lower)
+or.u <- c(rval$res$OR.mh$upper, rval$res$OR.strata$upper)
+or.p <- c(rval$res$OR.mh$est, rval$res$OR.strata$est)
+dat <- data.frame(y.at, y.lab, or.p, or.l, or.u)
+
+p <- ggplot(dat, aes(or.p, y.at))
+windows(); p + geom_point() + 
+   geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
+   labs(x = "Odds ratio", y = "Strata") + 
+   scale_x_continuous(trans = log2_trans(), breaks = x.at, 
+   limits = c(0.25,32)) + scale_y_continuous(breaks = y.at, labels = y.lab) + 
+   geom_vline(xintercept = 1, lwd = 1) + coord_fixed(ratio = 0.75 / 1) + 
+   theme(axis.title.y = element_text(vjust = 0))
+
 }
 
-## In this example the precision of the odds ratio estimate for strata 3
-## is high (i.e. the confidence interval around the point estimate of the odds
-## ratio is narrow). The inference here is that strata 3 carries most of the
-## weight in determining the value of the Mantel-Haenszel adjusted odds ratio. 
-
-## EXAMPLE 3
+## EXAMPLE 3:
 ## A study was conducted by Feychting et al (1998) comparing cancer occurrence
 ## among the blind with occurrence among those who were not blind but had 
 ## severe visual impairment. From these data we calculate a cancer rate of
@@ -223,14 +228,14 @@ segplot(vert ~ or.l + or.u, centers = or.p, horizontal = TRUE,
 
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
 rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.90, 
-   units = 1000,  homogeneity = "breslow.day", verbose = TRUE)
-round(rval$AR, digits = 3)
+   units = 1000,  homogeneity = "breslow.day")
+summary(rval)$AR
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
 ## blind, compared with those who were not blind but had severe visual impairment
 ## (90\% CI 6.20 to 8.24 cases per 1000 person-years).
 
-round(rval$IRR, digits = 3)   
+round(summary(rval)$IRR, digits = 2)
 
 ## The incidence rate of cancer in the blind group was less than half that of the 
 ## comparison group (incidence rate ratio 0.46, 90\% CI 0.40 to 0.53).

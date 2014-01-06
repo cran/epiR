@@ -47,7 +47,7 @@ The standardised mean difference method is used when trials assess the same outc
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## A systematic review comparing assertive community treatment (ACT) for the 
 ## severely mentally ill was compared to standard care. A systematic review
 ## comparing ACT to standard care found three trials that assessed mental
