@@ -368,6 +368,19 @@ print.epi.tests <- function(x, ...) {
                     npv$lower,
                     npv$upper
                     ))
+
+        cat(sprintf("\nPositive likelihood ratio              %.2f (%.2f, %.2f)",
+                    plr$est,
+                    plr$lower,
+                    plr$upper
+        ))
+        
+        cat(sprintf("\nNegative likelihood ratio              %.2f (%.2f, %.2f)",
+                    nlr$est,
+                    nlr$lower,
+                    nlr$upper
+        ))
+        
     })
     cat("\n---------------------------------------------------------")
     cat("\n")

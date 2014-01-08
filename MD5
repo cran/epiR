@@ -1,4 +1,4 @@
-80851965d485600c6d93a9ce7e45f6e6 *DESCRIPTION
+f18057d8c79e65631e2f7ac9f0af9371 *DESCRIPTION
 4b3574acb7141d90fde83793dd2971be *NAMESPACE
 429a22fe5dea1232fed964ebe1b92b1f *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
@@ -40,7 +40,7 @@ d388e24a2baea682359c4f07b71ee689 *R/epi.prev.R
 42ff19ebe373602acc39ab1a1dc7d244 *R/epi.smd.R
 32b646ecabba4110b2566b44d1879d49 *R/epi.stratasize.R
 9d5b8bb904edd5913995d10b69b04c51 *R/epi.studysize.R
-d375cf89cf72b6f0268454d6ef448a9c *R/epi.tests.R
+ba5e4d58f79b6d16659814f1f82b65c6 *R/epi.tests.R
 00c26a92f3e827fd67862cf8434ecad2 *R/zzz.R
 e21ab6f2a8b2c8ed12468ce39757977e *data/epi.SClip.RData
 fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
