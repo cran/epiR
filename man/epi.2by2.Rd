@@ -14,7 +14,7 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 
 \usage{
 epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100, 
-   homogeneity = "breslow.day")
+   homogeneity = "breslow.day", outcome = "as.columns")
 
 \method{print}{epi.2by2}(x, ...)
 
@@ -27,6 +27,7 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100,
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence estimates.}
   \item{homogeneity}{a character string indicating the type of homogeneity test to perform. Options are \code{breslow.day} or \code{woolf}.}
+  \item{outcome}{a character string indicating how the outcome variable is represented in the contingency table. Options are \code{as.columns} (outcome as columns) or \code{as.rows} (outcome as rows).}  
   \item{x, object}{an object of class \code{epi.2by2}.}
   \item{...}{Ignored.}
 }
@@ -121,17 +122,29 @@ The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "bre
 ## DCF-exposed cats (cases, non-cases) 13, 2163
 ## Non DCF-exposed cats (cases, non-cases) 5, 3349
 
-dat <- as.table(matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE))
-rval <- epi.2by2(dat = dat, method = "cross.sectional", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
-print(rval)
+## Outcome variable (FUS) as columns:
+dat <- matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE)
+rownames(dat) <- c("DF+", "DF-"); colnames(dat) <- c("FUS+", "FUS-"); dat
+
+epi.2by2(dat = as.table(dat), method = "cross.sectional", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   outcome = "as.columns")
+
+## Outcome variable (FUS) as rows:
+dat <- matrix(c(13,5,2163,3349), nrow = 2, byrow = TRUE)
+rownames(dat) <- c("FUS+", "FUS-"); colnames(dat) <- c("DF+", "DF-"); dat
+
+epi.2by2(dat =  as.table(dat), method = "cross.sectional", 
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   outcome = "as.rows")
 
 ## Prevalence ratio:
 ## The prevalence of FUS in DCF exposed cats is 4.01 times (95\% CI 1.43 to 
 ## 11.23) greater than the prevalence of FUS in non-DCF exposed cats.
 
 ## Attributable fraction:
-## In DCF exposed cats, 75\% of FUS is attributable to DCF (95\% CI 30\% to 91\%).
+## In DCF exposed cats, 75\% of FUS is attributable to DCF (95\% CI 30\% to 
+## 91\%).
 
 ## Population attributable fraction:
 ## Fifty-four percent of FUS cases in the cat population are attributable 
@@ -152,13 +165,13 @@ dat1$smoke <- factor(dat1$smoke, levels = c(1,0))
 dat1$race <- factor(dat1$race, levels = c(1,2,3))
 
 ## Generate the 2 by 2 table. Exposure (rows) = smoke. Outcome (columns) = low.
-tab1 <- table(dat1$smoke, dat1$low, 
-   dnn = c("Smoke", "Low BW"))
+tab1 <- table(dat1$smoke, dat1$low, dnn = c("Smoke", "Low BW"))
 print(tab1)
 
 ## Compute the odds ratio and other measures of association:
 epi.2by2(dat = tab1, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day",
+   outcome = "as.columns")
 
 ## Stratify by race:
 tab2 <- table(dat1$smoke, dat1$low, dat1$race, 
@@ -168,7 +181,8 @@ print(tab2)
 ## Compute the crude and Mantel-Haenszel adjusted odds ratio and other 
 ## measures of association:
 epi.2by2(dat = tab2, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   outcome = "as.columns")
 
 ## Now turn tab2 into a data frame. Often your data will be presented to
 ## you in this summary format:
@@ -182,7 +196,8 @@ print(tab3)
 
 # tab3 can now be passed to epi.2by2:
 rval <- epi.2by2(dat = tab3, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day")
+   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
+   outcome = "as.columns")
 print(rval)
 
 ## Crude odds ratio:
@@ -228,7 +243,7 @@ windows(); p + geom_point() +
 
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
 rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.90, 
-   units = 1000,  homogeneity = "breslow.day")
+   units = 1000,  homogeneity = "breslow.day", outcome = "as.columns")
 summary(rval)$AR
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
