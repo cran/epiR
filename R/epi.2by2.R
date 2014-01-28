@@ -1,4 +1,4 @@
-"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, homogeneity = "breslow.day"){
+"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, homogeneity = "breslow.day", outcome = "as.columns"){
     ## Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293.
     ## Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
     ## Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55:508 - 514.
@@ -66,6 +66,14 @@
     ## Attributable prevalence; attributable prevalence in population
     ## Attributable fraction in exposed; attributable fraction in population
 
+    ## If outcome is assigned by column, leave the data as is:
+    if(outcome == "as.columns"){
+      dat <- dat}
+
+    ## If outcome is assigned by row, transpose it:
+    if(outcome == "as.rows"){
+      dat <- t(dat)}
+    
     ## Create a list to hold all the measures:
     elements <- list()
 
@@ -989,14 +997,27 @@
        AFp   = res$PAFRisk.strata,
        chisq = res$chisq.strata)
 
-       ## Non verbose part - define tab:
-       r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
-       r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
-       r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk *", "       Odds")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Inc risk *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(a, c, M1))
+          r2 <- with(elements, c(b, d, 	M0))
+          r3 <- with(elements, c(N1, N0, N0 + N1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
        ## Output creation part:
        out <- list(method = "cohort.count", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
@@ -1030,15 +1051,28 @@
        OR.homog     = elements$OR.homog)
        ## AR.homog     = elements$AR.homog)
 
-        ## Define tab:
-        r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
-        r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
-        r3 <- with(elements, c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p))
-        tab <- as.data.frame(rbind(r1, r2, r3))
-        colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Inc risk *", "       Odds")
-        rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-        tab <- format.data.frame(tab, digits = 3, justify = "right")
+       ## Define tab:
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Inc risk *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(sa, sc, sM1))
+          r2 <- with(elements, c(sb, sd, sM0))
+          r3 <- with(elements, c(sN1, sN0, sN0 + sN1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+        
         ## Output creation part:
         out <- list(method = "cohort.count", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
     }
@@ -1057,16 +1091,29 @@
        chisq = res$chisq.strata)
 
        ## Define tab:
-       r1 <- with(elements, c(a, b, cIRatee.p))
-       r2 <- with(elements, c(c, d, cIRateo.p))
-       r3 <- with(elements, c(M1, M0, cIRatepop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate *")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(a, b, cIRatee.p))
+          r2 <- with(elements, c(c, d, cIRateo.p))
+          r3 <- with(elements, c(M1, M0, cIRatepop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Time at risk", "       Inc rate *")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
-        ## Output creation part:
-        out <- list(method = "cohort.time", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(a, c, M1))
+          r2 <- with(elements, c(b, d, M0))
+          r3 <- with(elements, c(N1, N0, N0 + N1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Time at risk", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+        
+       ## Output creation part:
+       out <- list(method = "cohort.time", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
     }
 
 
@@ -1093,13 +1140,26 @@
        ## AR.homog = AR.homog)
 
        ## Define tab:
-       r1 <- with(elements, c(sa, sb, cIRatee.p))
-       r2 <- with(elements, c(sc, sd, cIRateo.p))
-       r3 <- with(elements, c(sM1, sM0, cIRatepop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Time at risk", "       Inc rate *")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(sa, sb, cIRatee.p))
+          r2 <- with(elements, c(sc, sd, cIRateo.p))
+          r3 <- with(elements, c(sM1, sM0, cIRatepop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Time at risk", "       Inc rate *")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(sa, sc))
+          r2 <- with(elements, c(sb, sd))
+          r3 <- with(elements, c(sN1, sN0))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }         
 
        ## Output creation part:
        out <- list(method = "cohort.time", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
@@ -1120,14 +1180,27 @@
        chisq = res$chisq.strata)
 
        ## Define tab:
-       r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
-       r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
-       r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(a, c, M1))
+          r2 <- with(elements, c(b, d, M0))
+          r3 <- with(elements, c(N1, N0, N0 + N1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+          
        ## Output creation part:
        out <- list(method = "case.control", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
     }
@@ -1155,14 +1228,28 @@
        OR.homog      = elements$OR.homog)
 
        ## Define tab:
-       r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
-       r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
-       r3 <- with(elements, c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(sa, sc, sM1))
+          r2 <- with(elements, c(sb, sd, sM0))
+          r3 <- with(elements, c(sN1, sN0, sN0 + sN1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+
+          
        ## Output creation part:
        out <- list(method = "case.control", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
     }
@@ -1182,19 +1269,33 @@
        chisq = res$chisq.strata)
 
        ## Define tab:
-       r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
-       r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
-       r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(a, b, N1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(c, d, N0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(a, c, M1))
+          r2 <- with(elements, c(b, d, M0))
+          r3 <- with(elements, c(N1, N0, N0 + N1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+
+          
        ## Output creation part:
        out <- list(method = "cross.sectional", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
     }
 
-    
+
     if(method == "cross.sectional" & length(elements$a) > 1){
        
        ## Verbose part:
@@ -1223,13 +1324,26 @@
        OR.homog     = elements$OR.homog)
 
        ## Define tab:
-       r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
-       r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
-       r3 <- with(elements, c(sM1, sM0, sM1 + sM0, cIRiskpop.p, cOpop.p))
-       tab <- as.data.frame(rbind(r1, r2, r3))
-       colnames(tab) <- c("   Disease +", "   Disease -", "     Total", "       Prevalence *", "       Odds")
-       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
-       tab <- format.data.frame(tab, digits = 3, justify = "right")
+       if(outcome == "as.columns"){
+          r1 <- with(elements, c(sa, sb, sN1, cIRiske.p, cOe.p))
+          r2 <- with(elements, c(sc, sd, sN0, cIRisko.p, cOo.p))
+          r3 <- with(elements, c(sM1, sM0, sM1 + sM0, cIRiskpop.p, cOpop.p))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+          rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
+
+       if(outcome == "as.rows"){
+          ## Non verbose part - define tab:
+          r1 <- with(elements, c(sa, sc, sM1))
+          r2 <- with(elements, c(sb, sd, sM0))
+          r3 <- with(elements, c(sN1, sN0, sN0 + sN1))
+          tab <- as.data.frame(rbind(r1, r2, r3))
+          colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+          rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+          tab <- format.data.frame(tab, digits = 3, justify = "right")
+          }
 
        ## Output creation part:
        out <- list(method = "cross.sectional", conf.level = conf.level, elements = elements, res = res, rval = rval, tab = tab)
