@@ -75,6 +75,10 @@ Feychting M, Osterlund B, Ahlbom A (1998). Reduced cancer incidence among the bl
 
 Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. Journal of Epidemiology and Community Health 55: 508 - 514.
 
+Juul S (2004). Epidemiologi og evidens. Munksgaard, Copenhagen, Denmark.
+
+Kirkwood BR, Sterne JAC (2003). Essential Medical Statistics. Blackwell Science, Malden, MA, USA.
+
 Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, London, pp. 84 - 85.
 
 Martin SW, Meek AH, Willeberg P (1987). Veterinary Epidemiology Principles and Methods. Iowa State University Press, Ames, Iowa, pp. 130. 
@@ -104,7 +108,7 @@ Measures of effect include the attributable risk (or prevalence) and the attribu
 
 Measures of total effect include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of disease in the population that may be attributed to exposure. The population attributable fraction is the proportion of the disease in the population that is attributable to exposure.
 
-Point estimates and confidence intervals for the prevalence ratio, incidence risk ratio and incidence rate ratio are calculated using formulae provided by Rothman (2002, p 152). Point estimates and confidence intervals the odds ratio are calculated using the exact method (using function \code{fisher.test}). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the summary risk differences are calculated using formulae provided by Rothman and Greenland (1998, p 271).
+Point estimates and confidence intervals for the prevalence ratio and incidence risk ratio are calculated using formulae provided by Rothman (2002, p 130 to 140). Point estimates and confidence intervals for the incidence rate ratio are calculated using the exact method described by Kirkwood and Sterne (2003) and Juul (2004). Point estimates and confidence intervals the odds ratio are calculated using the exact method (using function \code{fisher.test}). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the summary risk differences are calculated using formulae provided by Rothman and Greenland (1998, p 271).
 
 The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 
