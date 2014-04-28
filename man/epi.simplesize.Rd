@@ -38,8 +38,6 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 }
 
 \note{
-If the calculated sample size is greater than 10\% of the population, an adjusted sample size is returned.
-
 \code{epsilon.r} defines the maximum relative difference between our estimate and the unknown population value. The sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
 }
 
@@ -70,7 +68,7 @@ epi.simplesize(N = 20, Vsq = (pvar / pmean^2), Py = NA, epsilon.r = 0.20,
 epi.simplesize(N = 278, Vsq = 30^2 / 200^2, Py = NA, epsilon.r = 10/200, 
    method = "mean", conf.level = 0.95)
 
-## A total of 28 deer need to be sampled to meet the survey requirements.
+## A total of 31 deer need to be sampled to meet the survey requirements.
 
 ## EXAMPLE 3:
 ## We want to estimate the seroprevalence of Brucella abortus in a population 

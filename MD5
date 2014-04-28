@@ -1,4 +1,4 @@
-158382145a24168c26169dcc715b57b5 *DESCRIPTION
+8caff2c87808504f8ba144515bf7661d *DESCRIPTION
 4b3574acb7141d90fde83793dd2971be *NAMESPACE
 22e92a105e5bafa4cda17883073c2a5b *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
@@ -36,10 +36,10 @@ b1c0bdf50b56a4b9df09ac89f2de0b98 *R/epi.pooled.R
 3a35fac64c1bcda32c3dcabe7b7d14b2 *R/epi.popsize.R
 9984eb80ee76e03e982e401c2c3a2490 *R/epi.prcc.R
 d388e24a2baea682359c4f07b71ee689 *R/epi.prev.R
-3a930c2a8a01fa7c2fc80d57b31ddf56 *R/epi.simplesize.R
+b149e431ad851995742d356767b1a1ab *R/epi.simplesize.R
 42ff19ebe373602acc39ab1a1dc7d244 *R/epi.smd.R
 32b646ecabba4110b2566b44d1879d49 *R/epi.stratasize.R
-9d5b8bb904edd5913995d10b69b04c51 *R/epi.studysize.R
+ab4112f7bfe6bb0c73e0109257ab00f0 *R/epi.studysize.R
 ba5e4d58f79b6d16659814f1f82b65c6 *R/epi.tests.R
 00c26a92f3e827fd67862cf8434ecad2 *R/zzz.R
 e21ab6f2a8b2c8ed12468ce39757977e *data/epi.SClip.RData
@@ -48,7 +48,7 @@ fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 1571a2a597fbdf06a71a49eafc30e016 *man/epi.2by2.Rd
 bf7ef9dbf069d206b52f03ccf25f4744 *man/epi.RtoBUGS.Rd
 0c9b04bc2d19935d734fa660831e0aff *man/epi.SClip.Rd
-84bf334434f1e5162a45cd864cc6192e *man/epi.about.Rd
+a8ba6434bd2698b6d63245597fe02d85 *man/epi.about.Rd
 0153a33f6f4ef4f4adb2a5ef8205f79b *man/epi.asc.Rd
 e369812dc14ce31c04d6ac0cb91ca2e4 *man/epi.bohning.Rd
 f2590484d82cca9cf53f382b1c2321f7 *man/epi.ccc.Rd
@@ -84,8 +84,8 @@ cc7f75a85351f5542916421fa4b7e648 *man/epi.offset.Rd
 94d5f2ced08ba7556c21e6360d5f54b8 *man/epi.popsize.Rd
 d1796a40a7f4d23429458f0f8f489274 *man/epi.prcc.Rd
 9c9de8405822d52a347f629ec8c6ed66 *man/epi.prev.Rd
-0c7b9d8ece95f22cbaf31c09959b2eec *man/epi.simplesize.Rd
+343836fb3af162d20f3b91114ced4dee *man/epi.simplesize.Rd
 b6389f885f3fdf71f58c115334f230d4 *man/epi.smd.Rd
 37c9bcc28fb98c218ef69aa9fec41958 *man/epi.stratasize.Rd
-0f9cb5a1d0597842d34043ae750414dd *man/epi.studysize.Rd
+ea834e7ed898c6845fc82d340e6ce477 *man/epi.studysize.Rd
 15aaf2fea7992db0f120035c473cec1b *man/epi.tests.Rd

@@ -11,8 +11,8 @@ Computes the sample size, power, and minimum detectable difference for cohort st
 }
 
 \usage{
-epi.studysize(treat, control, n, sigma, power, r = 1, 
-   conf.level = 0.95, sided.test = 2, method = "means")
+epi.studysize(treat, control, n, sigma, power, r = 1, design = 1,
+   sided.test = 2, conf.level = 0.95, method = "means")
 }
 
 \arguments{
@@ -22,8 +22,9 @@ epi.studysize(treat, control, n, sigma, power, r = 1,
   \item{sigma}{when \code{method = "means"} this is the expected standard deviation of the variable of interest for both treatment and control groups. When \code{method = "case.control"} this is the expected proportion of study subjects exposed to the risk factor of interest. This argument is ignored when \code{method = "proportions"}, \code{method = "survival"}, or \code{method = "cohort.count"}.}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group. This argument is ignored when \code{method = "proportions"}.}
-  \item{conf.level}{scalar, defining the level of confidence in the computed result.}
+  \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the treatment group is better or worse than the control group. Use a one-sided test to evaluate whether or not the treatment group is better than the control group.}
+  \item{conf.level}{scalar, defining the level of confidence in the computed result.}
   \item{method}{a character string indicating the method to be used. Options are \code{means}, \code{proportions}, \code{survival}, \code{cohort.count}, or \code{case.control}.}
 }
 
@@ -42,8 +43,7 @@ When \code{method = "case.control"} the argument \code{treat} defines the estima
 
 In case control studies sample size estimates are worked out on the basis of an expected odds (or risk) ratio. When \code{method = "case.control"} the estimated incidence risk estimates in the \code{treat} and \code{control} groups are used to define the expected risk ratio. See example 7 below, taken from Woodward p 412. 
 
-For \code{method = "proportions"} it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. In contrast, \code{method = "cohort.count"} relates to the two-sample problem where neither
-proportion is known (or assumed, at least). Thus, there is much more uncertainty in the \code{method = "cohort.count"} situation (compared with \code{method = "proportions"}) and correspondingly a requirement for a much larger sample size. Generally, \code{method = "cohort.count"} is more useful in practice. \code{method = "proportions"} is used in special situations, such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
+For \code{method = "proportions"} it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. In contrast, \code{method = "cohort.count"} relates to the two-sample problem where neither proportion is known (or assumed, at least). Thus, there is much more uncertainty in the \code{method = "cohort.count"} situation (compared with \code{method = "proportions"}) and correspondingly a requirement for a much larger sample size. Generally, \code{method = "cohort.count"} is more useful in practice. \code{method = "proportions"} is used in special situations, such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
 }
 
 \value{
@@ -84,8 +84,8 @@ When \code{method = "proportions"} values need to be entered for \code{control},
 ## at detecting a difference of 0.5 mmol/L. The standard deviation of serum 
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
 
-epi.studysize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
-   r = 1, conf.level = 0.95, sided.test = 1, method = "means")
+ epi.studysize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
+   r = 1, design = 1, sided.test = 1, conf.level = 0.95, method = "means")
 
 ## To satisfy the study requirements 340 individuals need to be tested: 170 in
 ## the first year and 170 in the second year.
@@ -107,7 +107,7 @@ epi.studysize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 ## How many women should be enrolled in this study?
 
 epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
-   r = 4, conf.level = 0.95, sided.test = 2, method = "means")
+   r = 4, design = 1, sided.test = 2, conf.level = 0.95, method = "means")
    
 ## The estimated sample size is 66. We round this up to the nearest multiple
 ## of 5, to 70. We allocate 70/5 = 14 women to the placebo group and four
@@ -123,7 +123,7 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 ## with 0.90 power. How many men need to be sampled?
 
 epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90, 
-   r = 1, conf.level = 0.95, sided.test = 1, method = "proportions")
+   r = 1, design = 1, sided.test = 1, conf.level = 0.95, method = "proportions")
    
 ## ## A total of 4568 men should be sampled: 2284 in the treatment group and
 ## 2284 in the control group. 
@@ -136,7 +136,7 @@ epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90,
 ## power to detect this difference. How many events are required?
 
 epi.studysize(treat = 0.45, control = 0.30, n = NA, sigma = NA, power = 0.90, 
-   r = 1, conf.level = 0.95, sided.test = 2, method = "survival")
+   r = 1, design = 1, sided.test = 2, conf.level = 0.95, method = "survival")
 
 ## A total of 250 events are required. Assuming one event per individual, 
 ## assign 125 individuals to the treatment group and 125 to the control group.
@@ -148,7 +148,7 @@ epi.studysize(treat = 0.45, control = 0.30, n = NA, sigma = NA, power = 0.90,
 ## 2-sided test at the 0.05 level?
 
 epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90, 
-   r = 1, conf.level = 0.95, sided.test = 2, method = "survival")
+   r = 1, design = 1, sided.test = 2, conf.level = 0.95, method = "survival")
 
 ## Assuming treatment increases time to event (compared with controls), the 
 ## minimum detectable hazard of a study involving 500 subjects (250 in the 
@@ -168,7 +168,8 @@ epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90,
 treat = 1.4 * (5 * 413)/100000
 control = (5 * 413)/100000
 epi.studysize(treat = treat, control = control, n = NA, sigma = NA, 
-   power = 0.90, r = 1, conf.level = 0.95, sided.test = 1, method = "cohort.count")
+   power = 0.90, r = 1, design = 1, sided.test = 1, conf.level = 0.95, 
+method = "cohort.count")
 
 ## A total of 12130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
@@ -178,8 +179,9 @@ epi.studysize(treat = treat, control = control, n = NA, sigma = NA,
 ## described above. What is the minimum and maximum detectable risk ratio?
 
 control = (5 * 413)/100000
-epi.studysize(treat = NA, control = control, n = 5000, sigma = NA, power = 0.90, 
-   r = 1, conf.level = 0.95, sided.test = 1, method = "cohort.count")
+epi.studysize(treat = NA, control = control, n = 5000, sigma = NA, 
+   power = 0.90, r = 1, design = 1, sided.test = 1, conf.level = 0.95, 
+   method = "cohort.count")
 
 ## The minimum detectable risk ratio >1 is 1.65. The maximum detectable
 ## risk ratio <1 is 0.50.
@@ -194,7 +196,7 @@ epi.studysize(treat = NA, control = control, n = 5000, sigma = NA, power = 0.90,
 ## indicate that 0.30 of the male population are smokers.
 
 epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30, 
-   power = 0.90, r = 1, conf.level = 0.95, sided.test = 2, 
+   power = 0.90, r = 1, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "case.control")
 
 ## A total of 376 men need to be sampled: 188 cases and 188 controls.
@@ -208,10 +210,46 @@ epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30,
 
 n <- 188 + 940
 epi.studysize(treat = 2/100, control = 1/100, n = n, sigma = 0.30, 
-   power = NA, r = 0.2, conf.level = 0.95, sided.test = 2, 
+   power = NA, r = 0.2, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "case.control")
 
 ## The power of this study, with the given sample size allocation is 0.99.
+
+
+## EXAMPLE 10:
+## A study is to be carried out to assess the effect of a new treatment for
+## anoestrus in dairy cattle. What is the required sample size if we expect 
+## the proportion of cows responding in the treatment to be 0.30 and the 
+## proportion of cows responding in the control group to be 0.15. 
+## The required power for this study is 0.80 using a two-sided 0.05 test:
+
+epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA, 
+   power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95, 
+   method = "cohort.count")
+
+
+## A total of 242 cows are required: 121 in the treatment group and 121 in 
+## the control group.
+
+## Assume now that this study is going to be carried out using animals from a 
+## number of herds. What is the required sample size when you account for the 
+## observation that response to treatment is likely to cluster across herds. 
+
+## For the exercise, assume that the intra-cluster correlation coefficient 
+## (the rate of homogeneity, rho) is 0.05 and the average number of cows per
+## herd is 30. Calculate the design effect, given 
+## rho = (design - 1) / (nbar - 1), where nbar equals the average number of 
+## individuals per cluster:
+
+design <- 0.05 * (30 - 1) + 1
+epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA, 
+   power = 0.80, r = 1, design = design, sided.test = 2, conf.level = 0.95, 
+   method = "cohort.count")
+
+## A total of 591 cows are required for this study: 296 in the treatment group
+## and 296 in the control group,
+
+
 }
 
 \keyword{univar}

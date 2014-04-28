@@ -12,18 +12,14 @@ An R package for the analysis of epidemiological data.
 epi.about()
 }
 
-\details{
-The most recent version of the \code{epiR} package can be obtained from: \url{http://epicentre.massey.ac.nz/}
-}
-
 \author{
-Mark Stevenson, EpiCentre, IVABS, Massey University, Palmerston North New Zealand.
+Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Faculty of Veterinary Science, University of Melbourne, Parkville, Victoria 3052, Australia.
 
 Telmo Nunes, UISEE/DETSA, Faculdade de Medicina Veterinaria --- UTL, Rua Prof. Cid dos Santos, 1300 - 477 Lisboa Portugal.
 
 Javier Sanchez, Atlantic Veterinary College, University of Prince Edward Island, Charlottetown, Prince Edward Island, C1A 4P3, Canada.
 
-Ron Thornton, MAF New Zealand, PO Box 2526 Wellington, New Zealand.
+Ron Thornton, Ministry for Primary Industries New Zealand, PO Box 2526 Wellington, New Zealand.
 }
 
 \keyword{univar}
