@@ -85,16 +85,19 @@ n.crude
 
 ## EXAMPLE 3 (continued):
 ## Being seropositive to brucellosis is likely to cluster within herds.
-## Otte and Gumm (1997) cite the intraclass correlation coefficient of
+## Otte and Gumm (1997) cite the intraclass correlation coefficient (rho) of
 ## Brucella abortus to be in the order of 0.09. Adjust the sample size
 ## estimate to account for clustering at the herd level. Assume that, on
 ## average, herds in your area of interest are comprised of 100 animals.
 
-## rho = (design - 1) / (nbar - 1)
-## D <- rho * (nbar - 1) + 1
+## Let D equal the design effect and nbar equal the average number of 
+## individuals per cluster:
 
-## Above, rho equals the intracless correlation coefficient and nbar equals
-## the average number of individuals per cluster.
+## rho = (D - 1) / (nbar - 1)
+
+## Solving for D gives you
+
+## D <- rho * (nbar - 1) + 1
 
 rho <- 0.09; nbar <- 100
 D <- rho * (nbar - 1) + 1

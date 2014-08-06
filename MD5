@@ -1,4 +1,4 @@
-8caff2c87808504f8ba144515bf7661d *DESCRIPTION
+bfb0534fa935f2a506ee736f90576fad *DESCRIPTION
 4b3574acb7141d90fde83793dd2971be *NAMESPACE
 22e92a105e5bafa4cda17883073c2a5b *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
@@ -26,7 +26,7 @@ e935ed017215d39b2225f61b23de3bfd *R/epi.herdtest.R
 9c2fdb99c5701dca5359dca3e651e5a2 *R/epi.insthaz.R
 f3d340bc5cd457e8600cbe24390c5ab8 *R/epi.interaction.r
 2a952ef6d504f5a1d6d1e39fd3d42666 *R/epi.iv.R
-a6c88e967df21b7666da87350c0a56cb *R/epi.kappa.R
+098e035a862a53f70d3c0490384bc8e1 *R/epi.kappa.R
 dd5a6b971d1652170e84fa8a709215a9 *R/epi.ltd.R
 4c9176c6dbfbb04dac7159ca7527b888 *R/epi.mh.R
 3d98611d0dba6b2b3d0fc12fac16b800 *R/epi.nomogram.R
@@ -48,7 +48,7 @@ fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 1571a2a597fbdf06a71a49eafc30e016 *man/epi.2by2.Rd
 bf7ef9dbf069d206b52f03ccf25f4744 *man/epi.RtoBUGS.Rd
 0c9b04bc2d19935d734fa660831e0aff *man/epi.SClip.Rd
-a8ba6434bd2698b6d63245597fe02d85 *man/epi.about.Rd
+cca870dcc7221fc78b2adf17121ab4e4 *man/epi.about.Rd
 0153a33f6f4ef4f4adb2a5ef8205f79b *man/epi.asc.Rd
 e369812dc14ce31c04d6ac0cb91ca2e4 *man/epi.bohning.Rd
 f2590484d82cca9cf53f382b1c2321f7 *man/epi.ccc.Rd
@@ -74,7 +74,7 @@ a543a406f2e65a4491b248e07f6d6d93 *man/epi.indirectadj.Rd
 c7d89bc6c96dc8dde6c4793982960c85 *man/epi.insthaz.Rd
 826cd35a738b8c4fc8be02319f292c5a *man/epi.interaction.Rd
 35859ed56cd79a40bd8f87855160ad9a *man/epi.iv.Rd
-d8727003bbe57063dae1b19400e022c0 *man/epi.kappa.Rd
+09edff0d4a987682013d795fab061873 *man/epi.kappa.Rd
 8a701be8448d07a9352101b83b955922 *man/epi.ltd.Rd
 bc96a2d036ef70851bb08581300677ed *man/epi.mh.Rd
 bc1165287dfa87662f653457a7a5aac6 *man/epi.nomogram.Rd
@@ -84,8 +84,8 @@ cc7f75a85351f5542916421fa4b7e648 *man/epi.offset.Rd
 94d5f2ced08ba7556c21e6360d5f54b8 *man/epi.popsize.Rd
 d1796a40a7f4d23429458f0f8f489274 *man/epi.prcc.Rd
 9c9de8405822d52a347f629ec8c6ed66 *man/epi.prev.Rd
-343836fb3af162d20f3b91114ced4dee *man/epi.simplesize.Rd
+ab614b1956d425153c98ce26ba172a69 *man/epi.simplesize.Rd
 b6389f885f3fdf71f58c115334f230d4 *man/epi.smd.Rd
 37c9bcc28fb98c218ef69aa9fec41958 *man/epi.stratasize.Rd
-ea834e7ed898c6845fc82d340e6ce477 *man/epi.studysize.Rd
+23c0b765c4225961b95f708bef9850dd *man/epi.studysize.Rd
 15aaf2fea7992db0f120035c473cec1b *man/epi.tests.Rd

@@ -116,10 +116,10 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 
 ## EXAMPLE 3 (from Woodward pp 403 - 404):
 ## A government initiative has decided to reduce the prevalence of male  
-## smoking to, at most, 0.30. A sample survey is planned to test, at the 
-## 0.05 level, the hypothesis that the proportion of smokers in the male 
-## population is 0.30 against the one-sided alternative that it is greater.
-## The survey should be able to find a prevalence of 0.32, when it is true,
+## smoking to, at most, 30\%. A sample survey is planned to test, at the 
+## 0.05 level, the hypothesis that the percentage of smokers in the male 
+## population is 30\% against the one-sided alternative that it is greater.
+## The survey should be able to find a prevalence of 32\%, when it is true,
 ## with 0.90 power. How many men need to be sampled?
 
 epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90, 
@@ -131,7 +131,7 @@ epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90,
 
 ## EXAMPLE 4 (from Therneau and Grambsch p 63):
 ## The 5-year survival probability of patients receiving a standard treatment 
-## 0.30 and we anticipate that a new treatment will increase it to 0.45. 
+## is 0.30 and we anticipate that a new treatment will increase it to 0.45. 
 ## Assume that a study will use a two-sided test at the 0.05 level with 0.90
 ## power to detect this difference. How many events are required?
 
@@ -158,12 +158,13 @@ epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90,
 ## EXAMPLE 6 (from Woodward p 406):
 ## A cohort study of smoking and coronary heart disease (CHD) in middle aged men
 ## is planned. A sample of men will be selected at random from the population
-## and will be asked to complete a questionnaire. The follow-up period will be
-## 5 years. The investigators would like to be 0.90 sure of being able to 
-## detect when the risk ratio of CHD is 1.4 for smokers, using a 0.05
-## significance test. Previous evidence suggests that the death rate in 
-## non-smokers is 413 per 100000 per year. Assuming equal numbers of smokers
-## and non-smokers are sampled, how many should be sampled overall?
+## and those that agree to participate will be asked to complete a 
+## questionnaire. The follow-up period will be 5 years. The investigators would 
+## like to be 0.90 sure of being able to detect when the risk ratio of CHD 
+## is 1.4 for smokers, using a 0.05 significance test. Previous evidence 
+## suggests that the incidence risk of death rate in non-smokers is 413 per 
+## 100,000 per year. Assuming equal numbers of smokers and non-smokers are 
+## sampled, how many men should be sampled overall?
 
 treat = 1.4 * (5 * 413)/100000
 control = (5 * 413)/100000
@@ -206,7 +207,7 @@ epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30,
 ## Suppose we wish to determine the power to detect an approximate risk
 ## ratio of 2.0 using a two-sided 0.05 test when 188 cases and 940 controls
 ## are available (that is, the ratio of cases to controls is 1:5). Assume 
-## a 0.30 prevalence of smoking in the male population.
+## the prevalence of smoking in the male population is 0.30.
 
 n <- 188 + 940
 epi.studysize(treat = 2/100, control = 1/100, n = n, sigma = 0.30, 
@@ -219,9 +220,9 @@ epi.studysize(treat = 2/100, control = 1/100, n = n, sigma = 0.30,
 ## EXAMPLE 10:
 ## A study is to be carried out to assess the effect of a new treatment for
 ## anoestrus in dairy cattle. What is the required sample size if we expect 
-## the proportion of cows responding in the treatment to be 0.30 and the 
-## proportion of cows responding in the control group to be 0.15. 
-## The required power for this study is 0.80 using a two-sided 0.05 test:
+## the proportion of cows responding in the treatment group to be 0.30 and the 
+## proportion of cows responding in the control group to be 0.15? The required 
+## power for this study is 0.80 using a two-sided 0.05 test.
 
 epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA, 
    power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95, 
@@ -248,7 +249,6 @@ epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA,
 
 ## A total of 591 cows are required for this study: 296 in the treatment group
 ## and 296 in the control group,
-
 
 }
 

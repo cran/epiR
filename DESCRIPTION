@@ -1,15 +1,15 @@
 Package: epiR
-Version: 0.9-58
-Date: 2014-04-28
+Version: 0.9-59
+Date: 2014-08-06
 Title: An R package for the analysis of epidemiological data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos and Kazuki Yoshida
+Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida and Simon Firestone
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: An R package for the analysis of epidemiological data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, and computing confidence intervals around incidence risk and incidence rate estimates. Miscellaneous functions for use in meta-analysis, diagnostic test interpretation, and sample size calculations.
 Depends: R (>= 3.0.0), survival
 Suggests: MASS (>= 3.1-20)
 License: GPL (>= 2)
 URL: http://www.vet.unimelb.edu.au
-Packaged: 2014-04-28 07:50:44 UTC; Mark
+Packaged: 2014-08-06 11:25:46 UTC; Mark
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2014-04-28 15:20:38
+Date/Publication: 2014-08-06 15:44:05
