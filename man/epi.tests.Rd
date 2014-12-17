@@ -64,7 +64,7 @@ Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, 
 }
 
 \author{
-Mark Stevenson (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand).
+Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia).
 }
 
 \note{

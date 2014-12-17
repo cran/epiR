@@ -277,5 +277,21 @@ else if(ctype == "smr"){
         
    rval <- data.frame(est = smr, se = se.smr, lower = low, upper = up)
    }
+
+else if(ctype == "odds"){
+  ## Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables. American Journal of Epidemiology 100: 165 - 167
+  ## Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69.
+  ## Added 161214
+  if (is.matrix(dat) == FALSE) 
+    stop("Error: dat must be a two-column matrix")
+  
+  a <- dat[,1]; b <- dat[,2]
+  Al <- (qbinom(1 - N., size = a + b, prob = (a / (a + b)))) / (a + b)
+  Au <- (qbinom(N., size = a + b, prob = (a / (a + b)))) / (a + b)
+  odds.p <- (a / b)
+  odds.l <- (Al / (1 - Al))
+  odds.u <- (Au / (1 - Au))
+  rval <- data.frame(est = odds.p, lower = odds.l, upper = odds.u)
+}
    return(rval)
 }

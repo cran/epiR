@@ -13,9 +13,9 @@ epi.about()
 }
 
 \author{
-Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Faculty of Veterinary Science, University of Melbourne, Parkville, Victoria 3052, Australia.
+Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Faculty of Veterinary and Agricultural Sciences, University of Melbourne, Parkville, Victoria 3010, Australia.
 
-Simon Firestone, Faculty of Veterinary Science, University of Melbourne, Parkville, Victoria 3052, Australia.
+Simon Firestone, Faculty of Veterinary and Agricultural Sciences, University of Melbourne, Parkville, Victoria 3010, Australia.
 
 Telmo Nunes, UISEE/DETSA, Faculdade de Medicina Veterinaria --- UTL, Rua Prof. Cid dos Santos, 1300 - 477 Lisboa Portugal.
 

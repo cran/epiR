@@ -99,7 +99,7 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 }
 
 \author{
-Mark Stevenson, Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA) and Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
+Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia), Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA) and Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
 }
 
 \note{Measures of strength of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.

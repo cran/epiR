@@ -4,7 +4,6 @@
    z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
  
  if(method == "means" & !is.na(treat) & !is.na(control) & is.na(n) & !is.na(sigma) & !is.na(power)){
-  
   # Sample size. From Woodward p 398:
   z.beta <- qnorm(power, mean = 0, sd = 1) 
   delta <- abs(treat - control)
@@ -49,25 +48,43 @@
  if (method == "proportions" & !is.na(treat) & !is.na(control) & is.na(n) & !is.na(power)) {
   # Sample size.
   z.beta <- qnorm(power, mean = 0, sd = 1)
-  delta <- abs(treat - control)
-  n <- (1/delta^2) * ((z.alpha * sqrt(treat * (1 - treat))) + (z.beta * sqrt(control * (1 - control))))^2
+  # delta <- abs(treat - control)
+  # n <- (1/delta^2) * ((z.alpha * sqrt(treat * (1 - treat))) + (z.beta * sqrt(control * (1 - control))))^2
+  
+  # From Woodward's spreadsheet. Changed 130814:
+  lambda <- treat / control
+  Pc <- control * (r * lambda + 1) / (r + 1)
+  T1 <- (r + 1) / (r * (lambda - 1)^2 * control^2)
+  T2 <- (r + 1) * Pc *(1 - Pc)
+  T3 <- lambda * control * (1 - lambda * control) + r * control * (1 - control)
+  n <- T1 * (z.alpha * sqrt(T2) + z.beta * sqrt(T3))^2
   
   # Account for the design effect:
   n <- n * design
   
-  n.total <- 2 * ceiling(0.5 * n)
-  rval <- list(n.total = n.total)
+  # n.total <- 2 * ceiling(0.5 * n)
+  # rval <- list(n.total = n.total)
+  n.crude <- ceiling(n)
+  n.treat <- ceiling(n / (r + 1)) * r
+  n.control <- ceiling(n / (r + 1)) * 1
+  n.total <- n.treat + n.control
+  rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
   }
 
  else
  if (method == "proportions" & !is.na(treat) & !is.na(control) & !is.na(n) & is.na(power)) {
   # Power.
-  delta <- abs(treat - control)
-
   # Account for the design effect:
   n <- n / design
-  
-  z.beta <- ((delta * sqrt(n)) - (z.alpha * sqrt(treat * (1 - treat))))/(sqrt(control * (1 - control)))
+
+  # From Woodward's spreadsheet. Changed 130814:
+  lambda <- control / treat
+  Pc <- treat * (r * lambda + 1) / (r + 1)
+  T1 <- ifelse(lambda >= 1, treat * (lambda - 1) * sqrt(n * r), treat * (1 - lambda) * sqrt(n * r))
+  T2 <- z.alpha * (r + 1) * sqrt(Pc * (1 - Pc))
+  T3 <- (r + 1) * (lambda * treat * (1 - lambda * treat) + r * treat * (1 - treat))
+  z.beta <- (T1 - T2) / sqrt(T3)
+  # z.beta <- ((delta * sqrt(n)) - (z.alpha * sqrt(treat * (1 - treat))))/(sqrt(control * (1 - control)))
   power <- pnorm(z.beta, mean = 0, sd = 1)
   rval <- list(power = power)
   }
@@ -162,7 +179,7 @@
   
   beta <- sqrt(((z.alpha + z.beta)^2) / (n * p * q))
   delta <- exp(beta)
-  rval <- list(hazard = c(delta, 1/delta))
+  rval <- list(hazard = sort(c(delta, 1/delta)))
      }
 
  else 
@@ -224,7 +241,7 @@
   c <- Y - (r * (1 - pi) * Z)
   lambda.pos <- (1 / (2 * a)) * (b + sqrt(b^2 - 4 * a * c))
   lambda.neg <- (1 / (2 * a)) * (b - sqrt(b^2 - 4 * a * c))
-  rval <- list(lambda = c(lambda.neg, lambda.pos))
+  rval <- list(lambda = sort(c(lambda.neg, lambda.pos)))
      }
 
  else 
@@ -232,13 +249,25 @@
   # Sample size. From Woodward p 412:
   z.beta <- qnorm(power, mean = 0, sd = 1) 
   lambda <- treat / control
+  
   # For this function, 'sigma' is the proportion of study subjects exposed:
-  P <- sigma
-  pc. <- (P / (r + 1)) * ((r * lambda) / (1 + ((lambda - 1) * P)) + 1)
-  p1 <- (r + 1) * (1 + (lambda - 1) * P)^2 / (r * P^2 * (P - 1)^2 * (lambda - 1)^2)
-  p2 <- z.alpha * sqrt((r + 1) * pc. * (1 - pc.))
-  p3 <- z.beta * sqrt(((lambda * P * (1 - P)) / ((1 + (lambda - 1) * P)^2)) + (r * P * (1 - P)))
-  n <- p1 * (p2 + p3)^2
+  Pc <- (sigma / (r + 1)) * ((r * lambda / (1 + (lambda - 1) * sigma)) + 1)
+  T1 <- (r + 1) * (1 + (lambda - 1) * sigma)^2
+  T2 <- r * sigma^2 * (sigma - 1)^2 * (lambda - 1)^2
+  T3 <- z.alpha * sqrt((r + 1) * Pc * (1 - Pc))
+  T4 <- lambda * sigma * (1 - sigma)
+  T5 <- 1 + (lambda - 1) * sigma
+  T6 <- T4 / (T5^2)
+  T7 <- r * sigma * (1 - sigma)
+  T8 <- z.beta * sqrt(T6 + T7)
+  n <- (T1 / T2) * (T3 + T8)^2
+
+  # P <- sigma
+  # pc. <- (P / (r + 1)) * ((r * lambda) / (1 + ((lambda - 1) * P)) + 1)
+  # p1 <- (r + 1) * (1 + (lambda - 1) * P)^2 / (r * P^2 * (P - 1)^2 * (lambda - 1)^2)
+  # p2 <- z.alpha * sqrt((r + 1) * pc. * (1 - pc.))
+  # p3 <- z.beta * sqrt(((lambda * P * (1 - P)) / ((1 + (lambda - 1) * P)^2)) + (r * P * (1 - P)))
+  # n <- p1 * (p2 + p3)^2
   
   # Account for the design effect:
   n <- n * design
@@ -274,7 +303,7 @@
      }
 
   else 
-  if(method == "case.control" & !is.na(treat) & !is.na(control) & !is.na(n) & !is.na(power)){
+  if(method == "case.control" & is.na(treat) & is.na(control) & !is.na(n) & !is.na(power)){
   # Risk ratio to be detected. From Woodward p 409:
   z.beta <- qnorm(power, mean = 0, sd = 1) 
   P <- sigma
@@ -286,7 +315,7 @@
   b <- 1 + (2 * r * P)
   lambda.pos <- 1 + ((-b + sqrt(b^2 - (4 * a * (r + 1)))) / (2 * a))
   lambda.neg <- 1 + ((-b - sqrt(b^2 - (4 * a * (r + 1)))) / (2 * a))
-  rval <- list(lambda = c(lambda.neg, lambda.pos))
-     }
+  rval <- list(lambda = sort(c(lambda.neg, lambda.pos)))
+  }
 rval
 }

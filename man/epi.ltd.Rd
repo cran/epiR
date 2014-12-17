@@ -27,7 +27,7 @@ A data frame with nine elements: \code{ckey} cow identifier, \code{lact} lactati
 }
 
 \author{
-Nicolas Lopez-Villalobos and Mark Stevenson (IVABS, Massey University, Palmerston North New Zealand). 
+Nicolas Lopez-Villalobos (IVABS, Massey University, Palmerston North New Zealand) and Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia). 
 }
 
 \references{

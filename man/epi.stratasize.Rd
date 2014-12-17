@@ -36,7 +36,7 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 }
 
 \author{
-Mark Stevenson (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand)
+Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia).
 
 Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island, Charlottetown  Prince Edward Island, C1A 4P3, Canada).
 }

@@ -7,7 +7,7 @@ Estimate the sample size to compare means, proportions, and survival
 }
 
 \description{
-Computes the sample size, power, and minimum detectable difference for cohort studies (using count data), case control studies, when comparing means and survival. 
+Computes the sample size, power, and minimum detectable difference for cohort studies (using count data), case-control studies, when comparing means and survival. 
 }
 
 \usage{
@@ -41,7 +41,7 @@ When \code{method = "cohort.count"} the argument \code{treat} defines the estima
 
 When \code{method = "case.control"} the argument \code{treat} defines the estimated incidence risk (cumulative incidence) of the event of interest in the treatment group and \code{control} defines the estimated incidence risk of the event of interest in the control group. The argument \code{sigma} is the expected proportion of study subjects exposed to the risk factor of interest (see Woodward pp 410 - 412).
 
-In case control studies sample size estimates are worked out on the basis of an expected odds (or risk) ratio. When \code{method = "case.control"} the estimated incidence risk estimates in the \code{treat} and \code{control} groups are used to define the expected risk ratio. See example 7 below, taken from Woodward p 412. 
+In case-control studies sample size estimates are worked out on the basis of an expected odds (or risk) ratio. When \code{method = "case.control"} the estimated incidence risk estimates in the \code{treat} and \code{control} groups are used to define the expected risk ratio. See example 7 below, taken from Woodward p 412. 
 
 For \code{method = "proportions"} it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. In contrast, \code{method = "cohort.count"} relates to the two-sample problem where neither proportion is known (or assumed, at least). Thus, there is much more uncertainty in the \code{method = "cohort.count"} situation (compared with \code{method = "proportions"}) and correspondingly a requirement for a much larger sample size. Generally, \code{method = "cohort.count"} is more useful in practice. \code{method = "proportions"} is used in special situations, such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
 }
@@ -66,7 +66,7 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 }
 
 \note{
-The power of a study is its ability to demonstrate an association, given that an association actually exists.
+The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
 The odds ratio and the risk ratio are approximately equal when the event of interest is rare. In this function \code{method = "case.control"} returns the sample size required to detect an approximate risk ratio in a case-control study (see Woodward p 412). 
 
@@ -125,8 +125,8 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95, method = "proportions")
    
-## ## A total of 4568 men should be sampled: 2284 in the treatment group and
-## 2284 in the control group. 
+## ## A total of 18,315 men should be sampled: 9158 in the treatment group and
+## 9158 in the control group. 
 
 
 ## EXAMPLE 4 (from Therneau and Grambsch p 63):
@@ -172,7 +172,7 @@ epi.studysize(treat = treat, control = control, n = NA, sigma = NA,
    power = 0.90, r = 1, design = 1, sided.test = 1, conf.level = 0.95, 
 method = "cohort.count")
 
-## A total of 12130 men need to be sampled (6065 smokers and 6065 non-smokers).
+## A total of 12,130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
 
 ## EXAMPLE 7 (from Woodward p 406):
@@ -194,7 +194,7 @@ epi.studysize(treat = NA, control = control, n = 5000, sigma = NA,
 ## smoking status with a sample of controls. Assuming an equal number of 
 ## cases and controls, how many are needed to detect an approximate risk
 ## ratio of 2.0 with 0.90 power using a two-sided 0.05 test? Previous surveys
-## indicate that 0.30 of the male population are smokers.
+## have shown that around 0.30 of the male population are smokers.
 
 epi.studysize(treat = 2/100, control = 1/100, n = NA, sigma = 0.30, 
    power = 0.90, r = 1, design = 1, sided.test = 2, conf.level = 0.95, 
@@ -228,7 +228,6 @@ epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA,
    power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "cohort.count")
 
-
 ## A total of 242 cows are required: 121 in the treatment group and 121 in 
 ## the control group.
 
@@ -247,7 +246,7 @@ epi.studysize(treat = 0.30, control = 0.15, n = NA, sigma = NA,
    power = 0.80, r = 1, design = design, sided.test = 2, conf.level = 0.95, 
    method = "cohort.count")
 
-## A total of 591 cows are required for this study: 296 in the treatment group
+## A total of 592 cows are required for this study: 296 in the treatment group
 ## and 296 in the control group,
 
 }
