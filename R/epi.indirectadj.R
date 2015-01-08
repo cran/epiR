@@ -18,7 +18,7 @@
     
     # Crude risk by strata:
     # Turn 'obs' into a table object so calculations can easily be done by strata:
-    t.obs <- by(data = obs, INDICES = obs, FUN = sum)
+    t.obs <- by(data = obs, INDICES = rownames(obs), FUN = sum)
     t.exp <- by(data = tmp$exp, INDICES = tmp$strata, FUN = sum)
     t.pop <- by(data = tmp$pop, INDICES = tmp$strata, FUN = sum)
     

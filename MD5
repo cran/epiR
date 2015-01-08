@@ -1,4 +1,4 @@
-ee0ed868ab15786edf745b1bc20e0879 *DESCRIPTION
+d50904814fe499c5cd67c140841865c9 *DESCRIPTION
 4b3574acb7141d90fde83793dd2971be *NAMESPACE
 22e92a105e5bafa4cda17883073c2a5b *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
@@ -23,7 +23,7 @@ da3832a85a8085b34f75455e6defbf24 *R/epi.dgamma.R
 276cc7e048b9b12cad3c16fe60190600 *R/epi.edr.R
 658381258fe39d7cdbe6253c66a49034 *R/epi.empbayes.R
 e935ed017215d39b2225f61b23de3bfd *R/epi.herdtest.R
-4c623da6adf1b9356ebcec299700c58c *R/epi.indirectadj.R
+566a1b7408b9ecb76c20bb182fb11d18 *R/epi.indirectadj.R
 9c2fdb99c5701dca5359dca3e651e5a2 *R/epi.insthaz.R
 f3d340bc5cd457e8600cbe24390c5ab8 *R/epi.interaction.r
 2a952ef6d504f5a1d6d1e39fd3d42666 *R/epi.iv.R
@@ -72,7 +72,7 @@ b561e5757a9fba546bc37cbfa5a6d6bf *man/epi.edr.Rd
 623bf229ccd13149e887c7760b3baf44 *man/epi.epidural.Rd
 823c79c884aada4064fd2e901eb30958 *man/epi.herdtest.Rd
 8bb745f9e835adcd99f19ffbbf48d8ed *man/epi.incin.Rd
-a543a406f2e65a4491b248e07f6d6d93 *man/epi.indirectadj.Rd
+bbfcecb93c8519e9ccbef8d92991e42b *man/epi.indirectadj.Rd
 c7d89bc6c96dc8dde6c4793982960c85 *man/epi.insthaz.Rd
 826cd35a738b8c4fc8be02319f292c5a *man/epi.interaction.Rd
 35859ed56cd79a40bd8f87855160ad9a *man/epi.iv.Rd
