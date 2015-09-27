@@ -88,26 +88,25 @@ n.crude
 ## Otte and Gumm (1997) cite the intraclass correlation coefficient (rho) of
 ## Brucella abortus to be in the order of 0.09. Adjust the sample size
 ## estimate to account for clustering at the herd level. Assume that, on
-## average, herds in your area of interest are comprised of 100 animals.
+## average, 20 animals will be sampled per herd:
 
 ## Let D equal the design effect and nbar equal the average number of 
 ## individuals per cluster:
 
 ## rho = (D - 1) / (nbar - 1)
 
-## Solving for D gives you
-
+## Solving for D:
 ## D <- rho * (nbar - 1) + 1
 
-rho <- 0.09; nbar <- 100
+rho <- 0.09; nbar <- 20
 D <- rho * (nbar - 1) + 1
 
 n.adj <- ceiling(n.crude * D)
 n.adj
 
 ## After accounting for the presence of clustering at the herd level we
-## estimate that a total of 5392 cattle need to be sampled to meet
-## the survey requirements.
+## estimate that a total of 1475 cattle need to be sampled to meet
+## the requirements of the survey.
 
 }
 

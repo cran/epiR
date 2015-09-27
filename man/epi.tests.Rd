@@ -22,7 +22,7 @@ epi.tests(dat, conf.level = 0.95)
   \item{dat}{an object of class \code{table} containing the individual cell frequencies (see below).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{x, object}{an object of class \code{epi.tests}.}
-  \item{...}{Ignored.}
+  \item{\dots}{Ignored.}
 }
 
 \details{

@@ -5,11 +5,15 @@
 \title{The library epiR: summary information}
 
 \description{
-An R package for the analysis of epidemiological data.
+Tools for the analysis of epidemiological data.
 }
 
 \usage{
 epi.about()
+}
+
+\details{
+The most recent version of the \code{epiR} package can be obtained from: \url{http://fvas.unimelb.edu.au/veam}
 }
 
 \author{

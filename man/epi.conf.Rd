@@ -187,15 +187,15 @@ round(epi.conf(dat, ctype = "smr"), digits = 2)
 ## confidence interval for this estimate?
 
 ## Calculate the design effect, given rho = (design - 1) / (nbar - 1), where
-## nbar equals the average number of individuals per cluster:
+## nbar equals the average number of individuals sampled per cluster:
 
-design <- 0.4 * (30 - 1) + 1
+D <- 0.4 * (30 - 1) + 1
 
 ## The design effect is 12.6. Now calculate the proportion protected:
 
 dat <- as.matrix(cbind(5898, 10363))
 epi.conf(dat, ctype = "prevalence", method = "fleiss", N = 1000000, 
-   design = design, conf.level = 0.95)
+   design = D, conf.level = 0.95)
 
 ## The estimated proportion of the population protected is 0.57 (95\% CI
 ## 0.53 -- 0.60). If we had mistakenly assumed that data were a simple random 

@@ -2,52 +2,48 @@
 
 \alias{epi.directadj}
 
-\title{Directly adjusted incidence risk estimates}
+\title{Directly adjusted incidence rate estimates}
 
 \description{
-Compute directly adjusted incidence risks.}
+Compute directly adjusted incidence rates.}
 
 \usage{
 epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. If there are no covariates to be adjusted for \code{obs} will be a one column matrix. The dimensions of the \code{obs} matrix must be named (see the examples, below).}
-  \item{pop}{a matrix representing population size. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population size within each stratum. If there are no covariates \code{pop} will be a one column matrix. The dimensions of the \code{pop} matrix must be named (see the examples, below).}
-  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for.}
+  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. If there are no covariates to be adjusted for \code{obs} will be a one column matrix. The rows the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{pop}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. If there are no covariates \code{pop} will be a one column matrix. The rows the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for the covariate(s).}
   \item{units}{multiplier for the incidence risk estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
-This function returns unadjusted (crude) and directly adjusted incidence risk estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e. adjust) for when calculating the directly adjusted incidence risk estimates.
+This function returns unadjusted (crude) and directly adjusted incidence rate estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e. adjust) for when calculating the directly adjusted incidence rate estimates.
 
-As an example, data were collected to identify the relationship between the incidence of mongoloidism and birth order in Michigan (USA) from 1950 to 1964 (Fleiss 1981, page 240). Of interest was to provide incidence risk estimates for each of the birth order categories that were adjusted for the effect of maternal age. Using \code{epi.directadj} rows represent the strata (birth order: 1, 2, 3, 4, and 5+) and columns represent the variable to be adjusted for (maternal age: less than 20 years of age, 20 - 24 years, 25 - 29 years, etc). The following table show the count of mongoloid births during the study period:
-
-\tabular{lllllll}{
-   \tab -20 \tab 20-24 \tab 25-29 \tab 30-34 \tab 35-39 \tab 40+ \cr
-1  \tab 107 \tab   141 \tab    60 \tab    40 \tab    39 \tab  25 \cr
-2  \tab  25 \tab   150 \tab   110 \tab    84 \tab    82 \tab  39 \cr
-3  \tab   3 \tab    71 \tab   114 \tab   103 \tab   108 \tab  75 \cr
-4  \tab   1 \tab    26 \tab    64 \tab    89 \tab   137 \tab  96 \cr
-5+ \tab   0 \tab     8 \tab    63 \tab   112 \tab   262 \tab 295 \cr
-}
-
-Data in this format would be presented as object \code{obs} for \code{epi.directadj}.
+When the outcome of interest is rare, the confidence intervals returned by this function (based on Fay and Feuer, 1997) are appropriate for incidence risk data. In this situation the argument \code{pop} represents the size of the population at risk (instead of population time at risk).
 } 
 
 \value{
 A list containing the following:
-  \item{crude.strata}{the crude incidence risk estimates for each stratum.}
-  \item{adj.strata}{the directly adjusted incidence risk estimates for each stratum.}
+  \item{crude}{the crude incidence rate estimates for each stratum-covariate combination.}
+  \item{crude.strata}{the crude incidence rate estimates for each stratum.}
+  \item{adj.strata}{the directly adjusted incidence rate estimates for each stratum.}
 }
 
 \references{
 Fay M, Feuer E (1997). Confidence intervals for directly standardized rates: A method based on the gamma distribution. Statistics in Medicine 16: 791 - 801.
 
-Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York, USA.
+Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York, USA, p 240.
 
 Greenland S, Rothman KJ. Introduction to stratified analysis. In: Rothman KJ, Greenland S (1998). Modern Epidemiology. Lippincott Williams, & Wilkins, Philadelphia, pp. 260 - 265.
+
+Thrusfield M (2007). Veterinary Epidemiology, Blackwell Publishing, London, UK, pp. 63 - 64.
+}
+
+\author{
+Thanks to Karl Ove Hufthammer for helpful suggestions to improve the execution and documentation of this function. 
 }
 
 \seealso{
@@ -55,8 +51,10 @@ Greenland S, Rothman KJ. Introduction to stratified analysis. In: Rothman KJ, Gr
 }
 
 \examples{
+## EXAMPLE 1 (from Thrusfield 2007 pp. 63 - 64):
 ## A study was conducted to estimate the seroprevalence of leptospirosis
-## in dogs in Glasgow and Edinburgh, Scotland. The following data were 
+## in dogs in Glasgow and Edinburgh, Scotland. For the matrix titled pop
+## the numbers represent dog-years at risk. The following data were 
 ## obtained for male and female dogs:
 
 obs <- matrix(data = c(15,46,53,16), nrow = 2, byrow = TRUE, 
@@ -72,18 +70,25 @@ std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE,
 
 epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
 
+## > $crude
+## >   strata cov       est     lower     upper
+## > 1     ED   M 0.3125000 0.1749039 0.5154212
+## > 2     GL   M 0.2944444 0.2205591 0.3851406
+## > 3     ED   F 0.2169811 0.1588575 0.2894224
+## > 4     GL   F 0.2253521 0.1288082 0.3659577
+
 ## > $crude.strata
-## >          est     lower     upper
-## > ED 0.2346154 0.1794622 0.3013733
-## > GL 0.2749004 0.2138889 0.3479040
+## >  strata       est     lower     upper
+## > 1     ED 0.2346154 0.1794622 0.3013733
+## > 2     GL 0.2749004 0.2138889 0.3479040
 
 ## > $adj.strata
-## >          est     lower     upper
-## > ED 0.2647406 0.1866047 0.3692766
-## > GL 0.2598983 0.1964162 0.3406224
+## >   strata       est     lower     upper
+## > 1     ED 0.2647406 0.1866047 0.3692766
+## > 2     GL 0.2598983 0.1964162 0.3406224
 
 ## The confounding effect of sex has been removed by the gender-adjusted 
-## incidence risk estimates.
+## incidence rate estimates.
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

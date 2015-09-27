@@ -7,7 +7,7 @@ Write matrix to an ASCII raster file
 }
 
 \description{
-Writes a data frame to an ASCII raster file, suitable for display in ArcView or ArcGIS.
+Writes a data frame to an ASCII raster file, suitable for display in a Geographic Information System.
 }
 
 \usage{
@@ -24,7 +24,7 @@ epi.asc(dat, file, xllcorner, yllcorner, cellsize, na = -9999)
 }
 
 \value{
-Writes an ASCII raster file (typically with \code{*.asc} extension), suitable for display in a GIS package.
+Writes an ASCII raster file (typically with \code{*.asc} extension), suitable for display in a Geographic Information System.
 }
 
 \note{

@@ -74,7 +74,7 @@ When \code{method = "proportions"} values need to be entered for \code{control},
 }
 
 \examples{
-## EXAMPLE 1 (from Woodward p 399):
+## EXAMPLE 1 (from Woodward 2005 p. 399):
 ## Supposed we wish to test, at the 5\% level of significance, the hypothesis
 ## that cholesterol means in a population are equal in two study years against 
 ## the one-sided alternative that the mean is higher in the second of the 
@@ -91,7 +91,7 @@ When \code{method = "proportions"} values need to be entered for \code{control},
 ## the first year and 170 in the second year.
 
 
-## EXAMPLE 2 (from Woodward pp 399 - 400):
+## EXAMPLE 2 (from Woodward 2005 pp. 399 - 400):
 ## Women taking oral contraceptives sometimes experience anaemia due to 
 ## impaired iron absorption. A study is planned to compare the use of iron
 ## tablets against a course of placebos. Oral contraceptive users are 
@@ -114,7 +114,7 @@ epi.studysize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90,
 ## times as many (56) to the iron treatment group.
 
 
-## EXAMPLE 3 (from Woodward pp 403 - 404):
+## EXAMPLE 3 (from Woodward 2005 pp. 403 - 404):
 ## A government initiative has decided to reduce the prevalence of male  
 ## smoking to, at most, 30\%. A sample survey is planned to test, at the 
 ## 0.05 level, the hypothesis that the percentage of smokers in the male 
@@ -129,7 +129,7 @@ epi.studysize(treat = 0.30, control = 0.32, n = NA, sigma = NA, power = 0.90,
 ## 9158 in the control group. 
 
 
-## EXAMPLE 4 (from Therneau and Grambsch p 63):
+## EXAMPLE 4 (from Therneau and Grambsch 2000 p. 63):
 ## The 5-year survival probability of patients receiving a standard treatment 
 ## is 0.30 and we anticipate that a new treatment will increase it to 0.45. 
 ## Assume that a study will use a two-sided test at the 0.05 level with 0.90
@@ -142,7 +142,7 @@ epi.studysize(treat = 0.45, control = 0.30, n = NA, sigma = NA, power = 0.90,
 ## assign 125 individuals to the treatment group and 125 to the control group.
 
 
-## EXAMPLE 5 (from Therneau and Grambsch p 63):
+## EXAMPLE 5 (from Therneau and Grambsch 2000 p. 63):
 ## What is the minimum detectable hazard in a study involving 500 subjects where 
 ## the treatment to control ratio is 1:1, assuming a power of 0.90 and a
 ## 2-sided test at the 0.05 level?
@@ -155,7 +155,7 @@ epi.studysize(treat = NA, control = NA, n = 500, sigma = NA, power = 0.90,
 ## treatment group and 250 in the controls) is 1.33.
 
 
-## EXAMPLE 6 (from Woodward p 406):
+## EXAMPLE 6 (from Woodward 2005 p. 406):
 ## A cohort study of smoking and coronary heart disease (CHD) in middle aged men
 ## is planned. A sample of men will be selected at random from the population
 ## and those that agree to participate will be asked to complete a 
@@ -175,7 +175,7 @@ method = "cohort.count")
 ## A total of 12,130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
 
-## EXAMPLE 7 (from Woodward p 406):
+## EXAMPLE 7 (from Woodward 2005 p. 406):
 ## Say, for example, we are only able to enrol 5000 subjects into the study
 ## described above. What is the minimum and maximum detectable risk ratio?
 
@@ -188,7 +188,7 @@ epi.studysize(treat = NA, control = control, n = 5000, sigma = NA,
 ## risk ratio <1 is 0.50.
 
 
-## EXAMPLE 8 (from Woodward p 412):
+## EXAMPLE 8 (from Woodward 2005 p. 412):
 ## A case-control study of the relationship between smoking and CHD is 
 ## planned. A sample of men with newly diagnosed CHD will be compared for
 ## smoking status with a sample of controls. Assuming an equal number of 

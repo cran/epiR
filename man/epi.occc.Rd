@@ -1,8 +1,8 @@
 \name{epi.occc}
 
 \alias{epi.occc}
-
 \alias{print.epi.occc}
+\alias{summary.epi.occc}
 
 \title{
 Overall concordance correlation coefficient (OCCC)
@@ -13,32 +13,27 @@ Overall concordance correlation coefficient (OCCC) for agreement on a continuous
 }
 
 \usage{
-epi.occc(x, na.rm = FALSE, pairs = FALSE)
+epi.occc(dat, na.rm = FALSE, pairs = FALSE)
 
 \method{print}{epi.occc}(x, ...)
+
+\method{summary}{epi.occc}(object, ...)
 }
 
 \arguments{
-  \item{x}{
-    a matrix, or a matrix like object. Rows correspond to cases/observations, columns corresponds to raters/variables.
-  }
-  \item{na.rm}{
-    logical. Should missing values (including \code{NaN}) be removed?
-  }
-  \item{pairs}{
-    logical. Should the return object contain pairwise statistics? See Details.
-  }
-  \item{\dots}{
-    further arguments passed to \code{print} methods.
-  }
+  \item{dat}{a matrix, or a matrix like object. Rows correspond to cases/observations, columns corresponds to raters/variables.}
+  \item{na.rm}{logical. Should missing values (including \code{NaN}) be removed?}
+  \item{pairs}{logical. Should the return object contain pairwise statistics? See Details.}
+  \item{x, object}{an object of class \code{epi.occc}.}
+  \item{\dots}{further arguments passed to \code{print} methods.}
 }
 
 \details{
-The index proposed by Barnhart et al. (2002) is the same as the index suggested by Lin (1989) in the section of future studies with correction of typographical error in Lin (2000).
+The index proposed by Barnhart et al. (2002) is the same as the index suggested by Lin (1989) in the section of future studies with a correction of a typographical error in Lin (2000).
 }
 
 \value{
-An object of class 'occc' with the following list elements (notation follows Barnhart et al. 2002):
+An object of class \code{epi.occc} with the following list elements (notation follows Barnhart et al. 2002):
 
 \itemize{
   \item{\code{occc}: }{the value of the overall concordance correlation coefficient
@@ -65,7 +60,7 @@ An object of class 'occc' with the following list elements (notation follows Bar
           (\eqn{u_{jk}}{u_jk}),}
     }
   }
-  \item{\code{data.name}: }{name of the input data \code{x}.}
+  \item{\code{data.name}: }{name of the input data \code{dat}.}
 }
 }
 
@@ -89,8 +84,10 @@ Peter Solymos, solymos@ualberta.ca.
 ## Generate some artificial ratings data:
 set.seed(1234)
 p <- runif(10, 0, 1)
-(x <- replicate(5, rbinom(10, 4, p) + 1))
-(z <- epi.occc(x, pairs = TRUE))
-str(z)
+x <- replicate(n = 5, expr = rbinom(10, 4, p) + 1)
+
+rval <- epi.occc(dat = x, pairs = TRUE)
+print(rval); summary(rval)
+
 }
-\keyword{ htest }
+\keyword{htest}

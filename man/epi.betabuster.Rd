@@ -36,7 +36,7 @@ A list containing the following:
 }
 
 \details{
-The beta distribution has two parameters: \code{shape1} and \code{shape2}, corresponding to \code{a} and \code{b} in the original verion of BetaBuster. If \code{r} equals the number of times an event has occurred after \code{n} trials, \code{shape1} = \code{r + 1} and \code{shape2} = \code{n - r + 1}.
+The beta distribution has two parameters: \code{shape1} and \code{shape2}, corresponding to \code{a} and \code{b} in the original verion of BetaBuster. If \code{r} equals the number of times an event has occurred after \code{n} trials, \code{shape1} = \code{(r + 1)} and \code{shape2} = \code{(n - r + 1)}.
 
 BetaBuster can be downloaded from \url{http://www.ics.uci.edu/~wjohnson/BIDA/betabuster.zip}.
 }

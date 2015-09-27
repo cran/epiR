@@ -1,15 +1,16 @@
 Package: epiR
-Version: 0.9-62
-Date: 2015-01-06
+Version: 0.9-69
+Date: 2015-09-27
 Title: Tools for the Analysis of Epidemiological Data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida and Simon Firestone
+Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu and Simon Firestone
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
-Description: An R package for the analysis of epidemiological data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, and computing confidence intervals around incidence risk and incidence rate estimates. Miscellaneous functions for use in meta-analysis, diagnostic test interpretation, and sample size calculations.
+Description: Tools for the analysis of epidemiological data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, and computing confidence intervals around incidence risk and incidence rate estimates. Miscellaneous functions for use in meta-analysis, diagnostic test interpretation, and sample size calculations.
 Depends: R (>= 3.0.0), survival
+Imports: BiasedUrn, methods
 Suggests: MASS (>= 3.1-20)
 License: GPL (>= 2)
-URL: http://www.vet.unimelb.edu.au
-Packaged: 2015-01-06 04:49:53 UTC; marks1
+URL: http://fvas.unimelb.edu.au/veam
+Packaged: 2015-09-27 01:17:03 UTC; Mark
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2015-01-08 12:20:05
+Date/Publication: 2015-09-27 17:15:39
