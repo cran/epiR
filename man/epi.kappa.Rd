@@ -62,10 +62,14 @@ Watson PF, Petrie A (2010) Method agreement analysis: A review of correct method
 
 \note{
 \tabular{llll}{
-          \tab Obs1 +	  \tab Obs1 -  \tab Total	\cr
-Obs 2 +		\tab \code{a}		    \tab \code{b}		   \tab \code{(a+b)}	\cr
-Obs 2 -   \tab \code{c}		    \tab \code{d}		   \tab \code{(c+d)}	\cr
-Total		  \tab \code{(a+c)}	  \tab \code{(b+d)}	 \tab \code{(a+b+c+d=N)}\cr
+--------------- \tab --------------- \tab --------------- \tab ------------------ \cr           
+                \tab Obs1 +	         \tab Obs1 -          \tab Total	            \cr
+--------------- \tab --------------- \tab --------------- \tab ------------------ \cr           
+Obs 2 +		      \tab \code{a}		     \tab \code{b}		    \tab \code{a+b} 	      \cr
+Obs 2 -         \tab \code{c}		     \tab \code{d}		    \tab \code{c+d}	        \cr
+--------------- \tab --------------- \tab --------------- \tab ------------------ \cr           
+Total		        \tab \code{a+c}  	   \tab \code{b+d}  	  \tab \code{a+b+c+d=N}   \cr
+--------------- \tab --------------- \tab --------------- \tab ------------------ \cr           
 }
 
 The kappa coefficient is influenced by the prevalence of the condition being assessed. A prevalence effect exists when the proportion of agreements on the positive classification differs from that of the negative classification. If the prevalence index is high (that is, the prevalence of a positive rating is very high or very low) chance agreement is also high and the value of kappa is reduced accordingly. The effect of prevalence on kappa is greater for large values of kappa than for small values (Byrt et al. 1993). Using the notation above, the prevalence index is calculated as \code{((a/N) - (d/N))}. Confidence intervals for the prevalence index are based on methods used for a difference in two proportions. See Rothman (2002, p 135 equation 7-2) for details.

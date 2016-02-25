@@ -77,7 +77,7 @@ epi.indirectadj(obs = obs, pop = pop, std = std, units = 100,
 
 ## EXAMPLE 2 (with covariates):
 ## We now have, for each area, data stratified by herd type (dairy, beef).
-## The standard incidence rates for beef herds, dairy herds, and the total
+## The standard incidence risks for beef herds, dairy herds, and the total
 ## population are 0.025, 0.085, and 0.060 cases per herd, respectively:
 
 obs <- matrix(data = c(58, 130), nrow = 2, byrow = TRUE,

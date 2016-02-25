@@ -36,28 +36,19 @@ The index proposed by Barnhart et al. (2002) is the same as the index suggested 
 An object of class \code{epi.occc} with the following list elements (notation follows Barnhart et al. 2002):
 
 \itemize{
-  \item{\code{occc}: }{the value of the overall concordance correlation coefficient
-    (\eqn{\rho_{o}^{c}}{rho.o^c}),}
-
+  \item{\code{occc}: }{the value of the overall concordance correlation coefficient (\eqn{\rho_{o}^{c}}{rho.o^c}),}
   \item{\code{oprec}: }{overall precision (\eqn{\rho}{rho}),}
-
   \item{\code{oaccu}: }{overall accuracy (\eqn{\chi^{a}}{chi^a}),}
-
   \item{\code{pairs}: }{a list with following elements (only if \code{pairs = TRUE}, otherwise \code{NULL};
     column indices for the pairs (j,k) follow lower-triangle column-major rule
     based on a \code{ncol(x)} times \code{ncol(x)} matrix),
     \itemize{
-        \item{\code{ccc}: }{pairwise CCC values 
-          (\eqn{\rho_{jk}^{c}}{rho_jk^c}),}
-        \item{\code{prec}: }{pairwise precision values
-          (\eqn{\rho_{jk}}{rho_jk}),}
-        \item{\code{accu}: }{pairwise accuracy values
-          \eqn{\chi_{jk}^{a}}{chi_jk^a}),}
+        \item{\code{ccc}: }{pairwise CCC values (\eqn{\rho_{jk}^{c}}{rho_jk^c}),}
+        \item{\code{prec}: }{pairwise precision values (\eqn{\rho_{jk}}{rho_jk}),}
+        \item{\code{accu}: }{pairwise accuracy values (\eqn{\chi_{jk}^{a}}{chi_jk^a}),}
         \item{\code{ksi}: }{pairwise weights (\eqn{\xi_{jk}}{ksi_jk}),}
-        \item{\code{scale}: }{pairwise scale values 
-          (\eqn{v_{jk}}{v_jk}),}
-        \item{\code{location}: }{pairwise location values 
-          (\eqn{u_{jk}}{u_jk}),}
+        \item{\code{scale}: }{pairwise scale values (\eqn{v_{jk}}{v_jk}),}
+        \item{\code{location}: }{pairwise location values (\eqn{u_{jk}}{u_jk}),}
     }
   }
   \item{\code{data.name}: }{name of the input data \code{dat}.}

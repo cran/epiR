@@ -29,24 +29,27 @@ Method mean.single requires a vector as input. Method \code{mean.unpaired} requi
 The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 
 \tabular{ll}{
-\code{ctype-method}                 \tab Reference             \cr
-\code{mean.single}                  \tab Altman et al. (2000)  \cr
-\code{mean.unpaired}                \tab Altman et al. (2000)  \cr
-\code{mean.paired}                  \tab Altman et al. (2000)  \cr
-\code{prop.single}                  \tab Altman et al. (2000)  \cr
-\code{prop.unpaired}                \tab Altman et al. (2000)  \cr
-\code{prop.paired}                  \tab Altman et al. (2000)  \cr
-\code{inc.risk, exact}              \tab Collett (1999)        \cr
-\code{inc.risk, wilson}             \tab Rothman (2002)        \cr
-\code{inc.risk, fleiss}             \tab Fleiss (1981)         \cr
-\code{prevalence, exact}            \tab Collett (1999)        \cr
-\code{prevalence, wilson}           \tab Rothman (2002)        \cr
-\code{prevalence, fleiss}           \tab Fleiss (1981)         \cr
-\code{inc.rate, exact}              \tab Collett (1999)        \cr
-\code{inc.rate, byar}               \tab Rothman (2002)        \cr
+----------------------------------- \tab ------------------------ \cr
+\code{ctype-method}                 \tab Reference                \cr
+----------------------------------- \tab ------------------------ \cr
+\code{mean.single}                  \tab Altman et al. (2000)     \cr
+\code{mean.unpaired}                \tab Altman et al. (2000)     \cr
+\code{mean.paired}                  \tab Altman et al. (2000)     \cr
+\code{prop.single}                  \tab Altman et al. (2000)     \cr
+\code{prop.unpaired}                \tab Altman et al. (2000)     \cr
+\code{prop.paired}                  \tab Altman et al. (2000)     \cr
+\code{inc.risk, exact}              \tab Collett (1999)           \cr
+\code{inc.risk, wilson}             \tab Rothman (2002)           \cr
+\code{inc.risk, fleiss}             \tab Fleiss (1981)            \cr
+\code{prevalence, exact}            \tab Collett (1999)           \cr
+\code{prevalence, wilson}           \tab Rothman (2002)           \cr
+\code{prevalence, fleiss}           \tab Fleiss (1981)            \cr
+\code{inc.rate, exact}              \tab Collett (1999)           \cr
+\code{inc.rate, byar}               \tab Rothman (2002)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr
-\code{smr}                          \tab Dobson et al. (1991)  \cr
-   }
+\code{smr}                          \tab Dobson et al. (1991)     \cr
+----------------------------------- \tab ------------------------ \cr
+}
 
 The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be done on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
 }

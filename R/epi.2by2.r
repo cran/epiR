@@ -1,7 +1,7 @@
 "epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, homogeneity = "breslow.day", outcome = "as.columns"){
     ## Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293.
     ## Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
-    ## Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55:508 - 514.
+    ## Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55: 508 - 514.
     ## Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, New York, p 84 - 85.
 
     ## Incidence risk in exposed:                      IRiske
@@ -374,7 +374,7 @@
         return(ci)
         }
     
-    
+           
        .funORscore <- function(dat, conf.level){
            a <- dat[1]
            N1 <- dat[1] + dat[3]
@@ -501,6 +501,75 @@
         }
   return(fmdiff)
 }
+
+       .funMHRD.Sato0 <- function(dat, conf.level = 0.95, units = units) {
+          if(length(dim(dat)) > 2){
+          ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
+          c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
+          dataset <- cbind(c1, c2, c3, c4)
+
+          num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
+          W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
+          delta.MH <- num / W
+          P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
+          Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
+  
+          delta.Mid <- delta.MH + 0.5 * qchisq(conf.level, df = 1) * (P / W^2)
+          ME <- sqrt(delta.Mid^2 - delta.MH^2 + qchisq(conf.level, df = 1) * Q / W^2)
+          CI <- delta.Mid + cbind(-1,1) * ME
+  
+          Sato0ARisk.p <- delta.Mid
+          Sato0ARisk.l <- Sato0ARisk.p - ME
+          Sato0ARisk.u <- Sato0ARisk.p + ME
+          c(Sato0ARisk.p * units, Sato0ARisk.l * units, Sato0ARisk.u * units)
+             }
+          }
+
+
+       .funMHRD.Sato <- function(dat, conf.level = 0.95, units = units) {
+          if(length(dim(dat)) > 2){
+          ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
+          c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
+          dataset <- cbind(c1, c2, c3, c4)
+  
+          num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
+          W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
+          delta.MH <- num / W
+          P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
+          Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
+          var.delta.MH = (delta.MH * P + Q) / W^2
+
+         SatoARisk.p <- delta.MH
+         SatoARisk.l <- SatoARisk.p - qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
+         SatoARisk.u <- SatoARisk.p + qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
+         c(SatoARisk.p * units, SatoARisk.l * units, SatoARisk.u * units)
+            }
+         }
+
+
+       .funMHRD.GR <- function(dat, conf.level = 0.95, units = units) {
+          if(length(dim(dat)) > 2){
+          ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
+          c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
+          dataset <- cbind(c1, c2, c3, c4)
+  
+          num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
+          W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
+          delta.MH <- num / W
+          P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
+          Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
+          p1 <- dataset[,1] / dataset[,2]
+          p2 <- dataset[,3] / dataset[,4]
+          denom <- apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4])) # Cochrane weights
+          var.delta.MH <- sum (denom^2 * (p1 * (1 - p1) / dataset[,2] + p2 * (1 - p2) / dataset[,4])) / W^2
+
+          GRARisk.p <- delta.MH
+          GRARisk.l <- GRARisk.p - qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
+          GRARisk.u <- GRARisk.p + qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
+          c(GRARisk.p * units, GRARisk.l * units, GRARisk.u * units)
+             }
+          }
+
 
         ## =================
         ## DECLARE VARIABLES
@@ -863,7 +932,6 @@
         ## Individual strata attributable fraction for risk data (from Hanley 2001):
         AFRisk.ctype <- ""
         AFRisk.p <- ((wRR.p - 1) / wRR.p)
-        ## Bug found 031013. The following two lines of code replace those on lines 441 and 442.
         AFRisk.l <- (wRR.l - 1) / wRR.l
         AFRisk.u <- (wRR.u - 1) / wRR.u
         ## AFRisk.l <- min((wRR.l - 1) / wRR.l, (wRR.u - 1) / wRR.u)
@@ -965,14 +1033,14 @@
 
         ## Crude incidence risk ratio - Wald confidence limits (Rothman p 135 equation 7-3):
         cwRR.ctype <- "Wald"
-        tmp        <- .funRRwald(matrix(c(sa,sb,sc,sd), nrow = 2, byrow = TRUE), conf.level)
+        tmp        <- .funRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
         cwRR.p     <- tmp[1]
         cwRR.l     <- tmp[2]
         cwRR.u     <- tmp[3]
 
         ## Crude incidence risk ratio - score confidence limits:
         csRR.ctype <- "Score"
-        tmp        <- .funRRscore(matrix(c(sa,sb,sc,sd), nrow = 2, byrow = TRUE), conf.level)
+        tmp        <- .funRRscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
         csRR.p     <- tmp[1]
         csRR.l     <- tmp[2]
         csRR.u     <- tmp[3]
@@ -990,26 +1058,26 @@
 
         ## Crude odds ratio - Wald confidence limits:
         cwOR.ctype <- "Wald"
-        tmp        <- .funORwald(matrix(c(sa,sb,sc,sd), nrow = 2, byrow = TRUE), conf.level)
+        tmp        <- .funORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
         cwOR.p     <- tmp[1]
         cwOR.l     <- tmp[2]
         cwOR.u     <- tmp[3]
 
         ## Crude odds ratio - Cornfield confidence limits:
-        ccfOR.ctype <- "Wald"
-        tmp         <- .funORcfield(matrix(c(sa,sb,sc,sd), nrow = 2, byrow = TRUE), conf.level)
+        ccfOR.ctype <- "Cornfield"
+        tmp         <- .funORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
         ccfOR.p     <- tmp[1]
         ccfOR.l     <- tmp[2]
         ccfOR.u     <- tmp[3]
 
         ## Crude odds ratio - score confidence limits:
         csOR.ctype <- "Score"
-        tmp        <- .funORscore(matrix(c(sa,sb,sc,sd), nrow = 2, byrow = TRUE), conf.level)
+        tmp        <- .funORscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
         csOR.p     <- tmp[1]
         csOR.l     <- tmp[2]
         csOR.u     <- tmp[3]
 
-        ## Crude odds ratio - maximum likelihood estimate (using fisher.test function:
+        ## Crude odds ratio - maximum likelihood estimate (using fisher.test function):
         ## Replaced 130612.
         cmOR.ctype <- "MLE"
         cmOR.tmp <- fisher.test(apply(dat, MARGIN = c(1,2), FUN = sum), conf.int = TRUE, conf.level = conf.level)
@@ -1019,20 +1087,20 @@
 
         ## Crude attributable risk - Wald confidence limits (Rothman p 135 equation 7-2):
         cwARisk.ctype <- "Wald"
-        tmp           <- .funARwald(dat, conf.level, units)
+        tmp           <- .funARwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
         cwARisk.p      <- tmp[1]
         cwARisk.l      <- tmp[2]
         cwARisk.u      <- tmp[3]
 
         ## Crude attributable risk - score confidence limits:
         cscARisk.ctype <- "Score"
-        tmp           <- .funARscore(dat, conf.level, units)
+        tmp           <- .funARscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
         cscARisk.p      <- tmp[1]
         cscARisk.l      <- tmp[2]
         cscARisk.u      <- tmp[3]
 
         ## Crude attributable rate (Rothman p 137 equation 7-4):
-        cARate.ctype <- ""
+        cARate.ctype <- "Wald"
         cARate.p <- ((sa / sb) - (sc / sd)) * units
         cARate.se <- (sqrt((sa / sb^2) + (sc / sd^2))) * units
         cARate.l <- cARate.p - (z * cARate.se)
@@ -1057,7 +1125,7 @@
         cAFest.u <- max((scOR.l - 1) / scOR.l, (scOR.u - 1) / scOR.u)
 
         ## Crude population attributable risk (same as Rothman p 135 equation 7-2):
-        cwPARisk.ctype <- ""
+        cwPARisk.ctype <- "Wald"
         cwPARisk.p <- ((sM1 / stotal) - (sc / sN0)) * units
         cwPARisk.se <- (sqrt(((sM1 * (stotal - sM1))/stotal^3) + ((sc * (sN0 - sc))/sN0^3))) * units
         cwPARisk.l <- cwPARisk.p - (z * cwPARisk.se)
@@ -1077,7 +1145,7 @@
         
         
         ## Crude population attributable rate (same as Rothman p 137 equation 7-4):
-        cPARate.ctype <- ""
+        cPARate.ctype <- "Wald"
         cPARate.p <- ((sM1 / sM0) - (sc / sd)) * units
         cPARate.se <- (sqrt((sM1 / sM0^2) + (sc / sd^2))) * units
         cPARate.l <- cPARate.p - (z * cPARate.se)
@@ -1122,7 +1190,7 @@
         
         ## ===============================
         ## MANTEL-HAENZEL SUMMARY MEASURES
-        ## ================================
+        ## ===============================
 
         ## Summary incidence risk ratio (Rothman 2002 p 148 and 152, equation 8-2):
         sRR.p <- sum((a * N0 / total)) / sum((c * N1 / total))
@@ -1157,8 +1225,8 @@
         sumGQ.HP <- sum(GQ.HP)
         
         ## Correction from Richard Bourgon 29 September 2010:
-        varLNOR.s <- sumGP/(2 * sumG^2) + sumGQ.HP/(2 * sumG * sumH) + sumHQ/(2 * sumH^2)
-        ## varLNOR.s <- sumGP / (2 * sumG^2) + sumGQ.HP/(2 * sumGH) + sumHQ/(2 * sumG * sumH)
+        varLNOR.s <- sumGP / (2 * sumG^2) + sumGQ.HP / (2 * sumG * sumH) + sumHQ / (2 * sumH^2)
+        ## varLNOR.s <- sumGP / (2 * sumG^2) + sumGQ.HP / (2 * sumGH) + sumHQ / (2 * sumG * sumH)
         lnOR.s <- log(sOR.p)
         sOR.se <- sqrt(varLNOR.s)
         sOR.l <- exp(lnOR.s - z * sqrt(varLNOR.s))
@@ -1174,6 +1242,20 @@
         sARisk.se <- (sqrt(varARisk.s)) * units
         sARisk.l <- sARisk.p - (z * sARisk.se)
         sARisk.u <- sARisk.p + (z * sARisk.se)
+
+        # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
+        SatoARisk.ctype <- "Sato"
+        tmp        <- .funMHRD.Sato(dat, conf.level, units)
+        SatoARisk.p <- tmp[1]
+        SatoARisk.l <- tmp[2]
+        SatoARisk.u <- tmp[3]
+
+        # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
+        GRARisk.ctype <- "Greenland-Robins"
+        tmp        <- .funMHRD.GR(dat, conf.level, units)
+        GRARisk.p <- tmp[1]
+        GRARisk.l <- tmp[2]
+        GRARisk.u <- tmp[3]
 
         ## Summary attributable rate (Rothman 2002 p 153, equation 8-4):
         sARate.p <- sum(((a * d) - (c * b)) / M0) / sum((b * d) / M0) * units
@@ -1321,113 +1403,127 @@
     ## ===============================
     ## Results are entered in a list
     res <- list(
-        ## Incidence risk ratio:
-        wRR.strata = data.frame(est = wRR.p, lower = wRR.l, upper = wRR.u),
-        scRR.strata = data.frame(est = scRR.p, lower = scRR.l, upper = scRR.u),
         
-        ## Incidence rate ratio:
-        IRR.strata = data.frame(est = IRR.p, lower = IRR.l, upper = IRR.u),
-
-        ## Odds ratio:
-        wOR.strata = data.frame(est = wOR.p, lower = wOR.l, upper = wOR.u),
-        cfOR.strata = data.frame(est = cfOR.p, lower = cfOR.l, upper = cfOR.u),
-        scOR.strata = data.frame(est = scOR.p, lower = scOR.l, upper = scOR.u),
-        mOR.strata = data.frame(est = mOR.p, lower = mOR.l, upper = mOR.u),
-
-        ## Attributable risk:
-        wARisk.strata = data.frame(est = wARisk.p, lower = wARisk.l, upper = wARisk.u),
-        scARisk.strata = data.frame(est = scARisk.p, lower = scARisk.l, upper = scARisk.u),
-        
-        ## Attributable rate:
-        ARate.strata = data.frame(est = ARate.p, lower = ARate.l, upper = ARate.u),
-
-        ## Attributable fraction for risk data:
-        AFRisk.strata = data.frame(est = AFRisk.p, lower = AFRisk.l, upper = AFRisk.u),
-
-        ## Attributable fraction for rate data:
-        AFRate.strata = data.frame(est = AFRate.p, lower = AFRate.l, upper = AFRate.u),
-
-        ## Estimated attributable fraction:
-        AFest.strata = data.frame(est = AFest.p, lower = AFest.l, upper = AFest.u),
-
-        ## Population attributable risk:
-        wPARisk.strata = data.frame(est = wPARisk.p, lower = wPARisk.l, upper = wPARisk.u),
-        pPARisk.strata = data.frame(est = pPARisk.p, lower = pPARisk.l, upper = pPARisk.u),
-        
-        ## Population attributable rate:
-        PARate.strata = data.frame(est = PARate.p, lower = PARate.l, upper = PARate.u),
-
-        ## Population attributable fraction for risk data:
-        PAFRisk.strata = data.frame(est = PAFRisk.p, lower = PAFRisk.l, upper = PAFRisk.u),
-
-        ## Population attributable fraction for rate data:
-        PAFRate.strata = data.frame(est = PAFRate.p, lower = PAFRate.l, upper = PAFRate.u),
-
-        ## Estimated population attributable fraction:
-        PAFest.strata = data.frame(est = PAFest.p, lower = PAFest.l, upper = PAFest.u),
-
-
+        ## Strata incidence risk ratio:
+        RR.strata.wald = data.frame(est = wRR.p, lower = wRR.l, upper = wRR.u),
+        RR.strata.score = data.frame(est = scRR.p, lower = scRR.l, upper = scRR.u),
 
         ## Crude incidence risk ratio:
-        wRR.crude = data.frame(est = cwRR.p, lower = cwRR.l, upper = cwRR.u),
-        scRR.crude = data.frame(est = csRR.p, lower = csRR.l, upper = csRR.u),
+        RR.crude.wald = data.frame(est = cwRR.p, lower = cwRR.l, upper = cwRR.u),
+        RR.crude.score = data.frame(est = csRR.p, lower = csRR.l, upper = csRR.u),
+
+        ## Mantel-Haenszel incidence risk ratio:
+        RR.mh.wald = data.frame(est = sRR.p, lower = sRR.l, upper = sRR.u),
+
+        
+        ## Strata incidence rate ratio:
+        IRR.strata.wald = data.frame(est = IRR.p, lower = IRR.l, upper = IRR.u),
 
         ## Crude incidence rate ratio:
-        IRR.crude = data.frame(est = ceIRR.p, lower = ceIRR.l, upper = ceIRR.u),
+        IRR.crude.wald = data.frame(est = ceIRR.p, lower = ceIRR.l, upper = ceIRR.u),
+
+        ## Mantel-Haenszel incidence rate ratio:
+        IRR.mh.wald = data.frame(est = sIRR.p, lower = sIRR.l, upper = sIRR.u),
+
+
+        ## Strata odds ratio:
+        OR.strata.wald = data.frame(est = wOR.p, lower = wOR.l, upper = wOR.u),
+        OR.strata.score = data.frame(est = scOR.p, lower = scOR.l, upper = scOR.u),
+        OR.strata.cfield = data.frame(est = cfOR.p, lower = cfOR.l, upper = cfOR.u),
+        OR.strata.mle = data.frame(est = mOR.p, lower = mOR.l, upper = mOR.u),
 
         ## Crude odds ratio:
-        wOR.crude = data.frame(est = cwOR.p, lower = cwOR.l, upper = cwOR.u),
-        cfOR.crude = data.frame(est = ccfOR.p, lower = ccfOR.l, upper = ccfOR.u),
-        scOR.crude = data.frame(est = csOR.p, lower = csOR.l, upper = csOR.u),
-        cmOR.crude = data.frame(est = cmOR.p, lower = cmOR.l, upper = cmOR.u),
-        
+        OR.crude.wald = data.frame(est = cwOR.p, lower = cwOR.l, upper = cwOR.u),
+        OR.crude.score = data.frame(est = csOR.p, lower = csOR.l, upper = csOR.u),
+        OR.crude.cfield = data.frame(est = ccfOR.p, lower = ccfOR.l, upper = ccfOR.u),
+        OR.crude.mle = data.frame(est = cmOR.p, lower = cmOR.l, upper = cmOR.u),
+
+        ## Mantel-Haenszel odds ratio:
+        OR.mh.wald = data.frame(est = sOR.p, lower = sOR.l, upper = sOR.u),
+
+
+        ## Strata attributable risk:
+        ARisk.strata.wald = data.frame(est = wARisk.p, lower = wARisk.l, upper = wARisk.u),
+        ARisk.strata.score = data.frame(est = scARisk.p, lower = scARisk.l, upper = scARisk.u),
+
         ## Crude attributable risk:
-        wARisk.crude = data.frame(est = cwARisk.p, lower = cwARisk.l, upper = cwARisk.u),
-        scARisk.crude = data.frame(est = cscARisk.p, lower = cscARisk.l, upper = cscARisk.u),
+        ARisk.crude.wald = data.frame(est = cwARisk.p, lower = cwARisk.l, upper = cwARisk.u),
+        ARisk.crude.score = data.frame(est = cscARisk.p, lower = cscARisk.l, upper = cscARisk.u),
         
+        ## Mantel-Haenszel attributable risk:
+        ARisk.mh.wald = data.frame(est = sARisk.p, lower = sARisk.l, upper = sARisk.u),
+        ARisk.mh.sato = data.frame(est = SatoARisk.p, lower = SatoARisk.l, upper = SatoARisk.u),
+        ARisk.mh.green = data.frame(est = GRARisk.p, lower = GRARisk.l, upper = GRARisk.u),                  
+        
+        
+        ## Strata attributable rate:
+        ARate.strata.wald = data.frame(est = ARate.p, lower = ARate.l, upper = ARate.u),
+
         ## Crude attributable rate:
-        ARate.crude = data.frame(est = cARate.p, lower = cARate.l, upper = cARate.u),
-
-        ## Crude attributable fraction for risk data:
-        AFRisk.crude = data.frame(est = cAFRisk.p, lower = cAFRisk.l, upper = cAFRisk.u),
-
-        ## Crude attributable fraction for rate data:
-        AFRate.crude = data.frame(est = cAFRate.p, lower = cAFRate.l, upper = cAFRate.u),
-
-        ## Crude estimated attributable fraction:
-        AFest.crude = data.frame(est = cAFest.p, lower = cAFest.l, upper = cAFest.u),
-
-        ## Crude population attributable risk:
-        wPARisk.crude = data.frame(est = cwPARisk.p, lower = cwPARisk.l, upper = cwPARisk.u),
-        pPARisk.crude = data.frame(est = cpPARisk.p, lower = cpPARisk.l, upper = cpPARisk.u),
-
-        ## Crude population attributable rate:
-        PARate.crude = data.frame(est = cPARate.p, lower = cPARate.l, upper = cPARate.u),
-
-        ## Crude population attributable fraction for risk data:
-        PAFRisk.crude = data.frame(est = cPAFRisk.p, lower = cPAFRisk.l, upper = cPAFRisk.u),
-
-        ## Crude population attributable fraction for rate data:
-        PAFRate.crude = data.frame(est = cPAFRate.p, lower = cPAFRate.l, upper = cPAFRate.u),
-
-        ## Crude estimated population attributable fraction:
-        PAFest.crude = data.frame(est = cPAFest.p, lower = cPAFest.l, upper = cPAFest.u),
-
-        ## Mantel-Haenszel adjusted incidence risk ratio:
-        RR.mh = data.frame(est = sRR.p, se = sRR.se, lower = sRR.l, upper = sRR.u),
-
-        ## Mantel-Haenszel adjusted incidence rate ratio:
-        IRR.mh = data.frame(est = sIRR.p, se = sIRR.se, lower = sIRR.l, upper = sIRR.u),
-
-        ## Mantel-Haenszel adjusted odds ratio:
-        OR.mh = data.frame(est = sOR.p, se = sOR.se, lower = sOR.l, upper = sOR.u),
-
-        ## Mantel-Haenszel adjusted attributable risk:
-        ARisk.mh = data.frame(est = sARisk.p, se = sARisk.se, lower = sARisk.l, upper = sARisk.u),
+        ARate.crude.wald = data.frame(est = cARate.p, lower = cARate.l, upper = cARate.u),
 
         ## Mantel-Haenszel adjusted attributable rate:
-        ARate.mh = data.frame(est = sARate.p, se = sARate.se, lower = sARate.l, upper = sARate.u),
+        ARate.mh.wald = data.frame(est = sARate.p, lower = sARate.l, upper = sARate.u),
 
+
+        ## Strata attributable fraction for risk data:
+        AFRisk.strata.wald = data.frame(est = AFRisk.p, lower = AFRisk.l, upper = AFRisk.u),
+        
+        ## Crude attributable fraction for risk data:
+        AFRisk.crude.wald = data.frame(est = cAFRisk.p, lower = cAFRisk.l, upper = cAFRisk.u),
+        
+        
+        ## Strata attributable fraction for rate data:
+        AFRate.strata.wald = data.frame(est = AFRate.p, lower = AFRate.l, upper = AFRate.u),
+        
+        ## Crude attributable fraction for rate data:
+        AFRate.crude.wald = data.frame(est = cAFRate.p, lower = cAFRate.l, upper = cAFRate.u),
+
+
+        ## Strata estimated attributable fraction:
+        AFest.strata.wald = data.frame(est = AFest.p, lower = AFest.l, upper = AFest.u),
+
+        ## Crude estimated attributable fraction:
+        AFest.crude.wald = data.frame(est = cAFest.p, lower = cAFest.l, upper = cAFest.u),
+
+
+        ## Strata population attributable risk:
+        PARisk.strata.wald = data.frame(est = wPARisk.p, lower = wPARisk.l, upper = wPARisk.u),
+        PARisk.strata.piri = data.frame(est = pPARisk.p, lower = pPARisk.l, upper = pPARisk.u),
+
+        ## Crude population attributable risk:
+        PARisk.crude.wald = data.frame(est = cwPARisk.p, lower = cwPARisk.l, upper = cwPARisk.u),
+        PARisk.crude.piri = data.frame(est = cpPARisk.p, lower = cpPARisk.l, upper = cpPARisk.u),
+        
+
+        ## Strata population attributable rate:
+        PARate.strata.wald = data.frame(est = PARate.p, lower = PARate.l, upper = PARate.u),
+        
+        ## Crude population attributable rate:
+        PARate.crude.wald = data.frame(est = cPARate.p, lower = cPARate.l, upper = cPARate.u),
+
+        
+        ## Strata population attributable fraction for risk data:
+        PAFRisk.strata.wald = data.frame(est = PAFRisk.p, lower = PAFRisk.l, upper = PAFRisk.u),
+
+        ## Crude population attributable fraction for risk data:
+        PAFRisk.crude.wald = data.frame(est = cPAFRisk.p, lower = cPAFRisk.l, upper = cPAFRisk.u),
+
+
+        ## Strata population attributable fraction for rate data:
+        PAFRate.strata.wald = data.frame(est = PAFRate.p, lower = PAFRate.l, upper = PAFRate.u),
+
+        ## Crude population attributable fraction for rate data:
+        PAFRate.crude.wald = data.frame(est = cPAFRate.p, lower = cPAFRate.l, upper = cPAFRate.u),
+
+
+        ## Strata estimated population attributable fraction:
+        PAFest.strata.wald = data.frame(est = PAFest.p, lower = PAFest.l, upper = PAFest.u),
+
+        ## Crude estimated population attributable fraction:
+        PAFest.crude.wald = data.frame(est = cPAFest.p, lower = cPAFest.l, upper = cPAFest.u),
+        
+        
         ## Effect of confounding for risk ratio (Woodward p 172):
         RR.conf = data.frame(est = RR.conf.p, lower = RR.conf.l, upper = RR.conf.u),
 
@@ -1444,9 +1540,9 @@
         ARate.conf = data.frame(est = ARate.conf.p, lower = ARate.conf.l, upper = ARate.conf.u),
         
         ## Labelling for incidence prevalence units:
-        count.units = ifelse(units == 1, "Cases per population unit", paste("Cases per ", units, " population units", sep = "")),
+        count.units = ifelse(units == 1, "Outcomes per population unit", paste("Outcomes per ", units, " population units", sep = "")),
         
-        time.units = ifelse(units == 1, "Cases per unit of population time at risk", paste("Cases per ", units, " units of population time at risk", sep = "")),
+        time.units = ifelse(units == 1, "Outcomes per unit of population time at risk", paste("Outcomes per ", units, " units of population time at risk", sep = "")),
         
         chisq.strata = data.frame(test.statistic = chi2, df = 1, p.value = p.chi2),
         
@@ -1469,21 +1565,23 @@
        
        ## Verbose part:
        massoc <- list(
-       RR.strata.wald     = res$wRR.strata,
-       RR.strata.score    = res$scRR.strata,
+       RR.strata.wald     = res$RR.strata.wald,
+       RR.strata.score    = res$RR.strata.score,
        
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score    = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
+       OR.strata.wald     = res$OR.strata.wald,
+       OR.strata.score    = res$OR.strata.score,
+       OR.strata.cfield   = res$OR.strata.cfield,
+       OR.strata.mle      = res$OR.strata.mle,
 
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
+       ARisk.strata.wald  = res$ARisk.strata.wald,
+       ARisk.strata.score = res$ARisk.strata.score,
 
-       AFe.strata         = res$AFRisk.strata,
-       AFp.strata         = res$PAFRisk.strata,
+       PARisk.strata.wald = res$PARisk.strata.wald,
+       PARisk.strata.piri = res$PARisk.strata.piri,
+
+       AFRisk.strata.wald = res$AFRisk.strata.wald,
+       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
+       
        chisq.strata       = res$chisq.strata)
 
        ## Define tab:
@@ -1517,35 +1615,41 @@
        
        ## Verbose part:
        massoc <- list(
-       RR.strata.wald     = res$wRR.strata,
-       RR.srata.score     = res$scRR.strata,
-       RR.crude.wald      = res$wRR.crude,
-       RR.crude.score     = res$scRR.crude,
-       RR.mh              = res$RR.mh,
-       
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score    = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
-       
-       OR.crude.wald      = res$wOR.crude,
-       OR.crude.cfield    = res$cfOR.crude,
-       OR.crude.score     = res$scOR.crude,
-       OR.crude.mle       = res$cmOR.crude,
-       OR.mh              = res$OR.mh,
+       RR.strata.wald     = res$RR.strata.wald,
+       RR.strata.score    = res$RR.strata.score,
+       RR.crude.wald      = res$RR.crude.wald,
+       RR.crude.score     = res$RR.crude.score,
+       RR.mh.wald         = res$RR.mh.wald,
 
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARe.crude.wald     = res$wARisk.crude,
-       ARe.crude.score    = res$scARisk.crude,
-       AR.mh              = res$ARisk.mh,
+       OR.strata.wald     = res$OR.strata.wald,
+       OR.strata.score    = res$OR.strata.score,
+       OR.strata.cfield   = res$OR.strata.cfield,
+       OR.strata.mle      = res$OR.strata.mle,
+       OR.crude.wald      = res$OR.crude.wald,
+       OR.crude.score     = res$OR.crude.score,
+       OR.crude.cfield    = res$OR.crude.cfield,
+       OR.crude.mle       = res$OR.crude.mle,
+       OR.mh.wald         = res$OR.mh.wald,
 
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
+       ARisk.strata.wald  = res$ARisk.strata.wald,
+       ARisk.strata.score = res$ARisk.strata.score,
+       ARisk.crude.wald   = res$ARisk.crude.wald,
+       ARisk.crude.score  = res$ARisk.crude.score,
+       ARisk.mh.wald      = res$ARisk.mh.wald,
+       ARisk.mh.sato      = res$ARisk.mh.sato,
+       ARisk.mh.green     = res$ARisk.mh.green,
        
-       AFe.strata         = res$AFRisk.strata,
-       AFp.strata         = res$PAFRisk.strata,
+       PARisk.strata.wald = res$PARisk.strata.wald,
+       PARisk.strata.piri = res$PARisk.strata.piri,
+       PARisk.crude.wald  = res$PARisk.crude.wald,
+       PARisk.crude.piri  = res$PARisk.crude.piri,
 
+       AFRisk.strata.wald = res$AFRisk.strata.wald,
+       AFRisk.crude.wald  = res$AFRisk.crude.wald,
+        
+       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
+       PAFRisk.crude.wald = res$PAFRisk.crude.wald,
+        
        chisq.strata = res$chisq.strata,
        chisq.crude  = res$chisq.crude,
        chisq.mh     = res$chisq.mh,
@@ -1585,11 +1689,14 @@
        
        ## Verbose part:
        massoc <- list(
-       IRR.strata   = res$IRR.strata,
-       ARe.strata   = res$ARate.strata,
-       ARp.strata   = res$PARate.strata,
-       AFe.strata   = res$AFRate.strata,
-       AFp.strata   = res$PAFRate.strata,
+       IRR.strata.wald    = res$IRR.strata.wald,
+       
+       ARate.strata.wald  = res$ARate.strata.wald,
+       PARate.strata.wald = res$PARate.strata.wald,
+       
+       AFRate.strata.wald = res$AFRate.strata.wald,
+       PAFRate.strata.wald = res$PAFRate.strata.wald,
+
        chisq.strata = res$chisq.strata)
 
        ## Define tab:
@@ -1623,23 +1730,26 @@
        
        ## Verbose part:
        massoc <- list(
-       IRR.strata   = res$IRR.strata,
-       IRR.crude    = res$IRR.crude,
-       IRR.mh       = res$IRR.mh,
+       IRR.strata.wald    = res$IRR.strata.wald,
+       IRR.crude.wald     = res$IRR.crude.wald,
+       IRR.mh.wald        = res$IRR.mh.wald,
+       
+       ARate.strata.wald  = res$ARate.strata.wald,
+       ARate.crude.wald   = res$ARate.crude.wald,
+       ARate.mh.wald      = res$ARate.mh.wald,
 
-       AR.strata    = res$ARate.strata,
-       AR.crude     = res$ARate.crude,
-       AR.mh        = res$ARate.mh,
-
-       ARp.strata   = res$PARate.strata,
-       AFp.strata   = res$PAFRate.strata,
-
+       PARate.strata.wald = res$PARate.strata.wald,
+       PARate.crude.wald = res$PARate.crude.wald,
+               
+       AFRate.strata.wald = res$AFRate.strata.wald,
+       AFRate.crude.wald  = res$AFRate.crude.wald,
+       
+       PAFRate.strata.wald = res$PAFRate.strata.wald,
+       PAFRate.crude.wald = res$PAFRate.crude.wald,
+       
        chisq.strata = res$chisq.strata,
        chisq.crude  = res$chisq.crude,
        chisq.mh     = res$chisq.mh)
-       ## RR.homog  = res$RR.homog,
-       ## OR.homog  = res$OR.homog,
-       ## AR.homog  = res$AR.homog)
 
        ## Define tab:
        if(outcome == "as.columns"){
@@ -1673,18 +1783,19 @@
        
        ## Verbose part:
        massoc <- list(
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score     = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
+       OR.strata.wald      = res$OR.strata.wald,
+       OR.strata.score     = res$OR.strata.score,
+       OR.strata.cfield    = res$OR.strata.cfield,
+       OR.strata.mle       = res$OR.strata.mle,
        
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
+       ARisk.strata.wald   = res$ARisk.strata.wald,
+       ARisk.strata.score  = res$ARisk.strata.score,
+       
+       PARisk.strata.wald  = res$PARisk.strata.wald,
+       PARisk.strata.piri  = res$PARisk.strata.piri,
 
-       AFeest.strata      = res$AFest.strata,
-       AFpest.strata      = res$PAFest.strata,
+       AFest.strata.wald   = res$AFest.strata.wald,
+       PAFest.strata.wald  = res$PAFest.strata.wald,
        chisq.strata       = res$chisq.strata)
 
        ## Define tab:
@@ -1718,30 +1829,35 @@
        
        ## Verbose part:
        massoc <- list(
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score    = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
-       
-       OR.crude.wald      = res$wOR.crude,
-       OR.crude.cfield    = res$cfOR.crude,       
-       OR.crude.score     = res$scOR.crude,
-       OR.crude.mle       = res$cmOR.crude,
-       OR.mh              = res$OR.mh,
+       OR.strata.wald      = res$OR.strata.wald,
+       OR.strata.score     = res$OR.strata.score,
+       OR.strata.cfield    = res$OR.strata.cfield,
+       OR.strata.mle       = res$OR.strata.mle,
 
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARe.crude.wald     = res$wARisk.crude,
-       ARe.crude.score    = res$scARisk.crude,
-       AR.mh              = res$ARisk.mh,
-
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
-       ARp.crude.wald     = res$wPARisk.crude,
-       ARp.crude.piri     = res$pPARisk.crude,
+       OR.crude.wald      = res$OR.crude.wald,
+       OR.crude.score     = res$OR.crude.score,
+       OR.crude.cfield    = res$OR.crude.cfield,
+       OR.crude.mle       = res$OR.crude.mle,
+       OR.mh.wald         = res$OR.mh.wald,       
        
-       AFest.strata       = res$AFest.strata,
-       AFpest.strata      = res$PAFest.strata,
+       ARisk.strata.wald  = res$ARisk.strata.wald,
+       ARisk.strata.score = res$ARisk.strata.score,
+       ARisk.crude.wald   = res$ARisk.crude.wald,
+       ARisk.crude.score  = res$ARisk.crude.score,
+       ARisk.mh.wald      = res$ARisk.mh.wald,
+       ARisk.mh.sato      = res$ARisk.mh.sato,
+       ARisk.mh.green     = res$ARisk.mh.green,
+       
+       PARisk.strata.wald  = res$PARisk.strata.wald,
+       PARisk.strata.piri  = res$PARisk.strata.piri,
+       PARisk.crude.wald   = res$PARisk.crude.wald,
+       PARisk.crude.piri   = res$PARisk.crude.piri,
+
+       AFest.strata.wald   = res$AFest.strata.wald,
+       AFest.crude.wald    = res$AFest.crude.wald,
+       
+       PAFest.strata.wald  = res$PAFest.strata.wald,
+       PAFest.crude.wald   = res$PAFest.crude.wald,
 
        chisq.strata  = res$chisq.strata,
        chisq.crude   = res$chisq.crude,
@@ -1781,21 +1897,23 @@
        
        ## Verbose part:
        massoc <- list(
-       PR.strata.wald     = res$wRR.strata,
-       PR.srata.score     = res$scRR.strata,
+       PR.strata.wald     = res$RR.strata.wald,
+       PR.strata.score    = res$RR.strata.score,
        
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score    = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
+       OR.strata.wald     = res$OR.strata.wald,
+       OR.strata.score    = res$OR.strata.score,
+       OR.strata.cfield   = res$OR.strata.cfield,
+       OR.strata.mle      = res$OR.strata.mle,
 
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
+       ARisk.strata.wald    = res$ARisk.strata.wald,
+       ARisk.strata.score   = res$ARisk.strata.score,
+
+       PARisk.strata.wald = res$PARisk.strata.wald,
+       PARisk.strata.piri = res$PARisk.strata.piri,
+
+       AFRisk.strata.wald = res$AFRisk.strata.wald,
+       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
        
-       AFe.strata         = res$AFRisk.strata,
-       AFp.strata         = res$PAFRisk.strata,
        chisq.strata       = res$chisq.strata)
 
        ## Define tab:
@@ -1829,33 +1947,40 @@
        
        ## Verbose part:
        massoc <- list(
-       PR.strata.wald     = res$wRR.strata,
-       PR.srata.score     = res$scRR.strata,
-       PR.crude.wald      = res$wRR.crude,
-       PR.crude.score     = res$scRR.crude,
-       PR.mh              = res$RR.mh,
+       PR.strata.wald     = res$RR.strata.wald,
+       PR.strata.score    = res$RR.strata.score,
+       PR.crude.wald      = res$RR.crude.wald,
+       PR.crude.score     = res$RR.crude.score,
+       PR.mh.wald         = res$RR.mh.wald,
 
-       OR.strata.wald     = res$wOR.strata,
-       OR.strata.cfield   = res$cfOR.strata,
-       OR.strata.score    = res$scOR.strata,
-       OR.strata.mle      = res$mOR.strata,
+       OR.strata.wald     = res$OR.strata.wald,
+       OR.strata.score    = res$OR.strata.score,
+       OR.strata.cfield   = res$OR.strata.cfield,
+       OR.strata.mle      = res$OR.strata.mle,
+       OR.crude.wald      = res$OR.crude.wald,
+       OR.crude.score     = res$OR.crude.score,
+       OR.crude.cfield    = res$OR.crude.cfield,
+       OR.crude.mle       = res$OR.crude.mle,
+       OR.mh.wald         = res$OR.mh.wald,
+
+       ARisk.strata.wald  = res$ARisk.strata.wald,
+       ARisk.strata.score = res$ARisk.strata.score,
+       ARisk.crude.wald   = res$ARisk.crude.wald,
+       ARisk.crude.score  = res$ARisk.crude.score,
+       ARisk.mh.wald      = res$ARisk.mh.wald,
+       ARisk.mh.sato      = res$ARisk.mh.sato,
+       ARisk.mh.green     = res$ARisk.mh.green,
        
-       OR.crude.wald      = res$wOR.crude,
-       OR.crude.cfield    = res$cfOR.crude,      
-       OR.crude.score     = res$scOR.crude,
-       OR.crude.mle       = res$cmOR.crude,
-       OR.mh              = res$OR.mh,
+       PARisk.strata.wald = res$PARisk.strata.wald,
+       PARisk.strata.piri = res$PARisk.strata.piri,
+       PARisk.crude.wald  = res$PARisk.crude.wald,
+       PARisk.crude.piri  = res$PARisk.crude.piri,
 
-       ARe.strata.wald    = res$wARisk.strata,
-       ARe.strata.score   = res$scARisk.strata,
-       ARe.crude.wald     = res$wARisk.crude,
-       ARe.crude.score    = res$scARisk.crude,
-       AR.mh              = res$ARisk.mh,
-       ARp.strata.wald    = res$wPARisk.strata,
-       ARp.strata.piri    = res$pPARisk.strata,
-
-       AFe.strata         = res$AFRisk.strata,
-       AFp.strata         = res$PAFRisk.strata,
+       AFRisk.strata.wald = res$AFRisk.strata.wald,
+       AFRisk.crude.wald  = res$AFRisk.crude.wald,
+        
+       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
+       PAFRisk.crude.wald = res$PAFRisk.crude.wald,
 
        chisq.strata = res$chisq.strata,
        chisq.crude  = res$chisq.crude,
@@ -1906,50 +2031,50 @@ print.epi.2by2 <- function(x, ...) {
 
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nInc risk ratio (W)                           %.2f (%.2f, %.2f)",
-                        wRR.strata[1],
-                        wRR.strata[2],
-                        wRR.strata[3]
+            cat(sprintf("\nInc risk ratio                               %.2f (%.2f, %.2f)",
+                        RR.strata.wald[1],
+                        RR.strata.wald[2],
+                        RR.strata.wald[3]
                         ))
 
-            cat(sprintf("\nOdds ratio (W)                               %.2f (%.2f, %.2f)",
-                        wOR.strata[1],
-                        wOR.strata[2],
-                        wOR.strata[3]
+            cat(sprintf("\nOdds ratio                                   %.2f (%.2f, %.2f)",
+                        OR.strata.wald[1],
+                        OR.strata.wald[2],
+                        OR.strata.wald[3]
                         ))
 
-            cat(sprintf("\nAttrib risk (W) *                            %.2f (%.2f, %.2f)",
-                        wARisk.strata[1],
-                        wARisk.strata[2],
-                        wARisk.strata[3]
+            cat(sprintf("\nAttrib risk *                                %.2f (%.2f, %.2f)",
+                        ARisk.strata.wald[1],
+                        ARisk.strata.wald[2],
+                        ARisk.strata.wald[3]
                         ))
 
-            cat(sprintf("\nAttrib risk in population (W) *              %.2f (%.2f, %.2f)",
-                        wPARisk.strata[1],
-                        wPARisk.strata[2],
-                        wPARisk.strata[3]
+            cat(sprintf("\nAttrib risk in population *                  %.2f (%.2f, %.2f)",
+                        PARisk.strata.wald[1],
+                        PARisk.strata.wald[2],
+                        PARisk.strata.wald[3]
                         ))
 
             cat(sprintf("\nAttrib fraction in exposed (%%)               %.2f (%.2f, %.2f)",
-                        AFRisk.strata[1] * 100,
-                        AFRisk.strata[2] * 100,
-                        AFRisk.strata[3] * 100
+                        AFRisk.strata.wald[1] * 100,
+                        AFRisk.strata.wald[2] * 100,
+                        AFRisk.strata.wald[3] * 100
                         ))
 
             cat(sprintf("\nAttrib fraction in population (%%)            %.2f (%.2f, %.2f)",
-                        PAFRisk.strata[1] * 100,
-                        PAFRisk.strata[2] * 100,
-                        PAFRisk.strata[3] * 100
+                        PAFRisk.strata.wald[1] * 100,
+                        PAFRisk.strata.wald[2] * 100,
+                        PAFRisk.strata.wald[3] * 100
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
         cat("\n", "X2 test statistic:", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "p-value:", p)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "*", x$res$count.units, "\n")
         }
         
@@ -1959,65 +2084,65 @@ print.epi.2by2 <- function(x, ...) {
         print(x$tab)
         cat("\n")
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nInc risk ratio (W) (crude)                   %.2f (%.2f, %.2f)",
-                        wRR.crude[1],
-                        wRR.crude[2],
-                        wRR.crude[3]
+            cat(sprintf("\nInc risk ratio (crude)                       %.2f (%.2f, %.2f)",
+                        RR.crude.wald[1],
+                        RR.crude.wald[2],
+                        RR.crude.wald[3]
                         ))
 
             cat(sprintf("\nInc risk ratio (M-H)                         %.2f (%.2f, %.2f)",
-                        RR.mh$est,
-                        RR.mh$lower,
-                        RR.mh$upper
+                        RR.mh.wald$est,
+                        RR.mh.wald$lower,
+                        RR.mh.wald$upper
                         ))
 
             cat(sprintf("\nInc risk ratio (crude:M-H)                   %.2f",
-                        round(wRR.crude[1] / RR.mh[1], digits = 2)
+                        round(RR.crude.wald[1] / RR.mh.wald[1], digits = 2)
                         ))
 
-            cat(sprintf("\nOdds ratio (W) (crude)                       %.2f (%.2f, %.2f)",
-                        wOR.crude[1],
-                        wOR.crude[2],
-                        wOR.crude[3]
+            cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+                        OR.crude.wald[1],
+                        OR.crude.wald[2],
+                        OR.crude.wald[3]
                         ))
 
             cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
-                        OR.mh$est,
-                        OR.mh$lower,
-                        OR.mh$upper
+                        OR.mh.wald$est,
+                        OR.mh.wald$lower,
+                        OR.mh.wald$upper
                         ))
 
             cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
-                        round(wOR.crude[1] / OR.mh[1], digits = 2)
+                        round(OR.crude.wald[1] / OR.mh.wald[1], digits = 2)
                         ))
 
-            cat(sprintf("\nAttrib risk (W) (crude) *                    %.2f (%.2f, %.2f)",
-                        wARisk.crude[1],
-                        wARisk.crude[2],
-                        wARisk.crude[3]
+            cat(sprintf("\nAttrib risk (crude) *                        %.2f (%.2f, %.2f)",
+                        ARisk.crude.wald[1],
+                        ARisk.crude.wald[2],
+                        ARisk.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib risk (M-H) *                          %.2f (%.2f, %.2f)",
-                        ARisk.mh$est,
-                        ARisk.mh$lower,
-                        ARisk.mh$upper
+                        ARisk.mh.wald$est,
+                        ARisk.mh.wald$lower,
+                        ARisk.mh.wald$upper
                         ))
 
             cat(sprintf("\nAttrib risk (crude:M-H)                      %.2f",
-                        round(wARisk.crude[1] / ARisk.mh[1], digits = 2)
+                        round(ARisk.crude.wald[1] / ARisk.mh.wald[1], digits = 2)
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         rrp <- ifelse(as.numeric(x$res$RR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$RR.homog)[3], digits = 3))
         cat("\n", "Test of homogeneity of IRR: X2 test statistic:", as.numeric(round(x$res$RR.homog[1], digits = 3)), "p-value:", rrp)
 
         orp <- ifelse(as.numeric(x$res$OR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$OR.homog)[3], digits = 3))
         cat("\n", "Test of homogeneity of  OR: X2 test statistic:", as.numeric(round(x$res$OR.homog[1], digits = 3)), "p-value:", orp)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "M-H: Mantel-Haenszel")        
         cat("\n", "*", x$res$count.units, "\n")
         }
@@ -2028,44 +2153,45 @@ print.epi.2by2 <- function(x, ...) {
 
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nInc rate ratio                                %.2f (%.2f, %.2f)",
-                        IRR.crude[1],
-                        IRR.crude[2],
-                        IRR.crude[3]
+            cat(sprintf("\nInc rate ratio                               %.2f (%.2f, %.2f)",
+                        IRR.crude.wald[1],
+                        IRR.crude.wald[2],
+                        IRR.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib rate *                                %.2f (%.2f, %.2f)",
-                        ARate.crude[1],
-                        ARate.crude[2],
-                        ARate.crude[3]
+                        ARate.crude.wald[1],
+                        ARate.crude.wald[2],
+                        ARate.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib rate in population *                  %.2f (%.2f, %.2f)",
-                        PARate.crude[1],
-                        PARate.crude[2],
-                        PARate.crude[3]
+                        PARate.crude.wald[1],
+                        PARate.crude.wald[2],
+                        PARate.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib fraction in exposed (%%)               %.2f (%.2f, %.2f)",
-                        AFRate.crude[1]   * 100,
-                        AFRate.crude[2]   * 100,
-                        AFRate.crude[3]   * 100
+                        AFRate.crude.wald[1]   * 100,
+                        AFRate.crude.wald[2]   * 100,
+                        AFRate.crude.wald[3]   * 100
                         ))
 
             cat(sprintf("\nAttrib fraction in population (%%)            %.2f (%.2f, %.2f)",
-                        PAFRate.crude[1]  * 100,
-                        PAFRate.crude[2]  * 100,
-                        PAFRate.crude[3]  * 100
+                        PAFRate.crude.wald[1]  * 100,
+                        PAFRate.crude.wald[2]  * 100,
+                        PAFRate.crude.wald[3]  * 100
                         ))
 
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
         cat("\n", "X2 test statistic:", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "p-value:", p)
+        cat("\n", "Wald confidence limits")
         cat("\n", "*", x$res$time.units, "\n")
         }
   
@@ -2075,47 +2201,48 @@ print.epi.2by2 <- function(x, ...) {
 
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         with(x$res, {
             
             cat(sprintf("\nInc rate ratio (crude)                       %.2f (%.2f, %.2f)",
-                        IRR.crude[1],
-                        IRR.crude[2],
-                        IRR.crude[3]
+                        IRR.crude.wald[1],
+                        IRR.crude.wald[2],
+                        IRR.crude.wald[3]
                         ))
 
             cat(sprintf("\nInc rate ratio (M-H)                         %.2f (%.2f, %.2f)",
-                        IRR.mh[1],
-                        IRR.mh[2],
-                        IRR.mh[3]
+                        IRR.mh.wald[1],
+                        IRR.mh.wald[2],
+                        IRR.mh.wald[3]
                         ))
 
             cat(sprintf("\nInc rate ratio (crude:M-H)                   %.2f",
-                        round(IRR.crude[1] / IRR.mh[1], digits = 2)
+                        round(IRR.crude.wald[1] / IRR.mh.wald[1], digits = 2)
                         ))
 
             cat(sprintf("\nAttrib rate (crude) *                        %.2f (%.2f, %.2f)",
-                        ARate.crude[1],
-                        ARate.crude[2],
-                        ARate.crude[3]
+                        ARate.crude.wald[1],
+                        ARate.crude.wald[2],
+                        ARate.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib rate (M-H) *                          %.2f (%.2f, %.2f)",
-                        ARate.mh[1],
-                        ARate.mh[2],
-                        ARate.mh[3]
+                        ARate.mh.wald[1],
+                        ARate.mh.wald[2],
+                        ARate.mh.wald[3]
                         ))
 
             cat(sprintf("\nAttrib rate (crude:M-H)                      %.2f",
                         ARate.conf$est
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         # rrp <- ifelse(as.numeric(x$res$RR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$RR.homog)[3], digits = 3))
         # cat("\n", "Test of homogeneity of IRR: X2 test statistic:", as.numeric(round(x$res$RR.homog[1], digits = 3)), "p-value:", rrp)
         
         # orp <- ifelse(as.numeric(x$res$OR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$OR.homog)[3], digits = 3))
         # cat("\n", "Test of homogeneity of  OR: X2 test statistic:", as.numeric(round(x$res$OR.homog[1], digits = 3)), "p-value:", orp)
+        cat("\n", "Wald confidence limits")
         cat("\n", "M-H: Mantel-Haenszel") 
         cat("\n", "*", x$res$time.units, "\n")
     }
@@ -2126,44 +2253,44 @@ print.epi.2by2 <- function(x, ...) {
 
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
             cat(sprintf("\nOdds ratio (W)                               %.2f (%.2f, %.2f)",
-                        wOR.strata[1],
-                        wOR.strata[2],
-                        wOR.strata[3]
+                        OR.strata.wald[1],
+                        OR.strata.wald[2],
+                        OR.strata.wald[3]
                         ))
 
-            cat(sprintf("\nAttrib prevalence (W) *                      %.2f (%.2f, %.2f)",
-                        wARisk.strata[1],
-                        wARisk.strata[2],
-                        wARisk.strata[3]
+            cat(sprintf("\nAttrib prevalence *                          %.2f (%.2f, %.2f)",
+                        ARisk.strata.wald[1],
+                        ARisk.strata.wald[2],
+                        ARisk.strata.wald[3]
                         ))
 
-            cat(sprintf("\nAttrib prevalence in population (W) *        %.2f (%.2f, %.2f)",
-                        wPARisk.strata[1],
-                        wPARisk.strata[2],
-                        wPARisk.strata[3]
+            cat(sprintf("\nAttrib prevalence in population *            %.2f (%.2f, %.2f)",
+                        PARisk.strata.wald[1],
+                        PARisk.strata.wald[2],
+                        PARisk.strata.wald[3]
                         ))
 
             cat(sprintf("\nAttrib fraction (est) in exposed  (%%)        %.2f (%.2f, %.2f)",
-                        AFest.strata[1]   * 100,
-                        AFest.strata[2]   * 100,
-                        AFest.strata[3]   * 100
+                        AFest.strata.wald[1]   * 100,
+                        AFest.strata.wald[2]   * 100,
+                        AFest.strata.wald[3]   * 100
                         ))
 
             cat(sprintf("\nAttrib fraction (est) in population (%%)      %.2f (%.2f, %.2f)",
-                        PAFest.strata[1]  * 100,
-                        PAFest.strata[2]  * 100,
-                        PAFest.strata[3]  * 100
+                        PAFest.strata.wald[1]  * 100,
+                        PAFest.strata.wald[2]  * 100,
+                        PAFest.strata.wald[3]  * 100
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
         cat("\n", "X2 test statistic:", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "p-value:", p)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "*", x$res$count.units, "\n")
         }
 
@@ -2173,46 +2300,46 @@ print.epi.2by2 <- function(x, ...) {
         
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nOdds ratio (W) (crude)                       %.2f (%.2f, %.2f)",
-                        wOR.crude[1],
-                        wOR.crude[2],
-                        wOR.crude[3]
+            cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+                        OR.crude.wald[1],
+                        OR.crude.wald[2],
+                        OR.crude.wald[3]
                         ))
 
             cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
-                        OR.mh[1],
-                        OR.mh[2],
-                        OR.mh[3]
+                        OR.mh.wald[1],
+                        OR.mh.wald[2],
+                        OR.mh.wald[3]
                         ))
 
             cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
-                        round(wOR.crude[1] / OR.mh[1], digits = 2)
+                        round(OR.crude.wald[1] / OR.mh.wald[1], digits = 2)
                         ))
 
-            cat(sprintf("\nAttrib prevalence (W) (crude) *              %.2f (%.2f, %.2f)",
-                        wARisk.crude[1],
-                        wARisk.crude[2],
-                        wARisk.crude[3]
+            cat(sprintf("\nAttrib prevalence (crude) *                  %.2f (%.2f, %.2f)",
+                        ARisk.crude.wald[1],
+                        ARisk.crude.wald[2],
+                        ARisk.crude.wald[3]
                         ))
 
             cat(sprintf("\nAttrib prevalence (M-H) *                    %.2f (%.2f, %.2f)",
-                        ARisk.mh[1],
-                        ARisk.mh[2],
-                        ARisk.mh[3]
+                        ARisk.mh.wald[1],
+                        ARisk.mh.wald[2],
+                        ARisk.mh.wald[3]
                         ))
 
             cat(sprintf("\nAttrib prevalence (crude:M-H)                %.2f",
-                        round(wARisk.crude[1] / ARisk.mh[1], digits = 2)
+                        round(ARisk.crude.wald[1] / ARisk.mh.wald[1], digits = 2)
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         orp <- ifelse(as.numeric(x$res$OR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$OR.homog)[3], digits = 3))
         cat("\n", "Test of homogeneity of  OR: X2 test statistic:", as.numeric(round(x$res$OR.homog[1], digits = 3)), "p-value:", orp)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "M-H: Mantel-Haenszel") 
         cat("\n", "*", x$res$count.units, "\n")
         }
@@ -2223,50 +2350,50 @@ print.epi.2by2 <- function(x, ...) {
         
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nPrevalence ratio (W)                         %.2f (%.2f, %.2f)",
-                        wRR.strata[1],
-                        wRR.strata[2],
-                        wRR.strata[3]
+            cat(sprintf("\nPrevalence ratio                             %.2f (%.2f, %.2f)",
+                        RR.strata.wald[1],
+                        RR.strata.wald[2],
+                        RR.strata.wald[3]
                         ))
 
-            cat(sprintf("\nOdds ratio (W)                               %.2f (%.2f, %.2f)",
-                        wOR.strata[1],
-                        wOR.strata[2],
-                        wOR.strata[3]
+            cat(sprintf("\nOdds ratio                                   %.2f (%.2f, %.2f)",
+                        OR.strata.wald[1],
+                        OR.strata.wald[2],
+                        OR.strata.wald[3]
                         ))
 
-            cat(sprintf("\nAttrib prevalence (W) *                      %.2f (%.2f, %.2f)",
-                        wARisk.strata[1],
-                        wARisk.strata[2],
-                        wARisk.strata[3]
+            cat(sprintf("\nAttrib prevalence *                          %.2f (%.2f, %.2f)",
+                        ARisk.strata.wald[1],
+                        ARisk.strata.wald[2],
+                        ARisk.strata.wald[3]
                         ))
 
             cat(sprintf("\nAttrib prevalence in population *            %.2f (%.2f, %.2f)",
-                        wPARisk.strata[1],
-                        wPARisk.strata[2],
-                        wPARisk.strata[3]
+                        PARisk.strata.wald[1],
+                        PARisk.strata.wald[2],
+                        PARisk.strata.wald[3]
                         ))
 
             cat(sprintf("\nAttrib fraction in exposed (%%)              %.2f (%.2f, %.2f)",
-                        AFRisk.strata[1]   * 100,
-                        AFRisk.strata[2]   * 100,
-                        AFRisk.strata[3]   * 100
+                        AFRisk.strata.wald[1]   * 100,
+                        AFRisk.strata.wald[2]   * 100,
+                        AFRisk.strata.wald[3]   * 100
                         ))
 
             cat(sprintf("\nAttrib fraction in population (%%)           %.2f (%.2f, %.2f)",
-                        PAFRisk.strata[1]   * 100,
-                        PAFRisk.strata[2]   * 100,
-                        PAFRisk.strata[3]   * 100
+                        PAFRisk.strata.wald[1]   * 100,
+                        PAFRisk.strata.wald[2]   * 100,
+                        PAFRisk.strata.wald[3]   * 100
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
         cat("\n", "X2 test statistic:", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "p-value:", p)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "*", x$res$count.units, "\n")
         }
 
@@ -2276,65 +2403,65 @@ print.epi.2by2 <- function(x, ...) {
         
         print(x$tab)
         cat("\nPoint estimates and", x$conf.level * 100, "%", "CIs:")
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
 
         with(x$res, {
 
-            cat(sprintf("\nPrevalence ratio (W) (crude)                 %.2f (%.2f, %.2f)",
-                        wRR.crude[1],
-                        wRR.crude[2],
-                        wRR.crude[3]
+            cat(sprintf("\nPrevalence ratio (crude)                     %.2f (%.2f, %.2f)",
+                        RR.crude.wald[1],
+                        RR.crude.wald[2],
+                        RR.crude.wald[3]
                         ))
 
             cat(sprintf("\nPrevalence ratio (M-H)                       %.2f (%.2f, %.2f)",
-                        RR.mh[1],
-                        RR.mh[2],
-                        RR.mh[3]
+                        RR.mh.wald[1],
+                        RR.mh.wald[2],
+                        RR.mh.wald[3]
                         ))
 
             cat(sprintf("\nPrevalence ratio (crude:M-H)                 %.2f",
-                        round(wRR.crude[1] / RR.mh[1], digits = 2)
+                        round(RR.crude.wald[1] / RR.mh.wald[1], digits = 2)
                         ))
 
-            cat(sprintf("\nOdds ratio (W) (crude)                       %.2f (%.2f, %.2f)",
-                        wOR.crude[1],
-                        wOR.crude[2],
-                        wOR.crude[3]
+            cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+                        OR.crude.wald[1],
+                        OR.crude.wald[2],
+                        OR.crude.wald[3]
                         ))
 
             cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
-                        OR.mh$est,
-                        OR.mh$lower,
-                        OR.mh$upper
+                        OR.mh.wald$est,
+                        OR.mh.wald$lower,
+                        OR.mh.wald$upper
                         ))
 
             cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
-                        round(wOR.crude[1] / OR.mh[1], digits = 2)
+                        round(OR.crude.wald[1] / OR.mh.wald[1], digits = 2)
                         ))
 
-            cat(sprintf("\nAtributable prevalence (W) (crude) *         %.2f (%.2f, %.2f)",
-                        wARisk.crude[1],
-                        wARisk.crude[2],
-                        wARisk.crude[3]
+            cat(sprintf("\nAtributable prevalence (crude) *             %.2f (%.2f, %.2f)",
+                        ARisk.crude.wald[1],
+                        ARisk.crude.wald[2],
+                        ARisk.crude.wald[3]
                         ))
 
             cat(sprintf("\nAtributable prevalence (M-H) *               %.2f (%.2f, %.2f)",
-                        ARisk.mh[1],
-                        ARisk.mh[2],
-                        ARisk.mh[3]
+                        ARisk.mh.wald[1],
+                        ARisk.mh.wald[2],
+                        ARisk.mh.wald[3]
                         ))
 
             cat(sprintf("\nAtributable prevalence (crude:M-H)           %.2f",
-                        round(wARisk.crude[1] /ARisk.mh[1], digits = 2)
+                        round(ARisk.crude.wald[1] /ARisk.mh.wald[1], digits = 2)
                         ))
         })
-        cat("\n---------------------------------------------------------")
+        cat("\n-------------------------------------------------------------------")
         rrp <- ifelse(as.numeric(x$res$RR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$RR.homog)[3], digits = 3))
         cat("\n", "Test of homogeneity of IRR: X2 test statistic:", as.numeric(round(x$res$RR.homog[1], digits = 3)), "p-value:", rrp)
         
         orp <- ifelse(as.numeric(x$res$OR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$OR.homog)[3], digits = 3))
         cat("\n", "Test of homogeneity of  OR: X2 test statistic:", as.numeric(round(x$res$OR.homog[1], digits = 3)), "p-value:", orp)
-        cat("\n", "W: Wald confidence limits")
+        cat("\n", "Wald confidence limits")
         cat("\n", "M-H: Mantel-Haenszel") 
         cat("\n", "*", x$res$count.units, "\n")
           }
@@ -2344,4 +2471,3 @@ print.epi.2by2 <- function(x, ...) {
 summary.epi.2by2 <- function(object, ...) {
     return(object$massoc)
 }
-

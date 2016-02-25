@@ -69,10 +69,14 @@ Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University 
 
 \note{
 \tabular{llll}{
- \tab Disease +	\tab Disease -  \tab Total\cr
-Test +\tab a\tab b \tab a + b\cr
-Test - \tab c\tab d \tab c + d\cr
-Total\tab a + c\tab b + d \tab a + b + c + d\cr
+-----------\tab ----------\tab ---------- \tab ----------\cr 
+ 		       \tab Disease +	\tab Disease -  \tab Total     \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr                  
+Test +  	 \tab a		      \tab b		      \tab a+b       \cr
+Test -     \tab c		      \tab d		      \tab c+d       \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr 
+Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr 
    }
 }
 

@@ -3,7 +3,7 @@
 \alias{epi.simplesize}
 
 \title{
-Sample size under under simple random sampling
+Sample size under simple random sampling
 }
 
 \description{

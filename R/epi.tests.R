@@ -314,7 +314,7 @@
     r2 <- with(elements, c(c, d, N0))
     r3 <- with(elements, c(M1, M0, M0 + M1))
     tab <- as.data.frame(rbind(r1, r2, r3))
-    colnames(tab) <- c("   Disease +", "   Disease -", "     Total")
+    colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total")
     rownames(tab) <- c("Test +", "Test -", "Total")
     tab <- format.data.frame(tab, digits = 3, justify = "right")
 
