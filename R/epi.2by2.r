@@ -403,7 +403,9 @@
               }
            
            else{
-              theta <- px / (1 - px) / (py / (1 - py)) / 1.1
+              # Changed 120316 due to NaN returned with some 2 by 2 table data:
+              theta <- px / (1 - px) / (py / (1 - py)) / 1.1111
+              # theta <- px / (1 - px) / (py / (1 - py)) / 1.1 
               ll <- .limit(a, N1, c, N0, conf.level, theta, 0)       
               theta <- px / (1 - px) / (py / (1 - py)) * 1.1
               ul <- .limit(a, N1, c, N0, conf.level, theta, 1)      

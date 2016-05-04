@@ -1,6 +1,6 @@
-337f75d3de05095bd2c586b3f55775b6 *DESCRIPTION
+60d658c586699215b63ddbf46db28ca7 *DESCRIPTION
 768be02285ea0371a36370a0ba64c50f *NAMESPACE
-c3c1700b46917cedc5ff5c92cf5a67d7 *R/epi.2by2.r
+b2d8a1b9e5cbe42253b36be9c8b80450 *R/epi.2by2.r
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
 35dd233e3feeceefc29040363acdbadd *R/epi.asc.R
@@ -31,7 +31,7 @@ e935ed017215d39b2225f61b23de3bfd *R/epi.herdtest.R
 2a952ef6d504f5a1d6d1e39fd3d42666 *R/epi.iv.R
 098e035a862a53f70d3c0490384bc8e1 *R/epi.kappa.R
 dd5a6b971d1652170e84fa8a709215a9 *R/epi.ltd.R
-4c9176c6dbfbb04dac7159ca7527b888 *R/epi.mh.R
+ea1981a5c3db03399670c25ae1cbca6a *R/epi.mh.R
 3d98611d0dba6b2b3d0fc12fac16b800 *R/epi.nomogram.R
 fda5a6132e84888d9ae9ec0e3054aee6 *R/epi.noninfb.r
 a724e7cb4906adc1328f3226ef0d6a6b *R/epi.noninfc.r

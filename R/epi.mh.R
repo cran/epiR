@@ -28,10 +28,11 @@
         F. <- sum(((a.i + d.i) * b.i * c.i) / N.i^2)
         G <-  sum(((b.i + c.i) * a.i * d.i) / N.i^2) 
         H <-  sum(((b.i + c.i) * b.i * c.i) / N.i^2)
-        P <- sum(((n.1i * n.2i * (a.i + c.i)) - (a.i * c.i * N.i)) / N.i^2)
+
         # For summary risk ratio:
-        R. <- sum((a.i * d.i) / N.i)
-        S. <- sum((b.i * c.i) / N.i)
+        P <- sum(((n.1i * n.2i * (a.i + c.i)) - (a.i * c.i * N.i)) / N.i^2)
+        R. <- sum((a.i * n.2i) / N.i)
+        S. <- sum((c.i * n.1i) / N.i)
         
         if(method == "odds.ratio"){  
             # Individual study odds ratios:
