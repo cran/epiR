@@ -15,11 +15,11 @@ epi.prev(pos, tested, se, sp, method = "wilson", conf.level = 0.95)
 }
 
 \arguments{
-  \item{pos}{the number of positives.}
-  \item{tested}{the number tested.}
-  \item{se}{test sensitivity (0 - 1).}
-  \item{sp}{test specificity (0 - 1).}
-  \item{method}{a character string indicating the method to use. Options are \code{"c-p"} (Cloppper-Pearson), \code{"sterne"} (Sterne), \code{"blaker"} (Blaker) and \code{"wilson"} (Wilson).}
+  \item{pos}{a vector listing the count of positive test results for each population.}
+  \item{tested}{a vector listing the count of subjects tested for each population.}
+  \item{se}{test sensitivity (0 - 1). Must be a single number between 0 and 1.}
+  \item{sp}{test specificity (0 - 1). Must be a single number between 0 and 1.}
+  \item{method}{a character string indicating the confidence interval calculation method to use. Options are \code{"c-p"} (Cloppper-Pearson), \code{"sterne"} (Sterne), \code{"blaker"} (Blaker) and \code{"wilson"} (Wilson).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
