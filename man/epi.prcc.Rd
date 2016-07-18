@@ -31,7 +31,7 @@ A data frame with three elements: \code{gamma} the partial rank corellation coef
 \references{
 Blower S, Dowlatabladi H (1994). Sensitivity and uncertainty analysis of complex models of disease transmission: an HIV model, as an example. International Statistical Review 62: 229 - 243.
 
-Sanchez M, Blower S (1997) Uncertainty and sensitivity analysis of the basic reproductive rate. American Journal of Epidemiology, 145: 1127 - 1137.
+Sanchez M, Blower S (1997) Uncertainty and sensitivity analysis of the basic reproductive rate. American Journal of Epidemiology 145: 1127 - 1137.
 }
 
 \author{

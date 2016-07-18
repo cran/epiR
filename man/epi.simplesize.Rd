@@ -34,7 +34,6 @@ Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wi
 Scheaffer RL, Mendenhall W, Lyman Ott R (1996). Elementary Survey Sampling. Duxbury Press, New York, pp. 95.
 
 Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
-
 }
 
 \note{

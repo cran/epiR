@@ -33,11 +33,11 @@ A list containing one or more of the following:
 }
 
 \references{
-Bennett JE, Dismukes WE, Duma RJ, Medoff G, Sande MA, Gallis H, Leonard J, Fields BT, Bradshaw M, Haywood H, McGee Z, Cate TR, Cobbs CG, Warner JF and Alling DW (1979). A comparison of amphotericin B alone and combined flucytosine in the treatment of cryptococcal meningitis. New England Journal of Medicine. 301: 126 - 131.
+Bennett JE, Dismukes WE, Duma RJ, Medoff G, Sande MA, Gallis H, Leonard J, Fields BT, Bradshaw M, Haywood H, McGee Z, Cate TR, Cobbs CG, Warner JF and Alling DW (1979). A comparison of amphotericin B alone and combined flucytosine in the treatment of cryptococcal meningitis. New England Journal of Medicine 301: 126 - 131.
 
-Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series. page 91.
+Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series, pp. 91.
 
-Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber. 36: 170 - 173.
+Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber 36: 170 - 173.
 
 Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics in Medicine 23: 1921 - 1986.
 
@@ -67,7 +67,7 @@ When calculating the power of a study, note that the variable \code{n} refers to
 ## anticipated that the standard deviation of diastolic BP is approximately 
 ## 8 mmHg. If one wishes to confirm that the difference is likely to be less 
 ## than 5 mmHg, that is, one wishes to show equivalence, how many patients 
-## are need to be enrolled in the trial? We assume 80\% power and 
+## are need to be enrolled in the trial? Assume 80\% power and 
 ## 95\% significance.
 
 epi.equivc(treat = 94, control = 96, sd = 8, delta = 5, n = NA, 
@@ -84,12 +84,12 @@ epi.equivc(treat = 94, control = 96, sd = 8, delta = 5, n = NA,
 ## where the intended trial is for testing equivalence of mean responses 
 ## in LDL. Assume that 80\% power is required at a 5\% level of significance.
 
-## In this example, we assume a 5% (i.e. delta = 0.05) change of LDL is 
+## In this example, we assume a 5 unit (i.e. delta = 5) change of LDL is 
 ## considered of clinically meaningful difference. Assume the standard 
-## of LDL is 0.10 and the LDL concentration in the treatment group is 0.20 
-## units and the LDL concentration in the control group is 0.21 units.
+## of LDL is 10 units and the LDL concentration in the treatment group is 20 
+## units and the LDL concentration in the control group is 21 units.
 
-epi.equivc(treat = 0.20, control = 0.21, sd = 0.10, delta = 0.05, n = NA, 
+epi.equivc(treat = 20, control = 21, sd = 10, delta = 5, n = NA, 
    r = 1, power = 0.80, alpha = 0.05)
 
 ## A total of 216 subjects need to be enrolled in the trial, 108 in the 

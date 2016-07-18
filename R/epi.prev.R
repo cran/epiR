@@ -1,10 +1,10 @@
-"epi.prev" <- function(pos, tested, se, sp, method = "wilson", conf.level = 0.95){
+"epi.prev" <- function(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95){
 
    # Confidence intervals:
-   if(method == "c-p") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "exact", alpha = 1 - conf.level)[,2:3]
+   if(method == "c-p") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "exact", alpha = 1 - conf.level)
    else if (method == "sterne") ap.cl <- tp.cl <- .sterne.ci(x = pos, n = tested, alpha = 1 - conf.level)
    else if (method == "blaker") ap.cl <- tp.cl <- .blaker.ci(x = pos, n = tested, conf.level)
-   else if (method == "wilson") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)[,2:3]
+   else if (method == "wilson") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)
    else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')
    
    # Apparent prevalence:
@@ -20,13 +20,13 @@
    # tp.cl <- pmin(tp.cl, c(1, 1))
 
    if(length(pos) == 1){
-     result.01 <- data.frame(est = ap.p, lower = ap.cl[1], upper = ap.cl[2])
-     result.02 <- data.frame(est = tp.p, lower = tp.cl[1], upper = tp.cl[2])
+     result.01 <- data.frame(est = ap.p * units, lower = ap.cl[1] * units, upper = ap.cl[2] * units)
+     result.02 <- data.frame(est = tp.p * units, lower = tp.cl[1] * units, upper = tp.cl[2] * units)
      } 
    
    if(length(pos) > 1){
-     result.01 <- data.frame(est = ap.p, lower = ap.cl[,1], upper = ap.cl[,2])
-     result.02 <- data.frame(est = tp.p, lower = tp.cl[,1], upper = tp.cl[,2])
+     result.01 <- data.frame(est = ap.p * units, lower = ap.cl[,1] * units, upper = ap.cl[,2] * units)
+     result.02 <- data.frame(est = tp.p * units, lower = tp.cl[,1] * units, upper = tp.cl[,2] * units)
    } 
      
    rval <- list(ap = result.01, tp = result.02)
@@ -92,7 +92,7 @@
   mat <- matrix(ncol = 3, nrow = length(x))
   
   for (i in 1:length(x)) mat[i,] <- bc(x[i], n[i], alpha = alpha, method = method)
-  # dimnames(mat) <- list(rep("", dim(mat)[1]), c("PointEst", "Lower", "Upper"))
+  mat <- mat[,2:3]
   mat
 }
 

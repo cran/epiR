@@ -35,7 +35,7 @@ A list containing the following:
 \references{
 Fay M, Feuer E (1997). Confidence intervals for directly standardized rates: A method based on the gamma distribution. Statistics in Medicine 16: 791 - 801.
 
-Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York, USA, p 240.
+Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York, USA, pp. 240.
 
 Greenland S, Rothman KJ. Introduction to stratified analysis. In: Rothman KJ, Greenland S (1998). Modern Epidemiology. Lippincott Williams, & Wilkins, Philadelphia, pp. 260 - 265.
 

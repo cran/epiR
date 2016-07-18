@@ -20,8 +20,8 @@ epi.descriptives(dat, conf.level = 0.95)
 
 \value{
 A list containing the following:
-  \item{arithmetic}{\code{n} number of observations, \code{mean} arithmetic mean, \code{sd} arithmetic standard deviation, \code{q25} 25th quantile, \code{q75} 75th quantile, \code{lower} lower bound of the confidence interval, \code{upper} upper bound of the confidence interval, \code{min} minimum value, \code{max} maximum value, and \code{na} number of missing values.}
-  \item{geometric}{\code{n} number of observations, \code{mean} geometric mean, \code{sd} geometric standard deviation, \code{q25} 25th quantile, \code{q75} 75th quantile, \code{lower} lower bound of the confidence interval, \code{upper} upper bound of the confidence interval, \code{min} minimum value, \code{max} maximum value, and \code{na} number of missing values.}
+  \item{arithmetic}{\code{n} number of observations, \code{mean} arithmetic mean, \code{sd} arithmetic standard deviation, \code{q25} 25th quantile, \code{q50} 50th quantile, \code{q75} 75th quantile, \code{lower} lower bound of the confidence interval, \code{upper} upper bound of the confidence interval, \code{min} minimum value, \code{max} maximum value, and \code{na} number of missing values.}
+  \item{geometric}{\code{n} number of observations, \code{mean} geometric mean, \code{sd} geometric standard deviation, \code{q25} 25th quantile, \code{q50} 50th quantile, \code{q75} 75th quantile, \code{lower} lower bound of the confidence interval, \code{upper} upper bound of the confidence interval, \code{min} minimum value, \code{max} maximum value, and \code{na} number of missing values.}
   \item{symmetry}{\code{skewness} and \code{kurtosis}. }
 }
 

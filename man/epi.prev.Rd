@@ -11,15 +11,16 @@ Computes the true prevalence of a disease in a population on the basis of an imp
 }
 
 \usage{
-epi.prev(pos, tested, se, sp, method = "wilson", conf.level = 0.95)
+epi.prev(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95)
 }
 
 \arguments{
   \item{pos}{a vector listing the count of positive test results for each population.}
   \item{tested}{a vector listing the count of subjects tested for each population.}
-  \item{se}{test sensitivity (0 - 1). Must be a single number between 0 and 1.}
-  \item{sp}{test specificity (0 - 1). Must be a single number between 0 and 1.}
+  \item{se}{test sensitivity (0 - 1). \code{se} can either be a single number or a vector of the same length as \code{pos}. See the examples, below, for details.}
+  \item{sp}{test specificity (0 - 1). \code{sp} can either be a single number or a vector of the same length as \code{pos}. See the examples, below, for details.}
   \item{method}{a character string indicating the confidence interval calculation method to use. Options are \code{"c-p"} (Cloppper-Pearson), \code{"sterne"} (Sterne), \code{"blaker"} (Blaker) and \code{"wilson"} (Wilson).}
+  \item{units}{multiplier for the prevalence estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
@@ -68,7 +69,7 @@ Sterne TE (1954). Some remarks on confidence or fiducial limits. Biometrika 41: 
 ## of brucellosis in this herd (and its 95% confidence interval)?
 
 epi.prev(pos = 23, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
-   conf.level = 0.95)
+   units = 100, conf.level = 0.95)
 
 ## The estimated true prevalence of brucellosis in this herd is 5.1 cases per 
 ## 100 cows (95% CI 0 -- 13 cases per 100 cows).
@@ -82,10 +83,29 @@ epi.prev(pos = 23, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
 ## true prevalence of Helicobacter pylori in this age group?
 
 epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
-   conf.level = 0.95)
+   units = 100, conf.level = 0.95)
 
 ## The estimated true prevalence of Helicobacter pylori in 1 -- 4 year olds is
 ## 0 cases per 100 (95% 0 -- 1.3 cases per 100).
+
+## Three dairy herds are tested for tuberculosis. On each herd a different test
+## regime is used (each with a different diagnostic test sensitivity and 
+## specificity). The number of animals tested in each herd were 210, 189 and 
+## 124, respectively. The number of test-positives in each herd were 8, 12 
+## and 7. Test sensitivities were 0.60, 0.65 and 0.70 (respectively). Test 
+## specificities were 0.90, 0.95 and 0.99. What is the estimated true 
+## prevalence of tuberculosis in the three herds?
+
+rval <- epi.prev(pos = c(8,12,7), tested = c(210,189,124), 
+   se = c(0.60,0.65,0.70), sp = c(0.90,0.95,0.99), method = "blaker", 
+   units = 100, conf.level = 0.95)
+round(rval$tp, digits = 3)
+
+## True prevalence estimates for each herd:
+## Herd 1: 0.00 (95\% CI 0.00 to 2.05) cases per 100 cows.
+## Herd 2: 2.25 (95\% CI 0.00 to 9.45) cases per 100 cows.
+## Herd 3: 6.73 (95\% CI 0.99 to 9.00) cases per 100 cows.
+
 }
 
 \keyword{univar}

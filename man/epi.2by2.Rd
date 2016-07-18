@@ -131,7 +131,7 @@ Cornfield, J (1956). A statistical problem arising from retrospective studies. I
 
 Elwood JM (2007). Critical Appraisal of Epidemiological Studies and Clinical Trials. Oxford University Press, London.
 
-Feinstein AR (2002). Principles of Medical Statistics. Chapman Hall/CRC, London, 332 - 336.
+Feinstein AR (2002). Principles of Medical Statistics. Chapman Hall/CRC, London, pp. 332 - 336.
 
 Fisher RA (1962). Confidence limits for a cross-product ratio. Australian Journal of Statistics 4: 41.
 
@@ -336,8 +336,8 @@ or.u <- c(rval$massoc$OR.mh$upper, rval$massoc$OR.strata.cfield$upper)
 or.p <- c(rval$massoc$OR.mh$est, rval$massoc$OR.strata.cfield$est)
 dat <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 
-p <- ggplot(dat, aes(or.p, y.at))
-p + geom_point() + 
+ggplot(dat, aes(or.p, y.at)) +
+   geom_point() + 
    geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
    labs(x = "Odds ratio", y = "Strata") + 
    scale_x_continuous(trans = log2_trans(), breaks = x.at, 

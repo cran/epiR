@@ -28,9 +28,9 @@ Bailey TC and Gatrell AC (1995). Interactive Spatial Data Analysis. Longman Scie
 \references{
 Diggle P, Gatrell A, and Lovett A (1990). Modelling the prevalence of cancer of the larynx in Lancashire: A new method for spatial epidemiology. In: Thomas R (Editor), Spatial Epidemiology. Pion Limited, London, pp. 35 - 47. 
 
-Diggle P (1990). A point process modelling approach to raised incidence of a rare phenomenon in the viscinity of a prespecified point. Journal of the Royal Statistical Society, A, 153: 349 - 362. 
+Diggle P (1990). A point process modelling approach to raised incidence of a rare phenomenon in the viscinity of a prespecified point. Journal of the Royal Statistical Society A 153: 349 - 362. 
 
-Diggle P, Rowlingson B (1994). A conditional approach to point process modelling of elevated risk. Journal of the Royal Statistical Society, A, 157: 433 - 440. 
+Diggle P, Rowlingson B (1994). A conditional approach to point process modelling of elevated risk. Journal of the Royal Statistical Society A 157: 433 - 440. 
 }
 
 \keyword{datasets}

@@ -632,40 +632,40 @@
         stotal <- sa + sb + sc + sd
 
         ## Within-strata incidence risk in exposed:
-        tmp <- .funincrisk(as.matrix(cbind(a, N1)), conf.level = conf.level)
-        IRiske.p <- as.numeric(tmp[,1]) * units
-        IRiske.l <- as.numeric(tmp[,2]) * units
-        IRiske.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(a, N1)), conf.level = conf.level)
+        IRiske.p <- as.numeric(.tmp[,1]) * units
+        IRiske.l <- as.numeric(.tmp[,2]) * units
+        IRiske.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata incidence risk in unexposed:
-        tmp <- .funincrisk(as.matrix(cbind(c, N0)), conf.level = conf.level)
-        IRisko.p <- as.numeric(tmp[,1]) * units
-        IRisko.l <- as.numeric(tmp[,2]) * units
-        IRisko.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(c, N0)), conf.level = conf.level)
+        IRisko.p <- as.numeric(.tmp[,1]) * units
+        IRisko.l <- as.numeric(.tmp[,2]) * units
+        IRisko.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata incidence risk in population:
-        tmp <- .funincrisk(as.matrix(cbind(M1, total)), conf.level = conf.level)
-        IRiskpop.p <- as.numeric(tmp[,1]) * units
-        IRiskpop.l <- as.numeric(tmp[,2]) * units
-        IRiskpop.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(M1, total)), conf.level = conf.level)
+        IRiskpop.p <- as.numeric(.tmp[,1]) * units
+        IRiskpop.l <- as.numeric(.tmp[,2]) * units
+        IRiskpop.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata incidence rate in exposed:
-        tmp <- .funincrate(as.matrix(cbind(a, b)), conf.level = conf.level)
-        IRatee.p <- as.numeric(tmp[,1]) * units
-        IRatee.l <- as.numeric(tmp[,2]) * units
-        IRatee.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(a, b)), conf.level = conf.level)
+        IRatee.p <- as.numeric(.tmp[,1]) * units
+        IRatee.l <- as.numeric(.tmp[,2]) * units
+        IRatee.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata incidence rate in unexposed:
-        tmp <- .funincrate(as.matrix(cbind(c, d)), conf.level = conf.level)
-        IRateo.p <- as.numeric(tmp[,1]) * units
-        IRateo.l <- as.numeric(tmp[,2]) * units
-        IRateo.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(c, d)), conf.level = conf.level)
+        IRateo.p <- as.numeric(.tmp[,1]) * units
+        IRateo.l <- as.numeric(.tmp[,2]) * units
+        IRateo.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata incidence rate in population:
-        tmp <- .funincrate(as.matrix(cbind(M1, M0)), conf.level = conf.level)
-        IRatepop.p <- as.numeric(tmp[,1]) * units
-        IRatepop.l <- as.numeric(tmp[,2]) * units
-        IRatepop.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(M1, M0)), conf.level = conf.level)
+        IRatepop.p <- as.numeric(.tmp[,1]) * units
+        IRatepop.l <- as.numeric(.tmp[,2]) * units
+        IRatepop.u <- as.numeric(.tmp[,3]) * units
 
         ## Within-strata odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
         ## American Journal of Epidemiology 100: 165 - 167.
@@ -692,40 +692,40 @@
         Opop.u <- (Au / (1 - Au))
 
         ## Crude incidence risk in exposed:
-        tmp <- .funincrisk(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
-        cIRiske.p <- as.numeric(tmp[,1]) * units
-        cIRiske.l <- as.numeric(tmp[,2]) * units
-        cIRiske.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
+        cIRiske.p <- as.numeric(.tmp[,1]) * units
+        cIRiske.l <- as.numeric(.tmp[,2]) * units
+        cIRiske.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude incidence risk in unexposed:
-        tmp <- .funincrisk(as.matrix(cbind(sc, sN0)), conf.level = conf.level)
-        cIRisko.p <- as.numeric(tmp[,1]) * units
-        cIRisko.l <- as.numeric(tmp[,2]) * units
-        cIRisko.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(sc, sN0)), conf.level = conf.level)
+        cIRisko.p <- as.numeric(.tmp[,1]) * units
+        cIRisko.l <- as.numeric(.tmp[,2]) * units
+        cIRisko.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude incidence risk in population:
-        tmp <- .funincrisk(as.matrix(cbind(sM1, stotal)), conf.level = conf.level)
-        cIRiskpop.p <- as.numeric(tmp[,1]) * units
-        cIRiskpop.l <- as.numeric(tmp[,2]) * units
-        cIRiskpop.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrisk(as.matrix(cbind(sM1, stotal)), conf.level = conf.level)
+        cIRiskpop.p <- as.numeric(.tmp[,1]) * units
+        cIRiskpop.l <- as.numeric(.tmp[,2]) * units
+        cIRiskpop.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude incidence rate in exposed:
-        tmp <- .funincrate(as.matrix(cbind(sa, sb)), conf.level = conf.level)
-        cIRatee.p <- as.numeric(tmp[,1]) * units
-        cIRatee.l <- as.numeric(tmp[,2]) * units
-        cIRatee.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(sa, sb)), conf.level = conf.level)
+        cIRatee.p <- as.numeric(.tmp[,1]) * units
+        cIRatee.l <- as.numeric(.tmp[,2]) * units
+        cIRatee.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude incidence rate in unexposed:
-        tmp <- .funincrate(as.matrix(cbind(sc, sd)), conf.level = conf.level)
-        cIRateo.p <- as.numeric(tmp[,1]) * units
-        cIRateo.l <- as.numeric(tmp[,2]) * units
-        cIRateo.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(sc, sd)), conf.level = conf.level)
+        cIRateo.p <- as.numeric(.tmp[,1]) * units
+        cIRateo.l <- as.numeric(.tmp[,2]) * units
+        cIRateo.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude incidence risk in population:
-        tmp <- .funincrate(as.matrix(cbind(sM1, sM0)), conf.level = conf.level)
-        cIRatepop.p <- as.numeric(tmp[,1]) * units
-        cIRatepop.l <- as.numeric(tmp[,2]) * units
-        cIRatepop.u <- as.numeric(tmp[,3]) * units
+        .tmp <- .funincrate(as.matrix(cbind(sM1, sM0)), conf.level = conf.level)
+        cIRatepop.p <- as.numeric(.tmp[,1]) * units
+        cIRatepop.l <- as.numeric(.tmp[,2]) * units
+        cIRatepop.u <- as.numeric(.tmp[,3]) * units
 
         ## Crude odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
         ## American Journal of Epidemiology 100: 165 - 167.
@@ -761,17 +761,17 @@
         wRR.p <- c(); wRR.l <- c(); wRR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funRRwald(dat[,,i], conf.level)
-                wRR.p <- c(wRR.p, tmp[1])
-                wRR.l <- c(wRR.l, tmp[2])
-                wRR.u <- c(wRR.u, tmp[3])
+                .tmp <- .funRRwald(dat[,,i], conf.level)
+                wRR.p <- c(wRR.p, .tmp[1])
+                wRR.l <- c(wRR.l, .tmp[2])
+                wRR.u <- c(wRR.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funRRwald(dat, conf.level)
-            wRR.p <- tmp[1]
-            wRR.l <- tmp[2]
-            wRR.u <- tmp[3]
+            .tmp <- .funRRwald(dat, conf.level)
+            wRR.p <- .tmp[1]
+            wRR.l <- .tmp[2]
+            wRR.u <- .tmp[3]
         }
 
         ## Individual strata incidence risk ratio - score confidence limits:
@@ -779,17 +779,17 @@
         scRR.p <- c(); scRR.l <- c(); scRR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funRRscore(dat[,,i], conf.level)
-                scRR.p <- c(scRR.p, tmp[1])
-                scRR.l <- c(scRR.l, tmp[2])
-                scRR.u <- c(scRR.u, tmp[3])
+                .tmp <- .funRRscore(dat[,,i], conf.level)
+                scRR.p <- c(scRR.p, .tmp[1])
+                scRR.l <- c(scRR.l, .tmp[2])
+                scRR.u <- c(scRR.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funRRscore(dat, conf.level)
-            scRR.p <- tmp[1]
-            scRR.l <- tmp[2]
-            scRR.u <- tmp[3]
+            .tmp <- .funRRscore(dat, conf.level)
+            scRR.p <- .tmp[1]
+            scRR.l <- .tmp[2]
+            scRR.u <- .tmp[3]
         }
         
         ## Individual strata incidence rate ratio (exact confidence intervals from epibasic.xlsx http://ph.au.dk/uddannelse/software/):
@@ -815,17 +815,17 @@
         wOR.p <- c(); wOR.l <- c(); wOR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funORwald(dat[,,i], conf.level)
-                wOR.p <- c(wOR.p, tmp[1])
-                wOR.l <- c(wOR.l, tmp[2])
-                wOR.u <- c(wOR.u, tmp[3])
+                .tmp <- .funORwald(dat[,,i], conf.level)
+                wOR.p <- c(wOR.p, .tmp[1])
+                wOR.l <- c(wOR.l, .tmp[2])
+                wOR.u <- c(wOR.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funORwald(dat, conf.level)
-            wOR.p <- tmp[1]
-            wOR.l <- tmp[2]
-            wOR.u <- tmp[3]
+            .tmp <- .funORwald(dat, conf.level)
+            wOR.p <- .tmp[1]
+            wOR.l <- .tmp[2]
+            wOR.u <- .tmp[3]
         }
 
 
@@ -834,17 +834,17 @@
         cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funORcfield(dat[,,i], conf.level)
-                cfOR.p <- c(cfOR.p, tmp[1])
-                cfOR.l <- c(cfOR.l, tmp[2])
-                cfOR.u <- c(cfOR.u, tmp[3])
+                .tmp <- .funORcfield(dat[,,i], conf.level)
+                cfOR.p <- c(cfOR.p, .tmp[1])
+                cfOR.l <- c(cfOR.l, .tmp[2])
+                cfOR.u <- c(cfOR.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funORcfield(dat, conf.level)
-            cfOR.p <- tmp[1]
-            cfOR.l <- tmp[2]
-            cfOR.u <- tmp[3]
+            .tmp <- .funORcfield(dat, conf.level)
+            cfOR.p <- .tmp[1]
+            cfOR.l <- .tmp[2]
+            cfOR.u <- .tmp[3]
         }
 
         ## Individual strata odds ratio - score confidence limits:
@@ -852,17 +852,17 @@
         scOR.p <- c(); scOR.l <- c(); scOR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funORscore(dat[,,i], conf.level)
-                scOR.p <- c(scOR.p, tmp[1])
-                scOR.l <- c(scOR.l, tmp[2])
-                scOR.u <- c(scOR.u, tmp[3])
+                .tmp <- .funORscore(dat[,,i], conf.level)
+                scOR.p <- c(scOR.p, .tmp[1])
+                scOR.l <- c(scOR.l, .tmp[2])
+                scOR.u <- c(scOR.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funORscore(dat, conf.level)
-            scOR.p <- tmp[1]
-            scOR.l <- tmp[2]
-            scOR.u <- tmp[3]
+            .tmp <- .funORscore(dat, conf.level)
+            scOR.p <- .tmp[1]
+            scOR.l <- .tmp[2]
+            scOR.u <- .tmp[3]
         }
 
         ## Individual strata odds ratios - maximum likelihood estimate (using fisher.test function):
@@ -871,18 +871,18 @@
         mOR.p <- c(); mOR.l <- c(); mOR.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funORml(dat[,,i], conf.level)
-                mOR.p <- c(mOR.p, tmp[1])
-                mOR.l <- c(mOR.l, tmp[2])
-                mOR.u <- c(mOR.u, tmp[3])
+                .tmp <- .funORml(dat[,,i], conf.level)
+                mOR.p <- c(mOR.p, .tmp[1])
+                mOR.l <- c(mOR.l, .tmp[2])
+                mOR.u <- c(mOR.u, .tmp[3])
             }
         }
 
         if(length(dim(dat)) == 2){
-            tmp <- .funORml(dat, conf.level)
-            mOR.p <- tmp[1]
-            mOR.l <- tmp[2]
-            mOR.u <- tmp[3]
+            .tmp <- .funORml(dat, conf.level)
+            mOR.p <- .tmp[1]
+            mOR.l <- .tmp[2]
+            mOR.u <- .tmp[3]
         }
 
         ## Individual strata attributable risk (Rothman p 135 equation 7-2):
@@ -890,17 +890,17 @@
         wARisk.p <- c(); wARisk.l <- c(); wARisk.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funARwald(dat[,,i], conf.level, units)
-                wARisk.p <- c(wARisk.p, tmp[1])
-                wARisk.l <- c(wARisk.l, tmp[2])
-                wARisk.u <- c(wARisk.u, tmp[3])
+                .tmp <- .funARwald(dat[,,i], conf.level, units)
+                wARisk.p <- c(wARisk.p, .tmp[1])
+                wARisk.l <- c(wARisk.l, .tmp[2])
+                wARisk.u <- c(wARisk.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funARwald(dat, conf.level, units)
-            wARisk.p <- tmp[1]
-            wARisk.l <- tmp[2]
-            wARisk.u <- tmp[3]
+            .tmp <- .funARwald(dat, conf.level, units)
+            wARisk.p <- .tmp[1]
+            wARisk.l <- .tmp[2]
+            wARisk.u <- .tmp[3]
         }
        
         ## Individual strata attributable risk - score confidence limits:
@@ -908,17 +908,17 @@
         scARisk.p <- c(); scARisk.l <- c(); scARisk.u <- c()
         if(length(dim(dat)) == 3){
             for(i in 1:dim(dat)[3]){
-                tmp <- .funARscore(dat[,,i], conf.level, units)
-                scARisk.p <- c(scARisk.p, tmp[1])
-                scARisk.l <- c(scARisk.l, tmp[2])
-                scARisk.u <- c(scARisk.u, tmp[3])
+                .tmp <- .funARscore(dat[,,i], conf.level, units)
+                scARisk.p <- c(scARisk.p, .tmp[1])
+                scARisk.l <- c(scARisk.l, .tmp[2])
+                scARisk.u <- c(scARisk.u, .tmp[3])
             }
         }
         if(length(dim(dat)) == 2){
-            tmp <- .funARscore(dat, conf.level, units)
-            scARisk.p <- tmp[1]
-            scARisk.l <- tmp[2]
-            scARisk.u <- tmp[3]
+            .tmp <- .funARscore(dat, conf.level, units)
+            scARisk.p <- .tmp[1]
+            scARisk.l <- .tmp[2]
+            scARisk.u <- .tmp[3]
         }
 
         ## Individual strata attributable rate (Rothman p 137 equation 7-4):
@@ -1035,17 +1035,17 @@
 
         ## Crude incidence risk ratio - Wald confidence limits (Rothman p 135 equation 7-3):
         cwRR.ctype <- "Wald"
-        tmp        <- .funRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-        cwRR.p     <- tmp[1]
-        cwRR.l     <- tmp[2]
-        cwRR.u     <- tmp[3]
+        .tmp        <- .funRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+        cwRR.p     <- .tmp[1]
+        cwRR.l     <- .tmp[2]
+        cwRR.u     <- .tmp[3]
 
         ## Crude incidence risk ratio - score confidence limits:
         csRR.ctype <- "Score"
-        tmp        <- .funRRscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-        csRR.p     <- tmp[1]
-        csRR.l     <- tmp[2]
-        csRR.u     <- tmp[3]
+        .tmp        <- .funRRscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+        csRR.p     <- .tmp[1]
+        csRR.l     <- .tmp[2]
+        csRR.u     <- .tmp[3]
 
         ## Crude incidence rate ratio (exact confidence intervals from epibasic.xlsx http://ph.au.dk/uddannelse/software/):
         ceIRR.ctype <- "Exact"
@@ -1060,24 +1060,24 @@
 
         ## Crude odds ratio - Wald confidence limits:
         cwOR.ctype <- "Wald"
-        tmp        <- .funORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-        cwOR.p     <- tmp[1]
-        cwOR.l     <- tmp[2]
-        cwOR.u     <- tmp[3]
+        .tmp        <- .funORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+        cwOR.p     <- .tmp[1]
+        cwOR.l     <- .tmp[2]
+        cwOR.u     <- .tmp[3]
 
         ## Crude odds ratio - Cornfield confidence limits:
         ccfOR.ctype <- "Cornfield"
-        tmp         <- .funORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-        ccfOR.p     <- tmp[1]
-        ccfOR.l     <- tmp[2]
-        ccfOR.u     <- tmp[3]
+        .tmp         <- .funORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+        ccfOR.p     <- .tmp[1]
+        ccfOR.l     <- .tmp[2]
+        ccfOR.u     <- .tmp[3]
 
         ## Crude odds ratio - score confidence limits:
         csOR.ctype <- "Score"
-        tmp        <- .funORscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-        csOR.p     <- tmp[1]
-        csOR.l     <- tmp[2]
-        csOR.u     <- tmp[3]
+        .tmp        <- .funORscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+        csOR.p     <- .tmp[1]
+        csOR.l     <- .tmp[2]
+        csOR.u     <- .tmp[3]
 
         ## Crude odds ratio - maximum likelihood estimate (using fisher.test function):
         ## Replaced 130612.
@@ -1089,17 +1089,17 @@
 
         ## Crude attributable risk - Wald confidence limits (Rothman p 135 equation 7-2):
         cwARisk.ctype <- "Wald"
-        tmp           <- .funARwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
-        cwARisk.p      <- tmp[1]
-        cwARisk.l      <- tmp[2]
-        cwARisk.u      <- tmp[3]
+        .tmp           <- .funARwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
+        cwARisk.p      <- .tmp[1]
+        cwARisk.l      <- .tmp[2]
+        cwARisk.u      <- .tmp[3]
 
         ## Crude attributable risk - score confidence limits:
         cscARisk.ctype <- "Score"
-        tmp           <- .funARscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
-        cscARisk.p      <- tmp[1]
-        cscARisk.l      <- tmp[2]
-        cscARisk.u      <- tmp[3]
+        .tmp           <- .funARscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
+        cscARisk.p      <- .tmp[1]
+        cscARisk.l      <- .tmp[2]
+        cscARisk.u      <- .tmp[3]
 
         ## Crude attributable rate (Rothman p 137 equation 7-4):
         cARate.ctype <- "Wald"
@@ -1247,17 +1247,17 @@
 
         # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
         SatoARisk.ctype <- "Sato"
-        tmp        <- .funMHRD.Sato(dat, conf.level, units)
-        SatoARisk.p <- tmp[1]
-        SatoARisk.l <- tmp[2]
-        SatoARisk.u <- tmp[3]
+        .tmp        <- .funMHRD.Sato(dat, conf.level, units)
+        SatoARisk.p <- .tmp[1]
+        SatoARisk.l <- .tmp[2]
+        SatoARisk.u <- .tmp[3]
 
         # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
         GRARisk.ctype <- "Greenland-Robins"
-        tmp        <- .funMHRD.GR(dat, conf.level, units)
-        GRARisk.p <- tmp[1]
-        GRARisk.l <- tmp[2]
-        GRARisk.u <- tmp[3]
+        .tmp        <- .funMHRD.GR(dat, conf.level, units)
+        GRARisk.p <- .tmp[1]
+        GRARisk.l <- .tmp[2]
+        GRARisk.u <- .tmp[3]
 
         ## Summary attributable rate (Rothman 2002 p 153, equation 8-4):
         sARate.p <- sum(((a * d) - (c * b)) / M0) / sum((b * d) / M0) * units

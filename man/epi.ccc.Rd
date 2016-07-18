@@ -46,8 +46,7 @@ Dunn G (2004). Statistical Evaluation of Measurement Errors: Design and Analysis
 
 Hsu C (1940). On samples from a normal bivariate population. Annals of Mathematical Statistics 11: 410 - 426.
 
-Krippendorff K (1970). Bivariate agreement coefficients for reliability of data. In: Borgatta E, Bohrnstedt G (eds)
-Sociological Methodology. San Francisco: Jossey-Bass, pp. 139 - 150.
+Krippendorff K (1970). Bivariate agreement coefficients for reliability of data. In: Borgatta E, Bohrnstedt G (eds) Sociological Methodology. San Francisco: Jossey-Bass, pp. 139 - 150.
 
 Lin L (1989). A concordance correlation coefficient to evaluate reproducibility. Biometrics 45: 255 - 268.
 

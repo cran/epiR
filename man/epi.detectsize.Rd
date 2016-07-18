@@ -23,7 +23,7 @@ epi.detectsize(N, prev, se, sp, interpretation = "series",
   \item{interpretation}{a character string indicating how test results should be interpreted. Options are \code{series} or \code{parallel}.}
   \item{covar}{a vector of length two defining the covariance between test results for disease positive and disease negative groups. The first element of the vector is the covariance between test results for disease positive subjects. The second element of the vector is the covariance between test results for disease negative subjects. Use \code{covar = c(0,0)} (the default) if these values are not known.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
-  \item{finite.correction}{logial, should a finite correction factor be applied?}
+  \item{finite.correction}{logical, should a finite correction factor be applied?}
 }
 
 \value{
@@ -33,7 +33,7 @@ A list containing the following:
 }
 
 \references{
-Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47 and pp 102 - 103.
+Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47 and pp. 102 - 103.
 }
 
 \note{

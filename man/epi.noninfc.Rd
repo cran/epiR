@@ -33,9 +33,9 @@ A list containing one or more of the following:
 }
 
 \references{
-Blackwelder WC (1982). Proving the null hypothesis in clinical trials. Controlled Clinical Trials. 3: 345 - 353. 
+Blackwelder WC (1982). Proving the null hypothesis in clinical trials. Controlled Clinical Trials 3: 345 - 353. 
 
-Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber. 36: 170 - 173.
+Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber 36: 170 - 173.
 
 Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics in Medicine 23: 1921 - 1986.
 
@@ -43,9 +43,9 @@ Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
 
-Scott IA (2009). Non-inferiority trials: determining whether alternative treatments are good enough. Medical Journal of Australia. 190: 326 - 330.
+Scott IA (2009). Non-inferiority trials: determining whether alternative treatments are good enough. Medical Journal of Australia 190: 326 - 330.
 
-Zhong B (2009). How to calculate sample size in randomized controlled trial? Journal of Thoracic Disease. 1: 51 - 54.
+Zhong B (2009). How to calculate sample size in randomized controlled trial? Journal of Thoracic Disease 1: 51 - 54.
 }
 
 \note{

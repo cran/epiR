@@ -11,6 +11,7 @@ epi.descriptives <- function(dat, conf.level = 0.95){
     ana <- is.na(dat); ana <- sum(as.numeric(ana))
     
     aq25 <- as.vector(quantile(dat, probs = 0.25, na.rm = TRUE))
+    aq50 <- as.vector(quantile(dat, probs = 0.50, na.rm = TRUE))
     aq75 <- as.vector(quantile(dat, probs = 0.75, na.rm = TRUE))
     alcl <- mean(dat, na.rm = TRUE) - (tcrit * ase)
     aucl <- mean(dat, na.rm = TRUE) + (tcrit * ase)
@@ -29,6 +30,7 @@ epi.descriptives <- function(dat, conf.level = 0.95){
     gna <- is.na(tdat); gna <- sum(as.numeric(gna))
     
     gq25 <- as.vector(exp(quantile(log(tdat), probs = 0.25, na.rm = TRUE)))
+    gq50 <- as.vector(exp(quantile(log(tdat), probs = 0.50, na.rm = TRUE)))
     gq75 <- as.vector(exp(quantile(log(tdat), probs = 0.75, na.rm = TRUE)))
 
     glcl <- exp(mean(log(tdat), na.rm = TRUE) - (tcrit * gse))
@@ -47,9 +49,9 @@ epi.descriptives <- function(dat, conf.level = 0.95){
     kurt <- ((an + 1) * (r - 3) + 6) * (an - 1)/((an - 2) * (an - 3))
     
     rval <- list(
-        arithmetic = data.frame(n = an, mean = amean, sd = asd, q25 = aq25, q75 = aq75, lower = alcl, upper = aucl, 
+        arithmetic = data.frame(n = an, mean = amean, sd = asd, q25 = aq25, q50 = aq50, q75 = aq75, lower = alcl, upper = aucl, 
             min = amin, max = amax, na = ana),
-        geometric = data.frame(n = gn, mean = gmean, sd = gsd,  q25 = gq25, q75 = gq75, lower = glcl, upper = gucl, 
+        geometric = data.frame(n = gn, mean = gmean, sd = gsd,  q25 = gq25, q50 = gq50, q75 = gq75, lower = glcl, upper = gucl, 
             min = gmin, max = gmax, na = gna),
         symmetry = data.frame(skewness = skew, kurtosis = kurt)
     )
