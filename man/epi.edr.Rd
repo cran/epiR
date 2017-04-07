@@ -38,19 +38,39 @@ Miller W (1976). A state-transition model of epidemic foot-and-mouth disease. In
 Morris R, Sanson R, Stern M, Stevenson M, Wilesmith J (2002). Decision-support tools for foot-and-mouth disease control. Revue Scientifique et Technique de l'Office International des Epizooties 21, 557 - 567.
 }
 
-
 \examples{
 set.seed(123)
 dat <- rpois(n = 50, lambda = 2) 
 edr.04 <- epi.edr(dat, n = 4, conf.level = 0.95, nsim = 99, na.zero = TRUE)
+sdate <- as.Date(x = "31/12/2015", format = "\%d/\%m/\%Y")
 
-## Plot:
-plot(1:50, 1:50, xlim = c(0,25), ylim = c(0, 10), xlab = "Days",
-   ylab = "Estimated dissemination ratio", type = "n", main = "")
-lines(1:50, edr.04[,1], type = "l", lwd = 2, lty = 1, col = "blue")
-lines(1:50, edr.04[,2], type = "l", lwd = 1, lty = 2, col = "blue")
-lines(1:50, edr.04[,3], type = "l", lwd = 1, lty = 2, col = "blue")
+dat.04 <- data.frame(idate = sdate + 1:50, est = edr.04$est, 
+   low = edr.04$lower, upp = edr.04$upper)
 
+## Line plot of EDR (and its 95\% confidence interval) as a function of 
+## calendar time:
+
+\dontrun{
+library(ggplot2)
+
+ggplot(dat.04, aes(x = as.integer(idate), y = est)) + 
+   geom_line() +
+   geom_line(dat = dat.04, aes(x = as.integer(idate), y = upp), 
+      lty = 3, size = 0.5) +
+   geom_line(dat = dat.04, aes(x = as.integer(idate), y = low), 
+      lty = 3, size = 0.5) +
+   scale_x_continuous(name = "Date", 
+      breaks = seq(from = min(as.integer(dat.04$idate)), 
+         to = max(as.integer(dat.04$idate)), by = 7), 
+      labels = seq(from = min(dat.04$idate), 
+         to = max(dat.04$idate), by = 7), 
+      limits = c(min(as.integer(dat.04$idate)), 
+         max(as.integer(dat.04$idate)))) +
+   scale_y_continuous(name = "Estimated disemination ratio (EDR)", 
+   limits = c(0,10)) +
+   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 10)) +
+   geom_hline(yintercept = 1, lty = 2)
+ }
 }
 
 \keyword{univar}

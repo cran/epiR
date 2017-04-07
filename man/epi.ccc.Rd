@@ -11,7 +11,8 @@ Calculates Lin's (1989, 2000) concordance correlation coefficient for agreement 
 }
 
 \usage{
-epi.ccc(x, y, ci = "z-transform", conf.level = 0.95)
+epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, rep.measure = FALSE, 
+   subjectid)
 }
 
 \arguments{
@@ -19,6 +20,8 @@ epi.ccc(x, y, ci = "z-transform", conf.level = 0.95)
   \item{y}{a vector, representing the second set of measurements.}
   \item{ci}{a character string, indicating the method to be used. Options are \code{z-transform} or \code{asymptotic}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
+  \item{rep.measure}{logical. If \code{TRUE} there are repeated observations across \code{subject}.}
+  \item{subjectid}{a factor providing details of the observer identifier if \code{rep.measure == TRUE}.}
 }
 
 \details{
@@ -34,14 +37,21 @@ A list containing the following:
   \item{l.shift}{the location shift.}
   \item{C.b}{a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees. No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page 258).}
   \item{blalt}{a data frame with two columns: \code{mean} the mean of each pair of measurements, \code{delta} vector \code{y} minus vector \code{x}.}
+  \item{sblalt}{a data frame listing the average difference between the two sets of measurements and the lower and upper confidence limits of the difference between the two sets of measurements. If \code{rep.measure == TRUE} the confidence interval of the difference is adjusted to account for repeated observations across individual subjects.}
   \item{nmissing}{a count of the number of measurement pairs ignored due to missingness.}
 }
 
 \references{
 Bland J, Altman D (1986). Statistical methods for assessing agreement between two methods of clinical measurement. The Lancet 327: 307 - 310.
 
+Bland J, Altman D (1999). Measuring agreement in method comparison studies. Statistical Methods in Medical Research 8: 135 - 160.
+
+Bland J, Altman D (2007). Agreement between methods of measurement with multiple observations per individual. Journal of Biopharmaceutical Statistics 17: 571 - 582. (Corrects the formula quoted in the 1999 paper).
+
 Bradley E, Blackwood L (1989). Comparing paired data: a simultaneous test for means and variances. American Statistician 43: 234 - 235.
 
+Burdick RK, Graybill FA (1992). Confidence Intervals on Variance Components. New York: Dekker.
+                                                                           
 Dunn G (2004). Statistical Evaluation of Measurement Errors: Design and Analysis of Reliability Studies. London: Arnold.
 
 Hsu C (1940). On samples from a normal bivariate population. Annals of Mathematical Statistics 11: 410 - 426.
@@ -64,31 +74,48 @@ Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University P
 }
 
 \examples{
-## Concordance correlation plot:
 set.seed(seed = 1234)
 method1 <- rnorm(n = 100, mean = 0, sd = 1)
-method2 <- method1 + runif(n = 100, min = 0, max = 1)
+method2 <- method1 + runif(n = 100, min = -0.25, max = 0.25)
 
 ## Introduce some missing values:
 method1[50] <- NA
 method2[75] <- NA
 
-tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform",
-   conf.level = 0.95)
+tmp <- data.frame(method1, method2)
+tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform", conf.level = 0.95, 
+   rep.measure = FALSE)
 
-lab <- paste("CCC: ", round(tmp.ccc$rho.c[,1], digits = 2), " (95\% CI ", 
+tmp.lab <- data.frame(lab = paste("CCC: ", 
+   round(tmp.ccc$rho.c[,1], digits = 2), " (95\% CI ", 
    round(tmp.ccc$rho.c[,2], digits = 2), " - ",
-   round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = "")
-z <- lm(method2 ~ method1)
+   round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = ""))
 
-par(pty = "s")
-plot(method1, method2, xlim = c(0, 5), ylim = c(0,5), xlab = "Method 1", 
-   ylab = "Method 2", pch = 16)
-abline(a = 0, b = 1, lty = 2)
-abline(z, lty = 1)
-legend(x = "topleft", legend = c("Line of perfect concordance", 
-   "Reduced major axis"), lty = c(2,1), lwd = c(1,1), bty = "n")
-text(x = 1.55, y = 3.8, labels = lab)
+z <- lm(method2 ~ method1)
+alpha <- summary(z)$coefficients[1,1]
+beta <-  summary(z)$coefficients[2,1]
+tmp.lm <- data.frame(alpha, beta)
+
+## Concordance correlation plot:
+
+\dontrun{
+library(ggplot2)
+
+ggplot(tmp, aes(x = method1, y = method2)) + 
+   geom_point() +
+   geom_abline(intercept = 0, slope = 1) +
+   geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 
+      linetype = "dashed") +
+   xlim(0, 3) +
+   ylim(0, 3) +
+   xlab("Method 1") +
+   ylab("Method 2") +
+   geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
+   coord_fixed(ratio = 1 / 1)
+
+## In this plot the dashed line represents the line of perfect concordance. 
+## The solid line represents the reduced major axis.  
+}
 
 ## Bland and Altman plot (Figure 2 from Bland and Altman 1986):
 x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
@@ -97,21 +124,23 @@ x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
 y <- c(512,430,520,428,500,600,364,380,658,445,432,626,260,
    477,259,350,451)
 
-tmp.ccc <- epi.ccc(x, y, ci = "z-transform", conf.level = 0.95)
-tmp.mean <- mean(tmp.ccc$blalt$delta)
-tmp.sd <- sqrt(var(tmp.ccc$blalt$delta))
+tmp.ccc <- epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, 
+   rep.measure = FALSE)
+tmp <- data.frame(mean = tmp.ccc$blalt[,1], delta = tmp.ccc$blalt[,2])
 
-plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16, 
-   xlab = "Average PEFR by two meters (L/min)", 
-   ylab = "Difference in PEFR (L/min)", xlim = c(0,800), 
-   ylim = c(-140,140)) 
-abline(h = tmp.mean, lty = 1, col = "gray")
-abline(h = tmp.mean - (2 * tmp.sd), lty = 2, col = "gray")
-abline(h = tmp.mean + (2 * tmp.sd), lty = 2, col = "gray")
-legend(x = "topleft", legend = c("Mean difference", 
-   "Mean difference +/ 2SD"), lty = c(1,2), bty = "n")
-legend(x = 0, y = 125, legend = c("Difference"), pch = 16, 
-    bty = "n")
+\dontrun{
+library(ggplot2)
+
+ggplot(tmp.ccc$blalt, aes(x = mean, y = delta)) + 
+  geom_point() +
+  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
+  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
+  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = est), linetype = 1) +
+  xlab("Average PEFR by two meters (L/min)") +
+  ylab("Difference in PEFR (L/min)") +
+  xlim(0,800) +
+  ylim(-150,150)     
+}    
 }
 
 \keyword{univar}

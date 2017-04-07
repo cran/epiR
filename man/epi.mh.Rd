@@ -32,10 +32,10 @@ epi.mh(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio",
 
 \value{
 A list containing the following:
-  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
-  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
-  \item{OR.summary}{the Mantel-Haenszel summary odds ratio, the standard error of the Mantel-Haenszel summary odds ratio, the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary odds ratio.}
-  \item{RR.summary}{the Mantel-Haenszel summary risk ratio, the standard error of the Mantel-Haenszel summary risk ratio, the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary risk ratio.}
+  \item{OR}{the odds ratio for each trial and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the Mantel-Haenszel summary odds ratio and the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary odds ratio.}
+  \item{RR.summary}{the Mantel-Haenszel summary risk ratio and the lower and upper bounds of the confidence interval of the Mantel-Haenszel summary risk ratio.}
   \item{weights}{the raw and inverse variance weights assigned to each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}

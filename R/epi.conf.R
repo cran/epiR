@@ -167,22 +167,28 @@ if(ctype == "inc.risk" | ctype == "prevalence"){
       stop("Error: dat must be a two-column matrix")
          
    if(method == "exact"){
-      # Exact method (see http://www.folkesundhed.au.dk/uddannelse/software):
-      a <- dat[,1]
-      n <- dat[,2]
-      b <- n - a
-      p <- a / n
+      # Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
+      alpha <- 1 - conf.level
+      alpha2 <- 0.5 * alpha
+      x <- dat[,1]; n <- dat[,2]
           
-      # Exact binomial confidence limits (D. Collett (1999): Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24).
-      a. <- ifelse(a == 0, a + 1, a)
-      b. <- ifelse(b == 0, b + 1, b) 
-      low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
-      up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
-      low <- ifelse(a == 0, 0, low)
-      up <- ifelse(a == n, 1, up)
-
-      rval <- data.frame(est = p, lower = low, upper = up)
-      }
+      p <- x/n
+      x1 <- x == 0; x2 <- x == n
+      lb <- ub <- x
+      lb[x1] <- 1
+      ub[x2] <- n[x2] - 1
+      lcl <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
+      ucl <- 1 - qbeta(alpha2, n - ub, x + 1)
+          
+      if (any(x1)) 
+        lcl[x1] <- rep(0, sum(x1))
+          
+      if (any(x2)) 
+        ucl[x2] <- rep(1, sum(x2))
+          
+      rval <- data.frame(est = p, lower = lcl, upper = ucl)
+      rval 
+     }
         
    if(method == "wilson"){
       # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 

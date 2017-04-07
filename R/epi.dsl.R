@@ -95,19 +95,19 @@
            p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
 
            # Results:
-           OR <- as.data.frame(cbind(OR.i, SE.OR.i, lower.OR.i, upper.OR.i))
-           names(OR) <- c("est", "se", "lower", "upper")
+           OR <- data.frame(OR.i, lower.OR.i, upper.OR.i)
+           names(OR) <- c("est", "lower", "upper")
            
-           OR.summary <- as.data.frame(cbind(OR.dsl, SE.OR.dsl, lower.OR.dsl, upper.OR.dsl))
-           names(OR.summary) <- c("est", "se", "lower", "upper")
+           OR.summary <- data.frame(OR.dsl, lower.OR.dsl, upper.OR.dsl)
+           names(OR.summary) <- c("est", "lower", "upper")
         
-           weights <- as.data.frame(cbind(w.iv.i, w.dsl.i))
+           weights <- data.frame(w.iv.i, w.dsl.i)
            names(weights) <- c("inv.var", "dsl")
 
-           Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+           Hsq <- data.frame(Hsq, Hsq.l, Hsq.u)
            names(Hsq) <- c("est", "lower", "upper")
         
-           Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+           Isq <- data.frame(Isq, Isq.l, Isq.u)
            names(Isq) <- c("est", "lower", "upper")
         
            rval <- list(OR = OR, OR.summary = OR.summary, weights = weights,
@@ -186,19 +186,19 @@
            p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
 
            # Results:
-           RR <- as.data.frame(cbind(RR.i, SE.RR.i, lower.RR.i, upper.RR.i))
-           names(RR) <- c("est", "se", "lower", "upper")
+           RR <- data.frame(RR.i, lower.RR.i, upper.RR.i)
+           names(RR) <- c("est", "lower", "upper")
            
-           RR.summary <- as.data.frame(cbind(RR.dsl, SE.RR.dsl, lower.RR.dsl, upper.RR.dsl))
-           names(RR.summary) <- c("est", "se", "lower", "upper")
+           RR.summary <- data.frame(RR.dsl, lower.RR.dsl, upper.RR.dsl)
+           names(RR.summary) <- c("est", "lower", "upper")
         
-           weights <- as.data.frame(cbind(w.iv.i, w.dsl.i))
+           weights <- data.frame(w.iv.i, w.dsl.i)
            names(weights) <- c("inv.var", "dsl")
 
-           Hsq <- as.data.frame(cbind(Hsq, Hsq.l, Hsq.u))
+           Hsq <- data.frame(Hsq, Hsq.l, Hsq.u)
            names(Hsq) <- c("est", "lower", "upper")
         
-           Isq <- as.data.frame(cbind(Isq, Isq.l, Isq.u))
+           Isq <- data.frame(Isq, Isq.l, Isq.u)
            names(Isq) <- c("est", "lower", "upper")
         
            rval <- list(RR = RR, RR.summary = RR.summary, weights = weights,

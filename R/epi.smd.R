@@ -57,12 +57,15 @@
     upper.MD.dsl <- MD.dsl + (z * SE.MD.dsl)
     
     # Results:
-    md <- as.data.frame(cbind(MD.i, SE.MD.i, lower.MD.i, upper.MD.i))
-    names(md) <- c("est", "se", "lower", "upper")
-    md.invar <- as.data.frame(cbind(MD.iv, SE.MD.iv, lower.MD.iv, upper.MD.iv))
-    names(md.invar) <- c("est", "se", "lower", "upper")
-    md.dsl <- as.data.frame(cbind(MD.dsl, lower.MD.dsl, upper.MD.dsl))
+    md <- data.frame(MD.i, lower.MD.i, upper.MD.i)
+    names(md) <- c("est", "lower", "upper")
+    
+    md.invar <- data.frame(MD.iv, lower.MD.iv, upper.MD.iv)
+    names(md.invar) <- c("est", "lower", "upper")
+    
+    md.dsl <- data.frame(MD.dsl, lower.MD.dsl, upper.MD.dsl)
     names(md.dsl) <- c("est", "lower", "upper")
+    
     heterogeneity = c(Q = Q, df = df, p.value = p.heterogeneity)
     
     rval <- list(md = md, md.invar = md.invar, md.dsl = md.dsl, heterogeneity = heterogeneity)

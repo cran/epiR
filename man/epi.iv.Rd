@@ -34,10 +34,10 @@ Using this method, the inverse variance weights are used to compute the pooled o
 
 \value{
 A list containing:
-  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
-  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
-  \item{OR.summary}{the inverse variance summary odds ratio, the standard error of the inverse variance summary odds ratio, the lower and upper bounds of the confidence interval of the inverse variance summary odds ratio.}
-  \item{RR.summary}{the inverse variance summary risk ratio, the standard error of the inverse variance summary risk ratio, the lower and upper bounds of the confidence interval of the inverse variance summary risk ratio.}
+  \item{OR}{the odds ratio for each trial and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the inverse variance summary odds ratio and the lower and upper bounds of the confidence interval of the inverse variance summary odds ratio.}
+  \item{RR.summary}{the inverse variance summary risk ratio and the lower and upper bounds of the confidence interval of the inverse variance summary risk ratio.}
   \item{weights}{the raw and inverse variance weights assigned to each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}

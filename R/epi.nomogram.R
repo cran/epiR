@@ -31,7 +31,7 @@ epi.nomogram <- function(se, sp, lr, pre.pos, verbose = FALSE){
    if(verbose == FALSE){
      post.prob.pos <- ifelse(post.prob.pos < 0.01, round(post.prob.pos, digits = 4), round(post.prob.pos, digits = 2))
      post.prob.neg <- ifelse(post.prob.neg < 0.01, round(post.prob.neg, digits = 4), round(post.prob.neg, digits = 2))
-     cat("The post-test probability of being disease positive is", post.prob.pos, "\n")
-     cat("The post-test probability of being disease negative is", post.prob.neg, "\n") 
+     cat("Given a positive test result, the post-test probability of being disease positive is", post.prob.pos, "\n")
+     cat("Given a negative test result, the post-test probability of being disease negative is", post.prob.neg, "\n") 
      }  
 }

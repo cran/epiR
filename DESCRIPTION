@@ -1,6 +1,6 @@
 Package: epiR
-Version: 0.9-79
-Date: 2016-07-16
+Version: 0.9-82
+Date: 2017-04-07
 Title: Tools for the Analysis of Epidemiological Data
 Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone and Ryan Kyle
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
@@ -11,6 +11,6 @@ Suggests: MASS (>= 3.1-20)
 License: GPL (>= 2)
 URL: http://fvas.unimelb.edu.au/veam
 NeedsCompilation: no
-Packaged: 2016-07-16 09:08:17 UTC; Mark
+Packaged: 2017-04-07 06:55:28 UTC; Mark
 Repository: CRAN
-Date/Publication: 2016-07-18 14:10:53
+Date/Publication: 2017-04-07 11:04:10 UTC

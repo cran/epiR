@@ -8,22 +8,30 @@
         N. <- 1 - ((1 - conf.level) / 2)
         z <- qnorm(N., mean = 0, sd = 1)
 
-        ## Exact binomial confidence limits from D. Collett (1999) Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
+        ## Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
         .funincrisk <- function(cdat, conf.level){
-            N. <- 1 - ((1 - conf.level) / 2)
-            a <- cdat[,1]
-            n <- cdat[,2]
-            b <- n - a
-            p <- a / n
-
-            a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b)
-            low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
-            up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
-            low <- ifelse(a == 0, 0, low)
-            up <- ifelse(a == n, 1, up)
-            rval <- data.frame(est = p, lower = low, upper = up)
-            rval
-        }
+          
+          alpha <- 1 - conf.level
+          alpha2 <- 0.5 * alpha
+          x <- cdat[,1]; n <- cdat[,2]
+          
+          p <- x/n
+          x1 <- x == 0; x2 <- x == n
+          lb <- ub <- x
+          lb[x1] <- 1
+          ub[x2] <- n[x2] - 1
+          lcl <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
+          ucl <- 1 - qbeta(alpha2, n - ub, x + 1)
+          
+          if (any(x1)) 
+            lcl[x1] <- rep(0, sum(x1))
+          
+          if (any(x2)) 
+            ucl[x2] <- rep(1, sum(x2))
+          
+          rval <- data.frame(est = p, lower = lcl, upper = ucl)
+          rval
+          }
 
         ## From Greg Snow, R-sig-Epi, 3 Mar 2008:
         ## My prefered approach (not the only one), is to use the Bayesian interval using a uniform prior (beta(1,1) distribution)

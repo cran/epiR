@@ -71,13 +71,20 @@ r <- rval$shape1 - 1; r
 ## from 10 trials, n:
 n <- rval$shape2 + rval$shape1 - 2; n
 
+dat <- data.frame(x = seq(from = 0, to = 1, by = 0.001), 
+   y = dbeta(x = seq(from = 0, to = 1,by = 0.001), 
+   shape1 = rval$shape1, shape2 = rval$shape2))
+
 ## Density plot of the estimated beta distribution:
 
-plot(seq(from = 0, to = 1, by = 0.001), 
-   dbeta(x = seq(from = 0, to = 1,by = 0.001), shape1 = rval$shape1, 
-   shape2 = rval$shape2), type = "l", xlab = "Test sensitivity", 
-   ylab = "Density")
- 
+\dontrun{
+library(ggplot2)
+
+windows(); ggplot(data = dat, aes(x = x, y = y)) +
+   geom_line() + 
+   xlab("Test sensitivity") +
+   ylab("Density") 
+}
 }
 \keyword{univar}% at least one, from doc/KEYWORDS
 \keyword{univar}% __ONLY ONE__ keyword per line

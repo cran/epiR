@@ -40,16 +40,30 @@ data(epi.SClip)
 obs <- epi.SClip$cases; pop <- epi.SClip$population
 
 est <- epi.empbayes(obs, pop)
-empbayes.prop <- (obs + est[4]) / (pop + est[3])
-raw.prop <- (obs) / (pop)
-rank <- rank(raw.prop)
-dat <- data.frame(rank, raw.prop, empbayes.prop)
+crude.p <- ((obs) / (pop)) * 100000
+crude.r <- rank(crude.p)
+ebay.p <- ((obs + est[4]) / (pop + est[3])) * 100000
+dat <- data.frame(rank = c(crude.r, crude.r), 
+   Method = c(rep("Crude", times = length(crude.r)), 
+      rep("Empirical Bayes", times = length(crude.r))),
+   est = c(crude.p, ebay.p)) 
 
-plot(dat$rank, dat$raw.prop, type = "n", xlab = "Rank", ylab = "Risk")
-points(dat$rank, dat$raw.prop, pch = 16, col = "red")
-points(dat$rank, dat$empbayes.prop, pch = 16, col = "blue")
-legend(x = "topleft", legend = c("Raw estimate", "Bayes adjusted estimate"), 
-   col = c("red","blue"), pch = c(16,16), bty = "n")
+## Scatter plot showing the crude and empirical Bayes adjusted lip cancer 
+## incidence rates as a function of district rank for the crude lip 
+## cancer incidence rates: 
+                          
+\dontrun{
+library(ggplot2)
+
+ggplot(dat, aes(x = rank, y = est, colour = Method)) + 
+   geom_point() +
+   ylab("Lip cancer incidence rates (cases per 100,000 person years)") +
+   scale_x_continuous(name = "District rank", 
+      breaks = seq(from = 0, to = 60, by = 10), 
+      labels = seq(from = 0, to = 60, by = 10), 
+      limits = c(0,60)) +
+   ylim(0,30)
+}
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

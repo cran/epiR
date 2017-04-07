@@ -6,23 +6,28 @@
        
    n <- sum(dat)
 
-   # Function to return confidene intervals for a proportion:
+   ## Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
    .funincrisk <- function(ndat, nconf.level){
-     ## Exact binomial confidence limits from D. Collett (1999) Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
-     N. <- 1 - ((1 - nconf.level) / 2)
-     a <- ndat[,1]
-     n <- ndat[,2]
-     b <- n - a
-     p <- a / n
-   
-     a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b)
-     low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
-     up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
-     low <- ifelse(a == 0, 0, low)
-     up <- ifelse(a == n, 1, up)
-     rval <- data.frame(p, low, up)
-     names(rval) <- c("est", "lower", "upper")
-     rval
+       alpha <- 1 - conf.level
+       alpha2 <- 0.5 * alpha
+       x <- ndat[,1]; n <- ndat[,2]
+          
+       p <- x/n
+       x1 <- x == 0; x2 <- x == n
+       lb <- ub <- x
+       lb[x1] <- 1
+       ub[x2] <- n[x2] - 1
+       lcl <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
+       ucl <- 1 - qbeta(alpha2, n - ub, x + 1)
+          
+       if (any(x1)) 
+            lcl[x1] <- rep(0, sum(x1))
+          
+       if (any(x2)) 
+            ucl[x2] <- rep(1, sum(x2))
+          
+       rval <- data.frame(est = p, lower = lcl, upper = ucl)
+        rval
    }
    
 if(method == "fleiss"){

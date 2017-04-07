@@ -31,10 +31,10 @@ epi.dsl(ev.trt, n.trt, ev.ctrl, n.ctrl, names, method = "odds.ratio",
 
 \value{
 A list containing the following:
-  \item{OR}{the odds ratio for each trial, the standard error of the odds ratio for each trial, and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
-  \item{RR}{the risk ratio for each trial, the standard error of the risk ratio for each trial, and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
-  \item{OR.summary}{the DerSimonian and Laird summary odds ratio, the standard error of the DerSimonian and Laird summary odds ratio, the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary odds ratio.}
-  \item{RR.summary}{the DerSimonian and Laird summary risk ratio, the standard error of the DerSimonian and Laird summary risk ratio, the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary risk ratio.}
+  \item{OR}{the odds ratio for each trial and the lower and upper bounds of the confidence interval of the odds ratio for each trial.}
+  \item{RR}{the risk ratio for each trial and the lower and upper bounds of the confidence interval of the risk ratio for each trial.}
+  \item{OR.summary}{the DerSimonian and Laird summary odds ratio and the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary odds ratio.}
+  \item{RR.summary}{the DerSimonian and Laird summary risk ratio and the lower and upper bounds of the confidence interval of the DerSimonian and Laird summary risk ratio.}
   \item{weights}{the inverse variance and DerSimonian and Laird weights for each trial.}
   \item{heterogeneity}{a vector containing \code{Q} the heterogeneity test statistic, \code{df} the degrees of freedom and its associated P-value.}
   \item{Hsq}{the relative excess of the  heterogeneity test statistic \code{Q} over the degrees of freedom \code{df}.}

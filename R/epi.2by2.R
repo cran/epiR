@@ -87,7 +87,7 @@
             c <- dat[2,1,]; C <- c
             d <- dat[2,2,]; D <- d
         }
-
+ 
         ## Test each strata for zero values. Add 0.5 to all cells if any cell has a zero value:
         for(i in 1:length(a)){
             if(a[i] < 1 | b[i] < 1 | c[i] < 1 | d[i] < 1){
@@ -96,35 +96,26 @@
         }
 
         .funincrisk <- function(dat, conf.level){
-        ## Exact binomial confidence limits from D. Collett (1999) Modelling binary data. Chapman & Hall/CRC, Boca Raton Florida, p. 24.
-            N. <- 1 - ((1 - conf.level) / 2)
-            a <- dat[,1]
-            n <- dat[,2]
-            b <- n - a
-            p <- a / n
-
-            ## Wilson's method (see Rothman, Epidemiology An Introduction, page 132):
-            ## N. <- 1 - ((1 - conf.level) / 2)
-            ## z <- qnorm(N., mean = 0, sd = 1)
-            ## a <- dat[,1]
-            ## n <- dat[,2]
-            ## p <- dat[,1] / dat[,2]
-
-            ## a. <- n/(n + z^2)
-            ## b. <- a/n
-            ## c. <- z^2/(2 * n)
-            ## d. <- (a * (n - a)) / n^3
-            ## e. <- z^2 / (4 * n^2)
-            ## low <- a. * (b. + c. - (z * sqrt(d. + e.)))
-            ## up <- a. * (b. + c. + (z * sqrt(d. + e.)))
-
-            a. <- ifelse(a == 0, a + 1, a); b. <- ifelse(b == 0, b + 1, b)
-            low <- a. /(a. + (b. + 1) * (1 / qf(1 - N., 2 * a., 2 * b. + 2)))
-            up <- (a. + 1) / (a. + 1 + b. / (1 / qf(1 - N., 2 * b., 2 * a. + 2)))
-            low <- ifelse(a == 0, 0, low)
-            up <- ifelse(a == n, 1, up)
-            rval <- data.frame(p, low, up)
-            names(rval) <- c("est", "lower", "upper")
+        ## Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
+            alpha <- 1 - conf.level
+            alpha2 <- 0.5 * alpha
+            x <- dat[,1]; n <- dat[,2]
+          
+            p <- x/n
+            x1 <- x == 0; x2 <- x == n
+            lb <- ub <- x
+            lb[x1] <- 1
+            ub[x2] <- n[x2] - 1
+            lcl <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
+            ucl <- 1 - qbeta(alpha2, n - ub, x + 1)
+          
+            if (any(x1)) 
+             lcl[x1] <- rep(0, sum(x1))
+          
+            if (any(x2)) 
+             ucl[x2] <- rep(1, sum(x2))
+          
+            rval <- data.frame(est = p, lower = lcl, upper = ucl)
             rval
         }
 

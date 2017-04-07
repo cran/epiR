@@ -27,6 +27,8 @@ A list containing the following:
 }
 
 \references{
+Caraguel C, Vanderstichel R (2013). The two-step Fagan's nomogram: ad hoc interpretation of a diagnostic test result without calculation. Evidence Based Medicine 18: 125 - 128.
+
 Hunink M, Glasziou P (2001). Decision Making in Health and Medicine - Integrating Evidence and Values. Cambridge University Press, pp. 128 - 156.
 }
 
@@ -46,7 +48,11 @@ Hunink M, Glasziou P (2001). Decision Making in Health and Medicine - Integratin
 
 epi.nomogram(se = 0.89, sp = 0.85, lr = NA, pre.pos = 0.05, verbose = FALSE)
 
-## The post-test probability that this dog is hypothyroid is 24\%.
+## Given a positive test result, the post-test probability of being 
+## disease positive is 0.24.
+
+## Given a negative test result, the post-test probability of being 
+## disease negative is 0.0068.
 
 ## EXAMPLE 2:
 ## A dog is presented to you with severe pruritis. You suspect sarcoptic 
@@ -61,7 +67,7 @@ epi.nomogram(se = NA, sp = NA, lr = c(9000, 0.1), pre.pos = pre.pos,
    verbose = FALSE)
 
 ## If the skin scraping is negative the post-test probability that this dog 
-## has sarcoptic mange is 0.2\%.
+## has sarcoptic mange is 0.002.
 
 }
 \keyword{univar}% at least one, from doc/KEYWORDS
