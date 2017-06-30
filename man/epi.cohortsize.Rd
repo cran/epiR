@@ -27,7 +27,7 @@ epi.cohortsize(exposed, unexposed, n, power, r = 1, design = 1, sided.test = 2,
 }
 
 \details{
-The methodology in this function follows the approach described in Chapter 8 of Woodward (2005), pp 405 - 410.
+The methodology in this function follows the approach described in Chapter 8 of Woodward (2005), pp. 381 - 426.
 }
 
 \value{

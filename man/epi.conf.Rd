@@ -16,7 +16,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 
 \arguments{
   \item{dat}{the data, either a vector or a matrix depending on the method chosen.}
-  \item{ctype}{a character string indicating the type of confidence interval to calculate. Options are \code{mean.single}, \code{mean.unpaired}, \code{mean.paired}, \code{prop.single}, \code{prop.unpaired}, \code{prop.paired}, \code{prevalence}, \code{inc.risk}, \code{inc.rate}, \code{odds} and \code{smr}.}
+  \item{ctype}{a character string indicating the type of confidence interval to calculate. Options are \code{mean.single}, \code{mean.unpaired}, \code{mean.paired}, \code{prop.single}, \code{prop.unpaired}, \code{prop.paired}, \code{prevalence}, \code{inc.risk}, \code{inc.rate}, \code{odds}, \code{ratio} and \code{smr}.}
   \item{method}{a character string indicating the method to use. Where \code{ctype = "inc.risk"} or \code{ctype = "prevalence"} options are \code{exact}, \code{wilson} and \code{fleiss}. Where \code{ctype = "inc.rate"} options are \code{exact} and \code{byar}.}
   \item{N}{scalar, representing the population size.}
   \item{design}{scalar, representing the design effect.}
@@ -24,7 +24,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 }
 
 \details{
-Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{odds} require a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
+Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{odds} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Method \code{ratio} requires a two-column matrix; the first column specifies the numerator, the second column specifies the denominator. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
 
 The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 
@@ -47,6 +47,7 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{inc.rate, exact}              \tab Collett (1999)           \cr
 \code{inc.rate, byar}               \tab Rothman (2002)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr
+\code{ratio}                        \tab Ederer and Mantel (1974) \cr
 \code{smr}                          \tab Dobson et al. (1991)     \cr
 ----------------------------------- \tab ------------------------ \cr
 }

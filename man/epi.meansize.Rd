@@ -28,7 +28,7 @@ epi.meansize(treat, control, n, sigma, power, r = 1, design = 1,
 }
 
 \details{
-The methodology in this function follows closely the approach described in Chapter 8 of Woodward (2005).
+The methodology in this function follows the approach described in Chapter 8 of Woodward (2005), pp. 381 - 426.
 }
 
 \value{
@@ -47,6 +47,10 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
+
+A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2005), pages 381 to 426.
+
+See the documentation for \code{\link{epi.cohortsize}} which provides an example using the \code{design} facility implemented in this function.
 }
 
 \examples{

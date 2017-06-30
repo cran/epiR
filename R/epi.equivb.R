@@ -1,33 +1,51 @@
 epi.equivb <- function(treat, control, delta, n, r = 1, power, alpha){
 
-  # alpha <- (1 - conf.level)
-  beta <- (1 - power)
-
-  z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
-  z.beta <- qnorm(1 - beta / 2, mean = 0, sd = 1)
-
+  # Sample size:
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
-     # http://powerandsamplesize.com/Calculators/Test-1-Proportion/1-Sample-Equivalence:
-     n.control <- (((treat * (1 - treat)) / r) + (control * (1 - control))) * ((z.alpha + z.beta) / (abs(treat - control) - delta))^2
-     n.treat <- n.control * r
-     
-     # r = n.treat / n.control
-     n.control <- ceiling(n.control)
-     n.treat <- ceiling(n.treat)
-     
-     rval <- list(n.treat = n.treat, n.control = n.control, n.total = n.treat + n.control)
+    beta <- (1 - power)
+    z.beta <- qnorm(1 - beta / 2, mean = 0, sd = 1)
+    z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
+    pA <- treat; pB <- control
+    qA <- 1 - pA; qB <- 1 - pB
+    epsilon <- pA - pB
+    
+    # Chow et al page 89, Equation 4.2.4:
+    # nB <- (z.alpha + z.beta)^2 / (delta - abs(epsilon))^2 * (((pA * qA) / r) + (pB * qB))
+    
+    # http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equivalence:
+    nB <- (pA * qA / r + pB * qB) * ((z.alpha + z.beta) / (abs(pA - pB) - delta))^2
+    
+    nA <- nB * r
+    nB <- ceiling(nB)
+    nA <- ceiling(nA)
+    
+    rval <- list(n.treat = nA, n.control = nB, n.total = nA + nB, power = power)
   }
+  
+  # Power:
+  if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
+    z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
+    pA <- treat; pB <- control
+    qA <- 1 - pA; qB <- 1 - pB
+    nA <- n - ceiling(1 / (r + 1) * (n))
+    nB <- ceiling(1 / (r + 1) * (n))
+    epsilon <- pA - pB
+    
+    # Chow et al. page 89, second equation from top of page:
+    # z <- (delta - abs(epsilon)) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    # power <- 2 * pnorm(z - z.alpha, mean = 0, sd = 1) - 1 
+    
+    # http://powerandsamplesize.com/Calculators/Test-1-Proportion/1-Sample-Equivalence:
+    z = (abs(pA - pB) - delta) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    power = 2 * (pnorm(z - z.alpha) + pnorm(-z - z.alpha)) - 1
+    power
 
-    if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
-     # Work out the number of subjects in the control group. r equals the number in the treatment group divided by 
-     # the number in the control group.
-     n.control <- ceiling(1 / (r + 1) * (n))
-     n.treat <- n - n.control
-     
-     z <- (abs(treat - control) - delta) / sqrt((treat * (1 - treat) / n.treat) + (control * (1 - control) / n.control))
-     power = 2 * (pnorm(z - qnorm(1 - alpha)) + pnorm(-z - qnorm(1 - alpha))) - 1
-     
-     rval <- list(n.treat = n.treat, n.control = n.control, n.total = n.treat + n.control, power = power)
+    # From user (Wu et al. 2008, page 433):
+    # z1 <- (delta - abs(pA - pB)) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    # z2 <- (delta + abs(pA - pB)) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    # power <- 1 - pnorm(-z1 + z.alpha) - pnorm(-z2 + z.alpha)
+
+    rval <- list(n.treat = nA, n.control = nB, n.total = nA + nB, power = power)
   }
   rval
 }  

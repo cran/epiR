@@ -243,7 +243,10 @@ if(ctype == "inc.rate"){
       p <- a / n
       # If numerator equals zero set lower bound of confidence limit to zero:
       low <- ifelse(a == 0, 0, (0.5 * qchisq(p = N., df = 2 * a + 2, lower.tail = FALSE) / n))
-      up <- 0.5 * qchisq(p = 1 - N., df = 2 * a + 2, lower.tail = FALSE) / n
+      
+      # Changed 020617. 
+      up <- 0.5 * qchisq(p = 1 - N., df = 2 * a, lower.tail = FALSE) / n
+      # up <- 0.5 * qchisq(p = 1 - N., df = 2 * a + 2, lower.tail = FALSE) / n
           
       rval <- data.frame(est = p, lower = low, upper = up)
       }          
@@ -284,7 +287,7 @@ else if(ctype == "smr"){
    rval <- data.frame(est = smr, se = se.smr, lower = low, upper = up)
    }
 
-else if(ctype == "odds"){
+else if(ctype == "odds" | ctype == "ratio"){
   ## Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables. American Journal of Epidemiology 100: 165 - 167
   ## Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69.
   ## Added 161214

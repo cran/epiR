@@ -9,7 +9,7 @@ Summary measures for count data presented in a 2 by 2 table
 }
 
 \description{
-Computes summary measures of risk and a chi-squared test for difference in the observed proportions from count data presented in a 2 by 2 table. Multiple strata may be represented by additional rows of count data. With multiple strata the function returns crude and Mantel-Haenszel adjusted measures of association and chi-squared tests of homogeneity.
+Computes summary measures of risk and a chi-squared test for difference in the observed proportions from count data presented in a 2 by 2 table. With multiple strata the function returns crude and Mantel-Haenszel adjusted measures of association and chi-squared tests of homogeneity.
 }
 
 \usage{
@@ -23,9 +23,9 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100,
 
 \arguments{
   \item{dat}{an object of class \code{table} containing the individual cell frequencies. See the examples, below, for details.}
-  \item{method}{a character string indicating the experimental design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}.}
+  \item{method}{a character string indicating the study design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}. Based on the study design specified by the user, appropriate measures of association, measures of effect in the exposed and measures of effect in the population are returned by the function.}
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}
-  \item{units}{multiplier for prevalence and incidence estimates.}
+  \item{units}{multiplier for prevalence and incidence (risk or rate) estimates.}
   \item{homogeneity}{a character string indicating the type of homogeneity test to perform. Options are \code{breslow.day} or \code{woolf}.}
   \item{outcome}{a character string indicating how the outcome variable is represented in the contingency table. Options are \code{as.columns} (outcome as columns) or \code{as.rows} (outcome as rows).}  
   \item{x, object}{an object of class \code{epi.2by2}.}
@@ -65,17 +65,17 @@ A summary of the methods used for each of the confidence interval calculations i
 \value{
 An object of class \code{epi.2by2} comprised of:
 
-  \item{method}{character string specifying the experimental design on which the tabular data has been based.}
+  \item{method}{character string returning the study design specified by the user.}
   \item{n.strata}{number of strata.}
   \item{conf.level}{magnitude of the returned confidence intervals.}
-  \item{massoc}{a list comprised of the computed measures of association. See below for details.}
+  \item{massoc}{a list comprised of the computed measures of association, measures of effect in the exposed and measures of effect in the population. See below for details.}
   \item{tab}{a data frame comprised of of the contingency table data.}
 
-When method equals \code{cohort.count} the following measures of association and effect are returned: 
+When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population are returned: 
 
   \item{\code{RR}}{Wald and score confidence intervals for the incidence risk ratios for each strata. Wald and score confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
-  \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk (risk difference) for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
   \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
@@ -121,6 +121,8 @@ When method equals \code{cross.sectional} the following measures of association 
   \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test.}
   \item{\code{PR.homog}}{test of homogeneity of the individual strata prevalence ratios.}
   \item{\code{OR.homog}}{test of homogeneity of the individual strata odds ratios.}  
+
+The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 }
 
 
@@ -180,20 +182,18 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 }
 
 \author{
-Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia), Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA) and Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
+Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia), Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA), Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA) and Simon Firestone (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
 }
 
-\note{Measures of strength of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
+\note{Measures of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
 
-Measures of effect include the attributable risk (or prevalence) and the attributable fraction. The attributable risk is the risk of disease in the exposed group minus the risk of disease in the unexposed group. The attributable risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction is the proportion of disease in the exposed group attributable to exposure. 
+Measures of effect in the exposed include the attributable risk (or prevalence) and the attributable fraction. The attributable risk is the risk of disease in the exposed group minus the risk of disease in the unexposed group. The attributable risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction is the proportion of study outcomes in the exposed group that is attributable to exposure. 
 
-Measures of total effect include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of disease in the population that may be attributed to exposure. The population attributable fraction is the proportion of the disease in the population that is attributable to exposure.
+Measures of effect in the population include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of the study outcome in the population that may be attributed to exposure. The population attributable fraction is the proportion of the study outcomes in the population that is attributable to exposure.
 
 Point estimates and confidence intervals for the prevalence ratio and incidence risk ratio are calculated using Wald (Wald 1943) and score methods (Miettinen and Nurminen 1985). Point estimates and confidence intervals for the incidence rate ratio are calculated using the exact method described by Kirkwood and Sterne (2003) and Juul (2004). Point estimates and confidence intervals the odds ratio are calculated using Wald (Wald 1943), score (Miettinen and Nurminen 1985) and maximum likelihood methods (Fleiss et al. 2003). Point estimates and confidence intervals for the population attributable risk are calculated using formulae provided by Rothman and Greenland (1998, p 271) and Pirikahu (2014). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk are calculated using formulae provided by Klingenberg (2014).
 
 Wald confidence intervals are provided in the summary table simply because they are widely used and would be familiar to most users. 
-
-The function checks each strata for cells with zero frequencies. If a zero frequency is found in any cell, 0.5 is added to all cells within the strata.
 
 The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not significant.
 
@@ -229,11 +229,11 @@ epi.2by2(dat =  as.table(dat), method = "cross.sectional",
 ## The prevalence of FUS in DCF exposed cats is 4.01 (95\% CI 1.43 to 11.23) 
 ## times greater than the prevalence of FUS in non-DCF exposed cats.
 
-## Attributable fraction:
+## Attributable fraction in the exposed:
 ## In DCF exposed cats, 75\% of FUS is attributable to DCF (95\% CI 30\% to 
 ## 91\%).
 
-## Population attributable fraction:
+## Attributable fraction in the population:
 ## Fifty-four percent of FUS cases in the cat population are attributable 
 ## to DCF (95\% CI 4\% to 78\%).
 
@@ -277,8 +277,8 @@ rval <- epi.2by2(dat = tab2, method = "cohort.count",
    outcome = "as.columns")
 print(rval)
 
-## After adjusting for the confounding effect of race, the odds of 
-## having a low birth weight child for smokers is 2.15 (95\% CI 1.29 to 3.58) 
+## After accounting for the confounding effect of race, the odds of 
+## having a low birth weight child for smokers is 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
 
 ## Compare the Greenland-Robins confidence intervals for the Mantel-Haenszel
@@ -315,9 +315,9 @@ rval$massoc$OR.crude.cfield
 rval$massoc$OR.crude.mle
 rval$massoc$OR.crude.score
 
-## Cornfield: 2.20 (95\% CI 1.07 to 3.79)
+## Cornfield: 2.02 (95\% CI 1.07 to 3.79)
 ## Maximum likelihood: 2.01 (1.03 to 3.96)
-# Score: 2.20 (95\% CI 2.84 to 5.17)
+# Score: 2.02 (95\% CI 1.08 to 3.77)
 
 ## Plot the individual strata-level odds ratios and compare them with the 
 ## Mantel-Haenszel adjusted odds ratio.
@@ -353,20 +353,51 @@ ggplot(dat, aes(or.p, y.at)) +
 ## 136/22050 person-years among the blind compared with 1709/127650 person-
 ## years among those who were visually impaired but not blind.
 
+\dontrun{
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
-rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.90, 
+rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.95, 
    units = 1000,  homogeneity = "breslow.day", outcome = "as.columns")
 summary(rval)$ARate.strata.wald
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
 ## blind, compared with those who were not blind but had severe visual impairment
-## (90\% CI 6.20 to 8.24 cases per 1000 person-years).
+## (90\% CI 6.00 to 8.43 cases per 1000 person-years).
 
 round(summary(rval)$IRR.strata.wald, digits = 2)
+}
 
 ## The incidence rate of cancer in the blind group was less than half that of the 
-## comparison group (incidence rate ratio 0.46, 90\% CI 0.40 to 0.53).
+## comparison group (incidence rate ratio 0.46, 90\% CI 0.38 to 0.55).
 
+## EXAMPLE 4:
+## A study has been conducted to assess the effect of a new treatment for 
+## mastitis in dairy cows. Eight herds took part in the study. The following 
+## data were obtained. The vectors ai, bi, ci and di list (for each herd) the 
+## number of cows in the E+D+, E+D-, E-D+ and E-D- groups, respectively.
+
+\dontrun{
+hid <- 1:8
+ai <- c(23,10,20,5,14,6,10,3)
+bi <- c(10,2,1,2,2,2,3,0)
+ci <- c(3,2,3,2,1,3,3,2)
+di <- c(6,4,3,2,6,3,1,1)
+dat <- data.frame(hid, ai, bi, ci, di)
+print(dat)
+
+## Re-format data frame dat into a format suitable for epi.2by2:
+hid <- rep(1:8, times = 4)
+exp <- factor(rep(c(1,1,0,0), each = 8), levels = c(1,0))
+out <- factor(rep(c(1,0,1,0), each = 8), levels = c(1,0))
+dat <- data.frame(hid, exp, out, n = c(ai,bi,ci,di)) 
+dat <- xtabs(n ~ exp + out + hid, data = dat)
+print(dat)
+
+epi.2by2(dat = dat, method = "cohort.count", homogeneity = "breslow.day", 
+   outcome= "as.columns")
+
+## After adjusting for the effect of herd, compared to untreated cows, treatment
+## increased the odds of recovery by a factor of 5.97 (95\% CI 2.72 to 13.13).
+ }
 }
 
 \keyword{univar}
