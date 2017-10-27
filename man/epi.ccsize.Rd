@@ -3,11 +3,11 @@
 \alias{epi.ccsize}
 
 \title{
-Sample size or power for an unmatched or matched case-control study
+Sample size, power or minimum detectable odds ratio for an unmatched or matched case-control study
 }
 
 \description{
-Computes the sample size or power for an unmatched or matched case-control study.
+Calculates the sample size, power or minimum detectable odds ratio for an unmatched or matched case-control study.
 }
 
 \usage{
@@ -126,8 +126,8 @@ epi.ccsize(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho = 0,
    design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
    fleiss = FALSE)
 
-## A total of 600 subjects need to be enrolled in the study: 150 cases and 
-## 450 controls.
+## A total of 620 subjects need to be enrolled in the study: 155 cases and 
+## 465 controls.
 
 ## An alternative is to conduct a matched case-control study rather than the 
 ## unmatched design outlined above. One case will be matched to one control 
@@ -146,31 +146,42 @@ epi.ccsize(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho = 0.01,
 ## EXAMPLE 5:
 ## Code to reproduce the isograph shown in Figure 2 in Dupont (1988):
 r <- 1
-p0 <- seq(from = 0.05, to = 0.95, length = 50)
+p0 = seq(from = 0.05, to = 0.95, length = 50)
 OR <- seq(from = 1.05, to = 6, length = 100)
-vals <- expand.grid(p0, OR)
-names(vals) <- c("p0", "OR")
+dat <- expand.grid(p0 = p0, OR = OR)
+dat$n.total <- NA
 
-vals$n.case <- NA; vals$n.control <- NA; vals$n.total <- NA
+for(i in 1:nrow(dat)){
+   dat$n.total[i] <- epi.ccsize(OR = dat$OR[i], p0 = dat$p0[i], n = NA, 
+   power = 0.80, r = 1, rho = 0, design = 1, sided.test = 2, 
+   conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
+}  
 
-for(i in 1:nrow(vals)){
-   trval <- epi.ccsize(OR = vals$OR[i], p0 = vals$p0[i], power = 0.80, 
-      n = NA, rho = 0, design = 1, sided.test = 2, conf.level = 0.95, 
-      method = "matched")
-   vals$n.case[i] <- trval$n.case
-   vals$n.control[i] <- trval$n.control
-   vals$n.total[i] <- trval$n.total
-}
-
-grid.n <- matrix(vals$n.case, nrow = length(p0))
-lev <- c(22:30,32,34,36,40,45,50,55,60,70,80,90,100,125,150,175,
+grid.n <- matrix(dat$n.total, nrow = length(p0))
+breaks <- c(22:30,32,34,36,40,45,50,55,60,70,80,90,100,125,150,175,
    200,300,500,1000)
 
 par(mar = c(5,5,0,5), bty = "n")
-contour(x = p0, y = OR, z = log10(grid.n), add = FALSE, levels = log10(lev), 
-   labels = lev, xlim = c(0,1), ylim = c(1,6), las = 1, method = "flattest", 
+contour(x = p0, y = OR, z = log10(grid.n), add = FALSE, levels = log10(breaks), 
+   labels = breaks, xlim = c(0,1), ylim = c(1,6), las = 1, method = "flattest", 
    xlab = 'Proportion of controls exposed', ylab = "Minimum OR to detect")
 
+\dontrun{
+## The same plot using ggplot2:
+
+library(ggplot2); library(directlabels)
+
+p <- ggplot(data = dat, aes(x = p0, y = OR, z = n.total)) +
+  geom_contour(aes(colour = ..level..), breaks = breaks) +
+  xlab("Proportion of controls exposed") +
+  ylab("Minimum OR to detect") +
+  xlim(0,1) +
+  ylim(1,6)
+
+print(direct.label(p, list("far.from.others.borders", "calc.boxes", 
+   "enlarge.box", hjust = 1, vjust = 1, box.color = NA, 
+   fill = "transparent", "draw.rects")))
+}
 
 ## EXAMPLE 6:
 ## From page 1164 of Dupont (1988). A matched case control study is to be 
@@ -194,7 +205,7 @@ epi.ccsize(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 3, rho = 0.2,
    fleiss = FALSE)
 
 ## A total of 204 subjects need to be enrolled in the study: 51 cases and 
-## 153 controls (204 subjects in total).
+## 153 controls.
 
 }
 

@@ -15,17 +15,21 @@ epi.cp(dat)
 }
 
 \arguments{
-  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent covariates.}
+  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent a set of \emph{m} covariates.}
 }
 
 \details{
-A covariate pattern is a unique combination of values of predictor variables. For example, if a model contains two dichotomous predictors, there will be four covariate patterns possible: \code{(1,1)}, \code{(1,0)}, \code{(0,1)}, and \code{(0,0)}. This function extracts the \emph{n} unique covariate patterns from a data set comprised of \emph{i} observations, labelling them from 1 to \emph{n}. A vector of length \emph{m} is also returned, listing the covariate pattern identifier for each observation.
+This function provides a summary of the covariate patterns (unique combinations of values of covariates) present in a data. This function extracts the \emph{k} unique covariate patterns in a data set comprised of \emph{i} observations, labelling them from 1 to \emph{k}. The frequency of occurrence of each covariate pattern is listed. A vector of length \emph{i} is also returned, listing the 1:\emph{k} covariate pattern identifier for each observation.
 }
 
 \value{
 A list containing the following:
-  \item{cov.pattern}{a data frame with columns: \code{id} the unique covariate patterns, \code{n} the number of occasions each of the listed covariate pattern appears in the data, and the unique covariate combinations.}
-  \item{id}{a vector listing the covariate pattern identifier for each observation.}
+  \item{cov.pattern}{a data frame with columns: \code{id} the unique covariate pattern identifier (labelled 1 to \emph{k}), \code{n} the number of occasions each of the listed covariate pattern appears in the data, and the unique covariate combinations.}
+  \item{id}{a vector of length \emph{i} listing the 1:\emph{k} covariate pattern identifier for each observation.}
+}
+
+\author{
+Thanks to Johann Popp for providing code and suggestions to enhance the speed of this function.
 }
 
 \references{

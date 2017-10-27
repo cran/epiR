@@ -7,7 +7,7 @@ Sample size, power and minimum detectable difference when comparing means
 }
 
 \description{
-Computes the sample size, power or minimum detectable difference when comparing means. 
+Calculates the sample size, power or minimum detectable difference when comparing means. 
 }
 
 \usage{
@@ -32,11 +32,12 @@ The methodology in this function follows the approach described in Chapter 8 of 
 }
 
 \value{
-A list containing one or more of the following: 
-  \item{n.crude}{the crude estimated total number of subjects required for the specified level of confidence and power.}
-  \item{n.total}{the total estimated number of subjects required for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+A list containing the following: 
+  \item{n.total}{the total number of subjects required for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{n.treat}{the total number of subjects in the treatment group for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{n.control}{the total number of subjects in the control group for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{power}{the power of the study given the number of study subjects, the expected effect size and level of confidence.}  
   \item{delta}{the minimum detectable difference given the specified level of confidence and power.}
-  \item{power}{the power of the study given the number of study subjects, the expected effect size and level of confidence.}
 }
 
 \references{
@@ -89,9 +90,8 @@ epi.meansize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 epi.meansize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
    r = 4, design = 1, sided.test = 2, conf.level = 0.95)
    
-## The estimated sample size is 66. We round this up to the nearest multiple
-## of 5, to 70. We allocate 70/5 = 14 women to the placebo group and four
-## times as many (56) to the iron treatment group.
+## The estimated sample size is 70. We allocate 70/5 = 14 women to the 
+## placebo group and four times as many (56) to the iron treatment group.
 
 }
 

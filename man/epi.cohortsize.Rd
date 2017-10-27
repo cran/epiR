@@ -3,11 +3,11 @@
 \alias{epi.cohortsize}
 
 \title{
-Sample size, power or minimum detectable effect for a cohort study
+Sample size, power or minimum detectable risk ratio for a cohort study
 }
 
 \description{
-Computes sample size, power or minimum detectable effect for a cohort study.
+Calculates the sample size, power or minimum detectable risk ratio for a cohort study.
 }
 
 \usage{
@@ -31,12 +31,12 @@ The methodology in this function follows the approach described in Chapter 8 of 
 }
 
 \value{
-A list containing one or more of the following: 
-  \item{n.crude}{the crude estimated total number of subjects required for the specified level of confidence and power.}
-  \item{n.total}{the total estimated number of subjects required for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
-  \item{delta}{the minimum detectable difference given the specified level of confidence and power.}
-  \item{lambda}{the minimum detectable risk ratio >1 and the maximum detectable risk ratio <1.}
-  \item{power}{the power of the study given the number of study subjects, the expected risk ratio and level of confidence.}
+A list containing the following: 
+  \item{n.total}{the total number of subjects required for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{n.treat}{the total number of subjects in the treatment group for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{n.control}{the total number of subjects in the control group for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{power}{the power of the study given the number of study subjects, the expected effect size and level of confidence.}  
+  \item{lambda}{the outcome proportion in the exposed group divided by the outcome proportion in the unexposed group (a risk ratio).}
 }
 
 \references{
@@ -47,6 +47,10 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
+
+Values need to be entered for \code{unexposed}, \code{n}, and \code{power} to return a value for \code{lambda}. In this situation, the lower value of lambda represents the maximum detectable risk ratio that is less than 1; the upper value of lambda represents the minimum detectable risk ratio greater than 1.
+
+
 }
 
 \examples{
@@ -61,9 +65,8 @@ The power of a study is its ability to demonstrate the presence of an associatio
 ## 100,000 per year. Assuming equal numbers of smokers and non-smokers are 
 ## sampled, how many men should be sampled overall?
 
-exposed = 1.4 * (5 * 413)/100000
-unexposed = (5 * 413)/100000
-epi.cohortsize(exposed = exposed, unexposed = unexposed, n = NA, power = 0.90, 
+e1 = 1.4 * (5 * 413)/100000; e0 = (5 * 413)/100000
+epi.cohortsize(exposed = e1, unexposed = e0, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95)
 
 ## A total of 12,130 men need to be sampled (6065 smokers and 6065 non-smokers).
@@ -73,8 +76,8 @@ epi.cohortsize(exposed = exposed, unexposed = unexposed, n = NA, power = 0.90,
 ## Say, for example, we are only able to enrol 5000 subjects into the study
 ## described above. What is the minimum and maximum detectable risk ratio?
 
-unexposed = (5 * 413)/100000
-epi.cohortsize(exposed = NA, unexposed = unexposed, n = 5000, power = 0.90, 
+e0 = (5 * 413)/100000
+epi.cohortsize(exposed = NA, unexposed = e0, n = 5000, power = 0.90, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95)
 
 ## The minimum detectable risk ratio >1 is 1.65. The maximum detectable
@@ -97,13 +100,14 @@ epi.cohortsize(exposed = 0.30, unexposed = 0.15, n = NA, power = 0.80,
 
 ## Assume now that this study is going to be carried out using animals from a 
 ## number of herds. What is the required sample size when you account for the 
-## observation that response to treatment is likely to cluster across herds. 
+## observation that response to treatment is likely to cluster within herds. 
 
 ## For the exercise, assume that the intra-cluster correlation coefficient 
-## (the rate of homogeneity, rho) is 0.05 and the average number of cows per
-## herd is 30. Calculate the design effect, given 
-## rho = (design - 1) / (nbar - 1), where nbar equals the average number of 
-## individuals per cluster:
+## (the rate of homogeneity, rho) for this treatment is 0.05 and the 
+## average number of cows sampled per herd will be 30. 
+
+## Calculate the design effect, given rho = (design - 1) / (nbar - 1), 
+## where nbar equals the average number of individuals per cluster:
 
 design <- 0.05 * (30 - 1) + 1
 epi.cohortsize(exposed = 0.30, unexposed = 0.15, n = NA, power = 0.80, 

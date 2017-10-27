@@ -1,23 +1,30 @@
 epi.cp <- function(dat){
-   obs <- as.data.frame(cbind(id = 1:nrow(dat), cp = rep(0, times = nrow(dat))))
-   nvar <- dim(dat)[2]
-   cp <- unique(dat)
-   cp <- cbind(id = 1:nrow(cp),cp)
-
-   for(i in 1:nrow(cp)){
-      tmp <- rep(0, times = nrow(dat))
-      for(j in 1:nvar){
-        tmp. <- as.numeric(dat[,j] == cp[i,(j+1)])
-        tmp <- cbind(tmp, tmp.)
-        }
-      tmp <- apply(tmp, MARGIN = 1, FUN = sum)
-      id <- tmp == nvar
-      obs$cp[id] <- cp$id[i]
-   }
-   n <- hist(obs$cp, breaks = seq(from = 0, to = nrow(cp), by = 1), plot = FALSE)
-   n <- n$counts
-   end <- nvar + 1
-   cov.pattern <- as.data.frame(cbind(id = cp[,1], n, cp[,2:end]))
-   rval <- list(cov.pattern = cov.pattern, id = obs$cp)
-   rval
+  
+  # Re-write of function following email from Johann Popp 11 October 2017.
+  ndat <- data.frame(id = 1:nrow(dat), dat)
+  
+  # Add an indicator variable for covariate patterns:
+  ndat$indi <- apply(X = ndat[,ncol(ndat):2], MARGIN = 1, FUN = function(x) as.factor(paste(x, collapse = "")))
+  
+  # Order the data according to the indicator variable:
+  ndat <- ndat[order(ndat$indi),]
+  
+  # Create a variable that indicates all the cases of each covariate pattern:
+  cp.id <- tapply(ndat$id, ndat$indi, function(x) paste(x, collapse = ","))
+  
+  # Create a data frame of unique covariate patterns:
+  cp <- unique(ndat[,2:ncol(ndat)])
+  n <- as.numeric(unlist(lapply(strsplit(cp.id, ","), length)))
+  
+  id <- tapply(ndat$id, ndat$indi, function(x) (x)[1])
+  lookup <- data.frame(id = 1:length(n), indi = row.names(id))
+  
+  cov.pattern <- data.frame(id = 1:length(n), n, cp[,-ncol(cp)])
+  rownames(cov.pattern) <- rownames(cp)
+  
+  # Create a vector with the covariate pattern for each case:
+  id <- lookup$id[match(ndat$indi, lookup$indi)]
+  # id <- as.numeric(unlist(lapply(strsplit(cp.id, ","), function(x) rep(min(as.numeric(unlist(x))), length(x)))))[order(ndat$id)]
+  
+  list(cov.pattern = cov.pattern, id = id)
 }
