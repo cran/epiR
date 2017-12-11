@@ -15,11 +15,11 @@ epi.cp(dat)
 }
 
 \arguments{
-  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent a set of \emph{m} covariates.}
+  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent a set of \emph{m} covariates. The function permits one or more covariates for each observation.}
 }
 
 \details{
-This function provides a summary of the covariate patterns (unique combinations of values of covariates) present in a data. This function extracts the \emph{k} unique covariate patterns in a data set comprised of \emph{i} observations, labelling them from 1 to \emph{k}. The frequency of occurrence of each covariate pattern is listed. A vector of length \emph{i} is also returned, listing the 1:\emph{k} covariate pattern identifier for each observation.
+This function extracts the \emph{k} unique covariate patterns in a data set comprised of \emph{i} observations, labelling them from 1 to \emph{k}. The frequency of occurrence of each covariate pattern is listed. A vector of length \emph{i} is also returned, listing the 1:\emph{k} covariate pattern identifier for each observation.
 }
 
 \value{
@@ -29,7 +29,7 @@ A list containing the following:
 }
 
 \author{
-Thanks to Johann Popp for providing code and suggestions to enhance the speed of this function.
+Thanks to Johann Popp and Mathew Jay for providing code and suggestions to enhance the utility of this function.
 }
 
 \references{

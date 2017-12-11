@@ -8,12 +8,12 @@
 Compute directly adjusted incidence rates.}
 
 \usage{
-epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
+epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. If there are no covariates to be adjusted for \code{obs} will be a one column matrix. The rows the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
-  \item{pop}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. If there are no covariates \code{pop} will be a one column matrix. The rows the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. If there are no covariates to be adjusted for \code{obs} will be a one column matrix. The rows of the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. If there are no covariates \code{pop} will be a one column matrix. The rows of the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
   \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for the covariate(s).}
   \item{units}{multiplier for the incidence risk estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
@@ -22,7 +22,7 @@ epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
 \details{
 This function returns unadjusted (crude) and directly adjusted incidence rate estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e. adjust) for when calculating the directly adjusted incidence rate estimates.
 
-When the outcome of interest is rare, the confidence intervals returned by this function (based on Fay and Feuer, 1997) are appropriate for incidence risk data. In this situation the argument \code{pop} represents the size of the population at risk (instead of population time at risk).
+When the outcome of interest is rare, the confidence intervals returned by this function (based on Fay and Feuer, 1997) are appropriate for incidence risk data. In this situation the argument \code{pop} represents the size of the population at risk (instead of population time at risk). See the examples below for an approach for directly standardising incidence risk data.
 } 
 
 \value{
@@ -57,10 +57,15 @@ Thanks to Karl Ove Hufthammer for helpful suggestions to improve the execution a
 ## the numbers represent dog-years at risk. The following data were 
 ## obtained for male and female dogs:
 
-obs <- matrix(data = c(15,46,53,16), nrow = 2, byrow = TRUE, 
+dat <- data.frame(obs = c(15,46,53,16), tar = c(48,212,180,71), 
+   sex = c("M","F","M","F"), city = c("ED","ED","GL","GL"))
+
+obs <- matrix(dat$obs, nrow = 2, byrow = TRUE, 
    dimnames = list(c("ED","GL"), c("M","F")))
-pop <- matrix(data = c(48,212,180,71), nrow = 2, byrow = TRUE, 
+tar <- matrix(dat$tar, nrow = 2, byrow = TRUE, 
    dimnames = list(c("ED","GL"), c("M","F")))
+std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
+   dimnames = list("", c("M","F")))
 
 ## Compute directly adjusted seroprevalence estimates, using a standard 
 ## population with equal numbers of male and female dogs:
@@ -68,7 +73,7 @@ pop <- matrix(data = c(48,212,180,71), nrow = 2, byrow = TRUE,
 std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
    dimnames = list("", c("M","F")))
 
-epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
+epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 
 ## > $crude
 ## >   strata cov       est     lower     upper
@@ -89,6 +94,95 @@ epi.directadj(obs, pop, std, units = 1, conf.level = 0.95)
 
 ## The confounding effect of sex has been removed by the gender-adjusted 
 ## incidence rate estimates.
+
+## The adjusted incidence rate of leptospirosis in Glasgow dogs is 26 (95\%
+## CI 20 to 34) cases per 100 dog-years at risk.
+
+## EXAMPLE 2 --- A more flexible approach for calculating adjusted incidence
+## rate estimates using Poisson regression:
+dat.glm01 <- glm(obs ~ city, offset = log(tar), family = poisson, data = dat)
+summary(dat.glm01)
+
+## If you want to obtain incidence rate estimates, use the predict method on a 
+## new data set with the time at risk (tar) variable set to 1 (which means 
+## log(tar) = 0). This will return the predicted number of cases per one unit 
+## of population, i.e. the incidence rate.
+
+dat.pred01 <- predict(object = dat.glm01, newdata = 
+   data.frame(city = c("ED","GL"), tar = c(1,1)), 
+   type  = "link", se = TRUE)
+
+conf.level <- 0.95
+critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
+est <- dat.glm01$family$linkinv(dat.pred01$fit)
+lower <- dat.glm01$family$linkinv(dat.pred01$fit - 
+   (critval * dat.pred01$se.fit))
+upper <- dat.glm01$family$linkinv(dat.pred01$fit + 
+   (critval * dat.pred01$se.fit))
+round(data.frame(est, lower, upper), 3)
+
+##   est lower upper
+## 0.235 0.183 0.302
+## 0.275 0.217 0.348
+## Results identical to the crude incidence rate estimates from 
+## epi.directadj.
+
+## We now adjust for the effect of sex and city and report the adjusted 
+## incidence rate estimates for each city:
+dat.glm02 <- dat.glm02 <- glm(obs ~ city + sex, offset = log(tar), 
+   family = poisson, data = dat)
+dat.pred02 <- predict(object = dat.glm02, newdata = 
+   data.frame(sex = c("F","F"), city = c("ED","GL"), tar = c(1,1)), 
+   type  = "link", se.fit = TRUE)
+
+conf.level <- 0.95
+critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
+est <- dat.glm02$family$linkinv(dat.pred02$fit)
+lower <- dat.glm02$family$linkinv(dat.pred02$fit - 
+   (critval * dat.pred02$se.fit))
+upper <- dat.glm02$family$linkinv(dat.pred02$fit + 
+   (critval * dat.pred02$se.fit))
+round(data.frame(est, lower, upper), 3)
+
+##   est lower upper
+## 0.220 0.168 0.287
+## 0.217 0.146 0.323
+
+## The adjusted incidence rate of leptospirosis in Glasgow dogs is 22 (95\%
+## CI 15 to 32) cases per 100 dog-years at risk.
+
+## EXAMPLE 3 --- Logistic regression to return adjusted incidence risk 
+## estimates:
+
+## Say we are now working with incidence risk data. Here we'll  use the 
+## leptospirosis dog data set, but re-label the variable 'tar' (time at risk) 
+## as 'pop' (population size). We adjust for the effect of sex and city and 
+## report the adjusted incidence risk estimates for each city:
+
+dat$pop <- dat$tar
+
+dat.glm03 <- glm(cbind(obs, pop - obs) ~ city + sex, 
+   family = "binomial", data = dat)
+dat.pred03 <- predict(object = dat.glm03, newdata = 
+   data.frame(sex = c("F","F"), city = c("ED","GL")), 
+   type  = "link", se.fit = TRUE)
+
+conf.level <- 0.95
+critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
+est <- dat.glm03$family$linkinv(dat.pred03$fit)
+lower <- dat.glm03$family$linkinv(dat.pred03$fit - 
+   (critval * dat.pred03$se.fit))
+upper <- dat.glm03$family$linkinv(dat.pred03$fit + 
+   (critval * dat.pred03$se.fit))
+round(data.frame(est, lower, upper), 3)
+
+##   est lower upper
+## 0.220 0.172 0.276
+## 0.217 0.150 0.304
+
+## The adjusted incidence risk of leptospirosis in Glasgow dogs is 22 (95\%
+## CI 15 to 30) cases per 100 dogs at risk.
+
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

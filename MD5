@@ -1,5 +1,5 @@
-3fc0a923a43866a0192811642e0aeb94 *DESCRIPTION
-7fef6704a714f9fc47a477f6b751aaab *NAMESPACE
+1211e3ccfebf61e8cc864447ad99f82a *DESCRIPTION
+7fd87ce14690805b6c72b2b5dfec8865 *NAMESPACE
 36914e5e5904e60bd5bd33af6cb05a45 *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
@@ -14,12 +14,12 @@ c3ff42af84bb01e927867d54b4ac4334 *R/epi.clustersize.R
 e88d3240c668b29504f247bf2c824ebd *R/epi.cohortsize.R
 8e08de8792494503161a98b7e38d9ef9 *R/epi.conf.R
 d535d0aaae250f95c38e00ccbba0b7ca *R/epi.convgrid.R
-6fcf38898074b7da8d20c1b83a76f730 *R/epi.cp.R
+2c28d23e9efa4475627834dfdcd3c1d8 *R/epi.cp.R
 0bce821540346b1e58e640d7334c043b *R/epi.cpresids.R
 e3d7b38e88eb943c976edb0f38350174 *R/epi.descriptives.R
 7ca563951950b4476e001ce3dba64043 *R/epi.detectsize.R
 da3832a85a8085b34f75455e6defbf24 *R/epi.dgamma.R
-4788877af77c92892dc43e324ccd05c5 *R/epi.directadj.R
+b87a0e34f24b34d15f1b05c72f1b1bd7 *R/epi.directadj.R
 85be50061d94e87a31c52f3287e8e492 *R/epi.dms.R
 c4af10a5115fd3bb7713694393c9a3d3 *R/epi.dsl.R
 276cc7e048b9b12cad3c16fe60190600 *R/epi.edr.R
@@ -71,12 +71,12 @@ b86f88dbb6fdfca830a2afbc9a764f30 *man/epi.cluster2size.Rd
 f702487d058e34fa75a4173710ab44c4 *man/epi.cohortsize.Rd
 ddc1befc74ee119935f03d93a3301e04 *man/epi.conf.Rd
 07e702fd65b9cc6710d27c133b94f89f *man/epi.convgrid.Rd
-3650dbdffa8726d7eb0859f10c4b7e57 *man/epi.cp.Rd
+cc4dedafa93be6696e9d15bdce5caf65 *man/epi.cp.Rd
 11dc595f8d992cd9b43c0c1eb83879e7 *man/epi.cpresids.Rd
 4227b839d52e6052284da81817ec836a *man/epi.descriptives.Rd
 9d9251304690d373ee190fb27626904c *man/epi.detectsize.Rd
 8b3b0014ef1fd0e3fc8da5c53b70e8ff *man/epi.dgamma.Rd
-ca643841b6f39fe1c48f335b14db1b5d *man/epi.directadj.Rd
+2c57362938a47d83fbec4d42cfc2d0f6 *man/epi.directadj.Rd
 9424e6c2bec3dea4d79f1551b8080901 *man/epi.dms.Rd
 2ec45cd68f08c7eff379cf0a62c96bed *man/epi.dsl.Rd
 b19c83df0d6b24e3c9acdc9bf99ddfce *man/epi.edr.Rd
