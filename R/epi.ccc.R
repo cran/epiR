@@ -89,7 +89,7 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95, rep.measure = FA
   ba.p <- mean(delta)
   ba.l <- ba.p - (zv * delta.sd)
   ba.u <- ba.p + (zv * delta.sd)
-  sblalt <- data.frame("est" = ba.p, "lower" = ba.l, "upper" = ba.u) 
+  sblalt <- data.frame("est" = ba.p, "delta.sd" = delta.sd, "lower" = ba.l, "upper" = ba.u) 
 
   if(ci == "asymptotic"){
     rho.c <- data.frame(p, ll, ul)

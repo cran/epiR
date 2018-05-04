@@ -37,7 +37,7 @@ A list containing the following:
   \item{l.shift}{the location shift.}
   \item{C.b}{a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees. No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page 258).}
   \item{blalt}{a data frame with two columns: \code{mean} the mean of each pair of measurements, \code{delta} vector \code{y} minus vector \code{x}.}
-  \item{sblalt}{a data frame listing the average difference between the two sets of measurements and the lower and upper confidence limits of the difference between the two sets of measurements. If \code{rep.measure == TRUE} the confidence interval of the difference is adjusted to account for repeated observations across individual subjects.}
+  \item{sblalt}{a data frame listing the average difference between the two sets of measurements, the standard deviation of the difference between the two sets of measurements and the lower and upper confidence limits of the difference between the two sets of measurements. If \code{rep.measure == TRUE} the confidence interval of the difference is adjusted to account for repeated observations across individual subjects.}
   \item{nmissing}{a count of the number of measurement pairs ignored due to missingness.}
 }
 
@@ -53,6 +53,8 @@ Bradley E, Blackwood L (1989). Comparing paired data: a simultaneous test for me
 Burdick RK, Graybill FA (1992). Confidence Intervals on Variance Components. New York: Dekker.
                                                                            
 Dunn G (2004). Statistical Evaluation of Measurement Errors: Design and Analysis of Reliability Studies. London: Arnold.
+
+Euser AM, Dekker FW, le Cessie S (2008). A practical approach to Bland-Altman plots and variation coefficients for log transformed variables. Journal of Clinical Epidemiology 61: 978 - 982.
 
 Hsu C (1940). On samples from a normal bivariate population. Annals of Mathematical Statistics 11: 410 - 426.
 
@@ -74,11 +76,13 @@ Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University P
 }
 
 \examples{
+
+## EXAMPLE 1:
 set.seed(seed = 1234)
 method1 <- rnorm(n = 100, mean = 0, sd = 1)
 method2 <- method1 + runif(n = 100, min = -0.25, max = 0.25)
 
-## Introduce some missing values:
+## Add some missing values:
 method1[50] <- NA
 method2[75] <- NA
 
@@ -97,7 +101,6 @@ beta <-  summary(z)$coefficients[2,1]
 tmp.lm <- data.frame(alpha, beta)
 
 ## Concordance correlation plot:
-
 \dontrun{
 library(ggplot2)
 
@@ -117,6 +120,8 @@ ggplot(tmp, aes(x = method1, y = method2)) +
 ## The solid line represents the reduced major axis.  
 }
 
+
+## EXAMPLE 2:
 ## Bland and Altman plot (Figure 2 from Bland and Altman 1986):
 x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
    478,178,423,427)
@@ -140,7 +145,75 @@ ggplot(tmp.ccc$blalt, aes(x = mean, y = delta)) +
   ylab("Difference in PEFR (L/min)") +
   xlim(0,800) +
   ylim(-150,150)     
-}    
+}
+
+
+## EXAMPLE 3:
+## Setting limits of agreement when your data are skewed. See Euser et al. 
+## (2008) for details.
+x <- c(0,210,15,90,0,0,15,0,0,0,15,0,15,0,0,0,0,15,0,0,15,135,0,0,15,
+   120,30,15,30,0,0,5235,780,1275,10515,1635,1905,1830,720,450,225,420,
+   300,15,285,0,225,525,675,5280,465,270,0,1485,15,420,0,60,0,0,0,750,
+   570,0)
+y <- c(0,70,0,0,0,0,35,0,0,0,0,0,0,35,0,0,0,0,0,0,35,35,70,0,0,140,35,
+   105,0,0,0,1190,385,1190,6930,560,1260,700,840,0,105,385,245,35,105,
+   0,140,350,350,3640,385,350,0,1505,0,630,70,0,0,140,0,420,490,0)   
+   
+crude.ccc <- epi.ccc(x, y, ci = "z-transform", 
+   conf.level = 0.95, rep.measure = FALSE)
+
+\dontrun{
+library(ggplot2)
+
+ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) + 
+  geom_point() +
+  geom_hline(data = crude.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
+  geom_hline(data = crude.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
+  geom_hline(data = crude.ccc$sblalt, aes(yintercept = est), linetype = 1) +
+  xlab("Average of the two measurements") +
+  ylab("Difference in the two measurements") +
+  xlim(0,8000) +
+  ylim(-8000,8000)
+}
+
+## In the above plot the spread of the differences increases with increasing 
+## mean of the observations. The Bland Altman limits of agreement should be 
+## calculated on a log scale.
+
+logx <- log(x + 50, base = 10)
+logy <- log(y + 50, base = 10)
+
+log10.ccc <- epi.ccc(x = logx, y = logy, ci = "z-transform", 
+   conf.level = 0.95, rep.measure = FALSE)
+
+## Transform the limits of agreement back to the original scale by taking 
+## anti-logs. If the limits of agreement for Z = log10(x) are between -a 
+## and +a, with a = 1.96 * s, the ratio between two measures on the original 
+## scale is between 10^-a and 10^a. See page 979 of Euser et al. (2008). 
+
+a <- 1.96 * log10.ccc$sblalt$delta.sd
+
+## For a given value for the mean Xbar, it can be shown that x - y is between 
+## -2Xbar(10^a - 1) / (10^a + 1) and +2Xbar(10^a - 1) / (10^a + 1):
+
+Xbar = seq(from = 0, to = 8000, by = 100)
+Xbar.low <- (-2 * Xbar * (10^a - 1)) / (10^a + 1)
+Xbar.upp <- (+2 * Xbar * (10^a - 1)) / (10^a + 1)
+limits <- data.frame(mean = Xbar, lower = Xbar.low, upper = Xbar.upp)
+
+\dontrun{
+library(ggplot2)
+
+ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) + 
+  geom_point() +
+  geom_line(data = limits, aes(x = mean, y = lower), linetype = 2) +
+  geom_line(data = limits, aes(x = mean, y = upper), linetype = 2) +
+  geom_line(data = limits, aes(x = mean, y = 0), linetype = 1) +
+  xlab("Average of the two measurements") +
+  ylab("Difference in the two measurements") +
+  xlim(0,8000) +
+  ylim(-8000,8000)
+}
 }
 
 \keyword{univar}

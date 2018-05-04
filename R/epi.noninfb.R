@@ -25,7 +25,9 @@ epi.noninfb <- function(treat, control, delta, n, r = 1, power, alpha){
       n.control <- ceiling(1 / (r + 1) * (n))
       n.treat <- n - n.control
      
-      z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat / r + control * (1 - control) / n.control)
+      # Replaced 010518 in response to email from Aline Guttmann on 080318: 
+      z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat + control * (1 - control) / n.control)
+      # Old code: z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat / r + control * (1 - control) / n.control)
       power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
       
       rval <- list(n.treat = n.treat, n.control = n.control, n.total = n.treat + n.control, power = power)

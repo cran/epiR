@@ -12,17 +12,17 @@ epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. If there are no covariates to be adjusted for \code{obs} will be a one column matrix. The rows of the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
-  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. If there are no covariates \code{pop} will be a one column matrix. The rows of the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
+  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
   \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for the covariate(s).}
-  \item{units}{multiplier for the incidence risk estimates.}
+  \item{units}{multiplier for the incidence rate estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
 This function returns unadjusted (crude) and directly adjusted incidence rate estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e. adjust) for when calculating the directly adjusted incidence rate estimates.
 
-When the outcome of interest is rare, the confidence intervals returned by this function (based on Fay and Feuer, 1997) are appropriate for incidence risk data. In this situation the argument \code{pop} represents the size of the population at risk (instead of population time at risk). See the examples below for an approach for directly standardising incidence risk data.
+When the outcome of interest is rare, the confidence intervals for the adjusted incidence rates returned by this function (based on Fay and Feuer, 1997) will be appropriate for incidence risk data. In this situation the argument \code{tar} is assumed to represent the size of the population at risk (instead of population time at risk). Example 3 (below) provides an approach if you are working with incidence risk data and the outcome of interest is not rare.
 } 
 
 \value{
@@ -37,9 +37,13 @@ Fay M, Feuer E (1997). Confidence intervals for directly standardized rates: A m
 
 Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York, USA, pp. 240.
 
+Frome E, Checkoway H (1985). Use of Poisson regression models in estimating incidence rates and ratios. American Journal of Epidemiology 121: 309 - 323.
+
 Greenland S, Rothman KJ. Introduction to stratified analysis. In: Rothman KJ, Greenland S (1998). Modern Epidemiology. Lippincott Williams, & Wilkins, Philadelphia, pp. 260 - 265.
 
 Thrusfield M (2007). Veterinary Epidemiology, Blackwell Publishing, London, UK, pp. 63 - 64.
+
+Wilcosky T, Chambless L (1985). A comparison of direct adjustment and regression adjustment of epidemiologic measures. Journal of Chronic Diseases 38: 849 - 956.
 }
 
 \author{
@@ -92,21 +96,22 @@ epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 ## > 1     ED 0.2647406 0.1866047 0.3692766
 ## > 2     GL 0.2598983 0.1964162 0.3406224
 
-## The confounding effect of sex has been removed by the gender-adjusted 
+## The confounding effect of gender has been removed by the adjusted 
 ## incidence rate estimates.
 
 ## The adjusted incidence rate of leptospirosis in Glasgow dogs is 26 (95\%
 ## CI 20 to 34) cases per 100 dog-years at risk.
 
 ## EXAMPLE 2 --- A more flexible approach for calculating adjusted incidence
-## rate estimates using Poisson regression:
+## rate estimates using Poisson regression. See Frome and Checkoway (1985) for
+## details.
 dat.glm01 <- glm(obs ~ city, offset = log(tar), family = poisson, data = dat)
 summary(dat.glm01)
 
-## If you want to obtain incidence rate estimates, use the predict method on a 
-## new data set with the time at risk (tar) variable set to 1 (which means 
-## log(tar) = 0). This will return the predicted number of cases per one unit 
-## of population, i.e. the incidence rate.
+## If you want to obtain adjusted incidence rate estimates, use the predict 
+## method on a new data set with the time at risk (tar) variable set to 1 
+## (which means log(tar) = 0). This will return the predicted number of 
+## cases per one unit of individual time, i.e. the incidence rate.
 
 dat.pred01 <- predict(object = dat.glm01, newdata = 
    data.frame(city = c("ED","GL"), tar = c(1,1)), 
@@ -127,7 +132,7 @@ round(data.frame(est, lower, upper), 3)
 ## Results identical to the crude incidence rate estimates from 
 ## epi.directadj.
 
-## We now adjust for the effect of sex and city and report the adjusted 
+## We now adjust for the effect of gender and city and report the adjusted 
 ## incidence rate estimates for each city:
 dat.glm02 <- dat.glm02 <- glm(obs ~ city + sex, offset = log(tar), 
    family = poisson, data = dat)
@@ -148,16 +153,19 @@ round(data.frame(est, lower, upper), 3)
 ## 0.220 0.168 0.287
 ## 0.217 0.146 0.323
 
-## The adjusted incidence rate of leptospirosis in Glasgow dogs is 22 (95\%
-## CI 15 to 32) cases per 100 dog-years at risk.
+## Using Poisson regression the gender adjusted incidence rate of leptospirosis 
+## in Glasgow dogs was 22 (95\% CI 15 to 32) cases per 100 dog-years at risk.
+## These results won't be the same as those using direct adjustment because
+## for direct adjustment we use a contrived standard population.
 
 ## EXAMPLE 3 --- Logistic regression to return adjusted incidence risk 
 ## estimates:
 
-## Say we are now working with incidence risk data. Here we'll  use the 
-## leptospirosis dog data set, but re-label the variable 'tar' (time at risk) 
-## as 'pop' (population size). We adjust for the effect of sex and city and 
-## report the adjusted incidence risk estimates for each city:
+## Say, for argument's sake, that we are now working with incidence risk data. 
+## Here we'll re-label the variable 'tar' (time at risk) as 'pop' 
+## (population size). We adjust for the effect of gender and city and 
+## report the adjusted incidence risk of canine leptospirosis estimates for 
+## each city:
 
 dat$pop <- dat$tar
 

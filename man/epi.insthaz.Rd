@@ -34,11 +34,39 @@ Singer J, Willett J (2003). Applied Longitudinal Data Analysis Modeling Change a
 
 \examples{
 require(survival)
-ovarian.km <- survfit(Surv(futime,fustat) ~ 1, data = ovarian)
 
-ovarian.haz <- epi.insthaz(ovarian.km, conf.level = 0.95)
-plot(ovarian.haz$time, ovarian.haz$est, xlab = "Days", 
-   ylab = "Instantaneous hazard", type = "b", pch = 16)
+ov.km <- survfit(Surv(futime, fustat) ~ 1, data = ovarian)
+ov.haz <- epi.insthaz(ov.km, conf.level = 0.95)
+ov.shaz <- data.frame(
+   time = lowess(ov.haz$time, ov.haz$lower, f = 0.50)$x,
+   est =  lowess(ov.haz$time, ov.haz$est, f = 0.50)$y,
+   low =  lowess(ov.haz$time, ov.haz$lower, f = 0.50)$y,
+   upp =  lowess(ov.haz$time, ov.haz$upper, f = 0.50)$y)
+
+plot(x = ov.haz$time, y = ov.haz$est, xlab = "Days", 
+  ylab = "Instantaneous hazard", type = "b", pch = 16, ylim = c(0, 0.02))
+lines(x = ov.shaz$time, y = ov.shaz$est, 
+   lty = 1, lwd = 2, col = "red")
+lines(x = ov.shaz$time, y = ov.shaz$low, 
+   lty = 2, lwd = 1, col = "red")
+lines(x = ov.shaz$time, y = ov.shaz$upp, 
+   lty = 2, lwd = 1, col = "red")
+
+\dontrun{ 
+library(ggplot2)
+
+ggplot(data = ov.haz, aes(x = time, y = est)) +
+   geom_line() + 
+   geom_line(data = ov.shaz, aes(x = time, y = est), 
+      lty = 1, lwd = 1.0, col = "red") + 
+   geom_line(data = ov.shaz, aes(x = time, y = low), 
+      lty = 2, lwd = 0.5, col = "red") +
+   geom_line(data = ov.shaz, aes(x = time, y = upp), 
+      lty = 2, lwd = 0.5, col = "red") +
+   xlab(label = "Days") +
+   ylab("Instantaneous hazard") +
+   ylim(0, 0.02)
+}
 
 }
 
