@@ -102,6 +102,7 @@
   lower <- c(); upper <- c()
 
   for(i in 1:length(x)){
+  
   # Lower bound a_alpha^st(X)
   if (x[i] == 0){tlower <- 0} else {
     J <- c(0:(x[i] - 1), (x[i] + 1):n[i])
@@ -177,9 +178,10 @@
     }
   
   # c("a_alpha^St" = pu, "b_alpha^St" = po)
-  lower <- c(tlower, lower)
-  upper <- c(tupper, upper)
+  lower <- c(lower, tlower)
+  upper <- c(upper, tupper)
   }
+  
   rval <- data.frame(lower = lower, upper = upper)
   return(rval)
 }  
@@ -204,8 +206,8 @@
       tupper = tupper - tolerance
     }
     
-    lower <- c(tlower, lower)
-    upper <- c(tupper, upper)
+    lower <- c(lower, tlower)
+    upper <- c(upper, tupper)
   }
 
   rval <- data.frame(lower = lower, upper = upper)

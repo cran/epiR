@@ -1,7 +1,12 @@
 
-        CHANGES IN epiR VERSION 0.9-96
+        CHANGES IN epiR VERSION 0.9-97
 
 BUG FIXES
+
+    o epi.prev
+    Error in formatting of confidence intervals when method = "sterne" and method = "blaker". 
+    [Spotted by Salome Duerr]
+    Fixed.
 
     o epi.noninfb
     Study power estimation when r argument for epi.noninfb was not equal 

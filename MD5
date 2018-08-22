@@ -1,6 +1,6 @@
-4b1b8787494714f41a288bb07a2d3901 *DESCRIPTION
+7ece8fb82e14138fde7f7a7ee84338b6 *DESCRIPTION
 7fd87ce14690805b6c72b2b5dfec8865 *NAMESPACE
-fd0ff8cc53d4cf77289ccd88f09e9188 *NEWS
+28a37343f2b3a07aa4b1c4da2780ca71 *NEWS
 36914e5e5904e60bd5bd33af6cb05a45 *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
@@ -44,7 +44,7 @@ dd89f9509954970ef09f36b06192b96c *R/epi.occc.R
 b1c0bdf50b56a4b9df09ac89f2de0b98 *R/epi.pooled.R
 3a35fac64c1bcda32c3dcabe7b7d14b2 *R/epi.popsize.R
 9984eb80ee76e03e982e401c2c3a2490 *R/epi.prcc.R
-3f91e8c64f3dda591ed7f2d98dc5d39c *R/epi.prev.R
+8662d09de3fc189b592c8cb0cd2ecd35 *R/epi.prev.R
 fbe3c8b6aebc5541f474d11443e427d4 *R/epi.propsize.R
 b149e431ad851995742d356767b1a1ab *R/epi.simplesize.R
 4e719a2b9c4ba572f0ee3c3d70d54190 *R/epi.smd.R
