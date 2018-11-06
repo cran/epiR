@@ -1,4 +1,12 @@
 
+        CHANGES IN epiR VERSION 0.9-98
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.prev
+    Function does not truncate true prevalence estimates to values between 0 and 1. Warning issued when apparent prevalence is less than (1 - specificity). Additional references added to docuementation. 
+
+
         CHANGES IN epiR VERSION 0.9-97
 
 BUG FIXES

@@ -54,25 +54,30 @@ Reiczigel J, Foldi J, Ozsvari L (2010). Exact confidence limits for prevalence o
 
 Rogan W, Gladen B (1978). Estimating prevalence from results of a screening test. American Journal of Epidemiology 107: 71 - 76. 
 
+Speybroeck N, Devleesschauwer B, Joseph L, Berkvens D (2012). Misclassification errors in prevalence estimation: Bayesian handling with care. International Journal of Public Health DOI:10.1007/s00038-012-0439-9.
+
 Sterne TE (1954). Some remarks on confidence or fiducial limits. Biometrika 41: 275 - 278. 
 }
 
+\note{This function uses apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). Confidence intervals for the apparent and true prevalence estimates are based on code provided by Reiczigel et al. (2010).
 
-\note{This function uses apparent prevalence, test sensitivity and test specificity to estimate true prevalence (after Rogan and Gladen, 1978). Confidence intervals for the apparent and true prevalence estimates are based on code provided by Reiczigel et al. (2010). 
+If apparent prevalence is less than (1 - diagnostic test specificity) the Rogan Gladen estimate of true prevalence will be less than zero (Speybroeck et al. 2012). If the apparent prevalence is greater than the diagnostic test sensitivity the Rogan Gladen estimate of true prevalence will be greater than one.
+ 
+When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In either situation a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
 }
 
 \examples{
 ## A simple random sample of 150 cows from a herd of 2560 is taken.
 ## Each cow is given a screening test for brucellosis which has a 
 ## sensitivity of 96% and a specificity of 89%. Of the 150 cows tested
-## 23 were positive to the screening test. What is the estimated prevalence 
+## 45 were positive to the screening test. What is the estimated prevalence 
 ## of brucellosis in this herd (and its 95% confidence interval)?
 
-epi.prev(pos = 23, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
+epi.prev(pos = 45, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
    units = 100, conf.level = 0.95)
 
-## The estimated true prevalence of brucellosis in this herd is 5.1 cases per 
-## 100 cows (95% CI 0 -- 13 cases per 100 cows).
+## The estimated true prevalence of brucellosis in this herd is 22 (95\% 14 
+## to 32) cases per 100 cows at risk.
 
 ## Moujaber et al. (2008) analysed the seroepidemiology of Helicobacter pylori 
 ## infection in Australia. They reported seroprevalence rates together with 
@@ -86,7 +91,8 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
    units = 100, conf.level = 0.95)
 
 ## The estimated true prevalence of Helicobacter pylori in 1 -- 4 year olds is
-## 0 cases per 100 (95% 0 -- 1.3 cases per 100).
+## -4 (95\% CI -6 to 1) cases per 100. Warning issued by function to alert 
+## user that estimate of true prevalence invalid.
 
 ## Three dairy herds are tested for tuberculosis. On each herd a different test
 ## regime is used (each with a different diagnostic test sensitivity and 
@@ -96,15 +102,15 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
 ## specificities were 0.90, 0.95 and 0.99. What is the estimated true 
 ## prevalence of tuberculosis in the three herds?
 
-rval <- epi.prev(pos = c(8,12,7), tested = c(210,189,124), 
+rval <- epi.prev(pos = c(80,100,50), tested = c(210,189,124), 
    se = c(0.60,0.65,0.70), sp = c(0.90,0.95,0.99), method = "blaker", 
    units = 100, conf.level = 0.95)
 round(rval$tp, digits = 3)
 
 ## True prevalence estimates for each herd:
-## Herd 1: 0.00 (95\% CI 0.00 to 2.05) cases per 100 cows.
-## Herd 2: 2.25 (95\% CI 0.00 to 9.45) cases per 100 cows.
-## Herd 3: 6.73 (95\% CI 0.99 to 9.00) cases per 100 cows.
+## Herd 1: 56 (95\% CI 43 to 70) cases per 100 cows.
+## Herd 2: 80 (95\% CI 68 to 92) cases per 100 cows.
+## Herd 3: 57 (95\% CI 45 to 70) cases per 100 cows.
 
 }
 

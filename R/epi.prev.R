@@ -9,22 +9,37 @@
    
    # Apparent prevalence:
    ap.p <- pos / tested
+
    # True prevalence:
    tp.p <- (ap.p + sp - 1) / (se + sp - 1)
-   tp.p[tp.p < 0] <- 0
-   tp.p[tp.p > 1] <- 1
+   
+   # The next two lines commented out 4 Nov 2018. Report TP estimates out of 0-1 range and issue warning.
+   # tp.p[tp.p < 0] <- 0
+   # tp.p[tp.p > 1] <- 1
+
    tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
-   tp.cl[tp.cl < 0] <- 0
-   tp.cl[tp.cl > 1] <- 1
+   
+   # The next two lines commented out 4 Nov 2018. Report TP estimates out of 0-1 range and issue warning.
+   # tp.cl[tp.cl < 0] <- 0
+   # tp.cl[tp.cl > 1] <- 1
    # tp.cl <- pmax(tp.cl, c(0, 0))
    # tp.cl <- pmin(tp.cl, c(1, 1))
 
    if(length(pos) == 1){
+     if(ap.p < (1 - sp)) warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+     if(ap.p > se) warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+     
      result.01 <- data.frame(est = ap.p * units, lower = ap.cl[1] * units, upper = ap.cl[2] * units)
      result.02 <- data.frame(est = tp.p * units, lower = tp.cl[1] * units, upper = tp.cl[2] * units)
      } 
    
    if(length(pos) > 1){
+     id <- ap.p < (1 - sp)
+     if(sum(id) > 0) warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+     
+     ie <- (ap.p > se)
+     if(sum(ie) > 0) warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+
      result.01 <- data.frame(est = ap.p * units, lower = ap.cl[,1] * units, upper = ap.cl[,2] * units)
      result.02 <- data.frame(est = tp.p * units, lower = tp.cl[,1] * units, upper = tp.cl[,2] * units)
    } 

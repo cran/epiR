@@ -1,6 +1,6 @@
-7ece8fb82e14138fde7f7a7ee84338b6 *DESCRIPTION
+77baebe3ea4ed30b749e782d3442b64c *DESCRIPTION
 7fd87ce14690805b6c72b2b5dfec8865 *NAMESPACE
-28a37343f2b3a07aa4b1c4da2780ca71 *NEWS
+7fda1472f483544e2692d23191a16247 *NEWS
 36914e5e5904e60bd5bd33af6cb05a45 *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
@@ -44,7 +44,7 @@ dd89f9509954970ef09f36b06192b96c *R/epi.occc.R
 b1c0bdf50b56a4b9df09ac89f2de0b98 *R/epi.pooled.R
 3a35fac64c1bcda32c3dcabe7b7d14b2 *R/epi.popsize.R
 9984eb80ee76e03e982e401c2c3a2490 *R/epi.prcc.R
-8662d09de3fc189b592c8cb0cd2ecd35 *R/epi.prev.R
+14e28441a7d56e5235f4b10877278b41 *R/epi.prev.R
 fbe3c8b6aebc5541f474d11443e427d4 *R/epi.propsize.R
 b149e431ad851995742d356767b1a1ab *R/epi.simplesize.R
 4e719a2b9c4ba572f0ee3c3d70d54190 *R/epi.smd.R
@@ -103,7 +103,7 @@ cc7f75a85351f5542916421fa4b7e648 *man/epi.offset.Rd
 2bd23171751550cdd1912e0d0244748d *man/epi.pooled.Rd
 94d5f2ced08ba7556c21e6360d5f54b8 *man/epi.popsize.Rd
 eb4fa4e5bf5996b7f46b9bb9e67f57e0 *man/epi.prcc.Rd
-1f01142f1724a5c1c88162aa96b8befe *man/epi.prev.Rd
+4b0cd221e0cb9241f24f16cbb6530334 *man/epi.prev.Rd
 0cc4da187b5d7bf97eda273ed0d622b3 *man/epi.propsize.Rd
 8e0668a9c1a7376e32521204873b8659 *man/epi.simplesize.Rd
 b6389f885f3fdf71f58c115334f230d4 *man/epi.smd.Rd
