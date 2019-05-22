@@ -1,3 +1,44 @@
+        CHANGES IN epiR VERSION 1.0-02
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.conf
+    Error in incidence rate confidence interval calculation.
+    [Spotted by Kazuki Yoshida]
+    Fixed.
+    
+    o epi.detectsize
+    Inconsistency in function documentation.
+    [Spotted by Jamie Madden]
+    Fixed. 
+    
+    o epi.kappa
+    Function returns an error if the number of rows and number of columns in the data table presented for analysis does not equal two.
+    [Spotted by Maia Dolgopoloff]
+    Fixed.
+
+BUG FIXES
+
+    o epi.2by
+    Anomalies in calculation of test of homogeneity in strata odds ratios and risk ratios corrected. Argument "homogeneity" removed from function. Woolf test of homogeneity reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+    [Spotted by Antonio A Lopes]
+    Fixed.
+    
+    
+        CHANGES IN epiR VERSION 1.0-01
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by
+    Argument "homogeneity" removed from epi.2by2. Mantel-Haenszel (Woolf) test of homogeneity now reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+
+BUG FIXES
+
+    o epi.2by
+    Anomalies in calculation of test of homogeneity in strata odds ratios and risk ratios corrected. Argument "homogeneity" removed from function. Woolf test of homogeneity reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+    [Spotted by Antonio A Lopes]
+    Fixed.
+
 
         CHANGES IN epiR VERSION 0.9-98
 

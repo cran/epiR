@@ -26,7 +26,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 \details{
 Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{odds} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Method \code{ratio} requires a two-column matrix; the first column specifies the numerator, the second column specifies the denominator. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
 
-The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk}, \code{prevalence} or \code{inc.rate} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
+The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk} or \code{prevalence} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 
 \tabular{ll}{
 ----------------------------------- \tab ------------------------ \cr
@@ -44,7 +44,7 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{prevalence, exact}            \tab Collett (1999)           \cr
 \code{prevalence, wilson}           \tab Rothman (2002)           \cr
 \code{prevalence, fleiss}           \tab Fleiss (1981)            \cr
-\code{inc.rate, exact}              \tab Collett (1999)           \cr
+\code{inc.rate, exact}              \tab Ulm (1990)               \cr
 \code{inc.rate, byar}               \tab Rothman (2002)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr
 \code{ratio}                        \tab Ederer and Mantel (1974) \cr
@@ -71,6 +71,8 @@ Killip S, Mahfoud Z, Pearce K (2004). What is an intracluster correlation coeffi
 Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
 
 Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
+
+Ulm K (1990). A simple method to calculate the confidence interval of a standardized mortality ratio. American Journal of Epidemiology 131: 373 - 375.
 }
 
 \examples{

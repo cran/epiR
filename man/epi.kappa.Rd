@@ -14,7 +14,7 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 }
 
 \arguments{
-  \item{dat}{an object of class table with the individual cell frequencies.}
+  \item{dat}{an object of class table comprised of 2 rows and 2 columns listing the individual cell frequencies.}
   \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{watson} or \code{altman}.}
   \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{two.sided}, \code{greater} or \code{less}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
@@ -23,7 +23,7 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 \details{
 Kappa is a measure of agreement beyond the level of agreement expected by chance alone. The observed agreement is the proportion of samples for which both methods (or observers) agree.
 
-The bias and prevalence adjusted kappa (Brt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments.
+The bias and prevalence adjusted kappa (Byrt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments.
 
 Common interpretations for the kappa statistic are as follows: < 0.2 slight agreement, 0.2 - 0.4 fair agreement, 0.4 - 0.6 moderate agreement, 0.6 - 0.8 substantial agreement, > 0.8 almost perfect agreement.
 

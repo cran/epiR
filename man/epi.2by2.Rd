@@ -14,7 +14,7 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 
 \usage{
 epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100, 
-   homogeneity = "breslow.day", outcome = "as.columns")
+   outcome = "as.columns")
 
 \method{print}{epi.2by2}(x, ...)
 
@@ -26,7 +26,6 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100,
   \item{method}{a character string indicating the study design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}. Based on the study design specified by the user, appropriate measures of association, measures of effect in the exposed and measures of effect in the population are returned by the function.}
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence (risk or rate) estimates.}
-  \item{homogeneity}{a character string indicating the type of homogeneity test to perform. Options are \code{breslow.day} or \code{woolf}.}
   \item{outcome}{a character string indicating how the outcome variable is represented in the contingency table. Options are \code{as.columns} (outcome as columns) or \code{as.rows} (outcome as rows).}  
   \item{x, object}{an object of class \code{epi.2by2}.}
   \item{...}{Ignored.}
@@ -81,9 +80,9 @@ When method equals \code{cohort.count} the following measures of association, me
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
-  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test.}
-  \item{\code{RR.homog}}{test of homogeneity of the individual strata incidence risk ratios.}
-  \item{\code{OR.homog}}{test of homogeneity of the individual strata odds ratios.}  
+  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
+  \item{\code{RR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata incidence risk ratios.}
+  \item{\code{OR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata odds ratios.}  
   
 When method equals \code{cohort.time} the following measures of association and effect are returned: 
 
@@ -94,7 +93,7 @@ When method equals \code{cohort.time} the following measures of association and 
   \item{\code{PAFRate}}{Wald confidence interval for the population attributable fraction for each strata. Wald confidence interval for the crude poulation attributable fraction.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
-  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test.}
+  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
 
 When method equals \code{case.control} the following measures of association and effect are returned:
 
@@ -105,8 +104,8 @@ When method equals \code{case.control} the following measures of association and
   \item{\code{PAFest}}{Wald confidence intervals for the population estimated attributable fraction for each strata. Wald confidence intervals for the crude population estimated attributable fraction.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
-  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test.}
-  \item{\code{OR.homog}}{test of homogeneity of the individual strata odds ratios.}  
+  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
+  \item{\code{OR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata odds ratios.}  
 
 When method equals \code{cross.sectional} the following measures of association and effect are returned: 
 
@@ -118,11 +117,13 @@ When method equals \code{cross.sectional} the following measures of association 
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
-  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test.}
-  \item{\code{PR.homog}}{test of homogeneity of the individual strata prevalence ratios.}
-  \item{\code{OR.homog}}{test of homogeneity of the individual strata odds ratios.}  
+  \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
+  \item{\code{PR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata prevalence ratios.}
+  \item{\code{OR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata odds ratios.}  
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
+
+The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 }
 
 
@@ -197,7 +198,7 @@ Wald confidence intervals are provided in the summary table simply because they 
 
 The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not significant.
 
-The tests of homogeneity of the odds (risk) ratio where \code{homogeneity = "breslow.day"} and \code{homogeneity = "woolf"} are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these functions.
+The Mantel-Haenszel (Woolf) test of homogeneity of the odds ratio are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these functions.
 }
 
 \examples{
@@ -214,16 +215,14 @@ dat <- matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE)
 rownames(dat) <- c("DF+", "DF-"); colnames(dat) <- c("FUS+", "FUS-"); dat
 
 epi.2by2(dat = as.table(dat), method = "cross.sectional", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   outcome = "as.columns")
+   conf.level = 0.95, units = 100, outcome = "as.columns")
 
 ## Outcome variable (FUS) as rows:
 dat <- matrix(c(13,5,2163,3349), nrow = 2, byrow = TRUE)
 rownames(dat) <- c("FUS+", "FUS-"); colnames(dat) <- c("DF+", "DF-"); dat
 
 epi.2by2(dat =  as.table(dat), method = "cross.sectional", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   outcome = "as.rows")
+   conf.level = 0.95, units = 100, outcome = "as.rows")
 
 ## Prevalence ratio:
 ## The prevalence of FUS in DCF exposed cats is 4.01 (95\% CI 1.43 to 11.23) 
@@ -257,13 +256,12 @@ print(tab1)
 
 ## Compute the incidence risk ratio and other measures of association:
 epi.2by2(dat = tab1, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day",
-   outcome = "as.columns")
+   conf.level = 0.95, units = 100, outcome = "as.columns")
 
 ## Odds ratio:
 ## The odds of having a low birth weight child for smokers is 2.02 
-## (95\% CI 1.08 to 3.78) times  greater than the odds of having 
-## a low birth weight child for non-smokers.
+## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
+## weight child for non-smokers.
 
 ## Now stratify by race:
 tab2 <- table(dat1$smoke, dat1$low, dat1$race, 
@@ -273,9 +271,13 @@ print(tab2)
 ## Compute the crude odds ratio, the Mantel-Haenszel adjusted odds ratio 
 ## and other measures of association:
 rval <- epi.2by2(dat = tab2, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   outcome = "as.columns")
+   conf.level = 0.95, units = 100, outcome = "as.columns")
 print(rval)
+
+## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
+## significant (chi square test statistic 2.8; df 2; p-value = 0.247). 
+## We accept the null hypothesis and conclude that the odds ratios for 
+## each strata of race are the same. 
 
 ## After accounting for the confounding effect of race, the odds of 
 ## having a low birth weight child for smokers is 3.09 (95\% CI 1.49 to 6.39)
@@ -301,8 +303,7 @@ print(tab3)
 
 # tab3 can now be passed to epi.2by2:
 rval <- epi.2by2(dat = tab3, method = "cohort.count", 
-   conf.level = 0.95, units = 100,  homogeneity = "breslow.day", 
-   outcome = "as.columns")
+   conf.level = 0.95, units = 100, outcome = "as.columns")
 print(rval)
 
 ## The Mantel-Haenszel adjusted odds ratio is 3.09 (95\% CI 1.49 to 6.39). The 
@@ -356,7 +357,7 @@ ggplot(dat, aes(or.p, y.at)) +
 \dontrun{
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
 rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.95, 
-   units = 1000,  homogeneity = "breslow.day", outcome = "as.columns")
+   units = 1000, outcome = "as.columns")
 summary(rval)$ARate.strata.wald
 
 ## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
@@ -392,8 +393,12 @@ dat <- data.frame(hid, exp, out, n = c(ai,bi,ci,di))
 dat <- xtabs(n ~ exp + out + hid, data = dat)
 print(dat)
 
-epi.2by2(dat = dat, method = "cohort.count", homogeneity = "breslow.day", 
-   outcome= "as.columns")
+epi.2by2(dat = dat, method = "cohort.count", outcome= "as.columns")
+
+## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
+## significant (chi square test statistic 5.276; df 7; p-value = 0.626). 
+## We accept the null hypothesis and conclude that the odds ratios for each 
+## strata of herd  are the same. 
 
 ## After adjusting for the effect of herd, compared to untreated cows, treatment
 ## increased the odds of recovery by a factor of 5.97 (95\% CI 2.72 to 13.13).
