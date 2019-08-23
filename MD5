@@ -1,8 +1,6 @@
-7f9c4e95805537f495eee2b7baaabb05 *DESCRIPTION
+6bfbd121ee4bcd310f41937eb19b546b *DESCRIPTION
 7fd87ce14690805b6c72b2b5dfec8865 *NAMESPACE
 89e7955c3c133df43e80fadb818496b7 *NEWS
-61b1924ca288f3469c40b70ee37a7b44 *R/NEW_epi.2by2_v01.R
-65125070bba4c9e18ea406e874d80e42 *R/NEW_epi.2by2_v02.R
 dd4727f45cd86e44ef6eca034ed5ce05 *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
@@ -17,7 +15,7 @@ c3ff42af84bb01e927867d54b4ac4334 *R/epi.clustersize.R
 e88d3240c668b29504f247bf2c824ebd *R/epi.cohortsize.R
 fc52f0f53ca921bb8063ce10450dedc7 *R/epi.conf.R
 d535d0aaae250f95c38e00ccbba0b7ca *R/epi.convgrid.R
-2c28d23e9efa4475627834dfdcd3c1d8 *R/epi.cp.R
+f5ada1be056fbaa31934d66ce0c48c58 *R/epi.cp.R
 0bce821540346b1e58e640d7334c043b *R/epi.cpresids.R
 e3d7b38e88eb943c976edb0f38350174 *R/epi.descriptives.R
 7ca563951950b4476e001ce3dba64043 *R/epi.detectsize.R
@@ -54,7 +52,7 @@ b149e431ad851995742d356767b1a1ab *R/epi.simplesize.R
 3c43a7f1e6a661729b3668d33b4c2358 *R/epi.supb.R
 535c35e8a4673060a17e60183c257fa5 *R/epi.supc.R
 868c42db0fc929ef5c2fdc7406e05c6f *R/epi.survivalsize.R
-c5d0ef995dc9b3280ccca3697a608c37 *R/epi.tests.R
+2a3bff2839184eec8059dea00a0e44bb *R/epi.tests.R
 00c26a92f3e827fd67862cf8434ecad2 *R/zzz.R
 e21ab6f2a8b2c8ed12468ce39757977e *data/epi.SClip.RData
 fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
@@ -91,7 +89,7 @@ f3402d302b0f91d5659aeedf917a2bd2 *man/epi.empbayes.Rd
 e9184315369aa93b32e1126e1487cf95 *man/epi.incin.Rd
 ae24ad247f63522997605f8be967f0cf *man/epi.indirectadj.Rd
 f6aa69d43b7b4046f17cdadfe28663e1 *man/epi.insthaz.Rd
-291ad447d33f9b6d38b2d70b745204b6 *man/epi.interaction.Rd
+1365830e64bb2885f04cfd5013e1ee3c *man/epi.interaction.Rd
 ede50c148a4b3ab71a74733a0ac953db *man/epi.iv.Rd
 6a41b00ad50b85b91d1d5710b19efcfd *man/epi.kappa.Rd
 85eb0f47054239387557a52af03a674f *man/epi.ltd.Rd
@@ -113,4 +111,4 @@ b6389f885f3fdf71f58c115334f230d4 *man/epi.smd.Rd
 16f8832c67368fb8b780904b9a928b87 *man/epi.supb.Rd
 4ac9e7c41ecaef08db27c9ebc3837f7d *man/epi.supc.Rd
 f5a55c6576a82a820b6325e944496f8b *man/epi.survivalsize.Rd
-9485078824a36fe10aa6286d649c62e2 *man/epi.tests.Rd
+a66de9399820a7d88f005d6044dc408a *man/epi.tests.Rd

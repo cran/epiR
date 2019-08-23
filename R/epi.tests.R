@@ -300,6 +300,34 @@
         c.up <- max(c.1, c.2)
 
         youden <- data.frame(est = c.p, lower = c.low, upper = c.up)
+        
+        
+        ## Proportion ruled out:
+        tdat <- as.matrix(cbind((c + d), total))
+        trval <- .funincrisk(tdat, conf.level)
+        pro <- trval$est; pro.low <- trval$lower; pro.up <- trval$upper
+        pro <- data.frame(est = pro, lower = pro.low, upper = pro.up)
+        
+        
+        ## Proportion ruled in:
+        tdat <- as.matrix(cbind((a + b), total))
+        trval <- .funincrisk(tdat, conf.level)
+        pri <- trval$est; pri.low <- trval$lower; pri.up <- trval$upper
+        pri <- data.frame(est = pri, lower = pri.low, upper = pri.up)
+        
+                
+        ## Proportion false positives:
+        tdat <- as.matrix(cbind(b, M0))
+        trval <- .funincrisk(tdat, conf.level)
+        pfp <- trval$est; pfp.low <- trval$lower; pfp.up <- trval$upper
+        pfp <- data.frame(est = pfp, lower = pfp.low, upper = pfp.up)
+        
+        
+        ## Proportion false negatives:
+        tdat <- as.matrix(cbind(c, M1))
+        trval <- .funincrisk(tdat, conf.level)
+        pfn <- trval$est; pfn.low <- trval$lower; pfn.up <- trval$upper
+        pfn<- data.frame(est = pfn, lower = pfn.low, upper = pfn.up)
 
     })
 
@@ -315,7 +343,12 @@
         ppv      = elements$pv.positive,
         npv      = elements$pv.negative,
         plr      = elements$lr.positive,
-        nlr      = elements$lr.negative)
+        nlr      = elements$lr.negative,
+        
+        pro      = elements$pro,
+        pri      = elements$pri,
+        pfp      = elements$pfp,
+        pfn      = elements$pfn)
 
     ## Define tab:
     r1 <- with(elements, c(a, b, N1))

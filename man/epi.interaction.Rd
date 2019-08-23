@@ -5,7 +5,7 @@
 \title{Relative excess risk due to interaction in a case-control study}
 
 \description{
-Computes the relative excess risk due to interaction, the proportion of disease among those with both exposures attributable to interaction, and the synergy index for case-control data. Confidence interval calculations are based on the delta method described by Hosmer and Lemeshow (1992).
+Computes the relative excess risk due to interaction, the proportion of outcomes among those with both exposures attributable to interaction, and the synergy index for case-control data. Confidence interval calculations are based on the delta method described by Hosmer and Lemeshow (1992).
 }
 
 \usage{
@@ -14,7 +14,7 @@ epi.interaction(model, coeff, type = c("RERI", "APAB", "S"), conf.level = 0.95)
 
 \arguments{
   \item{model}{an object of class \code{glm}, \code{clogit} or \code{coxph}.}
-  \item{coeff}{a vector specifying the position of the two coefficients of their interaction term in the model.}
+  \item{coeff}{a vector listing the positions of the coefficients of the interaction terms in the model. What row numbers of the regression table summary list the coefficients of the interaction terms included in the model?}
   \item{type}{character string defining the type of analysis to be run. Options are \code{RERI} the relative excess risk due to interaction, \code{APAB} the proportion of disease among those with both exposures that is attributable to interaction of the two exposures, and \code{S} the synergy index.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }

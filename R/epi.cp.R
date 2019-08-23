@@ -8,8 +8,8 @@ epi.cp <- function(dat){
   # Add an indicator variable for covariate patterns:
   ndat$indi <- apply(X = ndat[,ncol(ndat):2], MARGIN = 1, FUN = function(x) as.factor(paste(x, collapse = "")))
   
-  # Order the data according to the indicator variable:
-  ndat <- ndat[order(ndat$indi),]
+  # Order the data according to the indicator variable. Removed 4 Aug 2018.
+  # ndat <- ndat[order(ndat$indi),]
   
   # Create a variable that indicates all the cases of each covariate pattern:
   cp.id <- tapply(ndat$id, ndat$indi, function(x) paste(x, collapse = ","))

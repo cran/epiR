@@ -47,6 +47,10 @@ An object of class \code{epi.tests} containing the following:
   \item{npv}{negative predictive value.}
   \item{plr}{likelihood ratio of a positive test.}
   \item{nlr}{likelihood ratio of a negative test.}
+  \item{pro}{the proportion of subjects with the outcome ruled out.}
+  \item{pri}{the proportion of subjects with the outcome ruled in.}
+  \item{pfp}{of all the subjects that are truly outcome negative, the proportion that are incorrectly classified as positive (the proportion of false positives).} 
+  \item{pfn}{of all the subjects that are truly outcome positive, the proportion that are incorrectly classified as negative (the proportion of false negative).}   
 }
 
 \references{
@@ -64,7 +68,7 @@ Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, 
 }
 
 \author{
-Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia).
+Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia). Charles Reynard (School of Medical Sciences, The University of Manchester, United Kingdom).
 }
 
 \note{
@@ -81,11 +85,12 @@ Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
 }
 
 \examples{
-## Scott et al. 2008, Table 1:
-## A new diagnostic test was trialled on 1586 patients. Of 744 patients
-## that were disease positive, 670 tested positive. Of 842 patients that 
-## were disease negative, 640 tested negative. What is the likeliood
-## ratio of a positive test? What is the number needed to diagnose?
+## EXAMPLE 1:
+## From Scott et al. 2008, Table 1. A new diagnostic test was trialled 
+## on 1586 patients. Of 744 patients that were disease positive, 670 were 
+## test positive. Of 842 patients that were disease negative, 640 were 
+## test negative. What is the likeliood ratio of a positive test? 
+## What is the number needed to diagnose?
 
 dat <- as.table(matrix(c(670,202,74,640), nrow = 2, byrow = TRUE))
 colnames(dat) <- c("Dis+","Dis-")
@@ -98,6 +103,47 @@ print(rval); summary(rval)
 ## is 3.75 (95\% CI 3.32 to 4.24). The number needed to diagnose is 
 ## 1.51 (95\% CI 1.41 to 1.65). Around 15 persons need to be tested 
 ## to return 10 positive tests.
+
+## EXAMPLE 2:
+## A biomarker assay has been developed to identify patients that are at 
+## high risk of experiencing myocardial infarction. The assay varies on 
+## a continuous scale, from 0 to 1. Researchers believe that a biomarker 
+## assay result of greater than or equal to 0.60 renders a patient test 
+## positive, that is, at elevated risk of experiencing a heart attack 
+## over the next 12 months.
+
+## Generate data consistent with the information provided above. Assume the
+## prevalence of high risk subjects in your population is 0.35:
+set.seed(1234)
+dat <- data.frame(out = rbinom(n = 200, size = 1, prob = 0.35), 
+   bm = runif(n = 200, min = 0, max = 1))
+
+## Classify study subjects as either test positive or test negative 
+## according to their biomarker test result:
+dat$test <- ifelse(dat$bm >= 0.6, 1, 0)
+
+## Generate a two-by-two table:
+tab <- table(dat$test, dat$out)[2:1,2:1]
+rval <- epi.tests(tab, conf.level = 0.95)
+
+# What proportion of subjects are ruled out as being at high risk of 
+## myocardial infarction?
+rval$elements$pro
+# Answer: 0.61 (95\% CI 0.54 to 0.68).
+
+# What proportion of subjects are ruled in as being at high risk of 
+## myocardial infarction?
+rval$elements$pri
+# Answer: 0.38 (95\% CI 0.32 to 0.45).
+
+# What is the proportion of false positive results?
+rval$elements$pfp
+# Answer: 0.37 (95\% CI 0.29 to 0.45s).
+
+# What is the proportion of false negative results?
+rval$elements$pfn
+# Answer: 0.58 (95\% CI 0.44 to 0.70).
+
 }
 
 \keyword{univar}
