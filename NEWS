@@ -1,4 +1,25 @@
-        CHANGES IN epiR VERSION 1.0-02
+CHANGES IN epiR VERSION 1.0-10
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.interaction
+    Function now includes option to use either product or dummy parameterisation of interaction terms. Documentation updated.
+    [Suggested by Francois M Carrier]
+    o New function epi.sscohortc: Sample size, power or minimum detectable incidence risk ratio for a cohort study using individual count data.
+    o New function epi.sscohortt: Sample size, power or minimum detectable incidence rate ratio for a cohort study using individual time data.    
+    o New function epi.ssxsectn: Sample size, power or minimum detectable preva;ence ratio for a cross-sectional study.
+
+CHANGES IN epiR VERSION 1.0-06
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Functions to calculate sample size
+    Major revision of the naming of functions to calculate sample size.
+    
+    o New function epi.ssclus1estb: Sample size to estimate a binary outcome using one-stage cluster sampling.
+
+
+CHANGES IN epiR VERSION 1.0-04
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -25,7 +46,7 @@ BUG FIXES
     Fixed.
     
     
-        CHANGES IN epiR VERSION 1.0-01
+CHANGES IN epiR VERSION 1.0-01
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -40,7 +61,7 @@ BUG FIXES
     Fixed.
 
 
-        CHANGES IN epiR VERSION 0.9-98
+CHANGES IN epiR VERSION 0.9-98
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -48,7 +69,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Function does not truncate true prevalence estimates to values between 0 and 1. Warning issued when apparent prevalence is less than (1 - specificity). Additional references added to docuementation. 
 
 
-        CHANGES IN epiR VERSION 0.9-97
+CHANGES IN epiR VERSION 0.9-97
 
 BUG FIXES
 

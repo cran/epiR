@@ -7,7 +7,7 @@ Estimate true prevalence
 }
 
 \description{
-Computes the true prevalence of a disease in a population on the basis of an imperfect test.
+Compute the true prevalence of a disease in a population on the basis of an imperfect test.
 }
 
 \usage{

@@ -1,17 +1,17 @@
-\name{epi.detectsize}
+\name{epi.ssdetect}
 
-\alias{epi.detectsize}
+\alias{epi.ssdetect}
 
 \title{
-Sample size to detect disease
+Sample size to detect an event
 }
 
 \description{
-Estimates the required sample size to detect disease. The method adjusts sample size estimates on the basis of test sensitivity and can account for series and parallel test interpretation. 
+Sample size to detect at least one event (e.g. a disease-positive individual) in a population. The method adjusts sample size estimates on the basis of test sensitivity and can account for series and parallel test interpretation. 
 }
 
 \usage{
-epi.detectsize(N, prev, se, sp, interpretation = "series", 
+epi.ssdetect(N, prev, se, sp, interpretation = "series", 
    covar = c(0,0), conf.level = 0.95, finite.correction = TRUE)
 }
 
@@ -39,10 +39,7 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 \note{
 The finite correction factor reduces the variance of the sample as the sample size approaches the population size. As a rule of thumb, set \code{finite.correction = TRUE} when the sample size is greater than 5\% of the population size.
 
-Define \code{se1} and \code{se2} as the sensitivity for the first and second test, \code{sp1} and \code{sp2} as the specificity for the first and second test, \code{p111} as the proportion of disease-positive subjects with a positive test result to both tests and \code{p000} as the proportion of disease-negative subjects with a negative test result to both tests. The covariance between test results for the disease-positive group is \code{p111 - se1 * se2}. The covariance between test results for the disease-negative group is \code{p000 - sp1 * sp2}.
-
-The current implementation of \code{epi.detectsize} does not adjust the required sample size to account for imperfect test specificity.
-}
+Define \code{se1} and \code{se2} as the sensitivity for the first and second test, \code{sp1} and \code{sp2} as the specificity for the first and second test, \code{p111} as the proportion of disease-positive subjects with a positive test result to both tests and \code{p000} as the proportion of disease-negative subjects with a negative test result to both tests. The covariance between test results for the disease-positive group is \code{p111 - se1 * se2}. The covariance between test results for the disease-negative group is \code{p000 - sp1 * sp2}.}
 
 \examples{
 ## EXAMPLE 1:
@@ -52,7 +49,7 @@ The current implementation of \code{epi.detectsize} does not adjust the required
 ## specificity of 0.80. How many samples should we take to be 95\% certain 
 ## that, if all tests are negative, the disease is not present?
 
-epi.detectsize(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
+epi.ssdetect(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
    "series", covar = c(0,0), conf.level = 0.95, finite.correction = TRUE)
 
 ## We need to sample 59 cows.
@@ -68,7 +65,7 @@ epi.detectsize(N = 1000, prev = 0.05, se = 0.90, sp = 0.80, interpretation =
 ## study area if all tests are negative? There area is comprised of 
 ## approximately 5000 herds and the average number of cows per herd is 100.
 
-epi.detectsize(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95), 
+epi.ssdetect(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95), 
    sp = c(0.80, 0.85), interpretation = "parallel", covar = c(0,0), 
    conf.level = 0.95, finite.correction = TRUE)
 
@@ -82,7 +79,7 @@ epi.detectsize(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95),
 ## would have seroconverted if Mycoplasma were present in the herd. How many 
 ## sows do you need to sample?
 
-epi.detectsize(N = 200, prev = 0.20, se = 1.00, sp = 1.00, conf.level = 0.95,
+epi.ssdetect(N = 200, prev = 0.20, se = 1.00, sp = 1.00, conf.level = 0.95,
    finite.correction = TRUE)
 
 ## If you test 12 sows and all test negative you can state that you are 95\% 

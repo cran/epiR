@@ -1,17 +1,17 @@
-\name{epi.equivb}
+\name{epi.sssupb}
 
-\alias{epi.equivb}
+\alias{epi.sssupb}
 
 \title{
-Estimate the sample size for a parallel equivalence trial, binary outcomes
+Sample size for a parallel superiority trial, binary outcome
 }
 
 \description{
-Computes the sample size for a parallel equivalence trial with a binary outcome variable. 
+Sample size for a parallel superiority trial, binary outcome. 
 }
 
 \usage{
-epi.equivb(treat, control, delta, n, r = 1, power, alpha)
+epi.sssupb(treat, control, delta, n, r = 1, power, alpha)
 }
 
 \arguments{
@@ -25,22 +25,19 @@ epi.equivb(treat, control, delta, n, r = 1, power, alpha)
 }
 
 \value{
-A list containing one or more of the following: 
+A list containing the following: 
+  \item{n.total}{the total number of study subjects required.}
   \item{n.treat}{the required number of study subject in the treatment group.}
   \item{n.control}{the required number of study subject in the control group.}
-  \item{n.total}{the total number of study subjects required.}
+  \item{power}{the specified or calculated study power.}
 }
 
 \references{
-Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series, pp. 91.
-
-Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber 36: 170 - 173.
+Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series, page 90.
 
 Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics in Medicine 23: 1921 - 1986.
 
-Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
-
-Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
+Pocock SJ (1983). Clinical Trials: A Practical Approach. Wiley, New York.
 }
 
 \note{
@@ -52,41 +49,32 @@ An equivalence trial is used if want to prove that two treatments produce the sa
 
 With a non-inferiority trial, we specify the maximum acceptable difference between Pn and Ps as \code{delta}. The null hypothesis is H0: Ps - Pn >= \code{delta} and the alternative hypothesis is H1: Ps - Pn < \code{delta}. The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial, (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer, (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer, (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
 
-To summarise (adapted from Machin et al. 2009, page 105):
-
-\tabular{lllll}{
---------------- \tab ------------------------ \tab ----------------------- \tab --------------------- \tab --------------------- \cr
-Test for        \tab Null hypothesis          \tab Alt hypothesis          \tab Type I                \tab Type II               \cr
---------------- \tab ------------------------ \tab ----------------------- \tab --------------------- \tab --------------------- \cr
-Superiority     \tab H0:  Pn - Ps  <= delta   \tab H1:  Pn - Ps  > delta   \tab 2 sided, 5.0\%        \tab 1 sided, 10 or 20\%   \cr
-Equivalence     \tab H0: |Pn - Ps| >= delta   \tab H1: |Pn - Ps| < delta   \tab 1 sided, 5.0\%        \tab 1 sided, 20\%         \cr
-Non-inferiority \tab H0:  Pn - Ps  >= delta   \tab H1:  Pn - Ps  < delta   \tab 1 sided, 2.5\%        \tab 1 sided, 10 or 20\%   \cr
---------------- \tab ------------------------ \tab ----------------------- \tab --------------------- \tab --------------------- \cr
-}
-
-Superiority trial: H1 is that the new treatment is better than the standard treatment.\cr
-Equivalence trial: H1 is that the new treatment is not too different from the standard treatment.\cr
-Non-inferiority trial: 	H1 is that the new treatment is not much worse than the standard treatment.
+For a summary of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
 
 When calculating the power of a study, note that the variable \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
 }
 
 \examples{
-## EXAMPLE 1 (from Machin, Campbell, Tan and Tan 2009 p. 113):
-## Bennett, Dismukes, Duma et al. (1979) designed a clinical trial to test 
-## whether combination chemotherapy for a shorter period would be at least 
-## as good as conventional therapy for patients with cryptococcal meningitis. 
-## They recruited 39 patients to each treatment arm and wished to conclude 
-## that a difference of less than 20\% in response rate between the treatments
-## would indicate equivalence. Assuming a one-sided test size of 10\%, a 
-## power of 80\% and an overall response rate of 50\%, what would be a 
-## realistic sample size if the trial were to be repeated?
+## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 90):
+## Suppose that a pharmaceutical company is interested in conducting a
+## clinical trial to compare the efficacy of two antimicrobial agents 
+## when administered orally once daily in the treatment of patients 
+## with skin infections. In what follows, we consider the situation 
+## where the intended trial is for testing superiority of the 
+## test drug over the active control drug. For this purpose, the following 
+## assumptions are made. First, sample size calculation will be performed 
+## for achieving 80\% power at the 5\% level of significance.
 
-epi.equivb(treat = 0.50, control = 0.50, delta = 0.20, n = NA, r = 1, 
-   power = 0.80, alpha = 0.10)
+## Assume the true mean cure rates of the treatment agents and the active 
+## control are 85\% and 65\%, respectively. Assume the superiority
+## margin is 5\%.
 
-## A total of 166 subjects need to be enrolled in the trial, 83 in the 
-## treatment group and 83 in the control group.
+epi.sssupb(treat = 0.85, control = 0.65, delta = 0.05, n = NA, 
+   r = 1, power = 0.80, alpha = 0.05)
+
+## A total of 196 subjects need to be enrolled in the trial, 98 in the 
+## treatment group and 98 in the control group.
+
 }
 
 \keyword{univar}

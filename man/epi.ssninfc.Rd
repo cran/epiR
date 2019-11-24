@@ -1,22 +1,23 @@
-\name{epi.noninfb}
+\name{epi.ssninfc}
 
-\alias{epi.noninfb}
+\alias{epi.ssninfc}
 
 \title{
-Estimate the sample size for a parallel non-inferiority trial, binary outcomes
+Sample size for a non-inferiority trial, continuous outcome
 }
 
 \description{
-Computes the sample size for a parallel non-inferiority trial with a binary outcome variable. 
+Sample size for a non-inferiority trial, continuous outcome. 
 }
 
 \usage{
-epi.noninfb(treat, control, delta, n, r = 1, power, alpha)
+epi.ssninfc(treat, control, sd, delta, n, r = 1, power, alpha)
 }
 
 \arguments{
-  \item{treat}{the expected proportion of successes in the treatment group.}
-  \item{control}{the expected proportion of successes in the control group.}
+  \item{treat}{the expected mean of the outcome of interest in the treatment group.}
+  \item{control}{the expected mean of the outcome of interest in the control group.}
+  \item{sd}{the expected population standard deviation of the outcome of interest.}
   \item{delta}{the equivalence limit, expressed as a proportion.}
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
@@ -25,10 +26,11 @@ epi.noninfb(treat, control, delta, n, r = 1, power, alpha)
 }
 
 \value{
-A list containing one or more of the following: 
+A list containing the following: 
+  \item{n.total}{the total number of study subjects required.}
   \item{n.treat}{the required number of study subject in the treatment group.}
   \item{n.control}{the required number of study subject in the control group.}
-  \item{n.total}{the total number of study subjects required.}
+  \item{power}{the specified or calculated study power.}
 }
 
 \references{
@@ -56,35 +58,30 @@ An equivalence trial is used if want to prove that two treatments produce the sa
 
 With a non-inferiority trial, we specify the maximum acceptable difference between Pn and Ps as \code{delta}. The null hypothesis is H0: Ps - Pn >= \code{delta} and the alternative hypothesis is H1: Ps - Pn < \code{delta}. The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial, (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer, (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer, (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
 
-For a summary of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.equivb}}.
+For a summary of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}. 
 
 When calculating the power of a study, note that the variable \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
 }
 
 \examples{
-## EXAMPLE 1:
-## Suppose it is of interest to establish non-inferiority of a new treatment 
-## as compared to the currently used standard treatment. A difference of less
-## than 10\% is of no clinical importance. Thus, the non-inferiority margin 
-## (delta) is set at 0.10. Assume the true cure rate for the new treatment
-## is 0.85 and the control is 0.65. Assuming a one-sided test size of 2.5\% and 
-## a power of 90\% how many subjects should be included in the trial?
+## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 64):
+## A pharmaceutical company is interested in conducting a clinical trial
+## to compare two cholesterol lowering agents for treatment of patients with
+## congestive hear disease using a parallel design. The primary efficacy 
+## parameter is the LDL. In what follows, we will consider the situation
+## where the intended trial is for testing non-inferiority of mean responses 
+## in LDL. Assume that 80\% power is required at a 5\% level of significance.
 
-epi.noninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, r = 1,
-   power = 0.80, alpha = 0.025)
+## In this example, we assume a 5% (i.e. delta = 0.05) change of LDL is 
+## considered of clinically meaningful difference. Assume the standard 
+## of LDL is 0.10 and the LDL concentration in the treatment group is 0.20 
+## units and the LDL concentration in the control group is 0.20 units.
 
-## A total of 558 subjects need to be enrolled in the trial, 279 in the 
-## treatment group and 279 in the control group.
+epi.ssninfc(treat = 0.20, control = 0.20, sd = 0.10, delta = 0.05, n = NA, 
+   r = 1, power = 0.80, alpha = 0.05)
 
-## EXAMPLE 1 (cont.):
-## Suppose only 400 subjects were enrolled in the trial, 200 in the treatment
-## group and 200 in the control group. What is the estimated study power?
-
-epi.noninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 400, r = 1,
-   power = NA, alpha = 0.025)
-
-## With only 500 subjects the estimated study power is 0.66.
-
+## A total of 100 subjects need to be enrolled in the trial, 50 in the 
+## treatment group and 50 in the control group.
 }
 
 \keyword{univar}

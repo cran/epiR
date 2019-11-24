@@ -1,17 +1,17 @@
-\name{epi.survivalsize}
+\name{epi.sscomps}
 
-\alias{epi.survivalsize}
+\alias{epi.sscomps}
 
 \title{
-Sample size, power and minimum detectable hazard for time to event studies
+Sample size, power and minimum detectable hazard when comparing time to event
 }
 
 \description{
-Computes the sample size, power or minimum detectable hazard when comparing survival (time to event).
+Sample size, power and minimum detectable hazard when comparing time to event.
 }
 
 \usage{
-epi.survivalsize(treat, control, n, power, r = 1, design = 1,
+epi.sscomps(treat, control, n, power, r = 1, design = 1,
    sided.test = 2, conf.level = 0.95)
 }
 
@@ -22,7 +22,7 @@ epi.survivalsize(treat, control, n, power, r = 1, design = 1,
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group. This argument is ignored when \code{method = "proportions"}.}
   \item{design}{scalar, the estimated design effect.}
-  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the treatment group is better or worse than the control group. Use a one-sided test to evaluate whether or not the treatment group is better than the control group.}
+  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome hazard in the exposed (treatment) group is greater than or less than the outcome hazard in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome hazard in the exposed (treatment) group is greater than the outcome hazard in the unexposed (control) group.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -55,7 +55,7 @@ The power of a study is its ability to demonstrate the presence of an associatio
 ## Assume that a study will use a two-sided test at the 0.05 level with 0.90
 ## power to detect this difference. How many events are required?
 
-epi.survivalsize(treat = 0.45, control = 0.30, n = NA, power = 0.90, 
+epi.sscomps(treat = 0.45, control = 0.30, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 2, conf.level = 0.95)
 
 ## A total of 250 events are required. Assuming one event per individual, 
@@ -67,7 +67,7 @@ epi.survivalsize(treat = 0.45, control = 0.30, n = NA, power = 0.90,
 ## the treatment to control ratio is 1:1, assuming a power of 0.90 and a
 ## 2-sided test at the 0.05 level?
 
-epi.survivalsize(treat = NA, control = NA, n = 500, power = 0.90, 
+epi.sscomps(treat = NA, control = NA, n = 500, power = 0.90, 
    r = 1, design = 1, sided.test = 2, conf.level = 0.95)
 
 ## Assuming treatment increases time to event (compared with controls), the 

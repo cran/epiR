@@ -2,7 +2,7 @@
 
 \alias{epi.iv}
 
-\title{Fixed-effect meta-analysis of binary outcomes using the inverse variance method
+\title{Fixed-effects meta-analysis of binary outcomes using the inverse variance method
 }
 
 \description{

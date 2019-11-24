@@ -7,7 +7,7 @@ Estimated dissemination ratio
 }
 
 \description{
-Computes estimated dissemination ratio on the basis of a vector of numbers (usually counts of incident cases identified on each day of an epidemic).
+Computes estimated dissemination ratios on the basis of a vector of count data (usually incident cases identified on each day of an epidemic).
 }
 
 \usage{

@@ -2,7 +2,7 @@
 
 \alias{epi.insthaz}
 
-\title{Instantaneous hazard computed on the basis of a Kaplan-Meier survival function
+\title{Instantaneous hazard estimates based on Kaplan-Meier survival estimates
 }
 
 \description{

@@ -1,6 +1,6 @@
-\name{epi.ccsize}
+\name{epi.sscc}
 
-\alias{epi.ccsize}
+\alias{epi.sscc}
 
 \title{
 Sample size, power or minimum detectable odds ratio for an unmatched or matched case-control study
@@ -11,7 +11,7 @@ Calculates the sample size, power or minimum detectable odds ratio for an unmatc
 }
 
 \usage{
-epi.ccsize(OR, p0, n, power, r = 1, rho = 0, design = 1, sided.test = 2, 
+epi.sscc(OR, p0, n, power, r = 1, rho = 0, design = 1, sided.test = 2, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 }
 
@@ -21,9 +21,9 @@ epi.ccsize(OR, p0, n, power, r = 1, rho = 0, design = 1, sided.test = 2,
   \item{n}{scalar, the total number of subjects in the study (i.e. the number of cases plus the number of controls).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the control group divided by the number in the case group.}
-  \item{rho}{scalar, the correlation between case and control exposures for matched pairs. This argument is ignored when \code{method = "unmatched"}.}
+  \item{rho}{scalar, the correlation between case and control exposures for matched pairs. Ignored when \code{method = "unmatched"}.}
   \item{design}{scalar, the design effect.}
-  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the odds of exposure in cases is greater than or less than the controls. Use a one-sided test to evaluate whether or not the odds of exposure in cases is greater than the controls.}
+  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the odds of exposure in cases is greater than or less than the odds of exposure in controls. Use a one-sided test to evaluate whether or not the odds of exposure in cases is greater than the odds of exposure in controls.}
   \item{conf.level}{scalar, the level of confidence in the computed result.}
   \item{method}{a character string defining the method to be used. Options are \code{unmatched} or \code{matched}.}
   \item{fleiss}{logical, indicating whether or not the Fleiss correction should be applied. This argument is ignored when \code{method = "matched"}.}
@@ -68,7 +68,7 @@ See the documentation for \code{\link{epi.cohortsize}} which provides an example
 ## odds ratio of 2.0 with 0.90 power using a two-sided 0.05 test? Previous 
 ## surveys have shown that around 0.30 of males without CHD are smokers.
 
-epi.ccsize(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho = 0, 
+epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho = 0, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
    fleiss = FALSE)
 
@@ -82,7 +82,7 @@ epi.ccsize(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho = 0,
 ## the prevalence of smoking in males without CHD is 0.30.
 
 n <- 188 + 940
-epi.ccsize(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho = 0, 
+epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho = 0, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
    fleiss = TRUE)
 
@@ -103,7 +103,7 @@ epi.ccsize(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho = 0,
 ## Confirm the statement that 300 case subjects will provide 80\% power in 
 ## this study.
 
-epi.ccsize(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho = 0.01, 
+epi.sscc(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho = 0.01, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
    fleiss = TRUE)
 
@@ -122,7 +122,7 @@ epi.ccsize(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho = 0.01,
 ## Three controls will be recruited for every case. How many subjects need 
 ## to be enrolled in the study?
 
-epi.ccsize(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho = 0, 
+epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho = 0, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
    fleiss = FALSE)
 
@@ -135,7 +135,7 @@ epi.ccsize(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho = 0,
 ## (rho) is estimated to be 0.01 (low). Using the same assumptions as those
 ## described above, how many study subjects will be required?
 
-epi.ccsize(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho = 0.01, 
+epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho = 0.01, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
    fleiss = FALSE)
 
@@ -152,7 +152,7 @@ dat <- expand.grid(p0 = p0, OR = OR)
 dat$n.total <- NA
 
 for(i in 1:nrow(dat)){
-   dat$n.total[i] <- epi.ccsize(OR = dat$OR[i], p0 = dat$p0[i], n = NA, 
+   dat$n.total[i] <- epi.sscc(OR = dat$OR[i], p0 = dat$p0[i], n = NA, 
    power = 0.80, r = 1, rho = 0, design = 1, sided.test = 2, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
 }  
@@ -192,15 +192,17 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
 ## subjects need to be enrolled into the study to detect an odds ratio of 3.0 
 ## with 0.80 power using a two-sided 0.05 test? 
 
-epi.ccsize(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho = 0.2, 
+epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho = 0.2, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
    fleiss = FALSE)
 
 ## A total of 162 subjects need to be enrolled in the study: 81 cases and 
-## 81 controls. How many cases and controls are required if we select three 
+## 81 controls. 
+
+## How many cases and controls are required if we select three 
 ## controls per case?
 
-epi.ccsize(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 3, rho = 0.2, 
+epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 3, rho = 0.2, 
    design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
    fleiss = FALSE)
 

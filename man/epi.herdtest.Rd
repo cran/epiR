@@ -3,7 +3,7 @@
 \alias{epi.herdtest}
 
 \title{
-Estimate herd test characteristics
+Estimate the characteristics of diagnostic tests applied at the herd (group) level
 }
 
 \description{

@@ -1,17 +1,17 @@
-\name{epi.meansize}
+\name{epi.sscompc}
 
-\alias{epi.meansize}
+\alias{epi.sscompc}
 
 \title{
-Sample size, power and minimum detectable difference when comparing means
+Sample size, power and minimum detectable difference when comparing continuous outcomes
 }
 
 \description{
-Calculates the sample size, power or minimum detectable difference when comparing means. 
+Sample size, power and minimum detectable difference when comparing continuous outcomes. 
 }
 
 \usage{
-epi.meansize(treat, control, n, sigma, power, r = 1, design = 1,
+epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
    sided.test = 2, conf.level = 0.95)
 }
 
@@ -23,7 +23,7 @@ epi.meansize(treat, control, n, sigma, power, r = 1, design = 1,
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
-  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the treatment group is better or worse than the control group. Use a one-sided test to evaluate whether or not the treatment group is better than the control group.}
+  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome in the exposed (treatment) group is greater than or less than the outcome in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome in the exposed (treatment) group is greater than the outcome in the unexposed (control) group.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -65,7 +65,7 @@ See the documentation for \code{\link{epi.cohortsize}} which provides an example
 ## at detecting a difference of 0.5 mmol/L. The standard deviation of serum 
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
 
-epi.meansize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
+epi.sscompc(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95)
 
 ## To satisfy the study requirements 340 individuals need to be tested: 170 in
@@ -87,7 +87,7 @@ epi.meansize(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 ## women to the treatment group so as to obtain a better idea of its effect.
 ## How many women should be enrolled in this study?
 
-epi.meansize(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
+epi.sscompc(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
    r = 4, design = 1, sided.test = 2, conf.level = 0.95)
    
 ## The estimated sample size is 70. We allocate 70/5 = 14 women to the 

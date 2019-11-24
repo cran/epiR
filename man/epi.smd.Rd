@@ -2,7 +2,7 @@
 
 \alias{epi.smd}
 
-\title{Fixed-effect meta-analysis of continuous outcomes using the standardised mean difference method
+\title{Fixed-effects meta-analysis of continuous outcomes using the standardised mean difference method
 }
 
 \description{

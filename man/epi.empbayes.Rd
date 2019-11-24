@@ -2,7 +2,7 @@
 
 \alias{epi.empbayes}
 
-\title{Empirical Bayes estimates}
+\title{Empirical Bayes estimates of observed event counts}
 
 \description{
 Computes empirical Bayes estimates of observed event counts using the method of moments.

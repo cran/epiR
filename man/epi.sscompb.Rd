@@ -1,17 +1,17 @@
-\name{epi.propsize}
+\name{epi.sscompb}
 
-\alias{epi.propsize}
+\alias{epi.sscompb}
 
 \title{
-Sample size, power and minimum detectable risk ratio when comparing proportions
+Sample size, power and minimum detectable risk ratio when comparing binary outcomes
 }
 
 \description{
-Calculates the sample size, power or minimum detectable risk ratio when comparing proportions. 
+Sample size, power and minimum detectable risk ratio when comparing binary outcomes. 
 }
 
 \usage{
-epi.propsize(treat, control, n, power, r = 1, design = 1,
+epi.sscompb(treat, control, n, power, r = 1, design = 1,
    sided.test = 2, conf.level = 0.95)
 }
 
@@ -22,16 +22,16 @@ epi.propsize(treat, control, n, power, r = 1, design = 1,
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
-  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the treatment group is better or worse than the control group. Use a one-sided test to evaluate whether or not the treatment group is better than the control group.}
+  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome proportion in the exposed (treatment) group is greater than or less than the outcome proportion in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome proportion in the exposed (treatment) group is greater than the outcome proportion in the unexposed (control) group.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
 \details{
 The methodology in this function follows the approach described in Chapter 8 of Woodward (2005).
 
-With this function it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. Users are referred to the \code{\link{epi.cohortsize}} function which relates to the two-sample problem where neither proportion is known (or assumed, at least). 
+With this function it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. Users are referred to the \code{\link{epi.sscohortc}} function which relates to the two-sample problem where neither proportion is known (or assumed, at least). 
 
-Because there is much more uncertainty in the two sample problem where neither proportion is known, \code{epi.cohortsize} returns much larger sample size estimates. This function (\code{epi.propsize}) should be used in particular situations such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
+Because there is much more uncertainty in the two sample problem where neither proportion is known, \code{epi.sscohortc} returns much larger sample size estimates. This function (\code{epi.sscompb}) should be used in particular situations such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
 }
 
 \value{
@@ -66,7 +66,7 @@ Values need to be entered for \code{control}, \code{n}, and \code{power} to retu
 ## The survey should be able to find a prevalence of 32\%, when it is true,
 ## with 0.90 power. How many men need to be sampled?
 
-epi.propsize(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
+epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95)
    
 ## ## A total of 18,316 men should be sampled: 9158 in the treatment group and
@@ -80,7 +80,7 @@ epi.propsize(treat = 0.30, control = 0.32, n = NA, power = 0.90,
 ## control group) what is the maximum detectable risk ratio that is less 
 ## than 1?
 
-epi.propsize(treat = NA, control = 0.32, n = 10000, power = 0.90, 
+epi.sscompb(treat = NA, control = 0.32, n = 10000, power = 0.90, 
    r = 1, design = 1, sided.test = 1, conf.level = 0.95)
 
 ## If we sample only 10,000 men the maximum detectable risk ratio will be 0.91.

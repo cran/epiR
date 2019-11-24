@@ -5,7 +5,7 @@
 \title{Post-test probability of disease given sensitivity and specificity of a test}
 
 \description{
-Computes the post-test probability of disease given sensitivity and specificity of a test.
+Compute the post-test probability of disease given sensitivity and specificity of a test.
 }
 
 \usage{
