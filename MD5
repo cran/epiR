@@ -1,7 +1,7 @@
-64ba28a58a601f300e3c2812b2a4b2c8 *DESCRIPTION
+1835b07bf7e9d0a9068de4f1424b07dd *DESCRIPTION
 7fd87ce14690805b6c72b2b5dfec8865 *NAMESPACE
-5622ec2841c5fa51749ffd1a4319222f *NEWS
-dd4727f45cd86e44ef6eca034ed5ce05 *R/epi.2by2.R
+f60cc643feb608dc76c5f37291be1aea *NEWS
+13f21eb368a24a7fac4dc02dca5bb47c *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
 35dd233e3feeceefc29040363acdbadd *R/epi.asc.R
@@ -82,7 +82,7 @@ fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 1bd3ce36d4c41498da986a854d4ffd80 *man/epi.2by2.Rd
 f42bb15fa9bf5d14f728c1c1aa147e36 *man/epi.RtoBUGS.Rd
 189a2a8bdb0082ceeaf7d721ef637686 *man/epi.SClip.Rd
-870e11187dc554d0bfa7b0ea88ae6842 *man/epi.about.Rd
+e0691c00009d0a6e2eff0486dbf3719d *man/epi.about.Rd
 5779280680d12e1355f64bf0984401fe *man/epi.asc.Rd
 a3f56b6074f71a9f6a5356d298d20a01 *man/epi.betabuster.Rd
 7e06c95f246ea6a933847b73c2c0288a *man/epi.bohning.Rd

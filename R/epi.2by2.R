@@ -1311,6 +1311,8 @@
     wRR.homog <- sum(wRR. * (lnRR. - lnRR.s.)^2)
     wRR.homog.p <- 1 - pchisq(wRR.homog, df = n.strata - 1)
 
+    wPR.homog <- sum(wRR. * (lnRR. - lnRR.s.)^2)
+    wPR.homog.p <- 1 - pchisq(wPR.homog, df = n.strata - 1)
     
     # Woolf test of homogeneity of odds ratios (Jewell 2004, page 154). First work out the Woolf estimate of the adjusted odds ratio (labelled lnOR.s. here) based on Jewell (2004, page 129):
     lnOR. <- log(((a + 0.5) * (d + 0.5)) / ((b + 0.5) * (c + 0.5)))
@@ -1322,7 +1324,6 @@
     wOR.homog <- sum(wOR. * (lnOR. - lnOR.s.)^2)
     wOR.homog.p <- 1 - pchisq(wOR.homog, df = n.strata - 1)
 
-    
     # Breslow-Day test of homogeneity of odds ratio. Setup calculations. From Jim Robison-Cox, based on Jewell (2004, page 154).
     n11k <- dat[1,1,]
     n21k <- dat[2,1,]
@@ -1525,7 +1526,8 @@
     
     res$wOR.homog = data.frame(test.statistic = wOR.homog, df = n.strata - 1, p.value = wOR.homog.p)
     res$bOR.homog = data.frame(test.statistic = bOR.homog, df = n.strata - 1, p.value = bOR.homog.p)
-    
+
+    res$wPR.homog = data.frame(test.statistic = wPR.homog,  df = n.strata - 1, p.value = wPR.homog.p)    
     res$wRR.homog = data.frame(test.statistic = wRR.homog,  df = n.strata - 1, p.value = wRR.homog.p)
   }    
   
@@ -1809,19 +1811,19 @@
       OR.strata.cfield    = res$OR.strata.cfield,
       OR.strata.mle       = res$OR.strata.mle,
       
-      OR.crude.wald      = res$OR.crude.wald,
-      OR.crude.score     = res$OR.crude.score,
-      OR.crude.cfield    = res$OR.crude.cfield,
-      OR.crude.mle       = res$OR.crude.mle,
-      OR.mh.wald         = res$OR.mh.wald,       
+      OR.crude.wald       = res$OR.crude.wald,
+      OR.crude.score      = res$OR.crude.score,
+      OR.crude.cfield     = res$OR.crude.cfield,
+      OR.crude.mle        = res$OR.crude.mle,
+      OR.mh.wald          = res$OR.mh.wald,       
       
-      ARisk.strata.wald  = res$ARisk.strata.wald,
-      ARisk.strata.score = res$ARisk.strata.score,
-      ARisk.crude.wald   = res$ARisk.crude.wald,
-      ARisk.crude.score  = res$ARisk.crude.score,
-      ARisk.mh.wald      = res$ARisk.mh.wald,
-      ARisk.mh.sato      = res$ARisk.mh.sato,
-      ARisk.mh.green     = res$ARisk.mh.green,
+      ARisk.strata.wald   = res$ARisk.strata.wald,
+      ARisk.strata.score  = res$ARisk.strata.score,
+      ARisk.crude.wald    = res$ARisk.crude.wald,
+      ARisk.crude.score   = res$ARisk.crude.score,
+      ARisk.mh.wald       = res$ARisk.mh.wald,
+      ARisk.mh.sato       = res$ARisk.mh.sato,
+      ARisk.mh.green      = res$ARisk.mh.green,
       
       PARisk.strata.wald  = res$PARisk.strata.wald,
       PARisk.strata.piri  = res$PARisk.strata.piri,
@@ -1834,12 +1836,12 @@
       PAFest.strata.wald  = res$PAFest.strata.wald,
       PAFest.crude.wald   = res$PAFest.crude.wald,
       
-      chisq.strata  = res$chisq.strata,
-      chisq.crude   = res$chisq.crude,
-      chisq.mh      = res$chisq.mh,
+      chisq.strata        = res$chisq.strata,
+      chisq.crude         = res$chisq.crude,
+      chisq.mh            = res$chisq.mh,
       
-      OR.homog.woolf  = res$wOR.homog,
-      OR.homog.brday  = res$bOR.homog)
+      OR.homog.woolf      = res$wOR.homog,
+      OR.homog.brday      = res$bOR.homog)
     
     ## Define tab:
     if(outcome == "as.columns"){
@@ -1963,6 +1965,7 @@
       chisq.crude  = res$chisq.crude,
       chisq.mh     = res$chisq.mh,
       
+      PR.homog.woolf  = res$wPR.homog,
       RR.homog.woolf  = res$wRR.homog,
       OR.homog.woolf  = res$wOR.homog,
       OR.homog.brday  = res$bOR.homog)
@@ -2049,14 +2052,16 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
-    
-    cat("\n", "Test that odds ratio = 1: chi2(1) =", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "Pr>chi2 =", p)
-    
+
+    p <-  ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.strata[3]))
+    pdf <- as.numeric(x$res$chisq.strata[2])
+
+    cat("\n", " Test that OR = 1: chi2(", pdf,   ") = ", sprintf("%.3f", x$res$chisq.strata[1]),  " Pr>chi2 = ", p, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "CI: confidence interval") 
     cat("\n", "*", x$res$count.units, "\n")
   }
+  
   
   ## cohort.count ---  multiple strata
   if(x$method == "cohort.count" & x$n.strata > 1){
@@ -2117,27 +2122,24 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    wrrp <-  ifelse(as.numeric(x$res$wRR.homog)[3] < 0.001, "<0.001", round(as.numeric(x$res$wRR.homog)[3], digits = 3))
+    wrrp <-  ifelse(as.numeric(x$res$wRR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$wPR.homog[3]))
     wrrdf <- as.numeric(x$res$wRR.homog[2])
     
-    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", round(as.numeric(x$res$wOR.homog)[3], digits = 3))
+    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$wOR.homog[3]))
     wordf <- as.numeric(x$res$wOR.homog[2])
-
-    mhp <-   ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", round(as.numeric(x$res$chisq.mh)[3], digits = 3))
-    mhdf <-  as.numeric(x$res$chisq.mh[2])
-        
-    cat("\n", " M-H test of homogeneity of incidence risk ratios: chi2(", wrrdf, ") = ", as.numeric(round(x$res$wRR.homog[1], digits = 3)), " Pr>chi2 = ", wrrp, sep = "")
-
-    cat("\n", " M-H test of homogeneity of odds ratios: chi2(", wordf, ") = ", as.numeric(round(x$res$wOR.homog[1], digits = 3)), " Pr>chi2 = ", worp, sep = "")
-        
-    cat("\n", " Test that M-H adjusted odds ratio = 1: chi2(", mhdf, ") = ", as.numeric(round(x$res$chisq.mh[1], digits = 3)), " Pr>chi2 = ", mhp, sep = "")
     
+    mhp <-  ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.mh[3]))
+    mhdf <-  as.numeric(x$res$chisq.mh[2])
+    
+    cat("\n", " M-H test of homogeneity of RRs: chi2(", wrrdf, ") = ", sprintf("%.3f", x$res$wRR.homog[1]), " Pr>chi2 = ", wrrp, sep = "")
+    cat("\n", " M-H test of homogeneity of ORs: chi2(", wordf, ") = ", sprintf("%.3f", x$res$wOR.homog[1]), " Pr>chi2 = ", worp, sep = "")
+    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mhdf, ") = ",  sprintf("%.3f", x$res$chisq.mh[1]),  " Pr>chi2 = ", mhp, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval")        
     cat("\n", "*", x$res$count.units, "\n")
   }
-  
-  
+
+    
   ## cohort.time --- single strata
   if(x$method == "cohort.time" & x$n.strata == 1){
     
@@ -2179,9 +2181,8 @@ print.epi.2by2 <- function(x, ...) {
       
     })
     cat("\n-------------------------------------------------------------------")
-    # p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
-    
-    # cat("\n", "Test that incidence rate ratio = 1: chi2(1) =", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "Pr>chi2 =", p)
+    # p <-  ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.strata[3]))
+    # pdf <- as.numeric(x$res$chisq.strata[2])
     
     cat("\n", "Wald confidence limits")
     cat("\n", "CI: confidence interval")
@@ -2230,11 +2231,14 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    # rrp <- ifelse(as.numeric(x$res$RR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$RR.homog)[3], digits = 3))
-    # cat("\n", "Test of homogeneity of IRR: X2 test statistic:", as.numeric(round(x$res$RR.homog[1], digits = 3)), "p-value:", rrp)
+    # rrp <-  ifelse(as.numeric(x$res$RR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$RR.homog[3]))
+    # rrdf <- as.numeric(x$res$RR.homog[2])
     
-    # orp <- ifelse(as.numeric(x$res$OR.homog)[3] < 0.001, "< 0.001", round(as.numeric(x$res$OR.homog)[3], digits = 3))
-    # cat("\n", "Test of homogeneity of  OR: X2 test statistic:", as.numeric(round(x$res$OR.homog[1], digits = 3)), "p-value:", orp)
+    # mhp <-  ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.mh[3]))
+    # mhdf <-  as.numeric(x$res$chisq.mh[2])
+    
+    # cat("\n", " M-H test of homogeneity of IRRs: chi2(", wrrdf, ") = ", sprintf("%.3f", x$res$wRR.homog[1]), " Pr>chi2 = ", wrrp, sep = "")
+    # cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mhdf, ") = ",  sprintf("%.3f", x$res$chisq.mh[1]),  " Pr>chi2 = ", mhp, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval")
     cat("\n", "*", x$res$time.units, "\n")
@@ -2281,10 +2285,10 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
+    p <-  ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.strata[3]))
+    pdf <- as.numeric(x$res$chisq.strata[2])
     
-    cat("\n", "Test that odds ratio = 1: chi2(1) =", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "Pr>chi2 =", p)
-    
+    cat("\n", " Test that OR = 1: chi2(", pdf,   ") = ", sprintf("%.3f", x$res$chisq.strata[1]),  " Pr>chi2 = ", p, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "CI: confidence interval")
     cat("\n", "*", x$res$count.units, "\n")
@@ -2333,16 +2337,14 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", round(as.numeric(x$res$wOR.homog)[3], digits = 3))
+    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$wOR.homog[3]))
     wordf <- as.numeric(x$res$wOR.homog[2])
     
-    mhp <-   ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", round(as.numeric(x$res$chisq.mh)[3], digits = 3))
+    mhp <-  ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.mh[3]))
     mhdf <-  as.numeric(x$res$chisq.mh[2])
     
-    cat("\n", " M-H test of homogeneity of odds ratios: chi2(", wordf, ") = ", as.numeric(round(x$res$wOR.homog[1], digits = 3)), " Pr>chi2 = ", worp, sep = "")
-    
-    cat("\n", " Test that M-H adjusted odds ratio = 1: chi2(", mhdf, ") = ", as.numeric(round(x$res$chisq.mh[1], digits = 3)), " Pr>chi2 = ", mhp, sep = "")
-    
+    cat("\n", " M-H test of homogeneity of ORs: chi2(", wordf, ") = ", sprintf("%.3f", x$res$wOR.homog[1]), " Pr>chi2 = ", worp, sep = "")
+    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mhdf, ") = ",  sprintf("%.3f", x$res$chisq.mh[1]),  " Pr>chi2 = ", mhp, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval") 
     cat("\n", "*", x$res$count.units, "\n")
@@ -2395,10 +2397,10 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    p <- ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "< 0.001", round(as.numeric(x$res$chisq.strata)[3], digits = 3))
-
-    cat("\n", "Test that odds ratio = 1: chi2(1) =", as.numeric(round(x$res$chisq.strata[1], digits = 3)), "Pr>chi2 =", p)
+    p <-  ifelse(as.numeric(x$res$chisq.strata)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.strata[3]))
+    pdf <- as.numeric(x$res$chisq.strata[2])
     
+    cat("\n", " Test that OR = 1: chi2(", pdf,   ") = ", sprintf("%.3f", x$res$chisq.strata[1]),  " Pr>chi2 = ", p, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "CI: confidence interval")
     cat("\n", "*", x$res$count.units, "\n")
@@ -2463,21 +2465,18 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    wrrp <-  ifelse(as.numeric(x$res$wRR.homog)[3] < 0.001, "<0.001", round(as.numeric(x$res$wRR.homog)[3], digits = 3))
+    wrrp <-  ifelse(as.numeric(x$res$wRR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$wPR.homog[3]))
     wrrdf <- as.numeric(x$res$wRR.homog[2])
-    
-    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", round(as.numeric(x$res$wOR.homog)[3], digits = 3))
+
+    worp <-  ifelse(as.numeric(x$res$wOR.homog)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$wOR.homog[3]))
     wordf <- as.numeric(x$res$wOR.homog[2])
-    
-    mhp <-   ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", round(as.numeric(x$res$chisq.mh)[3], digits = 3))
+
+    mhp <-  ifelse(as.numeric(x$res$chisq.mh)[3] < 0.001, "<0.001", sprintf("%.2f", x$res$chisq.mh[3]))
     mhdf <-  as.numeric(x$res$chisq.mh[2])
-    
-    cat("\n", " M-H test of homogeneity of prevalence ratios: chi2(", wrrdf, ") = ", as.numeric(round(x$res$wRR.homog[1], digits = 3)), " Pr>chi2 = ", wrrp, sep = "")
-    
-    cat("\n", " M-H test of homogeneity of odds ratios: chi2(", wordf, ") = ", as.numeric(round(x$res$wOR.homog[1], digits = 3)), " Pr>chi2 = ", worp, sep = "")
-    
-    cat("\n", " Test that M-H adjusted odds ratio = 1: chi2(", mhdf, ") = ", as.numeric(round(x$res$chisq.mh[1], digits = 3)), " Pr>chi2 = ", mhp, sep = "")
-    
+
+    cat("\n", " M-H test of homogeneity of PRs: chi2(", wrrdf, ") = ", sprintf("%.3f", x$res$wPR.homog[1]), " Pr>chi2 = ", wrrp, sep = "")
+    cat("\n", " M-H test of homogeneity of ORs: chi2(", wordf, ") = ", sprintf("%.3f", x$res$wOR.homog[1]), " Pr>chi2 = ", worp, sep = "")
+    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mhdf, ") = ",  sprintf("%.3f", x$res$chisq.mh[1]),  " Pr>chi2 = ", mhp, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval") 
     cat("\n", "*", x$res$count.units, "\n")

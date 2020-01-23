@@ -76,7 +76,6 @@ The functions in \pkg{epiR} can be categorised as follows:
     \code{\link{epi.cp}}                 \tab Extract unique covariate patterns from a data set. \cr
     \code{\link{epi.cpresids}}           \tab Compute covariate pattern residuals from a logistic regression model. \cr
     \code{\link{epi.interaction}}        \tab Relative excess risk due to interaction in a case-control study. \cr
-    \code{\link{epi.smd}}                \tab Compute the relative excess risk due to interaction in a case-control study. \cr
   }
 }
 
