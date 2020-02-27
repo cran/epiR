@@ -18,7 +18,7 @@ epi.ssequc(treat, control, sd, delta, n, r = 1, power, alpha)
   \item{treat}{the expected mean of the outcome of interest in the treatment group.}
   \item{control}{the expected mean of the outcome of interest in the control group.}
   \item{sd}{the expected population standard deviation of the outcome of interest.}
-  \item{delta}{the equivalence limit, expressed as a proportion.}
+  \item{delta}{the equivalence limit, expressed as the change in the outcome of interest that represents a clinically meaningful diffference.}
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}

@@ -17,7 +17,7 @@ epi.sssupb(treat, control, delta, n, r = 1, power, alpha)
 \arguments{
   \item{treat}{the expected proportion of successes in the treatment group.}
   \item{control}{the expected proportion of successes in the control group.}
-  \item{delta}{the equivalence limit, expressed as a proportion.}
+  \item{delta}{the equivalence limit, expressed as the change in the outcome of interest that represents a clinically meaningful diffference.}
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
@@ -55,7 +55,7 @@ When calculating the power of a study, note that the variable \code{n} refers to
 }
 
 \examples{
-## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 90):
+## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 91):
 ## Suppose that a pharmaceutical company is interested in conducting a
 ## clinical trial to compare the efficacy of two antimicrobial agents 
 ## when administered orally once daily in the treatment of patients 

@@ -1,6 +1,6 @@
 Package: epiR
-Version: 1.0-11
-Date: 2020-01-23
+Version: 1.0-13
+Date: 2020-02-27
 Title: Tools for the Analysis of Epidemiological Data
 Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay and Charles Reynard.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
@@ -9,9 +9,9 @@ Depends: R (>= 3.0.0), survival
 Imports: BiasedUrn, methods
 Suggests: MASS (>= 3.1-20)
 License: GPL (>= 2)
-Packaged: 2020-01-23 07:32:33 UTC; marks1
+Packaged: 2020-02-27 01:31:02 UTC; marks1
 URL:
         https://fvas.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2020-01-23 23:00:02 UTC
+Date/Publication: 2020-02-27 11:20:11 UTC

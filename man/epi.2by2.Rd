@@ -123,6 +123,8 @@ When method equals \code{cross.sectional} the following measures of association 
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 
+Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500.
+
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 }
 
@@ -275,7 +277,7 @@ rval <- epi.2by2(dat = tab2, method = "cohort.count",
 print(rval)
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
-## significant (chi square test statistic 2.8; df 2; p-value = 0.247). 
+## significant (chi square test statistic 2.800; df 2; p-value = 0.25). 
 ## We accept the null hypothesis and conclude that the odds ratios for 
 ## each strata of race are the same. 
 
@@ -396,7 +398,7 @@ print(dat)
 epi.2by2(dat = dat, method = "cohort.count", outcome= "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
-## significant (chi square test statistic 5.276; df 7; p-value = 0.626). 
+## significant (chi square test statistic 5.276; df 7; p-value = 0.63). 
 ## We accept the null hypothesis and conclude that the odds ratios for each 
 ## strata of herd  are the same. 
 

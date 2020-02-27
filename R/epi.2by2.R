@@ -306,7 +306,7 @@
     else if (c == N0 || a == 0) {
       ll <- 0
       ul <- uniroot(function(or) {
-        sum(sapply(max(0, a + c - N0):a, dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1 - conf.level)/2
+        sum(sapply(max(0, a + c - N0):a, dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1- conf.level)/2
       }, interval = interval)$root
     }
     else if (a == N1 || c == 0) {
@@ -326,13 +326,13 @@
     c(cfOR.p, ll, ul)
   }
   
-  # dFNCHypergeo <- function (x, m1, m2, n, odds, precision = 1e-07){
-  #    stopifnot(is.numeric(x), is.numeric(m1), is.numeric(m2), 
-  #    is.numeric(n), is.numeric(odds), is.numeric(precision))
-  #    .Call("dFNCHypergeo", as.integer(x), as.integer(m1), as.integer(m2), 
-  #    as.integer(n), as.double(odds), as.double(precision), 
-  #   PACKAGE = "BiasedUrn")
-  # }
+   # dFNCHypergeo <- function(x, m1, m2, n, odds, precision = 1e-07){
+   #    stopifnot(is.numeric(x), is.numeric(m1), is.numeric(m2), 
+   #    is.numeric(n), is.numeric(odds), is.numeric(precision))
+   #    .Call("dFNCHypergeo", as.integer(x), as.integer(m1), as.integer(m2), 
+   #    as.integer(n), as.double(odds), as.double(precision), 
+   #   PACKAGE = "BiasedUrn")
+   # }
   
   # See http://www.stat.ufl.edu/~aa/cda/R/two-sample/R2/index.html
   # See https://stackoverflow.com/questions/4357827/do-while-loop-in-r
@@ -806,23 +806,44 @@
     wOR.u <- .tmp[3]
   }
   
-  
-  # Individual strata odds ratio - Cornfield confidence limits:
-  cfOR.ctype <- "Cornfield"
-  cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
-  if(length(dim(dat)) == 3){
-    for(i in 1:dim(dat)[3]){
-      .tmp <- .funORcfield(dat[,,i], conf.level)
-      cfOR.p <- c(cfOR.p, .tmp[1])
-      cfOR.l <- c(cfOR.l, .tmp[2])
-      cfOR.u <- c(cfOR.u, .tmp[3])
+  # Individual strata odds ratio - Cornfield confidence limits. 
+  # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
+  if(sum(total) < 500){ 
+    cfOR.ctype <- "Cornfield"
+    cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
+    if(length(dim(dat)) == 3){
+      for(i in 1:dim(dat)[3]){
+        .tmp <- .funORcfield(dat[,,i], conf.level)
+        cfOR.p <- c(cfOR.p, .tmp[1])
+        cfOR.l <- c(cfOR.l, .tmp[2])
+        cfOR.u <- c(cfOR.u, .tmp[3])
+      }
+    }
+    if(length(dim(dat)) == 2){
+      .tmp <- .funORcfield(dat, conf.level)
+      cfOR.p <- .tmp[1]
+      cfOR.l <- .tmp[2]
+      cfOR.u <- .tmp[3]
     }
   }
-  if(length(dim(dat)) == 2){
-    .tmp <- .funORcfield(dat, conf.level)
-    cfOR.p <- .tmp[1]
-    cfOR.l <- .tmp[2]
-    cfOR.u <- .tmp[3]
+  
+  if(sum(total) >= 500){ 
+    cfOR.ctype <- "Cornfield"
+    cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
+    if(length(dim(dat)) == 3){
+      for(i in 1:dim(dat)[3]){
+        # .tmp <- .funORcfield(dat[,,i], conf.level)
+        cfOR.p <- Oe.p / Oo.p
+        cfOR.l <- NA
+        cfOR.u <- NA
+      }
+    }
+    if(length(dim(dat)) == 2){
+      # .tmp <- .funORcfield(dat, conf.level)
+      cfOR.p <- Oe.p / Oo.p
+      cfOR.l <- NA
+      cfOR.u <- NA
+    }
   }
   
   # Individual strata odds ratio - score confidence limits:
@@ -1044,11 +1065,21 @@
   cwOR.u     <- .tmp[3]
   
   # Crude odds ratio - Cornfield confidence limits:
+  # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
+  if(sum(total) < 500){
   ccfOR.ctype <- "Cornfield"
   .tmp        <- .funORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   ccfOR.p     <- .tmp[1]
   ccfOR.l     <- .tmp[2]
   ccfOR.u     <- .tmp[3]
+  }
+  
+  if(sum(total) >= 500){
+    ccfOR.ctype <- "Cornfield"
+    ccfOR.p     <- Oe.p / Oo.p
+    ccfOR.l     <- NA
+    ccfOR.u     <- NA
+  }
   
   # Crude odds ratio - score confidence limits:
   csOR.ctype <- "Score"
@@ -1400,19 +1431,18 @@
     
     ## Strata odds ratio:
     OR.strata.wald = data.frame(est = wOR.p, lower = wOR.l, upper = wOR.u),
-    OR.strata.score = data.frame(est = scOR.p, lower = scOR.l, upper = scOR.u),
     OR.strata.cfield = data.frame(est = cfOR.p, lower = cfOR.l, upper = cfOR.u),
+    OR.strata.score = data.frame(est = scOR.p, lower = scOR.l, upper = scOR.u),
     OR.strata.mle = data.frame(est = mOR.p, lower = mOR.l, upper = mOR.u),
     
     ## Crude odds ratio:
     OR.crude.wald = data.frame(est = cwOR.p, lower = cwOR.l, upper = cwOR.u),
-    OR.crude.score = data.frame(est = csOR.p, lower = csOR.l, upper = csOR.u),
     OR.crude.cfield = data.frame(est = ccfOR.p, lower = ccfOR.l, upper = ccfOR.u),
+    OR.crude.score = data.frame(est = csOR.p, lower = csOR.l, upper = csOR.u),
     OR.crude.mle = data.frame(est = cmOR.p, lower = cmOR.l, upper = cmOR.u),
-    
+
     ## Mantel-Haenszel odds ratio:
     OR.mh.wald = data.frame(est = sOR.p, lower = sOR.l, upper = sOR.u),
-    
     
     ## Strata attributable risk:
     ARisk.strata.wald = data.frame(est = wARisk.p, lower = wARisk.l, upper = wARisk.u),
@@ -1545,8 +1575,8 @@
       RR.strata.score    = res$RR.strata.score,
       
       OR.strata.wald     = res$OR.strata.wald,
-      OR.strata.score    = res$OR.strata.score,
       OR.strata.cfield   = res$OR.strata.cfield,
+      OR.strata.score    = res$OR.strata.score,
       OR.strata.mle      = res$OR.strata.mle,
       
       ARisk.strata.wald  = res$ARisk.strata.wald,
@@ -1598,9 +1628,10 @@
       RR.mh.wald         = res$RR.mh.wald,
       
       OR.strata.wald     = res$OR.strata.wald,
-      OR.strata.score    = res$OR.strata.score,
       OR.strata.cfield   = res$OR.strata.cfield,
+      OR.strata.score    = res$OR.strata.score,
       OR.strata.mle      = res$OR.strata.mle,
+      
       OR.crude.wald      = res$OR.crude.wald,
       OR.crude.score     = res$OR.crude.score,
       OR.crude.cfield    = res$OR.crude.cfield,
@@ -1633,7 +1664,7 @@
       RR.homog.woolf  = res$wRR.homog,
       OR.homog.woolf  = res$wOR.homog,
       OR.homog.brday =  res$bOR.homog)
-    
+
     ## Define tab:
     if(outcome == "as.columns"){
       r1 <- c(sa, sb, sN1, cIRiske.p, cOe.p)
@@ -1659,7 +1690,6 @@
     ## Output creation part:
     out <- list(method = "cohort.count", n.strata = n.strata, conf.level = conf.level, res = res, massoc = massoc, tab = tab)
   }
-  
   
   ## method = "cohort.time", single strata:
   if(method == "cohort.time" & n.strata == 1){
@@ -1754,15 +1784,14 @@
     out <- list(method = "cohort.time", n.strata = n.strata, conf.level = conf.level, res = res, massoc = massoc, tab = tab)
   }
   
-  
   ## method == "case.control", single strata:
   if(method == "case.control" & n.strata == 1){
     
     ## Verbose part:
     massoc <- list(
       OR.strata.wald      = res$OR.strata.wald,
-      OR.strata.score     = res$OR.strata.score,
       OR.strata.cfield    = res$OR.strata.cfield,
+      OR.strata.score     = res$OR.strata.score,
       OR.strata.mle       = res$OR.strata.mle,
       
       ARisk.strata.wald   = res$ARisk.strata.wald,
@@ -1807,13 +1836,13 @@
     ## Verbose part:
     massoc <- list(
       OR.strata.wald      = res$OR.strata.wald,
-      OR.strata.score     = res$OR.strata.score,
       OR.strata.cfield    = res$OR.strata.cfield,
+      OR.strata.score     = res$OR.strata.score,
       OR.strata.mle       = res$OR.strata.mle,
       
       OR.crude.wald       = res$OR.crude.wald,
-      OR.crude.score      = res$OR.crude.score,
       OR.crude.cfield     = res$OR.crude.cfield,
+      OR.crude.score      = res$OR.crude.score,
       OR.crude.mle        = res$OR.crude.mle,
       OR.mh.wald          = res$OR.mh.wald,       
       
@@ -1869,8 +1898,7 @@
     ## Output creation part:
     out <- list(method = "case.control", n.strata = n.strata, conf.level = conf.level, res = res, massoc = massoc, tab = tab)
   }
-  
-  
+
   ## method == "cross.sectional", single strata:
   if(method == "cross.sectional" & n.strata == 1){
     
@@ -1880,8 +1908,8 @@
       PR.strata.score    = res$RR.strata.score,
       
       OR.strata.wald     = res$OR.strata.wald,
-      OR.strata.score    = res$OR.strata.score,
       OR.strata.cfield   = res$OR.strata.cfield,
+      OR.strata.score    = res$OR.strata.score,
       OR.strata.mle      = res$OR.strata.mle,
       
       ARisk.strata.wald    = res$ARisk.strata.wald,
@@ -1933,12 +1961,12 @@
       PR.mh.wald         = res$RR.mh.wald,
       
       OR.strata.wald     = res$OR.strata.wald,
-      OR.strata.score    = res$OR.strata.score,
       OR.strata.cfield   = res$OR.strata.cfield,
+      OR.strata.score    = res$OR.strata.score,
       OR.strata.mle      = res$OR.strata.mle,
       OR.crude.wald      = res$OR.crude.wald,
-      OR.crude.score     = res$OR.crude.score,
       OR.crude.cfield    = res$OR.crude.cfield,
+      OR.crude.score     = res$OR.crude.score,
       OR.crude.mle       = res$OR.crude.mle,
       OR.mh.wald         = res$OR.mh.wald,
       

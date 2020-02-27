@@ -1,3 +1,22 @@
+CHANGES IN epiR VERSION 1.0-13
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 calculates Cornfield confidence intervals for the odds ratio when the total number of events is less than 500. This reduces computation time when cell frequencies are large.
+    [Suggested by Jeff Canar]
+    o epi.ssdetect now uses the hypergeometric distribution to calculate sample size, removing the need to apply a finite correction factor.
+    [Suggested by Manuel Sanchez Vazquez]
+    o epi.ssninfb
+    Inconsistency in function documentation.
+    [Spotted by Winston Mason]
+    Fixed. 
+
+CHANGES IN epiR VERSION 1.0-12
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.smr: Computes confidence intervals and tests of significance of the standardised mortality [morbidity] ratio.
+
 CHANGES IN epiR VERSION 1.0-11
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -21,11 +40,8 @@ CHANGES IN epiR VERSION 1.0-06
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Functions to calculate sample size
-    Major revision of the naming of functions to calculate sample size.
-    
+    o Functions to calculate sample size. Major revision of the naming of functions to calculate sample size.
     o New function epi.ssclus1estb: Sample size to estimate a binary outcome using one-stage cluster sampling.
-
 
 CHANGES IN epiR VERSION 1.0-04
 

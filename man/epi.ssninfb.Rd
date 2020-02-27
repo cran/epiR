@@ -17,7 +17,7 @@ epi.ssninfb(treat, control, delta, n, r = 1, power, alpha)
 \arguments{
   \item{treat}{the expected proportion of successes in the treatment group.}
   \item{control}{the expected proportion of successes in the control group.}
-  \item{delta}{the equivalence limit, expressed as a proportion.}
+  \item{delta}{the equivalence limit, expressed as the change in the outcome of interest that represents a clinically meaningful diffference.}
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
@@ -63,28 +63,32 @@ When calculating the power of a study, note that the variable \code{n} refers to
 }
 
 \examples{
-## EXAMPLE 1:
-## Suppose it is of interest to establish non-inferiority of a new treatment 
-## as compared to the currently used standard treatment. A difference of less
-## than 10\% is of no clinical importance. Thus, the non-inferiority margin 
-## (delta) is set at 0.10. Assume the true cure rate for the new treatment
-## is 0.85 and the control is 0.65. Assuming a one-sided test size of 2.5\% and 
-## a power of 90\% how many subjects should be included in the trial?
+## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 90):
+## suppose a pharmaceutical company would like to conduct a clinical trial to
+## compare the efficacy of two antimicrobial agents when administered orally 
+## to patients with skin infections.
 
-epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, r = 1,
-   power = 0.80, alpha = 0.025)
+## Assume the true mean cure rate of the treatment is 0.85 and the true mean
+## cure rate of the control is 0.65. We consider a difference of less than 0.10
+## in cure rate to be of no clinical importance (i.e. delta = -0.10).
 
-## A total of 558 subjects need to be enrolled in the trial, 279 in the 
-## treatment group and 279 in the control group.
+## Assuming a one-sided test size of 5\% and a power of 80\% how many 
+## subjects should be included in the trial?
+
+epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = NA, r = 1, 
+   power = 0.80, alpha = 0.05)
+
+## A total of 50 subjects need to be enrolled in the trial, 25 in the 
+## treatment group and 25 in the control group.
 
 ## EXAMPLE 1 (cont.):
-## Suppose only 400 subjects were enrolled in the trial, 200 in the treatment
-## group and 200 in the control group. What is the estimated study power?
+## Suppose only 40 subjects were enrolled in the trial, 20 in the treatment
+## group and 20 in the control group. What is the estimated study power?
 
-epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 400, r = 1,
-   power = NA, alpha = 0.025)
+epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = 40, r = 1,
+   power = NA, alpha = 0.05)
 
-## With only 500 subjects the estimated study power is 0.66.
+## With only 40 subjects the estimated study power is 0.73.
 
 }
 
