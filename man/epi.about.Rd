@@ -21,6 +21,9 @@ The most recent version of the \code{epiR} package can be obtained from: \url{ht
 The following is a summary of the main functions and datasets in the \pkg{epiR} package. An alphabetical list of all functions and datasets is available by typing \code{library(help = epiR)}.
 
 For further information on any of these functions, type \code{help(name)} or \code{?name} where \code{name} is the name of the function or dataset.
+
+For details on how to use \pkg{epR} for routine epidemiological work start R, type \code{help.start()} to open the help browser and navigate to \code{Packages > epiR > Vignettes}.
+
 }
 
 \section{CONTENTS:}{

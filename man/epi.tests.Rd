@@ -138,7 +138,7 @@ rval$elements$pri
 
 # What is the proportion of false positive results?
 rval$elements$pfp
-# Answer: 0.37 (95\% CI 0.29 to 0.45s).
+# Answer: 0.37 (95\% CI 0.29 to 0.45).
 
 # What is the proportion of false negative results?
 rval$elements$pfn
