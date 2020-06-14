@@ -1,3 +1,14 @@
+CHANGES IN epiR VERSION 1.0-15
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.insthaz now handles stratified data. Examples in function documentation updated to reflect these changes.
+    o Argument rho in function epi.sscc changed to rho.cc to avoid confusion with rho used to represent the intracluster correlation coefficient.
+    [Suggested by Xiaoqing Liu] 
+    o Amibguity in documentation for epi.sscomps corrected.
+    [Spotted by Marco Barbara]
+    o Function epi.2by2 now included Taylor series confidence intervals for the incidence risk and prevalence ratio.
+
 CHANGES IN epiR VERSION 1.0-14
 
 SIGNIFICANT USER-VISIBLE CHANGES

@@ -8,31 +8,6 @@
         N. <- 1 - ((1 - conf.level) / 2)
         z <- qnorm(N., mean = 0, sd = 1)
 
-        ## Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
-        .funincrisk <- function(cdat, conf.level){
-          
-          alpha <- 1 - conf.level
-          alpha2 <- 0.5 * alpha
-          x <- cdat[,1]; n <- cdat[,2]
-          
-          p <- x/n
-          x1 <- x == 0; x2 <- x == n
-          lb <- ub <- x
-          lb[x1] <- 1
-          ub[x2] <- n[x2] - 1
-          lcl <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
-          ucl <- 1 - qbeta(alpha2, n - ub, x + 1)
-          
-          if (any(x1)) 
-            lcl[x1] <- rep(0, sum(x1))
-          
-          if (any(x2)) 
-            ucl[x2] <- rep(1, sum(x2))
-          
-          rval <- data.frame(est = p, lower = lcl, upper = ucl)
-          rval
-          }
-
         ## From Greg Snow, R-sig-Epi, 3 Mar 2008:
         ## My prefered approach (not the only one), is to use the Bayesian interval using a uniform prior (beta(1,1) distribution)
         ## with the binomial (it is easier to do than it looks). Basically find the HPD interval from a beta distribution with parameters s+1 and f+1,
@@ -84,7 +59,7 @@
 
         ## True prevalence:
         tdat <- as.matrix(cbind(M1, total))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         tp <- trval$est; tp.low <- trval$lower; tp.up <- trval$upper
 
         ## Greg Snow:
@@ -108,7 +83,7 @@
 
         ## Apparent prevalence:
         tdat <- as.matrix(cbind(N1, total))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         ap <- trval$est; ap.low <- trval$lower; ap.up <- trval$upper
 
         ## Greg Snow:
@@ -132,7 +107,7 @@
 
         ## Sensitivity:
         tdat <- as.matrix(cbind(a, M1))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         se <- trval$est; se.low <- trval$lower; se.up <- trval$upper
 
         ## Greg Snow:
@@ -156,7 +131,7 @@
 
         ## Specificity:
         tdat <- as.matrix(cbind(d, M0))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         sp <- trval$est; sp.low <- trval$lower; sp.up <- trval$upper
 
         ## Greg Snow:
@@ -180,7 +155,7 @@
 
         ## Positive predictive value:
         tdat <- as.matrix(cbind(a, N1))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         ppv <- trval$est; ppv.low <- trval$lower; ppv.up <- trval$upper
 
         ## Greg Snow:
@@ -204,7 +179,7 @@
 
         ## Negative predictive value:
         tdat <- as.matrix(cbind(d, N0))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         npv <- trval$est; npv.low <- trval$lower; npv.up <- trval$upper
 
         ## Greg Snow:
@@ -246,7 +221,7 @@
 
         ## Diagnostic accuracy (from Scott et al. (2008)):
         tdat <- as.matrix(cbind((a + d), total))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         da <- trval$est; da.low <- trval$lower; da.up <- trval$upper
 
         ## Greg Snow:
@@ -304,28 +279,28 @@
         
         ## Proportion ruled out:
         tdat <- as.matrix(cbind((c + d), total))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         pro <- trval$est; pro.low <- trval$lower; pro.up <- trval$upper
         pro <- data.frame(est = pro, lower = pro.low, upper = pro.up)
         
         
         ## Proportion ruled in:
         tdat <- as.matrix(cbind((a + b), total))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         pri <- trval$est; pri.low <- trval$lower; pri.up <- trval$upper
         pri <- data.frame(est = pri, lower = pri.low, upper = pri.up)
         
                 
         ## Proportion false positives:
         tdat <- as.matrix(cbind(b, M0))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         pfp <- trval$est; pfp.low <- trval$lower; pfp.up <- trval$upper
         pfp <- data.frame(est = pfp, lower = pfp.low, upper = pfp.up)
         
         
         ## Proportion false negatives:
         tdat <- as.matrix(cbind(c, M1))
-        trval <- .funincrisk(tdat, conf.level)
+        trval <- zincrisk(tdat, conf.level)
         pfn <- trval$est; pfn.low <- trval$lower; pfn.up <- trval$upper
         pfn<- data.frame(est = pfn, lower = pfn.low, upper = pfn.up)
 

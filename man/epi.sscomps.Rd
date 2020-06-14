@@ -32,10 +32,10 @@ The argument \code{treat} is the proportion of treated subjects that will have n
 
 \value{
 A list containing one or more of the following: 
-  \item{n.crude}{the crude estimated total number of subjects required for the specified level of confidence and power.}
-  \item{n.total}{the total estimated number of subjects required for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the treatment group compared with the control group.}
+  \item{n.crude}{the crude estimated total number of events required for the specified level of confidence and power.}
+  \item{n.total}{the total estimated number of events required for the specified level of confidence and power, respecting the requirement for \code{r} times as many events in the treatment group compared with the control group.}
   \item{hazard}{the minimum detectable hazard ratio >1 and the maximum detectable hazard ratio <1.}
-  \item{power}{the power of the study given the number of study subjects, the expected hazard ratio and level of confidence.}
+  \item{power}{the power of the study given the number of events, the expected hazard ratio and level of confidence.}
 }
 
 \references{

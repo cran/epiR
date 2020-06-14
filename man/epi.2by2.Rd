@@ -72,7 +72,7 @@ An object of class \code{epi.2by2} comprised of:
 
 When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population are returned: 
 
-  \item{\code{RR}}{Wald and score confidence intervals for the incidence risk ratios for each strata. Wald and score confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
+  \item{\code{RR}}{Wald, Taylor and score confidence intervals for the incidence risk ratios for each strata. Wald, Taylort and score confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk (risk difference) for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
@@ -109,7 +109,7 @@ When method equals \code{case.control} the following measures of association and
 
 When method equals \code{cross.sectional} the following measures of association and effect are returned: 
 
-  \item{\code{PR}}{Wald and score confidence intervals for the prevalence ratios for each strata. Wald and score confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
+  \item{\code{PR}}{Wald, Taylor and score confidence intervals for the prevalence ratios for each strata. Wald, Taylor and score confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk.}
@@ -145,6 +145,8 @@ Feychting M, Osterlund B, Ahlbom A (1998). Reduced cancer incidence among the bl
 Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions. John Wiley and Sons, New York. 
 
 Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. Journal of Epidemiology and Community Health 55: 508 - 514.
+
+Hightower AW, Orenstein WA, Martin SM (1988) Recommendations for the use of Taylor series confidence intervals for estimates of vaccine efficacy. Bulletin of the World Health Organization 66: 99 - 105.
 
 Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, London, pp. 84 - 85.
 

@@ -98,234 +98,6 @@
   #     }
   # }
   
-  .funincrisk <- function(dat, conf.level){
-    ## Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
-    alpha <- 1 - conf.level
-    alpha2 <- 0.5 * alpha
-    x <- dat[,1]; n <- dat[,2]
-    
-    p <- x/n
-    x1 <- x == 0; x2 <- x == n
-    lb <- ub <- x
-    lb[x1] <- 1
-    ub[x2] <- n[x2] - 1
-    
-    low <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
-    upp <- 1 - qbeta(alpha2, n - ub, x + 1)
-    
-    if (any(x1)) 
-      low[x1] <- rep(0, sum(x1))
-    
-    if (any(x2)) 
-      upp[x2] <- rep(1, sum(x2))
-    
-    rval <- data.frame(est = p, lower = low, upper = upp)
-    rval
-  }
-  
-  .funincrate <- function(dat, conf.level){
-    N. <- 1 - ((1 - conf.level) / 2)
-    
-    a <- dat[,1]
-    n <- dat[,2]
-    p <- a / n
-
-    # Changed 210519. Now use the method of Ulm (1990), which is used in poisson.test(). See email from Kazuki Yoshida 14 May 2019:
-    low <- (qchisq(p = 1 - N., df = 2 * a) / 2) / n
-    upp <- (qchisq(p = N., df = 2 * (a + 1)) / 2) / n
-    rval <- data.frame(est = p, lower = low, upper = upp)
-    rval
-  }
-  
-  .funRRwald <- function(dat, conf.level){
-    N. <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N., mean = 0, sd = 1)
-    
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    wRR.p      <- (a / N1) / (c / N0)
-    lnwRR      <- log(wRR.p)
-    lnwRR.var  <- (1 / a) - (1 / N1) + (1 / c) - (1 / N0)
-    lnwRR.se   <- sqrt((1 / a) - (1 / N1) + (1 / c) - (1 / N0))
-    wRR.se     <- exp(lnwRR.se)
-    
-    ll      <- exp(lnwRR - (z * lnwRR.se))
-    ul      <- exp(lnwRR + (z * lnwRR.se))
-    c(wRR.p, ll, ul)
-  }
-  
-  .funRRscore <- function(dat, conf.level){
-    N. <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N., mean = 0, sd = 1)
-    
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    scRR.p <- (a / N1) / (c / N0)
-    
-    if ((c == 0) && (a == 0)){
-      ul = Inf
-      ll = 0
-    }
-    
-    else{  
-      a1 =  N0 * (N0 * (N0 + N1) * a + N1 * (N0 + a) * (z^2))
-      a2 = -N0 * (N0 * N1 * (c + a) + 2 * (N0 + N1) * c * a + N1 * (N0 + c + 2 * a) * (z^2))  
-      a3 = 2 * N0 * N1 * c * (c + a) + (N0 + N1) * (c^2) * a + N0 * N1 * (c + a) * (z^2)
-      a4 = -N1 * (c ^ 2) * (c + a)
-      
-      b1 = a2 / a1
-      b2 = a3 / a1
-      b3 = a4 / a1
-      c1 = b2 - (b1^2) / 3
-      c2 = b3 - b1 * b2 / 3 + 2 * (b1^3) / 27
-      ceta = acos(sqrt(27) * c2 / (2 * c1 * sqrt(-c1)))
-      t1 = -2 * sqrt(-c1 / 3) * cos(pi / 3 - ceta / 3)
-      t2 = -2 * sqrt(-c1 / 3) * cos(pi / 3 + ceta / 3)
-      t3 = 2 * sqrt(-c1 / 3) * cos(ceta / 3)
-      p01 = t1 - b1 / 3
-      p02 = t2 - b1 / 3
-      p03 = t3 - b1 / 3
-      p0sum = p01 + p02 + p03
-      p0up = min(p01, p02, p03)
-      p0low = p0sum - p0up - max(p01, p02, p03)
-      
-      if( (c == 0) && (a != 0) ){
-        ll = (1 - (N1 - a) * (1 - p0low) / (c + N1 - (N0 + N1) * p0low)) / p0low 
-        ul = Inf 
-      }
-      
-      else if((c != N0) && (a == 0)){
-        ul = (1 - (N1 - a) * (1 - p0up) / (c + N1 - (N0 + N1) * p0up)) / p0up
-        ll = 0
-      }
-      
-      else if((c == N0) && (a == N1)){
-        ul = (N0 + z^2) / N0
-        ll = N1 / (N1 + z^2)
-      }
-      
-      else if((a == N1) || (c == N0)){
-        if((c == N0) && (a == 0)) {ll = 0}
-        if((c == N0) && (a != 0)) {
-          phat1  = c / N0
-          phat2  =  a / N1
-          phihat = phat2 / phat1
-          phil = 0.95 * phihat
-          chi2 = 0
-          while (chi2 <= z){
-            a = (N0 + N1) * phil
-            b = -((c + N1) * phil + a + N0)
-            c = c + a
-            p1hat = (-b - sqrt(b^2 -4 * a * c)) / (2 * a)
-            p2hat = p1hat * phil
-            q2hat = 1 - p2hat
-            var = (N0 * N1 * p2hat) / (N1 * (phil - p2hat) + N0 * q2hat)
-            chi2 = ((a - N1 * p2hat) / q2hat) / sqrt(var)
-            ll = phil
-            phil = ll / 1.0001}} 
-        i = c
-        j = a
-        ni = N0 
-        nj = N1 
-        
-        if(a == N1){               
-          i = a
-          j = c
-          ni = N1 
-          nj = N0
-        } 
-        phat1  = i / ni
-        phat2  =  j / nj
-        phihat = phat2 / phat1
-        phiu = 1.1 * phihat
-        
-        if((c == N0) && (a == 0)) { 
-          if(N0 < 100) {phiu = 0.01}
-          else {phiu = 0.001}
-        } 
-        
-        chi1 = 0
-        while (chi1 >= -z){
-          a. = (ni + nj) * phiu
-          b. = -((i + nj) * phiu + j + ni)
-          c. = i + j
-          p1hat = (-b. - sqrt(b.^2 - 4 * a. * c.)) / (2 * a.)
-          p2hat = p1hat * phiu
-          q2hat = 1 - p2hat
-          var = (ni * nj * p2hat) / (nj * (phiu - p2hat) + ni * q2hat)
-          chi1  = ((j - nj * p2hat) / q2hat) / sqrt(var)
-          phiu1 = phiu
-          phiu = 1.0001 * phiu1
-        }
-        
-        if(a == N1) {
-          ul = (1 - (N1 - a) * (1 - p0up) / (c + N1 - (N0 + N1) * p0up)) / p0up  
-          ll = 1 / phiu1       
-        }
-        
-        else{ul = phiu1}                        
-      }   
-      
-      else{
-        ul = (1 - (N1 - a) * (1 - p0up) / (c + N1 - (N0 + N1) * p0up)) /p0up
-        ll = (1 - (N1 - a) * (1 - p0low) / (c + N1 - (N0 + N1) * p0low)) / p0low 
-      }
-    }  
-    c(scRR.p, ll, ul)
-  }
-  
-  .funORwald <- function(dat, conf.level){
-    N. <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N., mean = 0, sd = 1)
-    
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    wOR.p <- (a / b) / (c / d)
-    lnwOR <- log(wOR.p)
-    lnwOR.var <- 1/a + 1/b + 1/c + 1/d
-    lnwOR.se <- sqrt(lnwOR.var)
-    ll <- exp(lnwOR - (z * lnwOR.se))
-    ul <- exp(lnwOR + (z * lnwOR.se))
-    c(wOR.p, ll, ul)
-  }
-  
-  .funORcfield <- function (dat, conf.level, interval = c(1e-08, 1e+08)){
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    cfOR.p <- (a / b) / (c / d)
-    
-    if (((a == 0) && (c == 0)) || ((a == N1) && (c == N0))) {
-      ll <- 0
-      ul <- Inf
-    }
-    
-    else if (c == N0 || a == 0) {
-      ll <- 0
-      ul <- uniroot(function(or) {
-        sum(sapply(max(0, a + c - N0):a, dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1- conf.level)/2
-      }, interval = interval)$root
-    }
-    else if (a == N1 || c == 0) {
-      ll <- uniroot(function(or) {
-        sum(sapply(a:min(N1, a + c), dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1 - conf.level)/2
-      }, interval = interval)$root
-      ul <- Inf
-    }
-    else {
-      ll <- uniroot(function(or) {
-        sum(sapply(a:min(N1, a + c), dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1 - conf.level)/2
-      }, interval = interval)$root
-      ul <- uniroot(function(or) {
-        sum(sapply(max(0, a + c - N0):a, dFNCHypergeo, N1, N0, a + c, or)) - dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1 - conf.level)/2
-      }, interval = interval)$root
-    }
-    c(cfOR.p, ll, ul)
-  }
-  
    # dFNCHypergeo <- function(x, m1, m2, n, odds, precision = 1e-07){
    #    stopifnot(is.numeric(x), is.numeric(m1), is.numeric(m2), 
    #    is.numeric(n), is.numeric(odds), is.numeric(precision))
@@ -337,219 +109,6 @@
   # See http://www.stat.ufl.edu/~aa/cda/R/two-sample/R2/index.html
   # See https://stackoverflow.com/questions/4357827/do-while-loop-in-r
 
-  .limit <- function(x1, n1, x2, n2, conf.level, lim, t){
-    z = qchisq(conf.level, 1)
-    px = x1 / n1
-    score <- 1:1000
-    score = 0
-    # Edited from Agresti version to increase speed 290617:
-    repeat{
-      a. = n2 *(lim - 1)
-      b. = n1 * lim + n2 - (x1 + x2) * (lim - 1)
-      c. = -(x1 + x2)
-      p2d = (-b. + sqrt(b.^2 - 4 * a. * c.)) / (2 * a.)
-      p1d = p2d * lim / (1 + p2d * (lim - 1))
-      score = ((n1 * (px - p1d))^2) * (1 / (n1 * p1d * (1 - p1d)) + 1 / (n2 * p2d * (1 - p2d)))
-      ci = lim
-      if(t == 0) {lim = ci / 1.001}
-      else{lim = ci * 1.001}
-      if(score > z){ break }
-    } 
-    return(ci)
-  }
-
-  .funORscore <- function(dat, conf.level){
-    x1 <- dat[1]; n1 <- dat[1] + dat[3]
-    x2 <- dat[2]; n2 <- dat[2] + dat[4]
-    
-    px = x1 / n1
-    py = x2 / n2
-    
-    scOR.p <- (dat[1] / dat[3]) / (dat[2] / dat[4])
-    
-    if(((x1 == 0) && (x2 == 0)) || ((x1 == n1) && (x2 == n2))){
-      ul = 1/0
-      ll = 0   
-    } 
-    
-    else if((x1 == 0) || (x2 == n2)){
-      ll = 0
-      theta = 0.01 / n2 
-      ul = .limit(x1, n1, x2, n2, conf.level, theta, 1)      
-    }
-    
-    else if((x1 == n1) || (x2 == 0)){
-      ul = 1 / 0
-      theta = 100 * n1
-      ll = .limit(x1, n1, x2, n2, conf.level, theta, 0)       
-    }
-    
-    else{
-      theta = px / (1 - px) / (py / (1 - py)) / 1.1
-      ll = .limit(x1, n1, x2, n2, conf.level, theta, 0)       
-      theta = px / (1 - px) / (py / (1 - py)) * 1.1
-      ul = .limit(x1, n1, x2, n2, conf.level, theta, 1)      
-    }
-    c(scOR.p, ll,ul)  
-  }
-  
-  .funORml <- function(dat, conf.level){
-    mOR.tmp <- fisher.test(dat, conf.int = TRUE, conf.level = conf.level)
-    
-    mOR.p <- as.numeric(mOR.tmp$estimate)
-    mOR.l <- as.numeric(mOR.tmp$conf.int)[1]
-    mOR.u <- as.numeric(mOR.tmp$conf.int)[2]
-    
-    c(mOR.p, mOR.l, mOR.u)
-  }   
-  
-  .funARwald <- function(dat, conf.level, units){
-    N. <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N., mean = 0, sd = 1)
-    
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    wARisk.p <- ((a / N1) - (c / N0))
-    ## wARisk.var <- (((a * b) / (N1^2 * (N1 - 1))) + ((c * d) / (N0^2 * (N0 - 1))))
-    wARisk.se <- (sqrt(((a * (N1 - a))/N1^3) + ((c * (N0 - c))/N0^3)))
-    ll <- (wARisk.p - (z * wARisk.se))
-    ul <- (wARisk.p + (z * wARisk.se))
-    c(wARisk.p * units, ll * units, ul * units)
-  }
-  
-  .funARscore <- function(dat, conf.level, units){
-    N. <- 1 - ((1 - conf.level) / 2)
-    z <- qnorm(N., mean = 0, sd = 1)
-    
-    a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
-    N1 <- a + b; N0 <- c + d
-    
-    sARisk.p <- ((a / N1) - (c / N0))       
-    px = a / N1
-    py = c / N0
-    z = qchisq(conf.level, 1)
-    proot = px - py
-    dp = 1 - proot
-    niter = 1
-    while(niter <= 50){
-      dp = 0.5 * dp
-      up2 = proot + dp
-      score = .z2stat(px, N1, py, N0, up2)
-      if(score < z){proot = up2}
-      niter = niter + 1
-      if((dp < 0.0000001) || (abs(z - score) < 0.000001)){
-        niter = 51
-        ul = up2
-      }
-    } 
-    
-    proot = px - py
-    dp = 1 + proot
-    niter = 1
-    while(niter <= 50){
-      dp = 0.5 * dp
-      low2 = proot - dp
-      score = .z2stat(px, N1, py, N0, low2)
-      if(score < z){proot = low2}
-      niter = niter + 1
-      if((dp < 0.0000001) || (abs(z - score) < 0.000001)){
-        ll = low2
-        niter = 51
-      }
-    }
-    c(sARisk.p * units, ll * units, ul * units)
-  }
-  
-  .z2stat <- function (p1x, nx, p1y, ny, dif){
-    diff = p1x-p1y-dif
-    if (abs(diff) == 0) {
-      fmdiff = 0}
-    else{
-      t = ny / nx
-      a = 1 + t
-      b = -(1 + t + p1x + t * p1y + dif * (t + 2))
-      c = dif * dif + dif * (2 * p1x + t + 1) + p1x + t * p1y
-      d = -p1x * dif * (1 + dif)
-      v = (b / a / 3)^3 - b * c / (6 * a * a) + d / a / 2
-      s = sqrt((b / a / 3)^2 - c / a / 3)
-      if(v > 0){u = s}
-      else{u = -s}
-      w = (3.141592654 + acos(v / u^3)) / 3
-      p1d = 2 * u * cos(w) - b / a / 3
-      p2d = p1d - dif
-      var = p1d * (1 - p1d) / nx + p2d * (1 - p2d) / ny
-      fmdiff = diff^2 / var
-    }
-    return(fmdiff)
-  }
-  
-  .funMHRD.Sato0 <- function(dat, conf.level = 0.95, units = units) {
-    if(length(dim(dat)) > 2){
-      ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
-      c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
-      dataset <- cbind(c1, c2, c3, c4)
-      
-      num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
-      W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
-      delta.MH <- num / W
-      P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
-      Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
-      
-      delta.Mid <- delta.MH + 0.5 * qchisq(conf.level, df = 1) * (P / W^2)
-      ME <- sqrt(delta.Mid^2 - delta.MH^2 + qchisq(conf.level, df = 1) * Q / W^2)
-      CI <- delta.Mid + cbind(-1,1) * ME
-      
-      Sato0ARisk.p <- delta.Mid
-      Sato0ARisk.l <- Sato0ARisk.p - ME
-      Sato0ARisk.u <- Sato0ARisk.p + ME
-      c(Sato0ARisk.p * units, Sato0ARisk.l * units, Sato0ARisk.u * units)
-    }
-  }
-  
-  .funMHRD.Sato <- function(dat, conf.level = 0.95, units = units) {
-    if(length(dim(dat)) > 2){
-      ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
-      c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
-      dataset <- cbind(c1, c2, c3, c4)
-      
-      num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
-      W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
-      delta.MH <- num / W
-      P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
-      Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
-      var.delta.MH = (delta.MH * P + Q) / W^2
-      
-      SatoARisk.p <- delta.MH
-      SatoARisk.l <- SatoARisk.p - qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
-      SatoARisk.u <- SatoARisk.p + qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
-      c(SatoARisk.p * units, SatoARisk.l * units, SatoARisk.u * units)
-    }
-  }
-  
-  .funMHRD.GR <- function(dat, conf.level = 0.95, units = units) {
-    if(length(dim(dat)) > 2){
-      ndat <- addmargins(A = dat, margin = 2, FUN = sum, quiet = FALSE)
-      c1 <- ndat[1,1,]; c2 <- ndat[1,3,]; c3 <- ndat[2,1,]; c4 <- ndat[2,3,]
-      dataset <- cbind(c1, c2, c3, c4)
-      
-      num <- sum(apply(X = dataset, MARGIN = 1, FUN = function(ro) (ro[1] * ro[4] - ro[3] * ro[2]) / (ro[2] + ro[4])))
-      W <- sum(apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4]))) # Cochrane weights
-      delta.MH <- num / W
-      P <- sum(apply(dataset, 1, function(ro) (ro[2]^2 * ro[3] - ro[4]^2 * ro[1] + 0.5 * ro[2] * ro[4] * (ro[4] - ro[2])) / (ro[2] + ro[4])^2))
-      Q <- sum(apply(dataset,1,function(ro) (ro[1] * (ro[4] - ro[3]) + ro[3] * (ro[2] - ro[1])) / (2 * (ro[2] + ro[4]))))
-      p1 <- dataset[,1] / dataset[,2]
-      p2 <- dataset[,3] / dataset[,4]
-      denom <- apply(dataset, 1, function(ro) ro[2] * ro[4] / (ro[2] + ro[4])) # Cochrane weights
-      var.delta.MH <- sum (denom^2 * (p1 * (1 - p1) / dataset[,2] + p2 * (1 - p2) / dataset[,4])) / W^2
-      
-      GRARisk.p <- delta.MH
-      GRARisk.l <- GRARisk.p - qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
-      GRARisk.u <- GRARisk.p + qnorm(1 - (1 - conf.level) / 2) * sqrt(var.delta.MH)
-      c(GRARisk.p * units, GRARisk.l * units, GRARisk.u * units)
-    }
-  }
-  
 
   ## =================
   ## DECLARE VARIABLES
@@ -610,37 +169,37 @@
   stotal <- sa + sb + sc + sd
   
   # Within-strata incidence risk in exposed:
-  .tmp <- .funincrisk(as.matrix(cbind(a, N1)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(a, N1)), conf.level = conf.level)
   IRiske.p <- as.numeric(.tmp[,1]) * units
   IRiske.l <- as.numeric(.tmp[,2]) * units
   IRiske.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata incidence risk in unexposed:
-  .tmp <- .funincrisk(as.matrix(cbind(c, N0)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(c, N0)), conf.level = conf.level)
   IRisko.p <- as.numeric(.tmp[,1]) * units
   IRisko.l <- as.numeric(.tmp[,2]) * units
   IRisko.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata incidence risk in population:
-  .tmp <- .funincrisk(as.matrix(cbind(M1, total)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(M1, total)), conf.level = conf.level)
   IRiskpop.p <- as.numeric(.tmp[,1]) * units
   IRiskpop.l <- as.numeric(.tmp[,2]) * units
   IRiskpop.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata incidence rate in exposed:
-  .tmp <- .funincrate(as.matrix(cbind(a, b)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(a, b)), conf.level = conf.level)
   IRatee.p <- as.numeric(.tmp[,1]) * units
   IRatee.l <- as.numeric(.tmp[,2]) * units
   IRatee.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata incidence rate in unexposed:
-  .tmp <- .funincrate(as.matrix(cbind(c, d)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(c, d)), conf.level = conf.level)
   IRateo.p <- as.numeric(.tmp[,1]) * units
   IRateo.l <- as.numeric(.tmp[,2]) * units
   IRateo.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata incidence rate in population:
-  .tmp <- .funincrate(as.matrix(cbind(M1, M0)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(M1, M0)), conf.level = conf.level)
   IRatepop.p <- as.numeric(.tmp[,1]) * units
   IRatepop.l <- as.numeric(.tmp[,2]) * units
   IRatepop.u <- as.numeric(.tmp[,3]) * units
@@ -670,37 +229,37 @@
   Opop.u <- (Au / (1 - Au))
   
   # Crude incidence risk in exposed:
-  .tmp <- .funincrisk(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
   cIRiske.p <- as.numeric(.tmp[,1]) * units
   cIRiske.l <- as.numeric(.tmp[,2]) * units
   cIRiske.u <- as.numeric(.tmp[,3]) * units
   
   # Crude incidence risk in unexposed:
-  .tmp <- .funincrisk(as.matrix(cbind(sc, sN0)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(sc, sN0)), conf.level = conf.level)
   cIRisko.p <- as.numeric(.tmp[,1]) * units
   cIRisko.l <- as.numeric(.tmp[,2]) * units
   cIRisko.u <- as.numeric(.tmp[,3]) * units
   
   # Crude incidence risk in population:
-  .tmp <- .funincrisk(as.matrix(cbind(sM1, stotal)), conf.level = conf.level)
+  .tmp <- zincrisk(as.matrix(cbind(sM1, stotal)), conf.level = conf.level)
   cIRiskpop.p <- as.numeric(.tmp[,1]) * units
   cIRiskpop.l <- as.numeric(.tmp[,2]) * units
   cIRiskpop.u <- as.numeric(.tmp[,3]) * units
   
   # Crude incidence rate in exposed:
-  .tmp <- .funincrate(as.matrix(cbind(sa, sb)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(sa, sb)), conf.level = conf.level)
   cIRatee.p <- as.numeric(.tmp[,1]) * units
   cIRatee.l <- as.numeric(.tmp[,2]) * units
   cIRatee.u <- as.numeric(.tmp[,3]) * units
   
   # Crude incidence rate in unexposed:
-  .tmp <- .funincrate(as.matrix(cbind(sc, sd)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(sc, sd)), conf.level = conf.level)
   cIRateo.p <- as.numeric(.tmp[,1]) * units
   cIRateo.l <- as.numeric(.tmp[,2]) * units
   cIRateo.u <- as.numeric(.tmp[,3]) * units
   
   # Crude incidence risk in population:
-  .tmp <- .funincrate(as.matrix(cbind(sM1, sM0)), conf.level = conf.level)
+  .tmp <- zincrate(as.matrix(cbind(sM1, sM0)), conf.level = conf.level)
   cIRatepop.p <- as.numeric(.tmp[,1]) * units
   cIRatepop.l <- as.numeric(.tmp[,2]) * units
   cIRatepop.u <- as.numeric(.tmp[,3]) * units
@@ -737,34 +296,58 @@
   # Individual strata incidence risk ratio - Wald confidence limits (Rothman p 135 equation 7-3):
   wRR.ctype <- "Wald"
   wRR.p <- c(); wRR.l <- c(); wRR.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funRRwald(dat[,,i], conf.level)
+      .tmp <- zRRwald(dat[,,i], conf.level)
       wRR.p <- c(wRR.p, .tmp[1])
       wRR.l <- c(wRR.l, .tmp[2])
       wRR.u <- c(wRR.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funRRwald(dat, conf.level)
+    .tmp <- zRRwald(dat, conf.level)
     wRR.p <- .tmp[1]
     wRR.l <- .tmp[2]
     wRR.u <- .tmp[3]
   }
   
+  # Individual strata incidence risk ratio - Taylor confidence limits (Hightower et al 1988):
+  tRR.ctype <- "Taylor"
+  tRR.p <- c(); tRR.l <- c(); tRR.u <- c()
+  
+  if(length(dim(dat)) == 3){
+    for(i in 1:dim(dat)[3]){
+      .tmp <- zRRtaylor(dat[,,i], conf.level)
+      tRR.p <- c(tRR.p, .tmp[1])
+      tRR.l <- c(tRR.l, .tmp[2])
+      tRR.u <- c(tRR.u, .tmp[3])
+    }
+  }
+  
+  if(length(dim(dat)) == 2){
+    .tmp <- zRRtaylor(dat, conf.level)
+    tRR.p <- .tmp[1]
+    tRR.l <- .tmp[2]
+    tRR.u <- .tmp[3]
+  }
+  
   # Individual strata incidence risk ratio - score confidence limits:
   scRR.ctype  <- "Score"
   scRR.p <- c(); scRR.l <- c(); scRR.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funRRscore(dat[,,i], conf.level)
+      .tmp <- zRRscore(dat[,,i], conf.level)
       scRR.p <- c(scRR.p, .tmp[1])
       scRR.l <- c(scRR.l, .tmp[2])
       scRR.u <- c(scRR.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funRRscore(dat, conf.level)
+    .tmp <- zRRscore(dat, conf.level)
     scRR.p <- .tmp[1]
     scRR.l <- .tmp[2]
     scRR.u <- .tmp[3]
@@ -791,16 +374,18 @@
   ## Individual strata Wald odds ratios (Rothman p 139 equation 7-6): 
   wOR.ctype   <- "Wald"
   wOR.p <- c(); wOR.l <- c(); wOR.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funORwald(dat[,,i], conf.level)
+      .tmp <- zORwald(dat[,,i], conf.level)
       wOR.p <- c(wOR.p, .tmp[1])
       wOR.l <- c(wOR.l, .tmp[2])
       wOR.u <- c(wOR.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funORwald(dat, conf.level)
+    .tmp <- zORwald(dat, conf.level)
     wOR.p <- .tmp[1]
     wOR.l <- .tmp[2]
     wOR.u <- .tmp[3]
@@ -811,16 +396,18 @@
   if(sum(total) < 500){ 
     cfOR.ctype <- "Cornfield"
     cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
+    
     if(length(dim(dat)) == 3){
       for(i in 1:dim(dat)[3]){
-        .tmp <- .funORcfield(dat[,,i], conf.level)
+        .tmp <- zORcfield(dat[,,i], conf.level)
         cfOR.p <- c(cfOR.p, .tmp[1])
         cfOR.l <- c(cfOR.l, .tmp[2])
         cfOR.u <- c(cfOR.u, .tmp[3])
       }
     }
+  
     if(length(dim(dat)) == 2){
-      .tmp <- .funORcfield(dat, conf.level)
+      .tmp <- zORcfield(dat, conf.level)
       cfOR.p <- .tmp[1]
       cfOR.l <- .tmp[2]
       cfOR.u <- .tmp[3]
@@ -830,16 +417,18 @@
   if(sum(total) >= 500){ 
     cfOR.ctype <- "Cornfield"
     cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
+    
     if(length(dim(dat)) == 3){
       for(i in 1:dim(dat)[3]){
-        # .tmp <- .funORcfield(dat[,,i], conf.level)
+        # .tmp <- zORcfield(dat[,,i], conf.level)
         cfOR.p <- Oe.p / Oo.p
         cfOR.l <- NA
         cfOR.u <- NA
       }
     }
+    
     if(length(dim(dat)) == 2){
-      # .tmp <- .funORcfield(dat, conf.level)
+      # .tmp <- zORcfield(dat, conf.level)
       cfOR.p <- Oe.p / Oo.p
       cfOR.l <- NA
       cfOR.u <- NA
@@ -849,16 +438,18 @@
   # Individual strata odds ratio - score confidence limits:
   scOR.ctype  <- "Score"
   scOR.p <- c(); scOR.l <- c(); scOR.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funORscore(dat[,,i], conf.level)
+      .tmp <- zORscore(dat[,,i], conf.level)
       scOR.p <- c(scOR.p, .tmp[1])
       scOR.l <- c(scOR.l, .tmp[2])
       scOR.u <- c(scOR.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funORscore(dat, conf.level)
+    .tmp <- zORscore(dat, conf.level)
     scOR.p <- .tmp[1]
     scOR.l <- .tmp[2]
     scOR.u <- .tmp[3]
@@ -868,9 +459,10 @@
   # Replaced 130612.
   mOR.ctype   <- "MLE"
   mOR.p <- c(); mOR.l <- c(); mOR.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funORml(dat[,,i], conf.level)
+      .tmp <- zORml(dat[,,i], conf.level)
       mOR.p <- c(mOR.p, .tmp[1])
       mOR.l <- c(mOR.l, .tmp[2])
       mOR.u <- c(mOR.u, .tmp[3])
@@ -878,7 +470,7 @@
   }
   
   if(length(dim(dat)) == 2){
-    .tmp <- .funORml(dat, conf.level)
+    .tmp <- zORml(dat, conf.level)
     mOR.p <- .tmp[1]
     mOR.l <- .tmp[2]
     mOR.u <- .tmp[3]
@@ -887,16 +479,18 @@
   # Individual strata attributable risk (Rothman p 135 equation 7-2):
   wARisk.ctype <- "Wald"
   wARisk.p <- c(); wARisk.l <- c(); wARisk.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funARwald(dat[,,i], conf.level, units)
+      .tmp <- zARwald(dat[,,i], conf.level, units)
       wARisk.p <- c(wARisk.p, .tmp[1])
       wARisk.l <- c(wARisk.l, .tmp[2])
       wARisk.u <- c(wARisk.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funARwald(dat, conf.level, units)
+    .tmp <- zARwald(dat, conf.level, units)
     wARisk.p <- .tmp[1]
     wARisk.l <- .tmp[2]
     wARisk.u <- .tmp[3]
@@ -905,16 +499,18 @@
   # Individual strata attributable risk - score confidence limits:
   scARisk.ctype  <- "Score"
   scARisk.p <- c(); scARisk.l <- c(); scARisk.u <- c()
+  
   if(length(dim(dat)) == 3){
     for(i in 1:dim(dat)[3]){
-      .tmp <- .funARscore(dat[,,i], conf.level, units)
+      .tmp <- zARscore(dat[,,i], conf.level, units)
       scARisk.p <- c(scARisk.p, .tmp[1])
       scARisk.l <- c(scARisk.l, .tmp[2])
       scARisk.u <- c(scARisk.u, .tmp[3])
     }
   }
+  
   if(length(dim(dat)) == 2){
-    .tmp <- .funARscore(dat, conf.level, units)
+    .tmp <- zARscore(dat, conf.level, units)
     scARisk.p <- .tmp[1]
     scARisk.l <- .tmp[2]
     scARisk.u <- .tmp[3]
@@ -1034,14 +630,21 @@
   
   # Crude incidence risk ratio - Wald confidence limits (Rothman p 135 equation 7-3):
   cwRR.ctype <- "Wald"
-  .tmp       <- .funRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  .tmp       <- zRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   cwRR.p     <- .tmp[1]
   cwRR.l     <- .tmp[2]
   cwRR.u     <- .tmp[3]
   
+  # Crude incidence risk ratio - Taylor confidence limits (Hightower et al 1988):
+  ctRR.ctype <- "Taylor"
+  .tmp       <- zRRtaylor(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  ctRR.p     <- .tmp[1]
+  ctRR.l     <- .tmp[2]
+  ctRR.u     <- .tmp[3]
+  
   # Crude incidence risk ratio - score confidence limits:
   csRR.ctype <- "Score"
-  .tmp       <- .funRRscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  .tmp       <- zRRscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   csRR.p     <- .tmp[1]
   csRR.l     <- .tmp[2]
   csRR.u     <- .tmp[3]
@@ -1059,7 +662,7 @@
   
   # Crude odds ratio - Wald confidence limits:
   cwOR.ctype <- "Wald"
-  .tmp       <- .funORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  .tmp       <- zORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   cwOR.p     <- .tmp[1]
   cwOR.l     <- .tmp[2]
   cwOR.u     <- .tmp[3]
@@ -1068,7 +671,7 @@
   # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
   if(sum(total) < 500){
   ccfOR.ctype <- "Cornfield"
-  .tmp        <- .funORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  .tmp        <- zORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   ccfOR.p     <- .tmp[1]
   ccfOR.l     <- .tmp[2]
   ccfOR.u     <- .tmp[3]
@@ -1083,7 +686,7 @@
   
   # Crude odds ratio - score confidence limits:
   csOR.ctype <- "Score"
-  .tmp       <- .funORscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  .tmp       <- zORscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   csOR.p     <- .tmp[1]
   csOR.l     <- .tmp[2]
   csOR.u     <- .tmp[3]
@@ -1098,14 +701,14 @@
   
   # Crude attributable risk - Wald confidence limits (Rothman p 135 equation 7-2):
   cwARisk.ctype <- "Wald"
-  .tmp          <- .funARwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
+  .tmp          <- zARwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
   cwARisk.p     <- .tmp[1]
   cwARisk.l     <- .tmp[2]
   cwARisk.u     <- .tmp[3]
   
   # Crude attributable risk - score confidence limits:
   cscARisk.ctype <- "Score"
-  .tmp           <- .funARscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
+  .tmp           <- zARscore(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level, units)
   cscARisk.p     <- .tmp[1]
   cscARisk.l     <- .tmp[2]
   cscARisk.u     <- .tmp[3]
@@ -1252,16 +855,16 @@
   sARisk.l <- sARisk.p - (z * sARisk.se)
   sARisk.u <- sARisk.p + (z * sARisk.se)
   
-  # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
+  # Summary attributable risk (Klingenberg 2014, Statistics in Medicine 33: 2968 - 2983).
   SatoARisk.ctype <- "Sato"
-  .tmp        <- .funMHRD.Sato(dat, conf.level, units)
+  .tmp        <- zMHRD.Sato(dat, conf.level, units)
   SatoARisk.p <- .tmp[1]
   SatoARisk.l <- .tmp[2]
   SatoARisk.u <- .tmp[3]
   
-  # Summary attributable risk (Klingenberg (2014) Statistics in Medicine 33: 2968 - 2983.
+  # Summary attributable risk (Klingenberg (2014, Statistics in Medicine 33: 2968 - 2983).
   GRARisk.ctype <- "Greenland-Robins"
-  .tmp        <- .funMHRD.GR(dat, conf.level, units)
+  .tmp        <- zMHRD.GR(dat, conf.level, units)
   GRARisk.p <- .tmp[1]
   GRARisk.l <- .tmp[2]
   GRARisk.u <- .tmp[3]
@@ -1411,10 +1014,12 @@
     
     ## Strata incidence risk ratio:
     RR.strata.wald = data.frame(est = wRR.p, lower = wRR.l, upper = wRR.u),
+    RR.strata.taylor = data.frame(est = tRR.p, lower = tRR.l, upper = tRR.u),
     RR.strata.score = data.frame(est = scRR.p, lower = scRR.l, upper = scRR.u),
     
     ## Crude incidence risk ratio:
     RR.crude.wald = data.frame(est = cwRR.p, lower = cwRR.l, upper = cwRR.u),
+    RR.crude.taylor = data.frame(est = ctRR.p, lower = ctRR.l, upper = ctRR.u),
     RR.crude.score = data.frame(est = csRR.p, lower = csRR.l, upper = csRR.u),
     
     ## Mantel-Haenszel incidence risk ratio:
@@ -1572,6 +1177,7 @@
     ## Verbose part:
     massoc <- list(
       RR.strata.wald     = res$RR.strata.wald,
+      RR.strata.taylor   = res$RR.strata.taylor,
       RR.strata.score    = res$RR.strata.score,
       
       OR.strata.wald     = res$OR.strata.wald,
@@ -1622,9 +1228,13 @@
     ## Verbose part:
     massoc <- list(
       RR.strata.wald     = res$RR.strata.wald,
+      RR.strata.taylor   = res$RR.strata.taylor,
       RR.strata.score    = res$RR.strata.score,
+      
       RR.crude.wald      = res$RR.crude.wald,
+      RR.crude.taylor    = res$RR.crude.taylor,
       RR.crude.score     = res$RR.crude.score,
+      
       RR.mh.wald         = res$RR.mh.wald,
       
       OR.strata.wald     = res$OR.strata.wald,
@@ -1746,7 +1356,7 @@
       ARate.mh.wald      = res$ARate.mh.wald,
       
       PARate.strata.wald = res$PARate.strata.wald,
-      PARate.crude.wald = res$PARate.crude.wald,
+      PARate.crude.wald =  res$PARate.crude.wald,
       
       AFRate.strata.wald = res$AFRate.strata.wald,
       AFRate.crude.wald  = res$AFRate.crude.wald,
@@ -1905,11 +1515,13 @@
     ## Verbose part:
     massoc <- list(
       PR.strata.wald     = res$RR.strata.wald,
+      PR.strata.taylor   = res$RR.strata.taylor,
       PR.strata.score    = res$RR.strata.score,
       
       OR.strata.wald     = res$OR.strata.wald,
       OR.strata.cfield   = res$OR.strata.cfield,
       OR.strata.score    = res$OR.strata.score,
+      
       OR.strata.mle      = res$OR.strata.mle,
       
       ARisk.strata.wald    = res$ARisk.strata.wald,
@@ -1955,9 +1567,13 @@
     ## Verbose part:
     massoc <- list(
       PR.strata.wald     = res$RR.strata.wald,
+      PR.strata.taylor   = res$RR.strata.taylor,
       PR.strata.score    = res$RR.strata.score,
+      
       PR.crude.wald      = res$RR.crude.wald,
+      PR.crude.taylor    = res$RR.crude.taylor,
       PR.crude.score     = res$RR.crude.score,
+      
       PR.mh.wald         = res$RR.mh.wald,
       
       OR.strata.wald     = res$OR.strata.wald,

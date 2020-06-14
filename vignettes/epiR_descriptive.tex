@@ -108,7 +108,7 @@
 
 \title{Descriptive Epidemiology using epiR}
 \author{Mark Stevenson}
-\date{2020-03-13}
+\date{2020-06-06}
 
 \begin{document}
 \maketitle
@@ -278,12 +278,12 @@ we'll use the exact method:
 \NormalTok{dat \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(dat, tmp)}
 \KeywordTok{head}\NormalTok{(dat)}
 \CommentTok{\#\textgreater{}       dprob npop ncas      est    lower    upper}
-\CommentTok{\#\textgreater{} 1 0.5180619 1256  651 51.83121 49.02653 54.62730}
-\CommentTok{\#\textgreater{} 2 0.6040562  250  151 60.40000 54.04362 66.50670}
-\CommentTok{\#\textgreater{} 3 0.2048714  850  174 20.47059 17.80546 23.34218}
-\CommentTok{\#\textgreater{} 4 0.6859783 1155  792 68.57143 65.80608 71.24184}
-\CommentTok{\#\textgreater{} 5 0.6963209 1220  850 69.67213 67.00656 72.24252}
-\CommentTok{\#\textgreater{} 6 0.2433462 1065  259 24.31925 21.76959 27.01163}
+\CommentTok{\#\textgreater{} 1 0.8009935  858  687 80.06993 77.23735 82.69419}
+\CommentTok{\#\textgreater{} 2 0.4592104  252  116 46.03175 39.75835 52.39958}
+\CommentTok{\#\textgreater{} 3 0.8920874 1363 1216 89.21497 87.44620 90.81251}
+\CommentTok{\#\textgreater{} 4 0.7488760   24   18 75.00000 53.28872 90.22696}
+\CommentTok{\#\textgreater{} 5 0.3515879  324  114 35.18519 29.98760 40.65647}
+\CommentTok{\#\textgreater{} 6 0.7735446  428  331 77.33645 73.07148 81.21880}
 \end{Highlighting}
 \end{Shaded}
 
@@ -501,12 +501,12 @@ controls measures were in place.
 \StringTok{   }\NormalTok{dat}\OperatorTok{$}\NormalTok{odate }\OperatorTok{\textless{}=}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1/6/03"}\NormalTok{, }\DataTypeTok{format =} \StringTok{"\%d/\%m/\%y"}\NormalTok{)] \textless{}{-}}\StringTok{ "pos"}
 \KeywordTok{head}\NormalTok{(dat)}
 \CommentTok{\#\textgreater{}        odate ncas dcontrol}
-\CommentTok{\#\textgreater{} 1 2000{-}01{-}01   98      neg}
-\CommentTok{\#\textgreater{} 2 2000{-}02{-}01   96      neg}
-\CommentTok{\#\textgreater{} 3 2000{-}03{-}01   31      neg}
-\CommentTok{\#\textgreater{} 4 2000{-}04{-}01   63      neg}
-\CommentTok{\#\textgreater{} 5 2000{-}05{-}01   54      neg}
-\CommentTok{\#\textgreater{} 6 2000{-}06{-}01   26      neg}
+\CommentTok{\#\textgreater{} 1 2000{-}01{-}01   92      neg}
+\CommentTok{\#\textgreater{} 2 2000{-}02{-}01   81      neg}
+\CommentTok{\#\textgreater{} 3 2000{-}03{-}01   63      neg}
+\CommentTok{\#\textgreater{} 4 2000{-}04{-}01   70      neg}
+\CommentTok{\#\textgreater{} 5 2000{-}05{-}01    8      neg}
+\CommentTok{\#\textgreater{} 6 2000{-}06{-}01   17      neg}
 \end{Highlighting}
 \end{Shaded}
 

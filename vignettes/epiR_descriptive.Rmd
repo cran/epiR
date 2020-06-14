@@ -9,7 +9,7 @@ output:
   toc: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Descriptive Epidemiology}
+  %\VignetteIndexEntry{Descriptive epidemiology}
   %\usepackage[utf8]{inputenc}
 
 ---

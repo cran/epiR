@@ -17,7 +17,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 \arguments{
   \item{dat}{the data, either a vector or a matrix depending on the method chosen.}
   \item{ctype}{a character string indicating the type of confidence interval to calculate. Options are \code{mean.single}, \code{mean.unpaired}, \code{mean.paired}, \code{prop.single}, \code{prop.unpaired}, \code{prop.paired}, \code{prevalence}, \code{inc.risk}, \code{inc.rate}, \code{odds}, \code{ratio} and \code{smr}.}
-  \item{method}{a character string indicating the method to use. Where \code{ctype = "inc.risk"} or \code{ctype = "prevalence"} options are \code{exact}, \code{wilson} and \code{fleiss}. Where \code{ctype = "inc.rate"} options are \code{exact} and \code{byar}.}
+  \item{method}{a character string indicating the method to use. Where \code{ctype = "inc.risk"} or \code{ctype = "prevalence"} options are \code{exact}, \code{wilson}, \code{fleiss}, \code{agresti}, \code{clopper-pearson} and \code{jeffreys}. Where \code{ctype = "inc.rate"} options are \code{exact} and \code{byar}.}
   \item{N}{scalar, representing the population size.}
   \item{design}{scalar, representing the design effect.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
@@ -41,9 +41,15 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{inc.risk, exact}              \tab Collett (1999)           \cr
 \code{inc.risk, wilson}             \tab Rothman (2002)           \cr
 \code{inc.risk, fleiss}             \tab Fleiss (1981)            \cr
+\code{inc.risk, agresti}            \tab REFERENCE (YYYY)         \cr
+\code{inc.risk, clopper-pearson}    \tab REFERENCE (YYYY)         \cr
+\code{inc.risk, jeffreys}           \tab REFERENCE (YYYY)         \cr
 \code{prevalence, exact}            \tab Collett (1999)           \cr
 \code{prevalence, wilson}           \tab Rothman (2002)           \cr
 \code{prevalence, fleiss}           \tab Fleiss (1981)            \cr
+\code{prevalence, agresti}          \tab REFERENCE (YYYY)         \cr
+\code{prevalence, clopper-pearson}  \tab REFERENCE (YYYY)         \cr
+\code{prevalence, jeffreys}         \tab REFERENCE (YYYY)         \cr
 \code{inc.rate, exact}              \tab Ulm (1990)               \cr
 \code{inc.rate, byar}               \tab Rothman (2002)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr

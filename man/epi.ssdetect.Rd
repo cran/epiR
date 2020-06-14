@@ -32,7 +32,9 @@ A list containing the following:
 }
 
 \references{
-Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 47 and pp. 102 - 103.
+Cannon RM (2001). Sense and sensitivity --- designing surveys based on an imperfect test. Preventive Veterinary Medicine 49: 141 - 163.
+
+Dohoo I, Martin W, Stryhn H (2009). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 54.
 }
 
 \note{
