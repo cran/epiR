@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Evan Sergeant and Mark Stevenson" />
+
+<meta name="date" content="2020-12-03" />
+
+<title>epiR - RSurveillance function mapping</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 800px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 0;
+padding: 4px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table:not([class]) {
+margin: auto;
+min-width: 40%;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table[summary="R argblock"] {
+width: 100%;
+border: none;
+}
+table:not([class]) th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table:not([class]) td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table:not([class]), table:not([class]) th, table:not([class]) td {
+border-left-style: none;
+border-right-style: none;
+}
+table:not([class]) tr.odd {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 13px;
+padding-bottom: 1px;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f5f5f5;
+border-radius: 3px;
+color: #333;
+}
+pre {
+overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0 10px 0;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: white;
+border: #f5f5f5 1px solid;
+}
+pre:not([class]) code {
+color: #444;
+background-color: white;
+}
+code {
+font-family: monospace;
+font-size: 90%;
+}
+p > code, li > code {
+padding: 2px 4px;
+color: #d14;
+border: 1px solid #e1e1e8;
+white-space: inherit;
+}
+div.figure {
+text-align: center;
+}
+table > caption, div.figure p.caption {
+font-style: italic;
+}
+table > caption span, div.figure p.caption span {
+font-style: normal;
+font-weight: bold;
+}
+p {
+margin: 0 0 10px;
+}
+table:not([class]) {
+margin: auto auto 10px auto;
+}
+img:not([class]) {
+background-color: #FFFFFF;
+padding: 2px;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+max-width: 100%;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f5f5f5;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f5f5f5;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f5f5f5;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+div.r-help-page {
+background-color: #f9f9f9;
+border-bottom: #ddd 1px solid;
+margin-bottom: 10px;
+padding: 10px;
+}
+div.r-help-page:hover {
+background-color: #f4f4f4;
+}
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">epiR - RSurveillance function mapping</h1>
+<h4 class="author">Evan Sergeant and Mark Stevenson</h4>
+<h4 class="date">2020-12-03</h4>
+
+
+
+<p>The following tables lists each of the functions in <code>RSurveillance</code> and their equivalent in <code>epiR</code>.</p>
+<div id="representative-sampling" class="section level2">
+<h2>Representative sampling</h2>
+<div id="sample-size-estimation" class="section level3">
+<h3>Sample size estimation</h3>
+<table>
+<caption>Functions to estimate sample size using representative population sampling data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">Prob disease freedom</td>
+<td align="center"><code>n.pfree</code></td>
+<td align="center"><code>rsu.sspfree.rs</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.freedom</code></td>
+<td align="center"><code>rsu.sssep.rs</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Two stage representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.2stage</code></td>
+<td align="center"><code>rsu.sssep.rs2st</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.freecalc</code></td>
+<td align="center"><code>rsu.sssep.rsfreecalc</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Pooled representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.pooled</code></td>
+<td align="center"><code>rsu.sssep.rspool</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="estimation-of-surveillance-system-sensitivity" class="section level3">
+<h3>Estimation of surveillance system sensitivity</h3>
+<table>
+<caption>Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.binom</code></td>
+<td align="center"><code>rsu.sep.rs</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.hypergeo</code></td>
+<td align="center"><code>rsu.sep.rs</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep</code></td>
+<td align="center"><code>rsu.sep.rs</code></td>
+</tr>
+<tr class="even">
+<td align="center">Two stage representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.sys</code></td>
+<td align="center"><code>rsu.sep.rs2st</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sse.combined</code></td>
+<td align="center"><code>rsu.sep.rsmult</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.freecalc</code></td>
+<td align="center"><code>rsu.sep.rsfreecalc</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.binom.imperfect</code></td>
+<td align="center"><code>rsu.sep.rsfreecalc</code></td>
+</tr>
+<tr class="even">
+<td align="center">Pooled representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.pooled</code></td>
+<td align="center"><code>rsu.sep.rspool</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.var.se</code></td>
+<td align="center"><code>rsu.sep.rsvarse</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">SSp</td>
+<td align="center"><code>spp</code></td>
+<td align="center"><code>rsu.spp.rs</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">SSp</td>
+<td align="center"><code>sph.hp</code></td>
+<td align="center"><code>rsu.spp.rs</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="estimation-of-the-probability-of-disease-freedom" class="section level3">
+<h3>Estimation of the probability of disease freedom</h3>
+<table>
+<caption>Functions to estimate the probability of disease freedom using representative population sampling data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">Prob disease of freedom</td>
+<td align="center"><code>pfree.1</code></td>
+<td align="center"><code>rsu.pfree.rs</code></td>
+</tr>
+<tr class="even">
+<td align="center">Representative</td>
+<td align="center">Prob disease of freedom</td>
+<td align="center"><code>pfree.calc</code></td>
+<td align="center"><code>rsu.pfree.rs</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Representative</td>
+<td align="center">Equilibrium prob of disease freedom</td>
+<td align="center"><code>pfree.equ</code></td>
+<td align="center"><code>rsu.pfree.equ</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="risk-based-sampling" class="section level2">
+<h2>Risk based sampling</h2>
+<div id="sample-size-estimation-1" class="section level3">
+<h3>Sample size estimation</h3>
+<table>
+<caption>Functions to estimate sample size using risk based sampling data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.rb</code></td>
+<td align="center"><code>rsu.sssep.rbsrg</code></td>
+</tr>
+<tr class="even">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.rb.varse</code></td>
+<td align="center"><code>rsu.sssep.rbmrg</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.rb.2stage.1</code></td>
+<td align="center"><code>rsu.sssep.rb2st1rf</code></td>
+</tr>
+<tr class="even">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>n.rb.2stage.2</code></td>
+<td align="center"><code>rsu.sssep.rb2st2rf</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="estimation-of-surveillance-system-sensitivity-1" class="section level3">
+<h3>Estimation of surveillance system sensitivity</h3>
+<table>
+<caption>Functions to estimate surveillance system sensitivity (SSe) using risk based sampling data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb.bin.varse</code></td>
+<td align="center"><code>rsu.sep.rb</code></td>
+</tr>
+<tr class="even">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb.bin</code></td>
+<td align="center"><code>rsu.sep.rb1rf</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb.hypergeo</code></td>
+<td align="center"><code>rsu.sep.rb1rf</code></td>
+</tr>
+<tr class="even">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb2.bin</code></td>
+<td align="center"><code>rsu.sep.rb2rf</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb2.hypergeo</code></td>
+<td align="center"><code>rsu.sep.rb2rf</code></td>
+</tr>
+<tr class="even">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.rb.hypergeo.varse</code></td>
+<td align="center"><code>rsu.sep.rbvarse</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sse.rb2stage</code></td>
+<td align="center"><code>rsu.sep.rb2stage</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="census-data" class="section level2">
+<h2>Census data</h2>
+<div id="estimation-of-surveillance-system-sensitivity-2" class="section level3">
+<h3>Estimation of surveillance system sensitivity</h3>
+<table>
+<caption>Functions to estimate surveillance system sensitivity (SSe) using census data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.exact</code></td>
+<td align="center"><code>rsu.sep.cens</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="passive-surveillance-data" class="section level2">
+<h2>Passive surveillance data</h2>
+<table>
+<caption>Functions to estimate surveillance system sensitivity (SSe) using passively collected surveillance data.</caption>
+<thead>
+<tr class="header">
+<th align="center">Sampling</th>
+<th align="center">Outcome</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Risk-based</td>
+<td align="center">SSe</td>
+<td align="center"><code>sep.passive</code></td>
+<td align="center"><code>rsu.sep.pass</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="miscellaneous-functions" class="section level2">
+<h2>Miscellaneous functions</h2>
+<table>
+<caption>Miscellaneous functions.</caption>
+<thead>
+<tr class="header">
+<th align="center">Details</th>
+<th align="center">RSurveillance</th>
+<th align="center">epiR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Adjusted risk</td>
+<td align="center"><code>adj.risk</code></td>
+<td align="center"><code>rsu.adjrisk</code></td>
+</tr>
+<tr class="even">
+<td align="center">Adjusted risk</td>
+<td align="center"><code>adj.risk.sim</code></td>
+<td align="center"><code>rsu.adjrisk</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Series test interpretation, Se</td>
+<td align="center"><code>se.series</code></td>
+<td align="center"><code>rsu.dxtest</code></td>
+</tr>
+<tr class="even">
+<td align="center">Parallel test interpretation, Se</td>
+<td align="center"><code>se.parallel</code></td>
+<td align="center"><code>rsu.dxtest</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Series test interpretation, Sp</td>
+<td align="center"><code>sp.series</code></td>
+<td align="center"><code>rsu.dxtest</code></td>
+</tr>
+<tr class="even">
+<td align="center">Parallel test interpretation, Sp</td>
+<td align="center"><code>sp.parallel</code></td>
+<td align="center"><code>rsu.dxtest</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Effective probability of infection</td>
+<td align="center"><code>epi.calc</code></td>
+<td align="center"><code>rsu.epinf</code></td>
+</tr>
+<tr class="even">
+<td align="center">Design prevalence back calculation</td>
+<td align="center"><code>pstar.calc</code></td>
+<td align="center"><code>rsu.pstar</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Prob disease is less than design prevalence</td>
+<td align="center"></td>
+<td align="center"><code>rsu.sep</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+  fig = 1;
+  caps = document.getElementsByTagName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.nodeName !== 'TABLE') continue;
+    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

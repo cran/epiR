@@ -397,7 +397,8 @@
     cfOR.ctype <- "Cornfield"
     cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
     
-    if(length(dim(dat)) == 3){
+    # Use zORcfield if cell frequencies are integer:
+    if(length(dim(dat)) == 3 & is.integer(dat) == TRUE){
       for(i in 1:dim(dat)[3]){
         .tmp <- zORcfield(dat[,,i], conf.level)
         cfOR.p <- c(cfOR.p, .tmp[1])
@@ -406,24 +407,43 @@
       }
     }
   
-    if(length(dim(dat)) == 2){
+    # Use zORcfield if cell frequencies are integer:
+    if(length(dim(dat)) == 2 & is.integer(dat) == TRUE){
       .tmp <- zORcfield(dat, conf.level)
       cfOR.p <- .tmp[1]
       cfOR.l <- .tmp[2]
       cfOR.u <- .tmp[3]
     }
+
+    # Return NAs for cfOR.p if Haldane Anscombe correction used (i.e. non-integer cell frequencies):
+    if(length(dim(dat)) == 3 & is.integer(dat) == FALSE){
+    for(i in 1:dim(dat)[3]){
+      .tmp <- c(NA,NA,NA)
+      cfOR.p <- c(cfOR.p, .tmp[1])
+      cfOR.l <- c(cfOR.l, .tmp[2])
+      cfOR.u <- c(cfOR.u, .tmp[3])
+    }
   }
   
+    # Return NAs for cfOR.p if Haldane Anscombe correction used (i.e. non-integer cell frequencies):
+    if(length(dim(dat)) == 2 & is.integer(dat) == TRUE){
+    .tmp <- c(NA,NA,NA)
+    cfOR.p <- .tmp[1]
+    cfOR.l <- .tmp[2]
+    cfOR.u <- .tmp[3]
+  }
+}
+
   if(sum(total) >= 500){ 
     cfOR.ctype <- "Cornfield"
     cfOR.p <- c(); cfOR.l <- c(); cfOR.u <- c()
     
     if(length(dim(dat)) == 3){
       for(i in 1:dim(dat)[3]){
-        # .tmp <- zORcfield(dat[,,i], conf.level)
-        cfOR.p <- Oe.p / Oo.p
-        cfOR.l <- NA
-        cfOR.u <- NA
+        .tmp <- c(NA,NA,NA)
+        cfOR.p <- c(cfOR.p, .tmp[1])
+        cfOR.l <- c(cfOR.l, .tmp[2])
+        cfOR.u <- c(cfOR.u, .tmp[3])
       }
     }
     
@@ -460,20 +480,40 @@
   mOR.ctype   <- "MLE"
   mOR.p <- c(); mOR.l <- c(); mOR.u <- c()
   
-  if(length(dim(dat)) == 3){
-    for(i in 1:dim(dat)[3]){
-      .tmp <- zORml(dat[,,i], conf.level)
-      mOR.p <- c(mOR.p, .tmp[1])
-      mOR.l <- c(mOR.l, .tmp[2])
-      mOR.u <- c(mOR.u, .tmp[3])
+  # If numbers too large error returned 'x' has entries too large to be integer.
+  
+  if(sum(total) < 2E09){
+    if(length(dim(dat)) == 3){
+      for(i in 1:dim(dat)[3]){
+        .tmp <- zORml(dat[,,i], conf.level)
+        mOR.p <- c(mOR.p, .tmp[1])
+        mOR.l <- c(mOR.l, .tmp[2])
+        mOR.u <- c(mOR.u, .tmp[3])
+      }
+    }
+    
+    if(length(dim(dat)) == 2){
+      .tmp <- zORml(dat, conf.level)
+      mOR.p <- .tmp[1]
+      mOR.l <- .tmp[2]
+      mOR.u <- .tmp[3]
     }
   }
   
-  if(length(dim(dat)) == 2){
-    .tmp <- zORml(dat, conf.level)
-    mOR.p <- .tmp[1]
-    mOR.l <- .tmp[2]
-    mOR.u <- .tmp[3]
+  if(sum(total) >= 2E09){
+    if(length(dim(dat)) == 3){
+      for(i in 1:dim(dat)[3]){
+        mOR.p <- Oe.p / Oo.p
+        mOR.l <- NA
+        mOR.u <- NA
+      }
+    }
+    
+    if(length(dim(dat)) == 2){
+      mOR.p <- Oe.p / Oo.p
+      mOR.l <- NA
+      mOR.u <- NA
+    }
   }
   
   # Individual strata attributable risk (Rothman p 135 equation 7-2):
@@ -669,14 +709,25 @@
   
   # Crude odds ratio - Cornfield confidence limits:
   # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
-  if(sum(total) < 500){
-  ccfOR.ctype <- "Cornfield"
-  .tmp        <- zORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
-  ccfOR.p     <- .tmp[1]
-  ccfOR.l     <- .tmp[2]
-  ccfOR.u     <- .tmp[3]
+  # Use zORcfield if cell frequencies are integer:
+  if(sum(total) < 500 & is.integer(dat) == TRUE){
+    ccfOR.ctype <- "Cornfield"
+    .tmp        <- zORcfield(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+    ccfOR.p     <- .tmp[1]
+    ccfOR.l     <- .tmp[2]
+    ccfOR.u     <- .tmp[3]
   }
   
+  # Return NAs for ccfOR.p if Haldane Anscombe correction used (i.e. non-integer cell frequencies):
+  if(sum(total) < 500 & is.integer(dat) == FALSE){
+    ccfOR.ctype <- "Cornfield"
+    .tmp        <- c(NA,NA,NA)
+    ccfOR.p     <- .tmp[1]
+    ccfOR.l     <- .tmp[2]
+    ccfOR.u     <- .tmp[3]
+  }
+  
+  # Return NAs for ccfOR.p if total >= 500:
   if(sum(total) >= 500){
     ccfOR.ctype <- "Cornfield"
     ccfOR.p     <- Oe.p / Oo.p
@@ -694,10 +745,19 @@
   # Crude odds ratio - maximum likelihood estimate (using fisher.test function):
   # Replaced 130612.
   cmOR.ctype <- "MLE"
-  cmOR.tmp <- fisher.test(apply(dat, MARGIN = c(1,2), FUN = sum), conf.int = TRUE, conf.level = conf.level)
-  cmOR.p <- as.numeric(cmOR.tmp$estimate)
-  cmOR.l <- as.numeric(cmOR.tmp$conf.int)[1]
-  cmOR.u <- as.numeric(cmOR.tmp$conf.int)[2]
+  
+  if(sum(total) < 2E09){
+    cmOR.tmp <- suppressWarnings(fisher.test(apply(dat, MARGIN = c(1,2), FUN = sum), conf.int = TRUE, conf.level = conf.level))
+    cmOR.p <- as.numeric(cmOR.tmp$estimate)
+    cmOR.l <- as.numeric(cmOR.tmp$conf.int)[1]
+    cmOR.u <- as.numeric(cmOR.tmp$conf.int)[2]
+  }
+  
+  if(sum(total) >= 2E09){
+    cmOR.p <- NA
+    cmOR.l <- NA
+    cmOR.u <- NA
+  }
   
   # Crude attributable risk - Wald confidence limits (Rothman p 135 equation 7-2):
   cwARisk.ctype <- "Wald"

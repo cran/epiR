@@ -1,4 +1,4 @@
-"epi.ssclus1estb" <- function(b, Py, epsilon.r, rho, conf.level = 0.95){
+"epi.ssclus1estb" <- function(b, Py, epsilon.r, rho, nfractional = FALSE, conf.level = 0.95){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
@@ -21,8 +21,15 @@
     n.psu <- n.ssu / bbar
 
     # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
-    n.ssu <- ceiling(n.ssu)
-    n.psu <- ceiling(n.psu)
+    if(nfractional == TRUE){
+      n.ssu <- n.ssu
+      n.psu <- n.psu
+    }
+    
+    if(nfractional == FALSE){
+      n.ssu <- ceiling(n.ssu)
+      n.psu <- ceiling(n.psu)
+    }
   }
 
   # Design effect when clusters are of equal size:  
@@ -32,8 +39,16 @@
       n.ssu <- (z^2 * Py * (1 - Py)) * D / epsilon.a^2
       n.psu <- n.ssu / b
       
-      n.ssu <- ceiling(n.ssu)
-      n.psu <- ceiling(n.psu)
+      # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
+      if(nfractional == TRUE){
+        n.ssu <- n.ssu
+        n.psu <- n.psu
+      }
+      
+      if(nfractional == FALSE){
+        n.ssu <- ceiling(n.ssu)
+        n.psu <- ceiling(n.psu)
+      }
     }
 
   # n.psu <- ceiling((Py * (1 - Py) * D) / (se^2 * b))

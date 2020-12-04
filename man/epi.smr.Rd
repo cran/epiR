@@ -26,6 +26,8 @@ This function calculates the standardised mortality [morbidity] ratio based on s
 The hypothesis that the SMR equals one is tested using the Chi square test, the Mid-P exact test, the Fisher exact test and Byar's approximation. Confidence intervals for the SMR are calculated using the Mid-P exact test, the Fisher exact test, Byar's approximation, Rothman and Greenland's method, Ury and Wiggin's method and the Vandenbroucke method.  
 
 Exact confidence intervals and p-values should be used when the number of observed events is less than or equal to five. For greater numbers of observed events, the approximation methods (Byar's, Rothman and Greenland, Ury and Wiggins and Vandenbroucke) should be used.
+
+A two-sided test of significance is returned, using the test statistic appropriate for the method used.
 }
 
 \value{
@@ -63,7 +65,7 @@ Rothman K, Greenland S, Lash T (2008). Modern Epidemiology. Lippincott, Williams
 
 Snedecor G, Cochran W (1989). Statistical Methods. Iowa University Press Ames, Iowa.
 
-Ury H, Wiggins A (1985). Another shortcut method for calculating the confidence interval of a poisson variable (or of a standardized mortality ratio). American Journal of Epidemiology 122, 197 - 198.
+Ury H, Wiggins A (1985). Another shortcut method for calculating the confidence interval of a Poisson variable (or of a standardized mortality ratio). American Journal of Epidemiology 122, 197 - 198.
 
 Vandenbroucke J, (1982). A shortcut method for calculating the 95 percent confidence interval of the standardized mortality ratio (Letter). American Journal of Epidemiology 115, 303 - 304.
 }

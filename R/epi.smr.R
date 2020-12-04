@@ -115,12 +115,12 @@ epi.smr <- function(obs = 4, exp = 3.3, method = "byar", conf.level = 0.95){
       .a <- a
     }
     
-    byar.z <- ((9 * .a)^(0.5)) * (1 - (1 / (9 * .a)) - ((lambda / .a)^(0.33)))
+    byar.z <- ((9 * .a)^(0.5)) * (1 - (1 / (9 * .a)) - ((lambda / .a)^(1/3)))
     byar.p <- 2 * (1 - pnorm(q = byar.z, mean = 0, sd = 1))
     
     # Confidence interval - Regidor et al. (1993):
-    alow <- a * (1 - (1 / (9 * a)) - (z / 3) * (1 / a)^0.5)^3
-    aupp <- (a + 1) * (1 - (1 / (9 * (a + 1))) - (z / 3) * (1 / (a + 1))^0.5)^3
+    alow <- a * (1 - (1 / (9 * a)) - (z / 3) * sqrt(1 / a))^3
+    aupp <- (a + 1) * (1 - (1 / (9 * (a + 1))) + (z / 3) * sqrt(1 / (a + 1)))^3
 
     byar.low <- alow / lambda
     byar.upp <- aupp / lambda

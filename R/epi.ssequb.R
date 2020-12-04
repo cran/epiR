@@ -1,4 +1,4 @@
-epi.ssequb <- function(treat, control, delta, n, r = 1, power, alpha){
+epi.ssequb <- function(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha){
 
   # Sample size:
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
@@ -15,11 +15,19 @@ epi.ssequb <- function(treat, control, delta, n, r = 1, power, alpha){
     # http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equivalence:
     nB <- (pA * qA / r + pB * qB) * ((z.alpha + z.beta) / (abs(pA - pB) - delta))^2
     
-    nA <- nB * r
-    nB <- ceiling(nB)
-    nA <- ceiling(nA)
+    if(nfractional == TRUE){
+      nA <- nB * r
+      nB <- nB
+      n.total <- nA + nB
+    }
     
-    rval <- list(n.total = nA + nB, n.treat = nA, n.control = nB, power = power)
+    if(nfractional == FALSE){
+      nA <- ceiling(nB * r)
+      nB <- ceiling(nB)
+      n.total <- nA + nB
+    }
+    
+    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, power = power)
   }
   
   # Power:
@@ -27,8 +35,19 @@ epi.ssequb <- function(treat, control, delta, n, r = 1, power, alpha){
     z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
     pA <- treat; pB <- control
     qA <- 1 - pA; qB <- 1 - pB
-    nA <- n - ceiling(1 / (r + 1) * (n))
-    nB <- ceiling(1 / (r + 1) * (n))
+    
+    if(nfractional == TRUE){
+      nA <- n - 1 / (r + 1) * (n)
+      nB <- 1 / (r + 1) * (n)
+      n.total <- nA + nB
+    }
+    
+    if(nfractional == FALSE){
+      nA <- n - ceiling(1 / (r + 1) * (n))
+      nB <- ceiling(1 / (r + 1) * (n))
+      n.total <- nA + nB
+    }
+
     epsilon <- pA - pB
     
     # Chow et al. page 89, second equation from top of page:
@@ -45,7 +64,7 @@ epi.ssequb <- function(treat, control, delta, n, r = 1, power, alpha){
     # z2 <- (delta + abs(pA - pB)) / sqrt((pA * qA / nA) + (pB * qB / nB))
     # power <- 1 - pnorm(-z1 + z.alpha) - pnorm(-z2 + z.alpha)
 
-    rval <- list(n.total = nA + nB, n.treat = nA, n.control = nB, power = power)
+    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, power = power)
   }
   rval
 }  

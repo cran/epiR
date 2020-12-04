@@ -1,4 +1,4 @@
-"epi.sscompb" <- function(treat, control, n, power, r = 1, design = 1, sided.test = 2, conf.level = 0.95) {
+"epi.sscompb" <- function(treat, control, n, power, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95) {
    
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
@@ -22,12 +22,21 @@
     T3 <- lambda * control * (1 - lambda * control) + r * control * (1 - control)
     n <- T1 * (z.alpha * sqrt(T2) + z.beta * sqrt(T3))^2
     
-    # Account for the design effect:
-    n1 <- n / (r + 1)
-    n1 <- ceiling(n1 * design)
-    n2 <- ceiling(r * n1)
+    if(nfractional == TRUE){
+      n1 <- n / (r + 1)
+      n1 <- n1 * design
+      n2 <- r * n1
+      n.total <- n1 + n2
+    }
 
-    rval <- list(n.total = n1 + n2, n.treat = n1, n.control = n2, power = power, lambda = lambda)
+    if(nfractional == FALSE){
+      n1 <- n / (r + 1)
+      n1 <- ceiling(n1 * design)
+      n2 <- ceiling(r * n1)
+      n.total <- n1 + n2
+    }
+    
+    rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = lambda)
     
   }
 
@@ -35,10 +44,19 @@
   else
     if (!is.na(treat) & !is.na(control) & !is.na(n) & is.na(power)) {
       
-      # Account for the design effect:
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1)
+      if(nfractional == TRUE){
+        n1 <- n / (r + 1)
+        n1 <- n1 * design
+        n2 <- r * n1
+        n.total <- n1 + n2
+      }
+      
+      if(nfractional == FALSE){
+        n1 <- n / (r + 1)
+        n1 <- ceiling(n1 * design)
+        n2 <- ceiling(r * n1)
+        n.total <- n1 + n2
+      }
       
       # From Woodward's spreadsheet. Changed 130814:
       lambda <- control / treat
@@ -50,7 +68,7 @@
       # z.beta <- ((delta * sqrt(n)) - (z.alpha * sqrt(treat * (1 - treat))))/(sqrt(control * (1 - control)))
       power <- pnorm(z.beta, mean = 0, sd = 1)
 
-      rval <- list(n.total = n1 + n2, n.treat = n1, n.control = n2, power = power, lambda = 1 / lambda)
+      rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = 1 / lambda)
     }
 
   # Lambda:
@@ -59,10 +77,19 @@
 
       z.beta <- qnorm(power, mean = 0, sd = 1)
       
-      # Account for the design effect:
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1)
+      if(nfractional == TRUE){
+        n1 <- n / (r + 1)
+        n1 <- n1 * design
+        n2 <- r * n1
+        n.total <- n1 + n2
+      }
+      
+      if(nfractional == FALSE){
+        n1 <- n / (r + 1)
+        n1 <- ceiling(n1 * design)
+        n2 <- ceiling(r * n1)
+        n.total <- n1 + n2
+      }
 
       # delta <- 1/sqrt(n) * ((z.alpha * sqrt(treat * (1 - treat))) + (z.beta * sqrt(control * (1 - control))))
       
@@ -98,7 +125,7 @@
       }
       treatl <- uniroot(Pfun, control = control, n = n, r = r, z.alpha = z.alpha, interval = c(1E-6,1))$root
       
-      rval <- list(n.total = n1 + n2, n.treat = n1, n.control = n2, power = power, lambda = sort(c(treatu / control, treatl / control)))
+      rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = sort(c(treatu / control, treatl / control)))
       
     }
   

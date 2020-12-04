@@ -11,7 +11,7 @@ Sample size to estimate a binary outcome using one-stage cluster sampling.
 }
 
 \usage{
-epi.ssclus1estb(b, Py, epsilon.r, rho, conf.level = 0.95)
+epi.ssclus1estb(b, Py, epsilon.r, rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -19,6 +19,7 @@ epi.ssclus1estb(b, Py, epsilon.r, rho, conf.level = 0.95)
   \item{Py}{scalar number, an estimate of the unknown population proportion.}
   \item{epsilon.r}{the maximum relative difference between the estimate and the unknown population value.}
   \item{rho}{scalar number, the intracluster correlation.}
+  \item{nfractional}{logical, return fractional sample size.}  
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -60,7 +61,7 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## (i.e. clusters) would need to be sampled?
 
 epi.ssclus1estb(b = 75, Py = 0.46, epsilon.r = 0.10, rho = 0.20, 
-   conf.level = 0.90)
+   nfractional = FALSE, conf.level = 0.90)
 
 ## A total of 67 villages need to be sampled to meet the specifications 
 ## of this study.
@@ -72,11 +73,10 @@ epi.ssclus1estb(b = 75, Py = 0.46, epsilon.r = 0.10, rho = 0.20,
 ## per village is (180 - 40) / 4 = 35. How many villages need to be sampled?
 
 epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon.r = 0.10, rho = 0.20, 
-   conf.level = 0.90)
+   nfractional = FALSE, conf.level = 0.90)
 
 ## A total of 81 villages need to be sampled to meet the specifications 
 ## of this study.
-
 
 }
 

@@ -23,7 +23,7 @@ Computes the instantaneous hazard of the event of interest, equivalent to the pr
 }
 
 \value{
-A data frame with three or four elements: \code{strata} the strata identifier, \code{time} the observed failure times, \code{est} the proportion of the population experiencing the event of interest per unit time, \code{lower} the lower bound of the confidence interval of the proportion of the population experiencing the event of interest per unit time, and \code{upper} the upper bound of the confidence interval of the proportion of the population experiencing the event of interest per unit time.
+A data frame with three or four elements: \code{strata} the strata identifier, \code{time} the observed failure times, \code{sest} the observed Kaplan-Meier survival function, \code{slow} the lower bound of the confidence interval for the observed Kaplan-Meier survival function, \code{supp} the upper bound of the confidence interval for the observed Kaplan-Meier survival function, \code{hest} the observed instantaneous hazard (the proportion of the population at risk experiencing the event of interest per unit time), \code{hlow} the lower bound of the confidence interval for the observed instantaneous hazard, and \code{hupp} the upper bound of the confidence interval for the observed instantaneous hazard.
 }
 
 \references{
@@ -44,19 +44,19 @@ lung.km01 <- survfit(Surv(time = time, event = status) ~ 1, data = dat)
 lung.haz01 <- epi.insthaz(lung.km01, conf.level = 0.95)
 
 lung.shaz01 <- data.frame(
-  time = lowess(lung.haz01$time, lung.haz01$lower, f = 0.20)$x,
-  est =  lowess(lung.haz01$time, lung.haz01$est, f = 0.20)$y,
-  low =  lowess(lung.haz01$time, lung.haz01$lower, f = 0.20)$y,
-  upp =  lowess(lung.haz01$time, lung.haz01$upper, f = 0.20)$y)
+  time = lowess(lung.haz01$time, lung.haz01$hlow, f = 0.20)$x,
+  hest =  lowess(lung.haz01$time, lung.haz01$hest, f = 0.20)$y,
+  hlow =  lowess(lung.haz01$time, lung.haz01$hlow, f = 0.20)$y,
+  hupp =  lowess(lung.haz01$time, lung.haz01$hupp, f = 0.20)$y)
 
-plot(x = lung.haz01$time, y = lung.haz01$est, xlab = "Time (days)", 
+plot(x = lung.haz01$time, y = lung.haz01$hest, xlab = "Time (days)", 
    ylab = "Daily probability of event", type = "s", 
    col = "grey", ylim = c(0, 0.05))
-lines(x = lung.shaz01$time, y = lung.shaz01$est, 
+lines(x = lung.shaz01$time, y = lung.shaz01$hest, 
       lty = 1, lwd = 2, col = "black")
-lines(x = lung.shaz01$time, y = lung.shaz01$low, 
+lines(x = lung.shaz01$time, y = lung.shaz01$hlow, 
       lty = 2, lwd = 1, col = "black")
-lines(x = lung.shaz01$time, y = lung.shaz01$upp, 
+lines(x = lung.shaz01$time, y = lung.shaz01$hupp, 
       lty = 2, lwd = 1, col = "black")
 
 \dontrun{ 
@@ -64,14 +64,14 @@ library(ggplot2)
 
 ggplot() +
   theme_bw() +
-  geom_step(data = lung.haz01, aes(x = time, y = est), colour = "grey") + 
-  geom_smooth(data = lung.haz01, aes(x = time, y = est), method = "loess", 
+  geom_step(data = lung.haz01, aes(x = time, y = hest), colour = "grey") + 
+  geom_smooth(data = lung.haz01, aes(x = time, y = hest), method = "loess", 
      colour = "black", size = 0.75, linetype = "solid", 
      se = FALSE, span = 0.20) +
-  geom_smooth(data = lung.haz01, aes(x = time, y = lower), method = "loess", 
+  geom_smooth(data = lung.haz01, aes(x = time, y = hlow), method = "loess", 
      colour = "black", size = 0.5, linetype = "dashed", 
      se = FALSE, span = 0.20) +
-  geom_smooth(data = lung.haz01, aes(x = time, y = upper), method = "loess", 
+  geom_smooth(data = lung.haz01, aes(x = time, y = hupp), method = "loess", 
      colour = "black", size = 0.5, linetype = "dashed", 
      se = FALSE, span = 0.20) +
   scale_x_continuous(limits = c(0,1000), name = "Time (days)") +
@@ -88,15 +88,15 @@ library(ggplot2)
 
 ggplot() +
   theme_bw() +
-  geom_step(data = lung.haz02, aes(x = time, y = est), colour = "grey") + 
+  geom_step(data = lung.haz02, aes(x = time, y = hest), colour = "grey") + 
   facet_grid(strata ~ .) +
-  geom_smooth(data = lung.haz02, aes(x = time, y = est), method = "loess", 
+  geom_smooth(data = lung.haz02, aes(x = time, y = hest), method = "loess", 
      colour = "black", size = 0.75, linetype = "solid", 
      se = FALSE, span = 0.20) +
-  geom_smooth(data = lung.haz02, aes(x = time, y = lower), method = "loess", 
+  geom_smooth(data = lung.haz02, aes(x = time, y = hlow), method = "loess", 
      colour = "black", size = 0.5, linetype = "dashed", 
      se = FALSE, span = 0.20) +
-  geom_smooth(data = lung.haz02, aes(x = time, y = upper), method = "loess", 
+  geom_smooth(data = lung.haz02, aes(x = time, y = hupp), method = "loess", 
      colour = "black", size = 0.5, linetype = "dashed", 
      se = FALSE, span = 0.20) +
   scale_x_continuous(limits = c(0,1000), name = "Time (days)") +

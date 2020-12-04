@@ -1,4 +1,4 @@
-"epi.sscomps" <- function(treat, control, n, power, r = 1, design = 1, sided.test = 2, conf.level = 0.95) {
+"epi.sscomps" <- function(treat, control, n, power, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95) {
    
    alpha.new <- (1 - conf.level) / sided.test
    z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
@@ -14,10 +14,21 @@
      # Account for the design effect:
      n <- n * design
   
-     n.crude <- ceiling(n)
-     n.treat <- ceiling(n / (r + 1)) * r
-     n.control <- ceiling(n / (r + 1)) * 1
-     n.total <- n.treat + n.control
+     if(nfractional == TRUE){
+       n.crude <- n
+       n.treat <- (n / (r + 1)) * r
+       n.control <- (n / (r + 1)) * 1
+       n.total <- n.treat + n.control
+     }
+     
+     if(nfractional == FALSE){
+       n.crude <- ceiling(n)
+       n.treat <- ceiling(n / (r + 1)) * r
+       n.control <- ceiling(n / (r + 1)) * 1
+       n.total <- n.treat + n.control
+     }
+     
+
      rval <- list(n.crude = n.crude, n.total = n.total, n.treat = n.treat, n.control = n.control)
      }
 

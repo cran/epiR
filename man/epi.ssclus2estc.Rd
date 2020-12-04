@@ -10,7 +10,8 @@ Number of clusters to be sampled to estimate a continuous outcome using two-stag
 }
 
 \usage{
-epi.ssclus2estc(b, N, xbar, xsigma, epsilon.r, rho, conf.level = 0.95)
+epi.ssclus2estc(b, N, xbar, xsigma, epsilon.r, rho, nfractional = FALSE, 
+   conf.level = 0.95)
 }
 
 \arguments{
@@ -20,6 +21,7 @@ epi.ssclus2estc(b, N, xbar, xsigma, epsilon.r, rho, conf.level = 0.95)
   \item{xsigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
   \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
   \item{rho}{scalar number, the intracluster correlation.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
 
@@ -55,7 +57,7 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## How many health centres should be sampled?
 
 epi.ssclus2estc(b = 2, N = 15, xbar = 28, xsigma = sqrt(160), 
-   epsilon.r = 0.30, rho = 0.02, conf.level = 0.95)
+   epsilon.r = 0.30, rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 3 health centres need to be sampled to meet the specifications 
 ## of this study. 

@@ -41,15 +41,15 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{inc.risk, exact}              \tab Collett (1999)           \cr
 \code{inc.risk, wilson}             \tab Rothman (2002)           \cr
 \code{inc.risk, fleiss}             \tab Fleiss (1981)            \cr
-\code{inc.risk, agresti}            \tab REFERENCE (YYYY)         \cr
-\code{inc.risk, clopper-pearson}    \tab REFERENCE (YYYY)         \cr
-\code{inc.risk, jeffreys}           \tab REFERENCE (YYYY)         \cr
+\code{inc.risk, agresti}            \tab Agresti and Coull (1998) \cr
+\code{inc.risk, clopper-pearson}    \tab Clopper and Pearson (1934)\cr
+\code{inc.risk, jeffreys}           \tab Brown et al. (2001)      \cr
 \code{prevalence, exact}            \tab Collett (1999)           \cr
 \code{prevalence, wilson}           \tab Rothman (2002)           \cr
 \code{prevalence, fleiss}           \tab Fleiss (1981)            \cr
-\code{prevalence, agresti}          \tab REFERENCE (YYYY)         \cr
-\code{prevalence, clopper-pearson}  \tab REFERENCE (YYYY)         \cr
-\code{prevalence, jeffreys}         \tab REFERENCE (YYYY)         \cr
+\code{prevalence, agresti}          \tab Agresti and Coull (1998) \cr
+\code{prevalence, clopper-pearson}  \tab Clopper and Pearson (1934)\cr
+\code{prevalence, jeffreys}         \tab Brown et al. (2001)      \cr
 \code{inc.rate, exact}              \tab Ulm (1990)               \cr
 \code{inc.rate, byar}               \tab Rothman (2002)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr
@@ -58,11 +58,21 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 ----------------------------------- \tab ------------------------ \cr
 }
 
+The Wald interval often has inadequate coverage, particularly for small sample sizes and proportion estimates close to 0 or 1. Conversely, the Clopper-Pearson Exact method is conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods when sample sizes are small and Agresti-Coull, Wilson, or Jeffreys methods for larger sample sizes. 
+
+The Clopper-Pearson interval is an early and very common method for calculating binomial confidence intervals. The Clopper-Pearson interval is sometimes called an 'exact' method, because it is based on the cumulative probabilities of the binomial distribution (i.e. exactly the correct distribution rather than an approximation).
+
 The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be done on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
 }
 
 \references{
+Agresti A, Coull B (1998). Approximate is better than 'exact' for interval estimation of binomial proportions. The American Statistician 52. DOI: 10.2307/2685469.
+
 Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29 and pp. 45 - 56.
+
+Brown L, Cai T, Dasgupta A (2001). Interval estimation for a binomial proportion. Statistical Science 16: 101 - 133.
+
+Clopper C, Pearson E (1934) The use of confidence or fiducial limits illustrated in the case of the binomial. Biometrika 26: 404 - 413. DOI: 10.1093/biomet/26.4.404.
 
 Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, pp. 24.
 

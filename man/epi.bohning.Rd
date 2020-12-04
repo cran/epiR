@@ -35,7 +35,6 @@ pop <- epi.SClip$population
 exp <- (sum(obs) / sum(pop)) * pop
 
 epi.bohning(obs, exp, alpha = 0.05)
-
 }
 \keyword{univar}% at least one, from doc/KEYWORDS
 \keyword{univar}% __ONLY ONE__ keyword per line

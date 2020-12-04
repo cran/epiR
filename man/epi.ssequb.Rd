@@ -11,7 +11,7 @@ Sample size for a parallel equivalence trial, binary outcome.
 }
 
 \usage{
-epi.ssequb(treat, control, delta, n, r = 1, power, alpha)
+epi.ssequb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
 }
 
 \arguments{
@@ -21,6 +21,7 @@ epi.ssequb(treat, control, delta, n, r = 1, power, alpha)
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{alpha}{scalar, defining the desired alpha level.}
 }
 
@@ -45,13 +46,13 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical St
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (s) and a new treatment (n). In each group, a proportion of subjects respond to the treatment: Ps and Pn. 
+Consider a clinical trial comparing two groups, a standard treatment (s) and a new treatment (n). In each group, a proportion of subjects respond to the treatment: \eqn{P_{s}} and \eqn{P_{n}}. 
 
-With a superiority trial we specify the maximum acceptable difference between Pn and Ps as \code{delta}. The null hypothesis is H0: Pn - Ps <= \code{delta} and the alternative hypothesis is H1: Pn - Ps > \code{delta}.
+With a superiority trial we specify the maximum acceptable difference between \eqn{P_{s}} and \eqn{P_{n}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: P_{n} - P_{s} \leq \delta} and the alternative hypothesis is \eqn{H_{1}: P_{n} - P_{s} > \delta}.
 
-An equivalence trial is used if want to prove that two treatments produce the same clinical outcomes. With an equivalence trial, we specify the maximum acceptable difference between Pn and Ps as \code{delta}. The null hypothesis is H0: |Ps - Pn| >= \code{delta} and the alternative hypothesis is H1: |Ps - Pn| < \code{delta}. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \code{delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
+An equivalence trial is used if you want to prove that two treatments produce the same clinical outcomes. With an equivalence trial, we specify the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: |P_{s} - P_{n}| \geq \delta} and the alternative hypothesis is \eqn{H_{1}: |P_{s} - P_{n}| < \delta}. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
 
-With a non-inferiority trial, we specify the maximum acceptable difference between Pn and Ps as \code{delta}. The null hypothesis is H0: Ps - Pn >= \code{delta} and the alternative hypothesis is H1: Ps - Pn < \code{delta}. The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial, (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer, (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer, (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+With a non-inferiority trial we specify the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: P_{s} - P_{n} \geq \delta} and the alternative hypothesis is \eqn{H_{1}: P_{s} - P_{n} < \delta}. The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial, (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer, (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer, (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
 
 To summarise (adapted from Machin et al. 2009, page 105):
 
@@ -84,7 +85,7 @@ When calculating the power of a study, note that the variable \code{n} refers to
 ## realistic sample size if the trial were to be repeated?
 
 epi.ssequb(treat = 0.50, control = 0.50, delta = 0.20, n = NA, r = 1, 
-   power = 0.80, alpha = 0.10)
+   power = 0.80, nfractional = FALSE, alpha = 0.10)
 
 ## A total of 166 subjects need to be enrolled in the trial, 83 in the 
 ## treatment group and 83 in the control group.

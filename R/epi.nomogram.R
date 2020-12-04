@@ -17,21 +17,23 @@ epi.nomogram <- function(se, sp, lr, pre.pos, verbose = FALSE){
     post.odds.pos <- pre.odds * lr.pos
     post.odds.neg <- pre.odds * lr.neg
    
-    post.prob.pos <- post.odds.pos / (1 + post.odds.pos)
-    post.prob.neg <- post.odds.neg / (1 + post.odds.neg)
+    post.opos.tpos <- post.odds.pos / (1 + post.odds.pos)
+    post.opos.tneg <- post.odds.neg / (1 + post.odds.neg)
 
-    lr <- as.data.frame(cbind(pos = lr.pos, neg = lr.neg))
-    prob <- as.data.frame(cbind(pre.pos = pre.pos, post.pos = post.prob.pos, post.neg = post.prob.neg))
-    rval <- list(lr = lr, prob = prob)
+    lr <- data.frame(pos = lr.pos, neg = lr.neg)
+    prior <- data.frame(opos = pre.pos)
+    post <- data.frame(opos.tpos = post.opos.tpos, opos.tneg = post.opos.tneg)
+    
+    rval <- list(lr = lr, prior = prior, post = post)
          
    if(verbose == TRUE){
      return(rval)
      }
    
    if(verbose == FALSE){
-     post.prob.pos <- ifelse(post.prob.pos < 0.01, round(post.prob.pos, digits = 4), round(post.prob.pos, digits = 2))
-     post.prob.neg <- ifelse(post.prob.neg < 0.01, round(post.prob.neg, digits = 4), round(post.prob.neg, digits = 2))
-     cat("Given a positive test result, the post-test probability of being disease positive is", post.prob.pos, "\n")
-     cat("Given a negative test result, the post-test probability of being disease negative is", post.prob.neg, "\n") 
+     post.opos.tpos <- ifelse(post.opos.tpos < 0.01, round(post.opos.tpos, digits = 4), round(post.opos.tpos, digits = 2))
+     post.opos.tneg <- ifelse(post.opos.tneg < 0.01, round(post.opos.tneg, digits = 4), round(post.opos.tneg, digits = 2))
+     cat("Given a positive test result, the post-test probability of being outcome positive is", post.opos.tpos, "\n")
+     cat("Given a negative test result, the post-test probability of being outcome positive is", post.opos.tneg, "\n") 
      }  
 }

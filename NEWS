@@ -1,3 +1,43 @@
+CHANGES IN epiR VERSION 2.0.16
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 code modified to allow it handle the Haldane-Anscombe correction (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero).
+    [Suggested by Mark Stevenson]
+    o Error in confidence interval calculation for epi.smr where method = "byar" corrected.
+    [Spotted by Sarah Haile]
+    o Vignette for surveillance functions updated.
+    o epi.2by2 calculates maximum likelihood confidence intervals for the odds ratio when the total number of events is less than 2E09, removing numeric overflow errors. 
+    [Suggested by Stuart Reece]
+    o New function epi.psi: Proportional similarity index to compare non-parametric frequency distributions.
+    o epi.prcc now includes confidence intervals. Example provided in the documentation for epi.prcc improved.
+    o Function epi.ssdetect returns sample size estimates using the binomial and hypergeometric distribution.
+    [Suggested by Manuel Sanchez Vazquez]
+
+CHANGES IN epiR VERSION 2.0.1
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.ssdxtest: Sample size to validate a diagnostic test in the absence of a gold standard.
+    o Function epi.sssimpleestb modified to adjust the required sample size to account for imperfect diagnostic sensitivity and specificity.
+
+CHANGES IN epiR VERSION 2.0.0
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Major upgrade with amalgamation of epiR with Evan Sergeant's RSurveillance package.
+    o Function epi.insthaz now returns Kaplan-Meier survival estimates as well as instantaneous hazard.
+    o Argument nfractional added to each of the sample size functions.
+    o Inconsistency in reporting of results of epi.nomogram corrected.
+    [Spotted by Pietro Ravani]
+
+CHANGES IN epiR VERSION 1.0-16
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.ssxsectn updated to calculate minimum detectable odds ratio for a cross-sectional study. Function epi.sscohortc updated to calculate minimum detectable odds ratio for a cohort study.
+    [Suggested by Alex Hou] 
+
 CHANGES IN epiR VERSION 1.0-15
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -7,7 +47,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     [Suggested by Xiaoqing Liu] 
     o Amibguity in documentation for epi.sscomps corrected.
     [Spotted by Marco Barbara]
-    o Function epi.2by2 now included Taylor series confidence intervals for the incidence risk and prevalence ratio.
+    o Function epi.2by2 now includes Taylor series confidence intervals for the incidence risk and prevalence ratio.
 
 CHANGES IN epiR VERSION 1.0-14
 

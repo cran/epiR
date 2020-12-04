@@ -109,10 +109,8 @@ ggplot(tmp, aes(x = method1, y = method2)) +
    geom_abline(intercept = 0, slope = 1) +
    geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 
       linetype = "dashed") +
-   xlim(0, 3) +
-   ylim(0, 3) +
-   xlab("Method 1") +
-   ylab("Method 2") +
+   scale_x_continuous(limits = c(0,3), name = "Method 1") +
+   scale_y_continuous(limits = c(0,3), name = "Method 2") +
    geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
    coord_fixed(ratio = 1 / 1)
 
@@ -141,10 +139,8 @@ ggplot(tmp.ccc$blalt, aes(x = mean, y = delta)) +
   geom_hline(data = tmp.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
   geom_hline(data = tmp.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
   geom_hline(data = tmp.ccc$sblalt, aes(yintercept = est), linetype = 1) +
-  xlab("Average PEFR by two meters (L/min)") +
-  ylab("Difference in PEFR (L/min)") +
-  xlim(0,800) +
-  ylim(-150,150)     
+  scale_x_continuous(limits = c(0,800), name = "Average PEFR by two meters (L/min)") +
+  scale_y_continuous(limits = c(-150,150), name = "Difference in PEFR (L/min)")   
 }
 
 
@@ -170,10 +166,8 @@ ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) +
   geom_hline(data = crude.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
   geom_hline(data = crude.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
   geom_hline(data = crude.ccc$sblalt, aes(yintercept = est), linetype = 1) +
-  xlab("Average of the two measurements") +
-  ylab("Difference in the two measurements") +
-  xlim(0,8000) +
-  ylim(-8000,8000)
+  scale_x_continuous(limits = c(0,8000), name = "Average of the two measurements") +
+  scale_y_continuous(limits = c(-8000,8000), name = "Difference in the two measurements")  
 }
 
 ## In the above plot the spread of the differences increases with increasing 
@@ -209,10 +203,8 @@ ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) +
   geom_line(data = limits, aes(x = mean, y = lower), linetype = 2) +
   geom_line(data = limits, aes(x = mean, y = upper), linetype = 2) +
   geom_line(data = limits, aes(x = mean, y = 0), linetype = 1) +
-  xlab("Average of the two measurements") +
-  ylab("Difference in the two measurements") +
-  xlim(0,8000) +
-  ylim(-8000,8000)
+    scale_x_continuous(limits = c(0,8000), name = "Average of the two measurements") +
+  scale_y_continuous(limits = c(-8000,8000), name = "Difference in the two measurements") 
 }
 }
 

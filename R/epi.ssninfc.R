@@ -1,4 +1,4 @@
-epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, alpha){
+epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE, alpha){
   
   # alpha <- (1 - conf.level)
   beta <- (1 - power)
@@ -11,24 +11,40 @@ epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, alpha){
       n.control <- (1 + 1 / r) * (sd * (z.alpha + z.beta) / (treat - control - delta))^2
       n.treat <- n.control * r
      
-      # r = n.treat / n.control
-      n.control <- ceiling(n.control)
-      n.treat <- ceiling(n.treat)
+      if(nfractional == TRUE){
+        n.control <- n.control
+        n.treat <- n.treat
+        n.total <- n.treat + n.control
+      }
       
-      rval <- list(n.total = n.treat + n.control, n.treat = n.treat, n.control = n.control, power = power)
+      if(nfractional == FALSE){
+        n.control <- ceiling(n.control)
+        n.treat <- ceiling(n.treat)
+        n.total <- n.treat + n.control
+      }
+      
+      rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
   }
   
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
-      # Work out the number of subjects in the control group. r equals the number in the treatment group divided by 
-      # the number in the control group.
-      n.control <- ceiling(1 / (r + 1) * (n))
-      n.treat <- n - n.control
-
+      # Work out the number of subjects in the control group. r equals the number in the treatment group divided by the number in the control group.
       
+    if(nfractional == TRUE){
+      n.control <- 1 / (r + 1) * n
+      n.treat <- n - n.control
+      n.total <- n.treat + n.control
+    }
+    
+    if(nfractional == FALSE){
+      n.control <- ceiling(1 / (r + 1) * n)
+      n.treat <- n - n.control
+      n.total <- n.treat + n.control
+    }    
+
       z <- (treat - control - delta) / (sd * sqrt((1 + 1 / r) / n.control))
       power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
       
-      rval <- list(n.total = n.treat + n.control, n.treat = n.treat, n.control = n.control, power = power)
+      rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
   }
   rval
 }  

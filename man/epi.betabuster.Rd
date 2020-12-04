@@ -37,8 +37,6 @@ A list containing the following:
 
 \details{
 The beta distribution has two parameters: \code{shape1} and \code{shape2}, corresponding to \code{a} and \code{b} in the original verion of BetaBuster. If \code{r} equals the number of times an event has occurred after \code{n} trials, \code{shape1} = \code{(r + 1)} and \code{shape2} = \code{(n - r + 1)}.
-
-BetaBuster can be downloaded from \url{http://www.ics.uci.edu/~wjohnson/BIDA/betabuster.zip}.
 }
 
 \references{
@@ -80,10 +78,10 @@ dat <- data.frame(x = seq(from = 0, to = 1, by = 0.001),
 \dontrun{
 library(ggplot2)
 
-windows(); ggplot(data = dat, aes(x = x, y = y)) +
+ggplot(data = dat, aes(x = x, y = y)) +
    geom_line() + 
-   xlab("Test sensitivity") +
-   ylab("Density") 
+   scale_x_continuous(name = "Test sensitivity") +
+   scale_y_continuous(name = "Density")
 }
 }
 \keyword{univar}% at least one, from doc/KEYWORDS

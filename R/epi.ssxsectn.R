@@ -1,110 +1,161 @@
-"epi.ssxsectn" <- function(pexp1, pexp0, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95){
-   
+epi.ssxsectn <- function(pdexp1 = 0.25, pdexp0 = 0.10, pexp = NA, n = NA, power = 0.80, r = 1, N, design = 1, sided.test = 2, finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95){
+  
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
   
-  if (!is.na(pexp1) & !is.na(pexp0) & !is.na(n) & !is.na(power)){
-    stop("Error: at least one of pexp1, n and power must be NA.")
+  if (!is.na(pdexp1) & !is.na(n) & !is.na(power)){
+    stop("Error: at least one of exposed, n and power must be NA.")
   }
   
-  # Sample size.  
-  if (!is.na(pexp1) & !is.na(pexp0) & is.na(n) & !is.na(power)) {
+  # Sample size:
+  if(!is.na(pdexp1) & !is.na(pdexp0) & is.na(n) & !is.na(power)){
     
-    z.beta <- qnorm(power, mean = 0, sd = 1)
-    # delta <- abs(pexp1 - pexp0)
-    # n <- (1/delta^2) * ((z.alpha * sqrt(pexp1 * (1 - pexp1))) + (z.beta * sqrt(pexp0 * (1 - pexp0))))^2
+    # Sample size estimate. From Woodward p 405:
+    z.beta <- qnorm(power, mean = 0, sd = 1) 
     
-    # From Woodward's spreadsheet. Changed 130814:
-    lambda <- pexp1 / pexp0
-    Pc <- pexp0 * (r * lambda + 1) / (r + 1)
-    T1 <- (r + 1) / (r * (lambda - 1)^2 * pexp0^2)
-    T2 <- (r + 1) * Pc *(1 - Pc)
-    T3 <- lambda * pexp0 * (1 - lambda * pexp0) + r * pexp0 * (1 - pexp0)
-    n <- T1 * (z.alpha * sqrt(T2) + z.beta * sqrt(T3))^2
+    # Prevalence ratio:
+    lambda <- pdexp1 / pdexp0
+    
+    # Odds ratio:
+    psi <- (pdexp1 / (1 - pdexp1)) / (pdexp0 / (1 - pdexp0))
+    
+    pi <- pdexp0
+    pc <- (pi * ((r * lambda) + 1)) / (r + 1)
+    p1 <- (r + 1) / (r * (lambda - 1)^2 * pi^2)
+    p2 <- z.alpha * sqrt((r + 1) * pc * (1 - pc))
+    p3 <- z.beta * sqrt((lambda * pi * (1 - (lambda * pi))) + (r * pi * (1 - pi)))
+    n0 <- p1 * (p2 + p3)^2
     
     # Account for the design effect:
-    n1 <- n / (r + 1)
-    n1 <- ceiling(n1 * design)
-    n2 <- ceiling(r * n1)
+    n0 <- n0 * design
     
-    rval <- list(n.total = n1 + n2, n.exp1 = n1, n.exp0 = n2, power = power, pr = lambda)
+    # Finite correction:    
+    n <- ifelse(finite.correction == TRUE, (n0 * N) / (n0 + (N - 1)), n0)
     
+    if(nfractional == TRUE){
+      n.exp1 <- n / (r + 1) * r
+      n.exp0 <- n / (r + 1) * 1
+      n.total <- n.exp1 + n.exp0
+    }
+    
+    if(nfractional == FALSE){
+      n.exp1 <- ceiling(n / (r + 1) * r)
+      n.exp0 <- ceiling(n / (r + 1) * 1)
+      n.total <- n.exp1 + n.exp0
+    }
+    
+    rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, pr = lambda, or = psi)
   }
   
-  # Power.  
-  else
-    if (!is.na(pexp1) & !is.na(pexp0) & !is.na(n) & is.na(power)) {
+  # Power:
+  else 
+    if(!is.na(pdexp1) & !is.na(pdexp0) & !is.na(n) & is.na(power)){
+      # Study power. From Woodward p 409:
       
-      # Account for the design effect:
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1)
+      # Prevalence ratio:
+      lambda <- pdexp1 / pdexp0
       
-      # From Woodward's spreadsheet. Changed 130814:
-      lambda <- pexp0 / pexp1
-      Pc <- pexp1 * (r * lambda + 1) / (r + 1)
-      T1 <- ifelse(lambda >= 1, pexp1 * (lambda - 1) * sqrt(n * r), pexp1 * (1 - lambda) * sqrt(n * r))
-      T2 <- z.alpha * (r + 1) * sqrt(Pc * (1 - Pc))
-      T3 <- (r + 1) * (lambda * pexp1 * (1 - lambda * pexp1) + r * pexp1 * (1 - pexp1))
-      z.beta <- (T1 - T2) / sqrt(T3)
-      # z.beta <- ((delta * sqrt(n)) - (z.alpha * sqrt(pexp1 * (1 - pexp1))))/(sqrt(pexp0 * (1 - pexp0)))
+      # Odds ratio:
+      psi <- (pdexp1 / (1 - pdexp1)) / (pdexp0 / (1 - pdexp0))
+      
+      pi <- pdexp0
+      pc <- (pi * ((r * lambda) + 1)) / (r + 1)
+      
+      if(nfractional == TRUE){
+        n.exp1 <- n / (r + 1) * r
+        n.exp0 <- n / (r + 1) * 1
+        n.total <- n.exp1 + n.exp0
+      }
+      
+      if(nfractional == FALSE){
+        n.exp1 <- ceiling(n / (r + 1) * r)
+        n.exp0 <- ceiling(n / (r + 1) * 1)
+        n.total <- n.exp1 + n.exp0
+      }
+      
+      # Convert n (finite corrected sample size) to n0:
+      n0 <- ifelse(finite.correction == TRUE, (n * N - n)  / (N - n), n)
+      
+      t1 <- ifelse(lambda >= 1, 
+                   (pi * (lambda - 1) * sqrt(n0 * r)),
+                   (pi * (1 - lambda) * sqrt(n0 * r)))
+      
+      t2 <- z.alpha * (r + 1) * sqrt(pc * (1 - pc))
+      t3 <- (r + 1) * (lambda * pi * (1 - lambda * pi) + r * pi * (1 - pi))
+      z.beta <- (t1 - t2) / sqrt(t3)
       power <- pnorm(z.beta, mean = 0, sd = 1)
       
-      rval <- list(n.total = n1 + n2, n.exp1 = n1, n.exp0 = n2, power = power, pr = 1 / lambda)
+      rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, pr = lambda, or = psi)
     }
   
   # Lambda:
   else 
-    if (is.na(pexp1) & !is.na(pexp0) & !is.na(n) & !is.na(power)) {
+    if(is.na(pdexp1) & !is.na(pdexp0) & !is.na(n) & !is.na(power)){
       
-      z.beta <- qnorm(power, mean = 0, sd = 1)
+      # Risk ratio to be detected - requires an estimate of prevalence of exposure in the unexposed. 
+      # From Woodward p 409:
+      z.beta <- qnorm(power, mean = 0, sd = 1) 
+      pi <- pdexp0
       
-      # Account for the design effect:
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1)
-      
-      # delta <- 1/sqrt(n) * ((z.alpha * sqrt(pexp1 * (1 - pexp1))) + (z.beta * sqrt(pexp0 * (1 - pexp0))))
-      
-      # Here we use the formulae for study power (from Woodward's spreadsheet) and then solve for pexp1 
-      # (which then allows us to calculate lambda).
-      # Note lambda defined as pexp0 / pexp1 (hence we take the inverse of lambda for reporting):
-      
-      # Where lambda > 1:
-      Pfun <- function(pexp1, pexp0, n, r, z.alpha){
-        lambda <- pexp0 / pexp1
-        Pc <- pexp1 * (r * lambda + 1) / (r + 1)
-        T1 <- pexp1 * (lambda - 1) * sqrt(n * r)
-        T2 <- z.alpha * (r + 1) * sqrt(Pc * (1 - Pc))
-        T3 <- (r + 1) * (lambda * pexp1 * (1 - lambda * pexp1) + r * pexp1 * (1 - pexp1))
-        z.beta <- (T1 - T2) / sqrt(T3)
-        
-        # Take the calculated value of the power and subtract the power entered by the user:
-        pnorm(z.beta, mean = 0, sd = 1) - power
+      if(nfractional == TRUE){
+        n.exp1 <- n / (r + 1) * r
+        n.exp0 <- n / (r + 1) * 1
+        n.total <- n.exp1 + n.exp0
       }
-      pexp1u <- uniroot(Pfun, pexp0 = pexp0, n = n, r = r, z.alpha = z.alpha, interval = c(1E-6,1))$root
       
-      # Where lambda < 1:
-      Pfun <- function(pexp1, pexp0, n, r, z.alpha){
-        lambda <- pexp0 / pexp1
-        Pc <- pexp1 * (r * lambda + 1) / (r + 1)
-        T1 <- pexp1 * (1 - lambda) * sqrt(n * r)
-        T2 <- z.alpha * (r + 1) * sqrt(Pc * (1 - Pc))
-        T3 <- (r + 1) * (lambda * pexp1 * (1 - lambda * pexp1) + r * pexp1 * (1 - pexp1))
-        z.beta <- (T1 - T2) / sqrt(T3)
-        
-        # Take the calculated value of the power and subtract the power entered by the user:
-        pnorm(z.beta, mean = 0, sd = 1) - power
+      if(nfractional == FALSE){
+        n.exp1 <- ceiling(n / (r + 1) * r)
+        n.exp0 <- ceiling(n / (r + 1) * 1)
+        n.total <- n.exp1 + n.exp0
       }
-      pexp1l <- uniroot(Pfun, pexp0 = pexp0, n = n, r = r, z.alpha = z.alpha, interval = c(1E-6,1))$root
       
-      rval <- list(n.total = n1 + n2, n.exp1 = n1, n.exp0 = n2, power = power, pr = sort(c(pexp1u / pexp0, pexp1l / pexp0)))
+      # Convert n (finite corrected sample size) to n0:
+      n0 <- ifelse(finite.correction == TRUE, (n * N - n)  / (N - n), n)
       
+      Y <- r * n0 * pi^2
+      Z <- (r + 1) * pi * (z.alpha + z.beta)^2
+      a <- Y + (pi * Z)
+      b <- (2 * Y) + Z
+      c <- Y - (r * (1 - pi) * Z)
+      
+      # Risk ratio:
+      lambda.pos <- (1 / (2 * a)) * (b + sqrt(b^2 - 4 * a * c))
+      lambda.neg <- (1 / (2 * a)) * (b - sqrt(b^2 - 4 * a * c))
+      
+      rlambda.pos <- lambda.pos
+      rlambda.neg <- ifelse(lambda.neg < 0, 0, lambda.neg)
+      
+      # From http://www.epigear.com/index_files/or2rr.html:
+      # s = prevalence of disease in the population
+      # p = prevalence of exposure in the population
+      
+      # Prevalence of disease in the exposed, unexposed and population:
+      pdexp1.pos <- lambda.pos * pdexp0
+      pdexp0.pos <- pdexp0
+      s.pos <- (pdexp1.pos + pdexp0.pos) / 2
+      p.pos <- pexp
+      
+      pdexp1.neg <- lambda.neg * pdexp0
+      pdexp0.neg <- pdexp0
+      s.neg <- (pdexp1.neg + pdexp0.neg) / 2
+      p.neg <- pexp
+      
+      # Odds ratio:
+      psi.pos <- (lambda.pos * (1 - (s.pos / (p.pos * lambda.pos + 1 - p.pos)))) / 
+        (1 - ((lambda.pos * s.pos) / (p.pos * lambda.pos + 1 - p.pos)))
+      
+      psi.neg <- (lambda.neg * (1 - (s.neg / (p.neg * lambda.neg + 1 - p.neg)))) / 
+        (1 - ((lambda.neg * s.neg) / (p.neg * lambda.neg + 1 - p.neg)))
+      
+      rpsi.pos <- psi.pos
+      rpsi.neg <- ifelse(psi.neg < 0, 0, psi.neg)
+      
+      rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, pr = sort(c(rlambda.neg, rlambda.pos)), or = sort(c(rpsi.neg, rpsi.pos)))
     }
   
   rval
 }
 
-# epi.ssxsectn(pexp1 = 0.50, pexp0 = 0.35, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95)
-# epi.ssxsectn(pexp1 = 0.50, pexp0 = 0.35, n = 340, power = NA, r = 1, design = 1, sided.test = 2, conf.level = 0.95)
-# epi.ssxsectn(pexp1 = NA,   pexp0 = 0.35, n = 340, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+# epi.ssxsection(pdexp1 = 0.25, pdexp0 = 0.10, pexp = 0.05, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+# epi.ssxsection(pdexp1 = 0.25, pdexp0 = 0.10, pexp = 0.05, n = 200, power = NA, r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+# epi.ssxsection(pdexp1 = NA, pdexp0 = 0.10, pexp = 0.05, n = 200, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95)

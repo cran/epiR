@@ -12,7 +12,7 @@ Calculates the sample size, power or minimum detectable odds ratio for an unmatc
 
 \usage{
 epi.sscc(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
-   conf.level = 0.95, method = "unmatched", fleiss = FALSE)
+   nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 }
 
 \arguments{
@@ -24,6 +24,7 @@ epi.sscc(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2,
   \item{rho.cc}{scalar, the correlation between case and control exposures for matched pairs. Ignored when \code{method = "unmatched"}.}
   \item{design}{scalar, the design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the odds of exposure in cases is greater than or less than the odds of exposure in controls. Use a one-sided test to evaluate whether or not the odds of exposure in cases is greater than the odds of exposure in controls.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, the level of confidence in the computed result.}
   \item{method}{a character string defining the method to be used. Options are \code{unmatched} or \code{matched}.}
   \item{fleiss}{logical, indicating whether or not the Fleiss correction should be applied. This argument is ignored when \code{method = "matched"}.}
@@ -56,7 +57,7 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
-See the documentation for \code{\link{epi.cohortsize}} which provides an example using the \code{design} facility implemented in this function. 
+See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
 
 \examples{
@@ -69,8 +70,8 @@ See the documentation for \code{\link{epi.cohortsize}} which provides an example
 ## surveys have shown that around 0.30 of males without CHD are smokers.
 
 epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho.cc = 0, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
-   fleiss = FALSE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "unmatched", fleiss = FALSE)
 
 ## A total of 376 men need to be sampled: 188 cases and 188 controls.
 
@@ -83,8 +84,8 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho.cc = 0,
 
 n <- 188 + 940
 epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
-   fleiss = TRUE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "unmatched", fleiss = TRUE)
 
 ## The power of this study, with the given sample size allocation is 0.99.
 
@@ -104,8 +105,8 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0,
 ## this study.
 
 epi.sscc(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho.cc = 0.01, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
-   fleiss = TRUE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "matched", fleiss = TRUE)
 
 ## If the true odds ratio for Campylobacter in exposed subjects relative to 
 ## unexposed subjects is 2.0 we will be able to reject the null hypothesis 
@@ -123,8 +124,8 @@ epi.sscc(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho.cc = 0.01,
 ## to be enrolled in the study?
 
 epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho.cc = 0, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", 
-   fleiss = FALSE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "unmatched", fleiss = FALSE)
 
 ## A total of 620 subjects need to be enrolled in the study: 155 cases and 
 ## 465 controls.
@@ -136,8 +137,8 @@ epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho.cc = 0,
 ## described above, how many study subjects will be required?
 
 epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho.cc = 0.01, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
-   fleiss = FALSE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "matched", fleiss = FALSE)
 
 ## A total of 456 subjects need to be enrolled in the study: 228 cases and 
 ## 228 controls.
@@ -154,7 +155,8 @@ dat$n.total <- NA
 for(i in 1:nrow(dat)){
    dat$n.total[i] <- epi.sscc(OR = dat$OR[i], p0 = dat$p0[i], n = NA, 
    power = 0.80, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
-   conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
+   nfractional = FALSE, conf.level = 0.95, method = "unmatched", 
+   fleiss = FALSE)$n.total
 }  
 
 grid.n <- matrix(dat$n.total, nrow = length(p0))
@@ -191,8 +193,8 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
 ## with 0.80 power using a two-sided 0.05 test? 
 
 epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho.cc = 0.2, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
-   fleiss = FALSE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "matched", fleiss = FALSE)
 
 ## A total of 162 subjects need to be enrolled in the study: 81 cases and 
 ## 81 controls. 
@@ -201,8 +203,8 @@ epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho.cc = 0.2,
 ## controls per case?
 
 epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 3, rho.cc = 0.2, 
-   design = 1, sided.test = 2, conf.level = 0.95, method = "matched", 
-   fleiss = FALSE)
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
+   method = "matched", fleiss = FALSE)
 
 ## A total of 204 subjects need to be enrolled in the study: 51 cases and 
 ## 153 controls.

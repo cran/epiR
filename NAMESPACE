@@ -6,25 +6,17 @@ export(epi.asc)
 export(epi.betabuster)
 export(epi.bohning)     
 export(epi.ccc)
-export(epi.ccsize)
-export(epi.cluster1size)
-export(epi.cluster2size)
-export(epi.clustersize)
-export(epi.cohortsize)
 export(epi.conf)
 export(epi.convgrid)
 export(epi.cp)
 export(epi.cpresids)
 export(epi.descriptives)
-export(epi.detectsize)
 export(epi.dgamma)
 export(epi.directadj)
 export(epi.dms)         
 export(epi.dsl)
 export(epi.edr)
 export(epi.empbayes)
-export(epi.equivb)
-export(epi.equivc)
 export(epi.herdtest)
 export(epi.indirectadj)
 export(epi.insthaz)
@@ -32,20 +24,16 @@ export(epi.interaction)
 export(epi.iv)          
 export(epi.kappa)
 export(epi.ltd)
-export(epi.meansize)
 export(epi.mh)
 export(epi.nomogram)    
-export(epi.noninfb)
-export(epi.noninfc)
 export(epi.occc)
 export(epi.offset)
 export(epi.pooled)      
 export(epi.popsize)
 export(epi.prcc)
 export(epi.prev)
-export(epi.propsize)
+export(epi.psi)
 export(epi.RtoBUGS)     
-export(epi.simplesize)
 export(epi.smd)
 export(epi.smr)
 export(epi.sscc)
@@ -69,12 +57,63 @@ export(epi.ssstrataestb)
 export(epi.ssstrataestc)
 export(epi.sssupb)
 export(epi.sssupc)
-export(epi.ssxsectn)    
-export(epi.stratasize)
-export(epi.supb)
-export(epi.supc)
-export(epi.survivalsize)
-export(epi.tests)       
+export(epi.ssxsectn)
+export(epi.ssdxtest)  
+export(epi.tests) 
+
+
+# ------------------------------------------------------------------------------------
+# Representative sampling - sample size probability of disease freedom:
+export(rsu.sspfree.rs)
+
+# Representative sampling - sample size surveillance system sensitivity:
+export(rsu.sssep.rs)
+export(rsu.sssep.rs2st)
+export(rsu.sssep.rsfreecalc)
+export(rsu.sssep.rspool)
+
+# Representative sampling - calculate surveillance system sensitivity:
+export(rsu.sep.rs)
+export(rsu.sep.rs2st)
+export(rsu.sep.rsmult)
+export(rsu.sep.rsfreecalc)
+export(rsu.sep.rspool)
+export(rsu.sep.rsvarse)
+
+# Representative sampling - calculate surveillance system specificity:
+export(rsu.spp.rs)
+
+# Representative sampling - probability of disease freedom:
+export(rsu.pfree.rs)
+export(rsu.pfree.equ)
+
+
+# ------------------------------------------------------------------------------------
+# Risk-based sampling - sample size surveillance system sensitivity:
+export(rsu.sssep.rbsrg)
+export(rsu.sssep.rbmrg)
+export(rsu.sssep.rb2st1rf)
+export(rsu.sssep.rb2st2rf)
+
+# Risk-based sampling - calculate surveillance system sensitivity:
+export(rsu.sep.rb)
+export(rsu.sep.rb1rf)
+export(rsu.sep.rb2rf)
+export(rsu.sep.rbvarse)
+export(rsu.sep.rb2st)
+
+# Census:
+export(rsu.sep.cens)
+
+# Passive:
+export(rsu.sep.pass)
+
+# Miscellaneous functions:
+export(rsu.adjrisk)
+export(rsu.dxtest)
+export(rsu.epinf)
+export(rsu.pstar)
+export(rsu.sep)
 
 
 S3method(print, epi.2by2)
@@ -86,6 +125,8 @@ S3method(summary, epi.occc)
 
 # Import all packages listed as Imports or Depends
 import(survival)
+import(pander)
+import(lubridate)
 importFrom(BiasedUrn, dFNCHypergeo)
 importFrom("graphics", "hist")
 importFrom("methods", "slot")

@@ -12,7 +12,7 @@ Sample size to detect at least one event (e.g. a disease-positive individual) in
 
 \usage{
 epi.ssdetect(N, prev, se, sp, interpretation = "series", covar = c(0,0), 
-   conf.level = 0.95)
+   finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -22,6 +22,8 @@ epi.ssdetect(N, prev, se, sp, interpretation = "series", covar = c(0,0),
   \item{sp}{a vector of length one or two defining the specificity of the test(s) used.}
   \item{interpretation}{a character string indicating how test results should be interpreted. Options are \code{series} or \code{parallel}.}
   \item{covar}{a vector of length two defining the covariance between test results for disease positive and disease negative groups. The first element of the vector is the covariance between test results for disease positive subjects. The second element of the vector is the covariance between test results for disease negative subjects. Use \code{covar = c(0,0)} (the default) if these values are not known.}
+  \item{finite.correction}{logical, apply finite correction? See details, below.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -35,10 +37,12 @@ A list containing the following:
 Cannon RM (2001). Sense and sensitivity --- designing surveys based on an imperfect test. Preventive Veterinary Medicine 49: 141 - 163.
 
 Dohoo I, Martin W, Stryhn H (2009). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 54.
+
+MacDiarmid S (1988). Future options for brucellosis surveillance in New Zealand beef herds. New Zealand Veterinary Journal 36, 39 - 42. DOI:  10.1080/00480169.1988.35472.
 }
 
 \note{
-Sample size calculations are carried out using the hypergeometric distribution, which takes into account the size of the population being sampled (i.e. there's no need to apply a finite correction factor).
+Sample size calculations are carried out using the binomial distribution and an approximation of the hypergeometric distribution (MacDiarmid 1988). Because the hypergeometric distribution takes into account the size of the population being sampled \code{finite.correction = TRUE} is only applied to the binomial sample size estimates.
 
 Define \code{se1} and \code{se2} as the sensitivity for the first and second test, \code{sp1} and \code{sp2} as the specificity for the first and second test, \code{p111} as the proportion of disease-positive subjects with a positive test result to both tests and \code{p000} as the proportion of disease-negative subjects with a negative test result to both tests. The covariance between test results for the disease-positive group is \code{p111 - se1 * se2}. The covariance between test results for the disease-negative group is \code{p000 - sp1 * sp2}.}
 
@@ -51,9 +55,10 @@ Define \code{se1} and \code{se2} as the sensitivity for the first and second tes
 ## that, if all tests are negative, the disease is not present?
 
 epi.ssdetect(N = 1000, prev = 0.05, se = 0.90, sp = 1.00, interpretation =
-   "series", covar = c(0,0), conf.level = 0.95)
+   "series", covar = c(0,0), finite.correction = TRUE, nfractional = FALSE, 
+   conf.level = 0.95)
 
-## We need to sample 65 cows.
+## Using the hypergeometric distribution, we need to sample 65 cows.
 
 ## EXAMPLE 2:
 ## We would like to confirm the absence of disease in a study area. If the 
@@ -68,7 +73,7 @@ epi.ssdetect(N = 1000, prev = 0.05, se = 0.90, sp = 1.00, interpretation =
 
 epi.ssdetect(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95), 
    sp = c(0.80, 0.85), interpretation = "parallel", covar = c(0,0), 
-   conf.level = 0.95)
+   finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
 
 ## We need to sample 46 cows from 40 herds (a total of 1840 samples).
 ## The sensitivity of this testing regime is 99\%. The specificity of this 
@@ -79,6 +84,10 @@ epi.ssdetect(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95),
 ## Based on your experience and the literature, a minimum of 20\% of sows  
 ## would have seroconverted if Mycoplasma were present in the herd. How many 
 ## sows do you need to sample?
+
+epi.ssdetect(N = 200, prev = 0.20, se = 1.00, sp = 1.00, interpretation =
+   "series", covar = c(0,0), finite.correction = TRUE, nfractional = FALSE, 
+   conf.level = 0.95)
 
 epi.ssdetect(N = 200, prev = 0.20, se = 1.00, sp = 1.00, conf.level = 0.95)
 

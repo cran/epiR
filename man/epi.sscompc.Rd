@@ -12,7 +12,7 @@ Sample size, power and minimum detectable difference when comparing continuous o
 
 \usage{
 epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
-   sided.test = 2, conf.level = 0.95)
+   sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -24,6 +24,7 @@ epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome in the exposed (treatment) group is greater than or less than the outcome in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome in the exposed (treatment) group is greater than the outcome in the unexposed (control) group.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -51,7 +52,7 @@ The power of a study is its ability to demonstrate the presence of an associatio
 
 A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2005), pages 381 to 426.
 
-See the documentation for \code{\link{epi.cohortsize}} which provides an example using the \code{design} facility implemented in this function.
+See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
 
 \examples{
@@ -66,7 +67,7 @@ See the documentation for \code{\link{epi.cohortsize}} which provides an example
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
 
 epi.sscompc(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
-   r = 1, design = 1, sided.test = 1, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
 
 ## To satisfy the study requirements 340 individuals need to be tested: 170 in
 ## the first year and 170 in the second year.
@@ -88,7 +89,7 @@ epi.sscompc(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 ## How many women should be enrolled in this study?
 
 epi.sscompc(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
-   r = 4, design = 1, sided.test = 2, conf.level = 0.95)
+   r = 4, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
    
 ## The estimated sample size is 70. We allocate 70/5 = 14 women to the 
 ## placebo group and four times as many (56) to the iron treatment group.

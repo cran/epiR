@@ -12,7 +12,7 @@ Sample size, power or minimum detectable incidence rate ratio for a cohort study
 
 \usage{
 epi.sscohortt(irexp1, irexp0, FT = NA, n, power, r = 1, design = 1, sided.test = 2, 
-   conf.level = 0.95)
+   nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -24,6 +24,7 @@ epi.sscohortt(irexp1, irexp0, FT = NA, n, power, r = 1, design = 1, sided.test =
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome incidence rate in the exposed group is greater than or less than the outcome incidence rate in the unexposed group. Use a one-sided test to evaluate whether or not the outcome incidence rate in the exposed group is greater than the outcome incidence rate in the unexposed group.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -50,6 +51,8 @@ Lwanga S, Lemeshow S (1991). Sample Size Determination in Health Studies. World 
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
 Values need to be entered for \code{irexp0}, \code{n}, and \code{power} to return a value for \code{irr}. In this situation, the lower value of \code{irr} represents the maximum detectable incidence rate ratio that is less than 1; the upper value of \code{irr} represents the minimum detectable incidence rate ratio greater than 1.
+
+See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
 
 \examples{
@@ -74,7 +77,7 @@ Values need to be entered for \code{irexp0}, \code{n}, and \code{power} to retur
 ## impairment per 100 individuals per year.
 
 epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, 
-   r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 46 subjects are required for this study: 23 in the exposed 
 ## group and 23 in the unexposed group.
@@ -86,7 +89,7 @@ epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80,
 ## be followed up in each group?
 
 epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = 5, n = NA, power = 0.80, 
-   r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 130 subjects are required for this study: 65 in the exposed 
 ## group and 65 in the unexposed group.

@@ -11,7 +11,8 @@ Sample size to estimate a continuous outcome using simple random sampling.
 }
 
 \usage{
-epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon.r, conf.level = 0.95)
+epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon.r, nfractional = FALSE, 
+   conf.level = 0.95)
 }
 
 \arguments{
@@ -19,6 +20,7 @@ epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon.r, conf.level = 0.95)
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
   \item{sigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
   \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
+  \item{nfractional}{logical, return fractional sample size.}  
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
 
@@ -51,9 +53,9 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 
 pmean <- 1500 * 0.05; psigma <- (300 * 0.05)
 epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon.r = 0.20, 
-   conf.level = 0.95)
+   nfractional = FALSE, conf.level = 0.95)
 
-## Three clinics need to be sampled to meet the requirements of the survey. 
+## Four clinics need to be sampled to meet the requirements of the survey. 
 
 ## EXAMPLE 2:
 ## We want to estimate the mean bodyweight of deer on a farm. There are 278
@@ -63,7 +65,7 @@ epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon.r = 0.20,
 ## many deer should be sampled?
 
 epi.sssimpleestc(N = 278, xbar = 200, sigma = 30, epsilon.r = 10 / 200, 
-   conf.level = 0.95)
+   nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 31 deer need to be sampled to meet the requirements of the survey.
 }

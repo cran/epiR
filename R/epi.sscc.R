@@ -1,4 +1,4 @@
-"epi.sscc" <- function(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
+"epi.sscc" <- function(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
  
   # p0: proportion of controls exposed.
   # rho.cc: correlation between case and control exposures in matched pairs (defaults to 0).  
@@ -52,12 +52,21 @@
       n <- n.
     }
     
-    # Account for the design effect:
-    n1 <- n / (1 + r)
-    n1 <- ceiling(n1 * design)
-    n2 <- ceiling(r * n1)
+    if(nfractional == TRUE){
+      n1 <- n / (1 + r)
+      n1 <- n1 * design
+      n2 <- r * n1 
+      n.total <- n1 + n2
+    }
     
-    rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = OR)
+    if(nfractional == FALSE){
+      n1 <- n / (1 + r)
+      n1 <- ceiling(n1 * design)
+      n2 <- ceiling(r * n1) 
+      n.total <- n1 + n2
+    }
+    
+    rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
   }
   
   # Unmatched case-control - power: 
@@ -85,22 +94,40 @@
       # z.beta <- sqrt((n1 * r * (p1 - p0)^2) / (pbar * qbar * (r + 1))) - z.alpha
       power <- pnorm(z.beta, mean = 0, sd = 1)
       
-      # Account for the design effect:
-      n1 <- ceiling(n1 * design)
-      n2 <- n - n1
-      # n2 <- ceiling(r * n1)
+      if(nfractional == TRUE){
+        n1 <- n1 * design
+        n2 <- n - n1
+        n.total <- n1 + n2             
+      }
       
-      rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = OR)
+      if(nfractional == FALSE){
+        n1 <- ceiling(n1 * design)
+        n2 <- n - n1
+        n.total <- n1 + n2        
+      }
+      
+      rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
     }
   
   # Unmatched case-control - effect:  
   else 
     if(method == "unmatched" & is.na(OR) & !is.na(n) & !is.na(power)){
       
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n2 <- n - n1
-      # n2 <- ceiling(r * n1)
+      if(nfractional == TRUE){
+        n1 <- n / (r + 1)
+        n1 <- n1 * design
+        n2 <- n - n1
+        n.total <- n1 + n2           
+      }
+      
+      if(nfractional == FALSE){
+        n1 <- n / (r + 1)
+        n1 <- ceiling(n1 * design)
+        n2 <- n - n1
+        n.total <- n1 + n2        
+      }
+      
+
       
       Pfun <- function(OR, power, p0, r, n, design, z.alpha){
         q0 <- 1 - p0
@@ -167,10 +194,19 @@
     nu.psi <- sum(nu.psi)
     nu.one <- sum(nu.one)
     
-    n1 <- ceiling(((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2))
-    n2 <- ceiling(r * n1)    
+    if(nfractional == TRUE){
+      n1 <- ((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2)
+      n2 <- r * n1  
+      n.total <- n1 + n2      
+    }
     
-    rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = OR)
+    if(nfractional == FALSE){
+      n1 <- ceiling(((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2))
+      n2 <- ceiling(r * n1)  
+      n.total <- n1 + n2
+    }
+
+    rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
   }
   
   # Matched case-control - power: 
@@ -203,12 +239,20 @@
       nu.psi <- sum(nu.psi)
       nu.one <- sum(nu.one)
       
-      # Account for the design effect:
-      n1 <- n / (1 + r)
-      n1 <- ceiling(n1 * design)
-      n2 <- n - n1
-      # n2 <- ceiling(r * n1)
-  
+      if(nfractional == TRUE){
+        n1 <- n / (1 + r)
+        n1 <- n1 * design
+        n2 <- n - n1
+        n.total <- n1 + n2        
+      }
+      
+      if(nfractional == FALSE){
+        n1 <- n / (1 + r)
+        n1 <- ceiling(n1 * design)
+        n2 <- n - n1
+        n.total <- n1 + n2       
+      }
+
       z.beta <- (sqrt(n1 * ((ee.one - ee.psi)^2)) - z.alpha * sqrt(nu.one)) / sqrt(nu.psi)
       power <- 1 - pnorm(q = z.beta, lower.tail = FALSE)
       
@@ -219,11 +263,20 @@
   else 
     if(method == "matched" & is.na(OR) & !is.na(n) & !is.na(power)){
       
-      n1 <- n / (1 + r)
-      n1 <- ceiling(n1 * design)
-      n2 <- n - n1
-      # n2 <- ceiling(r * n1)
+      if(nfractional == TRUE){
+        n1 <- n / (1 + r)
+        n1 <- n1 * design
+        n2 <- n - n1
+        n.total <- n1 + n2
+      }
       
+      if(nfractional == FALSE){
+        n1 <- n / (1 + r)
+        n1 <- ceiling(n1 * design)
+        n2 <- n - n1
+        n.total <- n1 + n2
+      }
+
       Pfun <- function(OR, power, p0, r, n, design, z.alpha){
         odds0 = p0 / (1 - p0)
         odds1 = odds0 * OR

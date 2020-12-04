@@ -67,7 +67,7 @@ ggplot(dat.04, aes(x = as.integer(idate), y = est)) +
       limits = c(min(as.integer(dat.04$idate)), 
          max(as.integer(dat.04$idate)))) +
    scale_y_continuous(name = "Estimated disemination ratio (EDR)", 
-   limits = c(0,10)) +
+      limits = c(0,10)) +
    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 10)) +
    geom_hline(yintercept = 1, lty = 2)
  }

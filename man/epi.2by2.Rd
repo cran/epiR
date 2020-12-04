@@ -123,14 +123,17 @@ When method equals \code{cross.sectional} the following measures of association 
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 
-Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500.
+Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio are only calculated when the total number of observations is less than 2E09.
+
+If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios not computed. 
 
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 }
 
-
 \references{
 Altman D, Machin D, Bryant T, Gardner M (2000). Statistics with Confidence. British Medical Journal, London, pp. 69.
+
+Anscombe F (1956). On estimating binomial response relations. Biometrika 43, 461 - 464.
 
 Cornfield, J (1956). A statistical problem arising from retrospective studies. In: Proceedings of the Third Berkeley Symposium on Mathematical Statistics and Probability, University of California Press, Berkeley California 4: 135 - 148.
 
@@ -143,6 +146,8 @@ Fisher RA (1962). Confidence limits for a cross-product ratio. Australian Journa
 Feychting M, Osterlund B, Ahlbom A (1998). Reduced cancer incidence among the blind. Epidemiology 9: 490 - 494.
 
 Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions. John Wiley and Sons, New York. 
+
+Haldane J (1940). The mean and variance of the moments of chi square, when used as a test of homogeneity, when expectations are small. Biometrika 29, 133 - 143.
 
 Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. Journal of Epidemiology and Community Health 55: 508 - 514.
 
@@ -346,8 +351,10 @@ ggplot(dat, aes(or.p, y.at)) +
    geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
    labs(x = "Odds ratio", y = "Strata") + 
    scale_x_continuous(trans = log2_trans(), breaks = x.at, 
-   limits = c(0.25,32)) + scale_y_continuous(breaks = y.at, labels = y.lab) + 
-   geom_vline(xintercept = 1, lwd = 1) + coord_fixed(ratio = 0.75 / 1) + 
+   limits = c(0.25,32)) + 
+   scale_y_continuous(breaks = y.at, labels = y.lab) + 
+   geom_vline(xintercept = 1, lwd = 1) + 
+   coord_fixed(ratio = 0.75 / 1) + 
    theme(axis.title.y = element_text(vjust = 0))
 }
 
@@ -397,7 +404,7 @@ dat <- data.frame(hid, exp, out, n = c(ai,bi,ci,di))
 dat <- xtabs(n ~ exp + out + hid, data = dat)
 print(dat)
 
-epi.2by2(dat = dat, method = "cohort.count", outcome= "as.columns")
+epi.2by2(dat = dat, method = "cohort.count", outcome = "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
 ## significant (chi square test statistic 5.276; df 7; p-value = 0.63). 

@@ -11,18 +11,23 @@ Sample size, power or minimum detectable incidence risk ratio for a cohort study
 }
 
 \usage{
-epi.sscohortc(irexp1, irexp0, n, power, r = 1, design = 1, sided.test = 2, 
-   conf.level = 0.95)
+epi.sscohortc(irexp1, irexp0, pexp = NA, n = NA, power = 0.80, r = 1, 
+   N, design = 1, sided.test = 2, finite.correction = FALSE, 
+   nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{irexp1}{the expected incidence risk of the outcome in the exposed group (0 to 1).}
   \item{irexp0}{the expected incidence risk of the outcome in the non-exposed group (0 to 1).}
+  \item{pexp}{the expected prevalence of exposure to the hypothesised risk factor in the population (0 to 1).}
   \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in both the exposed and unexposed groups).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
+  \item{N}{scalar, the estimated number of individuals in the population.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome incidence risk in the exposed group is greater than or less than the outcome incidence risk in the unexposed group. Use a one-sided test to evaluate whether or not the outcome incidence risk in the exposed group is greater than the outcome incidence risk in the unexposed group.}
+  \item{finite.correction}{logical, apply a finite correction factor?}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -37,6 +42,7 @@ A list containing the following:
   \item{n.exp0}{the total number of subjects in the non-exposed (control) group for the specified level of confidence and power, respecting the requirement for \code{r} times as many individuals in the exposed (treatment) group compared with the non-exposed (control) group.}
   \item{power}{the power of the study given the number of study subjects, the expected effect size and level of confidence.}  
   \item{irr}{the incidence risk of the outcome in the exposed group divided by the incidence risk of the outcome in the unexposed group (the incidence risk ratio).}
+  \item{or}{the odds of the outcome in the exposed group divided by the odds of the outcome in the unexposed group (the odds ratio).}
 }
 
 \references{
@@ -48,7 +54,9 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
-Values need to be entered for \code{irexp0}, \code{n}, and \code{power} to return a value for \code{irr}. In this situation, the lower value of \code{irr} represents the maximum detectable incidence risk ratio that is less than 1; the upper value of \code{irr} represents the minimum detectable incidence risk ratio greater than 1.
+Values need to be entered for \code{irexp0}, \code{pexp}, \code{n}, and \code{power} to return a value for \code{irr}. In this situation, the lower value of \code{irr} represents the maximum detectable incidence risk ratio that is less than 1; the upper value of \code{irr} represents the minimum detectable incidence risk ratio greater than 1. A value for \code{pexp} doesn't need to be entered if you want to calculate sample size or study power.
+
+When calculating study power or minimum detectable incidence risk ratio when \code{finite.correction = TRUE} the function takes the values of \code{n} and \code{N} entered by the user and back-calculates a value of \code{n} assuming an infinite population. Values for \code{power}, \code{irr} and \code{or} are then returned, assuming the back-calculated value of \code{n} is equivalent to the value of \code{n} entered by the user.  
 }
 
 \examples{
@@ -64,8 +72,9 @@ Values need to be entered for \code{irexp0}, \code{n}, and \code{power} to retur
 ## sampled, how many men should be sampled overall?
 
 irexp1 = 1.4 * (5 * 413)/100000; irexp0 = (5 * 413)/100000
-epi.sscohortc(irexp1 = irexp1, irexp0 = irexp0, n = NA, power = 0.90, 
-   r = 1, design = 1, sided.test = 1, conf.level = 0.95)
+epi.sscohortc(irexp1 = irexp1, irexp0 = irexp0, pexp = NA, n = NA, 
+   power = 0.90, r = 1, N = NA, design = 1, sided.test = 1, 
+   finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 12,130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
@@ -75,8 +84,9 @@ epi.sscohortc(irexp1 = irexp1, irexp0 = irexp0, n = NA, power = 0.90,
 ## described above. What is the minimum and maximum detectable risk ratio?
 
 irexp0 = (5 * 413)/100000
-epi.sscohortc(irexp1 = NA, irexp0 = irexp0, n = 5000, power = 0.90, 
-   r = 1, design = 1, sided.test = 1, conf.level = 0.95)
+epi.sscohortc(irexp1 = NA, irexp0 = irexp0, pexp = NA, n = 5000, 
+   power = 0.90, r = 1, N = NA, design = 1, sided.test = 1, 
+   finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)
 
 ## The minimum detectable risk ratio >1 is 1.65. The maximum detectable
 ## risk ratio <1 is 0.50.
@@ -90,15 +100,16 @@ epi.sscohortc(irexp1 = NA, irexp0 = irexp0, n = 5000, power = 0.90,
 ## to be 0.15? The required power for this study is 0.80 using a two-sided 
 ## 0.05 test.
 
-epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, n = NA, power = 0.80, 
-   r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, pexp = NA, n = NA, 
+   power = 0.80, r = 1, N = NA, design = 1, sided.test = 2, 
+   finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 242 cows are required: 121 in the treatment (exposed) group and 
 ## 121 in the control (unexposed) group.
 
 ## Assume now that this study is going to be carried out using animals from a 
 ## number of herds. What is the required sample size when you account for the 
-## observation that response to treatment is likely to cluster within herds. 
+## observation that response to treatment is likely to cluster within herds? 
 
 ## For the exercise, assume that the intra-cluster correlation coefficient 
 ## (the rate of homogeneity, rho) for this treatment is 0.05 and the 
@@ -108,8 +119,9 @@ epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, n = NA, power = 0.80,
 ## where nbar equals the average number of individuals per cluster:
 
 design <- 0.05 * (30 - 1) + 1
-epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, n = NA, power = 0.80, 
-   r = 1, design = design, sided.test = 2, conf.level = 0.95)
+epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, pexp = NA, n = NA, 
+   power = 0.80, r = 1, N = NA, design = design, sided.test = 2, 
+   finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 592 cows are required for this study: 296 in the treatment group
 ## and 296 in the control group.

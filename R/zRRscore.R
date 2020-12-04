@@ -2,7 +2,7 @@ zRRscore <- function(dat, conf.level){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
-  a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
+  a <- as.numeric(dat[1]); b <- as.numeric(dat[3]); c <- as.numeric(dat[2]); d <- as.numeric(dat[4])
   N1 <- a + b; N0 <- c + d
   
   scRR.p <- (a / N1) / (c / N0)

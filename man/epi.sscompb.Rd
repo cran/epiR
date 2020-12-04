@@ -12,7 +12,7 @@ Sample size, power and minimum detectable risk ratio when comparing binary outco
 
 \usage{
 epi.sscompb(treat, control, n, power, r = 1, design = 1,
-   sided.test = 2, conf.level = 0.95)
+   sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ epi.sscompb(treat, control, n, power, r = 1, design = 1,
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome proportion in the exposed (treatment) group is greater than or less than the outcome proportion in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome proportion in the exposed (treatment) group is greater than the outcome proportion in the unexposed (control) group.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -55,6 +56,8 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
 Values need to be entered for \code{control}, \code{n}, and \code{power} to return a value for \code{lambda}. In this situation, the lower value of lambda represents the maximum detectable risk ratio that is less than 1; the upper value of lambda represents the minimum detectable risk ratio greater than 1.
+
+See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
 
 \examples{
@@ -67,7 +70,7 @@ Values need to be entered for \code{control}, \code{n}, and \code{power} to retu
 ## with 0.90 power. How many men need to be sampled?
 
 epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
-   r = 1, design = 1, sided.test = 1, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
    
 ## ## A total of 18,316 men should be sampled: 9158 in the treatment group and
 ## 9158 in the control group. The risk ratio (that is, the prevalence of 
@@ -81,7 +84,7 @@ epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90,
 ## than 1?
 
 epi.sscompb(treat = NA, control = 0.32, n = 10000, power = 0.90, 
-   r = 1, design = 1, sided.test = 1, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
 
 ## If we sample only 10,000 men the maximum detectable risk ratio will be 0.91.
 

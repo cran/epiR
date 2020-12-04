@@ -6,8 +6,16 @@
    if(length(survfit.obj$strata) == 0)
    {
      dat.df <- data.frame(time = survfit.obj$time, time0 = c(0, survfit.obj$time[-length(survfit.obj$time)]))
+
+     # https://www.real-statistics.com/survival-analysis/kaplan-meier-procedure/confidence-interval-for-the-survival-function/
+     # Kaplan-Meier survival and confidence intervals:
+     dat.df$sest <- survfit.obj$surv
+     dat.df$sse  <- survfit.obj$std.err
+     dat.df$supp <- dat.df$sest^exp(z / log(dat.df$sest) * dat.df$sse / dat.df$sest)
+     dat.df$slow <- dat.df$sest^exp(-z / log(dat.df$sest) * dat.df$sse / dat.df$sest)   
+       
+     # Instantaneous hazard and confidence intervals:
      dat.df$int <- dat.df$time - dat.df$time0
-     
      dat.df$a <- survfit.obj$n.event
      dat.df$n <- survfit.obj$n.risk
      dat.df$p <- dat.df$a / dat.df$n
@@ -17,16 +25,17 @@
      dat.df$d. <- (dat.df$a * (dat.df$n - dat.df$a)) / dat.df$n^3
      dat.df$e. <- z^2 / (4 * dat.df$n^2)
      
-     dat.df$est <- dat.df$p / dat.df$int     
-     dat.df$low <- (dat.df$a. * (dat.df$b. + dat.df$c. - (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
-     dat.df$upp <- (dat.df$a. * (dat.df$b. + dat.df$c. + (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
+     dat.df$hest <- dat.df$p / dat.df$int     
+     dat.df$hlow <- (dat.df$a. * (dat.df$b. + dat.df$c. - (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
+     dat.df$hupp <- (dat.df$a. * (dat.df$b. + dat.df$c. + (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
      
-     dat.df$est[is.infinite(dat.df$est)] <- 0 
-     dat.df$low[is.infinite(dat.df$low)] <- 0
-     dat.df$upp[is.infinite(dat.df$upp)] <- 0
+     dat.df$hest[is.infinite(dat.df$hest)] <- 0 
+     dat.df$hlow[is.infinite(dat.df$hlow)] <- 0
+     dat.df$hupp[is.infinite(dat.df$hupp)] <- 0
      
      rval <- data.frame(time = dat.df$time, 
-        est = dat.df$est, lower = dat.df$low, upper = dat.df$upp)
+        sest = dat.df$sest, slow = dat.df$slow, supp = dat.df$supp,
+        hest = dat.df$hest, hlow = dat.df$hlow, hupp = dat.df$hupp)
    }
    
    else
@@ -62,7 +71,14 @@
        dat.df$time0 <- time0
        dat.df <- dat.df[,c(1,3,2)]
        dat.df$int <- (dat.df$time - dat.df$time0)
+
+       # Kaplan-Meier survival and confidence intervals:
+       dat.df$sest <- survfit.obj$surv
+       dat.df$sse  <- survfit.obj$std.err
+       dat.df$supp <- dat.df$sest^exp(z / log(dat.df$sest) * dat.df$sse / dat.df$sest)
+       dat.df$slow <- dat.df$sest^exp(-z / log(dat.df$sest) * dat.df$sse / dat.df$sest)   
        
+       # Instantaneous hazard and confidence intervals:
        dat.df$a <- survfit.obj$n.event
        dat.df$n <- survfit.obj$n.risk
        dat.df$p <- dat.df$a / dat.df$n
@@ -73,16 +89,17 @@
        dat.df$d. <- (dat.df$a * (dat.df$n - dat.df$a)) / dat.df$n^3
        dat.df$e. <- z^2 / (4 * dat.df$n^2)
        
-       dat.df$est <- dat.df$p / dat.df$int     
-       dat.df$low <- (dat.df$a. * (dat.df$b. + dat.df$c. - (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
-       dat.df$upp <- (dat.df$a. * (dat.df$b. + dat.df$c. + (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
+       dat.df$hest <- dat.df$p / dat.df$int     
+       dat.df$hlow <- (dat.df$a. * (dat.df$b. + dat.df$c. - (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
+       dat.df$hupp <- (dat.df$a. * (dat.df$b. + dat.df$c. + (z * sqrt(dat.df$d. + dat.df$e.)))) / dat.df$int
        
-       dat.df$est[is.infinite(dat.df$est)] <- 0 
-       dat.df$low[is.infinite(dat.df$low)] <- 0
-       dat.df$upp[is.infinite(dat.df$upp)] <- 0
+       dat.df$hest[is.infinite(dat.df$hest)] <- 0 
+       dat.df$hlow[is.infinite(dat.df$hlow)] <- 0
+       dat.df$hupp[is.infinite(dat.df$hupp)] <- 0
        
        rval <- data.frame(strata = dat.df$strata, time = dat.df$time, 
-         est = dat.df$est, lower = dat.df$low, upper = dat.df$upp)
+          sest = dat.df$sest, slow = dat.df$slow, supp = dat.df$supp,
+          hest = dat.df$hest, hlow = dat.df$hlow, hupp = dat.df$hupp)
      }    
        
    return(rval)

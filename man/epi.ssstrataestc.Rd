@@ -11,7 +11,7 @@ Sample size to estimate a continuous outcome using a stratified random sampling 
 
 \usage{
 epi.ssstrataestc(strata.n, strata.xbar, strata.sigma, epsilon.r, 
-   conf.level = 0.95)
+   nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -19,6 +19,7 @@ epi.ssstrataestc(strata.n, strata.xbar, strata.sigma, epsilon.r,
   \item{strata.xbar}{vector of numbers, defining the expected means of the continuous variable to be estimated for each strata.}
   \item{strata.sigma}{vector of numbers, defining the expected standard deviation of the continous variable to be estimated for each strata.}
   \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
 
@@ -58,10 +59,10 @@ strata.n <- c(600, 500, 400)
 strata.xbar <- c(0.164, 0.166, 0.236)
 strata.sigma <- sqrt(c(0.245, 0.296, 0.436))
 epi.ssstrataestc(strata.n, strata.xbar, strata.sigma, epsilon.r = 0.20, 
-   conf.level = 0.95)
+   nfractional = FALSE, conf.level = 0.95)
 
 ## The number allocated to the under 45 years, 45 -- 64 years, and 65 years 
-## and over stratums should be 223, 186, and 149 (a total of 558). These 
+## and over stratums should be 224, 187, and 150 (a total of 561). These 
 ## results differ from the worked example provided in Levy and Lemeshow where 
 ## certainty is set to approximately 99\%.
 

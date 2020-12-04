@@ -22,8 +22,9 @@ epi.nomogram(se, sp, lr, pre.pos, verbose = FALSE)
 
 \value{
 A list containing the following:
-  \item{lr}{the likelihood ratio of a positive and negative test.}
-  \item{prob}{the post-test probability of the outcome given a positive and negative test.}
+  \item{lr}{a data frame listing the likelihood ratio of a positive and negative test.}
+  \item{prior}{a data frame listing the pre-test probability of being outcome (i.e. disease) positive, as entered by the user.}
+  \item{post}{a data frame listing: \code{opos.tpos} the post-test probability of being outcome (i.e. disease) positive given a positive test result and \code{opos.tneg} the post-test probability of being outcome (i.e. disease) positive given a negative test result.}
 }
 
 \references{
@@ -48,11 +49,10 @@ Hunink M, Glasziou P (2001). Decision Making in Health and Medicine - Integratin
 
 epi.nomogram(se = 0.89, sp = 0.85, lr = NA, pre.pos = 0.05, verbose = FALSE)
 
-## Given a positive test result, the post-test probability of being 
-## disease positive is 0.24.
+## If the test is positive the post-test probability that this dog is  
+## hypothyroid is 0.24. If the test is negative the post-test probability 
+## that this dog is hypothyroid is 0.0068.
 
-## Given a negative test result, the post-test probability of being 
-## disease negative is 0.0068.
 
 ## EXAMPLE 2:
 ## A dog is presented to you with severe pruritis. You suspect sarcoptic 

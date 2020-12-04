@@ -1,4 +1,4 @@
-"epi.sscohortt" <- function(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, conf.level = 0.95){
+"epi.sscohortt" <- function(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
 
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
@@ -23,8 +23,17 @@
     n.exp1 <- ceiling(n.exp1 * design)
     
     # r is the ratio of the number in the control group to the number in the treatment group:
-    n.exp0 <- r * n.exp1
-    n.total <- n.exp1 + n.exp0
+
+    if(nfractional == TRUE){
+      n.exp0 <- r * n.exp1
+      n.total <- n.exp1 + n.exp0
+    }
+    
+    if(nfractional == FALSE){
+      n.exp0 <- ceiling(r * n.exp1)
+      n.total <- n.exp1 + n.exp0
+    }
+    
     
     rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, irr = irexp1 / irexp0)
   }

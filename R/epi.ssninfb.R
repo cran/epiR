@@ -1,4 +1,4 @@
-epi.ssninfb <- function(treat, control, delta, n, r = 1, power, alpha){
+epi.ssninfb <- function(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha){
    
    # alpha <- 1 - conf.level
    beta <- 1 - power
@@ -9,28 +9,43 @@ epi.ssninfb <- function(treat, control, delta, n, r = 1, power, alpha){
    if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
       # http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Non-Inferiority-or-Superiority:
       
-      (n.control <- (treat * (1 - treat) / r + control * (1 - control)) * ((z.alpha + z.beta) / (treat - control - delta))^2)
-      n.treat <- n.control * r
+     if(nfractional == FALSE){
+       n.control <- ceiling((treat * (1 - treat) / r + control * (1 - control)) * ((z.alpha + z.beta) / (treat - control - delta))^2)
+       n.treat <- n.control * r
+       n.total <- n.treat + n.control
+     }
      
-      # r = n.treat / n.control
-      n.control <- ceiling(n.control)
-      n.treat <- ceiling(n.treat)
-      
-      rval <- list(n.total = n.treat + n.control, n.treat = n.treat, n.control = n.control, power = power)
+     if(nfractional == TRUE){
+       n.control <- (treat * (1 - treat) / r + control * (1 - control)) * ((z.alpha + z.beta) / (treat - control - delta))^2
+       n.treat <- n.control * r
+       n.total <- n.treat + n.control
+     }
+     
+      rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
    }
   
    if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
-      # Work out the number of subjects in the control group. r equals the number in the treatment group divided by 
-      # the number in the control group.
-      n.control <- ceiling(1 / (r + 1) * (n))
-      n.treat <- n - n.control
-     
-      # Replaced 010518 in response to email from Aline Guttmann on 080318: 
-      z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat + control * (1 - control) / n.control)
-      # Old code: z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat / r + control * (1 - control) / n.control)
-      power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
       
-      rval <- list(n.total = n.treat + n.control, n.treat = n.treat, n.control = n.control, power = power)
+     # Work out the number of subjects in the control group. r equals the number in the treatment group divided by the number in the control group.
+      
+     if(nfractional == FALSE){     
+       n.control <- ceiling(1 / (r + 1) * (n))
+       n.treat <- n - n.control
+       n.total <- n.treat + n.control
+     }
+     
+     if(nfractional == TRUE){     
+       n.control <- 1 / (r + 1) * (n)
+       n.treat <- n - n.control
+       n.total <- n.treat + n.control
+     }
+     
+     # Replaced 010518 in response to email from Aline Guttmann on 080318: 
+     z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat + control * (1 - control) / n.control)
+     # Old code: z <- (treat - control - delta) / sqrt(treat * (1 - treat) / n.treat / r + control * (1 - control) / n.control)
+     power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
+      
+      rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
   }
   rval
 }  

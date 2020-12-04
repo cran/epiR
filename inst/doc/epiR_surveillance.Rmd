@@ -1,0 +1,528 @@
+---
+title: "Design and analysis of disease surveillance programs using epiR"
+author: "Mark Stevenson and Evan Sergeant"
+date: "`r Sys.Date()`"
+bibliography: epiR_surveillance.bib
+link-citations: yes
+output:
+  knitr:::html_vignette:
+  toc: true
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Disease surveillance}
+  %\usepackage[utf8]{inputenc}
+
+---
+\setmainfont{Calibri Light}
+
+```{r, echo = FALSE, message = FALSE}
+
+# If you want to create a PDF document paste the following after line 9 above:
+#   pdf_document:
+#     toc: true
+#     highlight: tango
+#     number_sections: no
+#     latex_engine: xelatex    
+# header-includes: 
+#    - \usepackage{fontspec}
+
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+```
+
+Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
+
+The Terrestrial Animal Health Code of the World Organisation of Animal Health [@OIE:2019] defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners, and (4) identification of hazards or risk factors for disease outbreaks.
+
+This vignette provides instruction on the way R and `epiR` (and specifically the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of programs to provide a quantitative basis for claims for disease freedom.
+
+## Definitions
+
+**Design prevalence**. The design prevalence (minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we may reject the null hypothesis and accept the alternative hypothesis to conclude that the prevalence is less than the design prevalence. 
+
+A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn't need to be described using a distribution. *Cluster-level design prevalence* refers to a design prevalence assigned at the cluster (e.g. village, herd or household) level. *Unit-level design prevalence* refers to a design prevalence assigned at the individual unit (e.g. cow, sheep, bird) level. The unit-level prevalence of disease can be applied either within clusters (e.g. herds, flocks, villages) or across broader, unclustered populations (e.g. human populations or wildlife).
+
+**Surveillance system**. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g. on-farm testing, abattoir surveillance, disease hotlines) called **surveillance system components**. Each surveillance system component is comprised of **surveillance system units**. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively. 
+
+**Unit sensitivity**. Unit sensitivity is defined as the average probability that a unit (selected from those processed) will return a positive surveillance outcome, given that disease is present in the population at a level equal to or greater than a specified design prevalence.
+
+**Component sensitivity**. Component sensitivity (CSe) is defined as the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
+
+**Surveillance system sensitivity**. Surveillance system sensitivity (SSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than a specified design prevalence.
+
+## An approach for thinking about surveillance design and assessment
+
+The first thing to consider when you're designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen sampling will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
+
+Once we have the method of sampling defined we then move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how we might assess the surveillance system once it has been designed and implemented.
+
+In terms of design, once you have specified the sampling method you need to determine how many surveillance system units will be sampled (usually to achieve a defined surveillance system sensitivity). 
+
+Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, we then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: (1) What is the surveillance system sensitivity? or (2) What is the probability that the prevalence of disease is less than the specified design prevalence? or (3) What is the surveillance system's negative predictive value? 
+
+The remainder of this vignette follows this general structure. For each sampling method (representative, risk-based, census and passive) we provide notes and examples on the use of `epiR` for sample size estimation, estimation of surveillance system sensitivity and estimation of the probability of disease freedom. While 'estimation of the probability of disease freedom' is the name assigned to the last group of analyses a more correct label would be 'estimation of the probability that the prevalence of disease is less than a specified design prevalence' (i.e. the negative predictive value of the surveillance system). Be aware that we can only truly demonstrate disease freedom if every member of the population at risk is assessed using a test with perfect diagnostic sensitivity and perfect diagnostic specificity. 
+
+## Representative sampling
+
+### Sample size estimation
+
+The sample size functions for surveillance representative sampling in `epiR` fall into two classes: sampling to achieve a defined probability of disease freedom and sampling to achieve a defined surveillance system sensitivity.
+
+The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g. cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units are sampled.
+
+```{r ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+library(pander)
+panderOptions('table.split.table', Inf)
+# panderOptions('table.alignment.default', function(df) ifelse(sapply(df, is.numeric), 'right', 'left'))
+
+set.caption("Functions to estimate sample size using representative population sampling data.")
+
+ssrs.tab <- " 
+Sampling       | Outcome               | Details                    | Function
+Representative | Prob disease freedom  | Imperfect Se, perfect Sp   | `rsu.sspfree.rs`
+Representative | SSe                   | Imperfect Se, perfect Sp   | `rsu.sssep.rs`
+Two stage representative | SSe         | Imperfect Se, perfect Sp   | `rsu.sssep.rs2st`
+Representative | SSe                   | Imperfect Se, imperfect Sp, known N | `rsu.sssep.rsfreecalc`
+Pooled representative    | SSe                   | Imperfect Se, imperfect Sp | `rsu.sssep.rspool`"
+
+ssrs.df <- read.delim(textConnection(ssrs.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+
+names(ssrs.df) <- unname(as.list(ssrs.df[1,])) # put headers on
+ssrs.df <- ssrs.df[-1,] # remove first row
+row.names(ssrs.df) <- NULL
+pander(ssrs.df, style = 'rmarkdown')
+```
+
+*EXAMPLE 1*
+
+A cross-sectional study is to be carried out to confirm the absence of brucellosis in dairy herds using a bulk milk tank test assuming a design prevalence of 5%. Assume the total number of dairy herds in your study area is unknown and large and the bulk milk tank test to be used has a diagnostic sensitivity of 0.95 and a specificity of 1.00. How many herds need to be sampled to achieve a system sensitivity of 95%? That is, what is the probability that disease will be detected if it is present in the population at the designated design prevalence?
+
+```{r message = FALSE}
+library(epiR)
+rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.95)
+```
+A total of 62 herds need to be sampled and tested. 
+
+This question can be asked in another way. If our prior estimate of the probability that the population of herds is free of disease is 0.50 and we believe that there's a 1% chance of disease being introduced into the population during the next time period, how many herds need to be sampled to be 95% confident that disease is absent (i.e. less than the design prevalence) if all tests are negative? 
+
+```{r message = FALSE}
+rsu.sspfree.rs(N = NA, prior = 0.50, p.intro = 0.01, pstar = 0.05, pfree = 0.95, se.u = 0.95)
+```
+A total of 61 herds need to be sampled (similar to the value calculated above). Note that function `rsu.sssep.rs` returns the sample size to achieve a desired surveillance system sensitivity ('what's the probability that disease will be detected?'). Function `rsu.sspfree.rs` returns the sample size to achieve a desired (posterior) probability of disease freedom.
+
+Now assume that it is known that there are 500 dairy herds in your study area. Revise your sample size estimate to achieve the desired surveillance system sensitivity in light of this new information.
+
+```{r message = FALSE}
+rsu.sssep.rs(N = 500, pstar = 0.05, se.p = 0.95, se.u = 0.95)
+```
+A total of 60 herds need to be sampled and tested. 
+
+The sample size calculations presented so far assume the use of a test with perfect specificity (that is, if a sample returns a positive result we can be 100% certain that the herd is positive and disease is actually present in the population). 
+
+Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The `rsu.ss.rsfreecalc` function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software 'Freecalc' [@cameron_baldock:1998].
+
+*EXAMPLE 2*
+
+We'll continue with the brucellosis example introduced above. Imagine the test we're using has a diagnostic sensitivity of 0.95 (as before) but this time it has a specificity of 0.98. How many herds need to be sampled to be 95% certain that the prevalence of brucellosis in dairy herds is less than the design prevalence if less than a specified number of tests return a positive result? 
+
+```{r message = FALSE}
+rsu.sssep.rsfreecalc(N = 5000, pstar = 0.05, mse.p = 0.95, 
+   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
+   max.ss = 32000)$summary
+```
+
+A population sensitivity of 95% is achieved with a total sample size of 194 herds, assuming a cut-point of 7 or more positive herds are required to return a positive survey result.
+
+Note the substantial increase in sample size when diagnostic specificity is imperfect (194 herds when specificity is 0.98 compared with 63 when specificity is 1.00). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are more likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to see its effect on estimated sample size. 
+
+```{r message = FALSE}
+rsu.sssep.rsfreecalc(N = 5000, pstar = 0.10, mse.p = 0.95, 
+   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
+   max.ss = 32000)$summary
+```
+
+The required sample size decreases to 66 and the cut-point to 3 positives due to: (1) the expected reduction in the number of false positives; and (2) the greater difference between true and false positive rates in the first example compared with the second. 
+
+Now consider the situation where individual surveillance units (e.g. animals) are aggregated within groups called 'clusters' (e.g. herds). With this type of system **two-stage cluster sampling** is a commonly used approach for disease surveillance studies. 
+
+With two stage cluster sampling herds (clusters) are sampled first and then individual surveillance units are then sampled from each sampled cluster. This means that we have two sample sizes to calculate: the number of clusters and the number of surveillance units from within each sampled cluster. 
+
+*EXAMPLE 3*
+
+For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the herd level is 0.95 and the target sensitivity of disease detection at the population level is the same, 0.95. 
+
+How many herds need to be sampled if you want to be 95% certain of detecting at least one infected herd if that the between-herd prevalence of disease is greater than or equal to 0.005?
+
+```{r message = FALSE}
+rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.95)
+```
+We need to sample a total of 622 herds. 
+
+How many animals need to be sampled from each herd if you want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?
+
+```{r message = FALSE}
+rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.90)
+```
+Within each selected herd we need to sample at least 66 animals. 
+
+As an alternative we can calculate the required number of herds to sample and the required number of animals to sample from each herd in a single step using the function `rsu.sssep.rs2stage`:
+
+```{r message = FALSE}
+rsu.sssep.rs2st(H = 20000, N = NA, pstar.c = 0.005, pstar.u = 0.05, se.p = 0.95, se.c = 0.95, se.u = 0.90)
+```
+
+### Estimation of surveillance system sensitivity and specificity
+
+```{r seprs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+
+set.caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+
+seprs.tab <- " 
+Sampling       | Outcome      | Details                    | Function
+Representative | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rs`
+Two stage representative      | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rs2st`
+Representative | SSe          | Imperfect Se, perfect Sp, multiple components   | `rsu.sep.rsmult`
+Representative | SSe          | Imperfect Se, imperfect Sp | `rsu.sep.rsfreecalc`
+Pooled representative         | SSe   | Imperfect Se, perfect Sp   | `rsu.sep.rspool`
+Representative | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rsvarse`
+Representative | SSp          | Imperfect Sp               | `rsu.spp.rs`"
+
+seprs.df <- read.delim(textConnection(seprs.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+
+names(seprs.df) <- unname(as.list(seprs.df[1,])) # put headers on
+seprs.df <- seprs.df[-1,] # remove first row
+row.names(seprs.df) <- NULL
+pander(seprs.df, style = 'rmarkdown')
+```
+
+*EXAMPLE 4*
+
+Three hundred samples are to be tested from a population of animals to confirm the absence of disease. The total size of the population is unknown. Assuming a design prevalence of 0.01 and a test with diagnostic sensitivity of 0.95 will be used what is the surveillance system sensitivity? That is, what is the probability that disease will be detected if it is present in the population at or above the specified design prevalence?
+
+```{r message = FALSE}
+rsu.sep.rs(N = NA, n = 300, pstar = 0.01, se.u = 0.95)
+```
+
+The probability that this surveillance strategy will detect disease if it is present in the population at or above the specified design prevalence (the surveillance system sensitivity) is 0.943.
+
+*EXAMPLE 5*
+
+Thirty animals from five herds ranging in size from 80 to 100 head are to be sampled to confirm the absence of a disease. Assuming a design prevalence of 0.01 and a test with diagnostic sensitivity of 0.95 will be used, what is the sensitivity of disease detection for each herd?
+
+```{r message = FALSE}
+N <- seq(from = 80, to = 100, by = 5)
+n <- rep(30, times = length(N))
+
+herd.sep <- rsu.sep.rs(N = N, n = n, pstar = 0.01, se.u = 0.95)
+sort(round(herd.sep, digits = 2))
+```
+
+The sensitivity of disease detection for each herd ranges from 0.28 to 0.36. 
+
+*EXAMPLE 6*
+
+Assume 73 samples were tested at two different labs, using different tests. Laboratory 1 tested 50 samples with the standard test which has a diagnostic sensitivity of 0.80. Laboratory 2 tested the remaining 23 samples with a different test which has a diagnostic sensitivity of 0.70. What is the surveillance system sensitivity of disease detection if we set the design prevalence to 0.05?
+
+```{r message = FALSE}
+# Diagnostic test sensitivities and the number of samples tested at each laboratory:
+se.t1 <- 0.80; se.t2 <- 0.70
+n.lab1 <- 50; n.lab2 <- 23
+
+# Create a vector of test sensitivities for each sample:
+se.all <- c(rep(se.t1, times = n.lab1), rep(se.t2, times = n.lab2))
+rsu.sep.rsvarse(N = n.lab1 + n.lab2, pstar = 0.05, se.u = se.all)
+```
+If the design prevalence is 0.05 the estimated surveillance system sensitivity is 0.997. 
+
+### Estimation of the probability of disease freedom
+
+```{r pfreers.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+
+set.caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
+
+pfreers.tab <- " 
+Sampling       | Outcome                             | Details                    | Function
+Representative | Prob disease of freedom | Imperfect Se, perfect Sp   | `rsu.pfree.rs`
+Representative | Equilibrium prob of disease freedom | Imperfect Se, perfect Sp   | `rsu.pfree.equ`"
+
+pfreers.df <- read.delim(textConnection(pfreers.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+
+names(pfreers.df) <- unname(as.list(pfreers.df[1,])) # put headers on
+pfreers.df <- pfreers.df[-1,] # remove first row
+row.names(pfreers.df) <- NULL
+pander(pfreers.df, style = 'rmarkdown')
+```
+
+*EXAMPLE 7*
+
+You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated system sensitivity of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is higher during the warmer months of the year (June to August). 
+
+Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is free of disease is 0.50.
+
+```{r message = FALSE}
+library(ggplot2); library(lubridate); library(scales)
+
+# Define a vector disease incursion probabilities (January to December):
+p.intro <- c(0.01,0.01,0.01,0.02,0.04,0.10,0.10,0.10,0.08,0.06,0.04,0.02)
+
+rval.df <- rsu.pfree.rs(se.p = rep(0.65, times = 12), p.intro = p.intro, prior = 0.50, by.time = TRUE)
+
+# Re-format rval.df ready for for ggplot2:
+dat.df <- data.frame(mnum = rep(1:12, times = 2),
+   mchar = rep(seq(as.Date("2020/1/1"), by = "month", length.out = 12), times = 2),                 
+   class = c(rep("Disease introduction", times = length(p.intro)), 
+             rep("Disease freedom", times = length(p.intro))),
+   prob = c(rval.df$PIntro, rval.df$PFree))
+
+# Plot the results:
+ggplot(data = dat.df, aes(x = mchar, y = prob, group = class, col = class)) +
+  theme_bw() +
+  geom_point() + 
+  geom_line() +
+  scale_colour_manual(values = c("red", "dark blue")) + 
+  scale_x_date(breaks = date_breaks("1 month"), labels = date_format("%b"),
+     name = "Month") +
+  scale_y_continuous(limits = c(0,1), name = "Probability") +
+  geom_hline(aes(yintercept = 0.95), linetype = "dashed", col = "blue") +
+  guides(col = guide_legend(title = "")) +
+  theme(legend.position = c(0.8, 0.5))
+```
+
+## Risk-based sampling
+
+With risk-based sampling we modify the intensity of sampling effort across the population of interest according to risk (as opposed to representative sampling where the probability that an individual unit is sampled is uniform across the population of interest). When our objective is to detect the presence of disease risk-based sampling makes intuitive sense: we concentrate our search effort on those sections of the population where we believe we are more likely to detect disease (i.e. where the risk of disease is high).
+
+### How many samples do I need?
+
+The sample size functions all relate to sampling to achieve a defined surveillance system sensitivity.
+
+```{r ssrb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+set.caption("Functions to estimate sample size using risk based sampling data.")
+
+ssrb.tab <- " 
+Sampling       | Outcome               | Details                  | Function
+Risk-based     | SSe                   | Single Se for risk groups, perfect Sp        | `rsu.sssep.rbsrg`
+Risk-based     | SSe                   | Multiple Se within risk groups, perfect Sp   | `rsu.sssep.rbmrg`
+Risk-based     | SSe                   | Two stage sampling, 1 risk factor  | `rsu.sssep.rb2st1rf`
+Risk-based     | SSe                   | Two stage sampling, 2 risk factors | `rsu.sssep.rb2st2rf`"
+
+ssrb.df <- read.delim(textConnection(ssrb.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+
+names(ssrb.df) <- unname(as.list(ssrb.df[1,])) # put headers on
+ssrb.df <- ssrb.df[-1,] # remove first row
+row.names(ssrb.df) <- NULL
+pander(ssrb.df, style = 'rmarkdown')
+```
+
+*EXAMPLE 8*
+
+You are working with a disease of cattle where the prevalence of disease is believed to vary according to herd type. The risk of disease is 5 times greater in dairy herds and 3 times greater in mixed herds compared with the reference category, beef herds. The distribution of dairy, mixed and beef herds in the population of interest is 0.10, 0.10 and 0.80, respectively. Assume you intend to distribute your sampling effort 0.4, 0.4 and 0.2 across dairy, mixed and beef herds, respectively.
+
+Within each of the three risk groups a single test with a diagnostic sensitivity of 0.95 will be used. How many herds need to be sampled if you want to achieve 95% system sensitivity for a prevalence of disease in the population of greater than or equal to 1%?
+
+```{r message = FALSE}
+# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+m <- rbind(1,1,1)
+
+rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
+   spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = 0.95)
+```
+A total of 147 herds need to be sampled: 59 dairy, 59 mixed and 29 beef herds.
+
+Now assume that one of two tests will be used for each herd. The first test has a diagnostic sensitivity of 0.92. The second test has a diagnostic sensitivity of 0.80. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70, respectively (which means that 0.20, 0.50 and 0.30 receive the second test, respectively). Recalculate the sample size.
+
+```{r message = FALSE}
+# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3))
+
+rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
+   spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = c(0.92,0.80))
+```
+
+A total of 159 herds need to be sampled: 64 dairy, 64 mixed and 31 beef herds.
+
+*EXAMPLE 9*
+
+A cross-sectional study is to be carried out to confirm the absence of disease using risk based sampling. Assume a population level design prevalence of 0.01 and there are 'high', 'medium' and 'low' risk areas where the risk of disease in the high risk area compared with the low risk area is 5 and the risk of disease in the medium risk area compared with the low risk area is 3. The proportions of the population at risk in the high, medium and low risk area are 0.10, 0.10 and 0.80, respectively.
+
+Half of your samples will be taken from individuals in the high risk area, 0.30 from the medium risk area and 0.20 from the low risk area. You intend to use a test with diagnostic sensitivity of 0.90 and you'd like to take sufficient samples to return a population sensitivity of 0.95. How many units need to be sampled to meet the requirements of the study?
+
+```{r message = FALSE}
+rsu.sssep.rbsrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.10,0.10,0.80), 
+   spr = c(0.50,0.30,0.20), se.p = 0.95, se.u = 0.90)
+```
+A total of 147 units needs to be sampled to meet the requirements of the study: 74 from the high risk area, 45 from the medium risk area and 28 from the low risk area. 
+
+*EXAMPLE 10*
+
+A cross-sectional study is to be carried out to confirm the absence of disease using risk based sampling. Assume a design prevalence of 0.02 at the cluster (herd) level and a design prevalence of  0.10 at the surveillance unit (individual animal) level. Clusters are categorised as being either high, medium or low risk with the probability of disease for clusters in the high and medium risk area 5 and 3 times the probability of disease in the low risk area. The proportions of clusters in the high, medium and low risk area are 0.10, 0.20 and 0.70, respectively. The proportion of samples from the high, medium and low risk area will be 0.40, 0.40 and 0.20, respectively. 
+
+Surveillance units (individual animals) are categorised as being either high or low risk with the probability of disease for units in the high risk group 4 times the probability of disease in the low risk group. The proportions of units in the high and low risk groups are 0.10 and 0.90, respectively. All of your samples will be taken from units in the high risk group. 
+
+You intend to use a test with diagnostic sensitivity of 0.95 and you'd like to take sufficient samples to be 95% certain that you've detected disease at the population level, 95% certain that you've detected disease at the cluster level and 95% at the surveillance unit level. How many clusters and how many units need to be sampled to meet the requirements of the study?
+
+```{r message = FALSE}
+rsu.sssep.rb2st2rf(
+   rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.40,0.20),
+   pstar.c = 0.02,
+   rr.u = c(4,1), ppr.u = c(0.1, 0.9), spr.u = c(1,0),
+   pstar.u = 0.10, 
+   se.p = 0.95, se.c = 0.95, se.u = 0.95)
+```
+
+A total of 82 clusters needs to be sampled: 33 from the high risk area, 33 from the medium risk area and 16 from the low risk area. A total of 9 units should be sampled from each cluster.
+
+
+### Surveillance system sensitivity
+
+```{r seprb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+set.caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
+
+ssrb.tab <- " 
+Sampling       | Outcome        | Details                  | Function
+Risk-based     | SSe            | Varying Se, perfect Sp   | `rsu.sep.rb`
+Risk-based     | SSe            | Varying Se, perfect Sp, one risk factor   | `rsu.sep.rb1rf`
+Risk-based     | SSe            | Varying Se, perfect Sp, two risk factors  | `rsu.sep.rb2rf`"
+
+ssrb.df <- read.delim(textConnection(ssrb.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+
+names(ssrb.df) <- unname(as.list(ssrb.df[1,])) # put headers on
+ssrb.df <- ssrb.df[-1,] # remove first row
+row.names(ssrb.df) <- NULL
+pander(ssrb.df, style = 'rmarkdown')
+```
+
+*EXAMPLE 11*
+
+You have been asked to provide an assessment of a surveillance program for Actinobacillus hyopneumoniae in pigs. It is known that there are high risk and low risk areas for A. hypopneumoniae in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.
+
+The risk of A. hypopneumoniae is dependent on age, with adult pigs around five times more likely to be A. hypopneumoniae positive compared with younger (grower) pigs. 
+
+Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested. 
+
+The ELISA for A. hypopneumoniae in pigs has a diagnostic sensitivity of 0.95.
+
+What is the surveillance system sensitivity if we assume a design prevalence of 1 per 100 at the cluster (herd) level and 5 per 100 at the surveillance system unit (pig) level?
+
+```{r message = FALSE}
+# There are 1784 herds in the study area:
+H <- 1784
+
+# Twenty of the 1784 herds are sampled. Generate 20 herds of varying size:
+set.seed(1234)
+hsize <- rlnorm(n = 20, meanlog = log(10), sdlog = log(8))
+hsize <- round(hsize + 20, digits = 0)
+
+# Generate a matrix listing the number of growers and finishers in each of the 20 sampled herds. 
+# Assume that anywhere between 80% and 95% of the pigs in each herd are growers:
+set.seed(1234)
+pctg <- runif(n = 20, min = 0.80, max = 0.95)
+ngrow <- round(pctg * hsize, digits = 0)
+nfini <- hsize - ngrow
+N <- cbind(ngrow, nfini)
+
+# Generate a matrix listing the number of grower and finisher pigs sampled from each herd. Fifteen pigs from each herd are sampled. If there's less than 15 pigs we sample the entire herd:
+nsgrow <- rep(0, times = 20)
+nsfini <- ifelse(nfini <= 15, nfini, 15)
+n <- cbind(nsgrow, nsfini)
+
+# The herd-level design prevalence is 0.01 and the individual pig-level design prevalence is 0.05: 
+pstar.c <- 0.01
+pstar.u <- 0.05
+
+# For herds in the high-risk area the probability being A. hyopneumoniae positive is 3.5 times that of herds in the low-risk area. Ninety percent of herds are in the low risk area and 10% are in the high risk area:
+rr.c <- c(3.5,1)
+ppr.c <- c(0.1,0.9) 
+
+# We've sampled 15 herds from the high risk area and 5 herds from the low risk area. Above, for vector rr.c, the relative risk for the high risk group is listed first so the vector rg follows this order:
+rg <- c(rep(1, times = 15), rep(2, times = 5))
+
+# The probability being A. hyopneumoniae positive for finishers is 5 times that of growers. For the matrices N and n growers are listed first then finishers. Vector rr.u follows the same order:
+rr.u <- c(1,5)
+
+# The diagnostic sensitivity of the A. hyopneumoniae ELISA is 0.95:
+se.u <- 0.95
+
+rsu.sep.rb2st(H = H, N = N, n = n, 
+   pstar.c = pstar.c, pstar.u = pstar.u,
+   rg = rg, rr.c = rr.c, rr.u = rr.u,
+   ppr.c = ppr.c, ppr.u = NA,
+   se.u = se.u)
+```
+
+The estimated surveillance system sensitivity of this program is 0.32. 
+
+Repeat these analyses assuming we don't know the total number of pig herds in the population and we have only an estimate of the proportions of growers and finishers in each herd. 
+
+```{r message = FALSE}
+# Generate a matrix listing the proportion of growers and finishers in each of the 20 sampled herds:
+
+ppr.u <- cbind(rep(0.9, times = 20), rep(0.1, times = 20))
+
+# Set H (the number of clusters) and N (the number of surveillance units within each cluster) to NA:
+rsu.sep.rb2st(H = NA, N = NA, n = n, 
+   pstar.c = pstar.c, pstar.u = pstar.u,
+   rg = rg, rr.c = rr.c, rr.u = rr.u,
+   ppr.c = ppr.c, ppr.u = ppr.u,
+   se.u = se.u)
+```
+The estimated surveillance system sensitivity is 0.21. 
+
+
+## Analysis of passive surveillance data
+
+### Estimation of surveillance system sensitivity and specificity
+
+*EXAMPLE 12*
+
+There are four 'steps' in a (passive) disease detection process for disease X in your country: (1) an infected animal shows clinical signs of disease; (2) a herd manager observes clinical signs in a disease animal and calls a veterinarian; (3) a veterinarian responds appropriately to the disease investigation request (taking, for example, appropriate samples for laboratory investigation); and (4) the laboratory conducts appropriate tests on the submitted samples and interprets the results of those tests correctly. The probabilities for each step in the disease detection pathway (in order) are 0.10, 0.20, 0.90 and 0.99, respectively. 
+
+Assuming the probability that a unit actually has disease if it is submitted for testing is 0.98, the sensitivity of the diagnostic test used at the unit level is 0.90, the population is comprised of 1000 clusters (herds), five animals from each cluster (herd) investigated for disease are tested and the cluster-level design prevalence is 0.01, what is the sensitivity of disease detection at the cluster (herd) and population level?
+
+```{r message = FALSE}
+rsu.sep.pass(step.p = c(0.10,0.20,0.90,0.99), pstar.c = 0.01,
+   p.inf.u = 0.98, N = 1000, n = 5, se.u = 0.90)
+```
+
+The sensitivity of disease detection at the cluster (herd) level is 0.018. The sensitivity of disease detection at the population level is 0.16.
+
+## Miscellaneous functions
+
+### Adjusted relative risks
+
+*EXAMPLE 13*
+
+For a given disease of interest you believe that there is a 'high risk' and 'low risk' area in your country. The risk of disease in the high-risk area compared with the low-risk area is 5. A recent census shows that 10% of the population are resident in the high-risk area and 90% are resident in the low-risk area. Calculate the adjusted relative risks for each area. 
+
+```{r message = FALSE}
+rsu.adjrisk(rr = c(5,1), ppr = c(0.10,0.90))
+```
+
+The adjusted relative risks for the high and low risk areas are 3.6 and 0.7, respectively.
+
+### Design prevalence back calculation
+
+*EXAMPLE 14*
+
+The population size in a provincial area in your country is 193,000. In a given two-week period a total of 7764 individuals have been tested for COVID-19 using an approved PCR which is believed to have a diagnostic sensitivity of 0.85. All of the individuals tested have returned a negative result. What is the maximum prevalence required to provide system sensitivity of 0.95 if COVID-19 is actually present in this population (i.e. what is the back-calculated design prevalence)? Express your result as the number of COVID-19 cases per 100,000 head of population.
+
+```{r message = FALSE}
+rsu.pstar(N = 193000, n = 7764, se.p = 0.95, se.u = 0.85) * 100000
+```
+
+If the 7764 individuals have all returned a negative test result (using a test with 85% sensitivity) we can be 95% confident that COVID-19, if it is present, is present at a prevalence of 44 cases per 100,000 or less.  
+
+What is the probability that the prevalence of COVID-19 in this population is less than or equal to 10 cases per 100,000?
+
+```{r message = FALSE}
+rsu.sep(N = 193000, n = 7764, pstar = 10 / 100000, se.u = 0.85)
+```
+
+If all of the 7764 individuals returned a negative test we can 48% confident that the prevalence of COVID-19 in the province is less than 10 per 100,000. How many need to be tested to be 95% confident that the prevalence of COVID-19 is less than or equal to 10 cases per 100,000? We return to the sample size functions covered earlier:
+
+```{r message = FALSE}
+rsu.sssep.rs(N = 193000, pstar = 10 / 100000, se.p = 0.95, se.u = 0.85)
+```
+To be 95% confident that the prevalence of COVID-19 is less than or equal to 10 cases per 100,000 a total of 31,586 individuals need to be tested. 
+
+## References

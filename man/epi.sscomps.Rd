@@ -12,7 +12,7 @@ Sample size, power and minimum detectable hazard when comparing time to event.
 
 \usage{
 epi.sscomps(treat, control, n, power, r = 1, design = 1,
-   sided.test = 2, conf.level = 0.95)
+   sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ epi.sscomps(treat, control, n, power, r = 1, design = 1,
   \item{r}{scalar, the number in the treatment group divided by the number in the control group. This argument is ignored when \code{method = "proportions"}.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome hazard in the exposed (treatment) group is greater than or less than the outcome hazard in the unexposed (control) group. Use a one-sided test to evaluate whether or not the outcome hazard in the exposed (treatment) group is greater than the outcome hazard in the unexposed (control) group.}
+  \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
@@ -46,6 +47,8 @@ Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
+
+See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
 
 \examples{
@@ -56,7 +59,7 @@ The power of a study is its ability to demonstrate the presence of an associatio
 ## power to detect this difference. How many events are required?
 
 epi.sscomps(treat = 0.45, control = 0.30, n = NA, power = 0.90, 
-   r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 250 events are required. Assuming one event per individual, 
 ## assign 125 individuals to the treatment group and 125 to the control group.
@@ -68,7 +71,7 @@ epi.sscomps(treat = 0.45, control = 0.30, n = NA, power = 0.90,
 ## 2-sided test at the 0.05 level?
 
 epi.sscomps(treat = NA, control = NA, n = 500, power = 0.90, 
-   r = 1, design = 1, sided.test = 2, conf.level = 0.95)
+   r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## Assuming treatment increases time to event (compared with controls), the 
 ## minimum detectable hazard of a study involving 500 subjects (250 in the 
