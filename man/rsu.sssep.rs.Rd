@@ -16,7 +16,7 @@ rsu.sssep.rs(N, pstar, se.p = 0.95, se.u)
 
 \arguments{
 \item{N}{scalar integer or vector of same length as \code{pstar}, representing the population size.}
-\item{pstar}{scalar (0 to 1) or vector of same length as \code{pstar}, design prevalence.}
+\item{pstar}{a scalar or vector of either proportions (0 to 1) or a positive integers representing the design prevalence. If \code{pstar} is an integer represents the number of positive units in the population, and \code{N} must be provided.}
 \item{se.p}{scalar or vector of same length as \code{pstar} representing the desired surveillance system (population-level) sensitivity.}
 \item{se.u}{scalar (0 to 1) or vector of the same length as \code{pstar} representing the sensitivity of the diagnostic test at the surveillance unit level.}
 }

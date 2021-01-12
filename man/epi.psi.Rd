@@ -63,10 +63,12 @@ epi.psi(dat.df, itno = 99, conf.level = 0.95)
 \dontrun{
 ## Compare the relative frequencies of the source and study populations
 ## by state graphically:
-dat.df$psrcp <- dat.df$srcp / sum(dat$srcp)
-dat.df$pstup <- dat.df$stup / sum(dat$stup)
+library(ggplot2)
+
+dat.df$psrcp <- dat.df$srcp / sum(dat.df$srcp)
+dat.df$pstup <- dat.df$stup / sum(dat.df$stup)
 dat.df <- dat.df[sort.list(dat.df$psrcp),]
-dat$state <- factor(dat.df$state, levels = dat.df$state)
+dat.df$state <- factor(dat.df$state, levels = dat.df$state)
 
 ## Data frame for ggplot2:
 gdat.df <- data.frame(state = rep(dat.df$state, times = 2),

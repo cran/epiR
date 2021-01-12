@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mark Stevenson" />
+
+<meta name="date" content="2021-01-12" />
+
+<title>Sample Size Calculations Using epiR</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 800px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 0;
+padding: 4px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table:not([class]) {
+margin: auto;
+min-width: 40%;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table[summary="R argblock"] {
+width: 100%;
+border: none;
+}
+table:not([class]) th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table:not([class]) td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table:not([class]), table:not([class]) th, table:not([class]) td {
+border-left-style: none;
+border-right-style: none;
+}
+table:not([class]) tr.odd {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 13px;
+padding-bottom: 1px;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f5f5f5;
+border-radius: 3px;
+color: #333;
+}
+pre {
+overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0 10px 0;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: white;
+border: #f5f5f5 1px solid;
+}
+pre:not([class]) code {
+color: #444;
+background-color: white;
+}
+code {
+font-family: monospace;
+font-size: 90%;
+}
+p > code, li > code {
+padding: 2px 4px;
+color: #d14;
+border: 1px solid #e1e1e8;
+white-space: inherit;
+}
+div.figure {
+text-align: center;
+}
+table > caption, div.figure p.caption {
+font-style: italic;
+}
+table > caption span, div.figure p.caption span {
+font-style: normal;
+font-weight: bold;
+}
+p {
+margin: 0 0 10px;
+}
+table:not([class]) {
+margin: auto auto 10px auto;
+}
+img:not([class]) {
+background-color: #FFFFFF;
+padding: 2px;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+max-width: 100%;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f5f5f5;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f5f5f5;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f5f5f5;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+div.r-help-page {
+background-color: #f9f9f9;
+border-bottom: #ddd 1px solid;
+margin-bottom: 10px;
+padding: 10px;
+}
+div.r-help-page:hover {
+background-color: #f4f4f4;
+}
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Sample Size Calculations Using epiR</h1>
+<h4 class="author">Mark Stevenson</h4>
+<h4 class="date">2021-01-12</h4>
+
+
+
+<div id="prevalence-estimation" class="section level3">
+<h3>Prevalence estimation</h3>
+<p>The expected seroprevalence of brucellosis in a population of cattle is thought to be in the order of 15%. How many cattle need to be sampled and tested to be 95% certain that our seroprevalence estimate is within 20% (i.e. 0.20 <span class="math inline">\(\times\)</span> 0.15 = 0.03, 3%) of the true population value, assuming use of a test with perfect sensitivity and specificity? This formula requires the population size to be specified so we set N to a large number, 1,000,000:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(epiR)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">epi.sssimpleestb</span>(<span class="dt">N =</span> <span class="fl">1E+06</span>, <span class="dt">Py =</span> <span class="fl">0.15</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.20</span>, <span class="dt">se =</span> <span class="dv">1</span>, <span class="dt">sp =</span> <span class="dv">1</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; [1] 545</span></span></code></pre></div>
+<p>A total of 545 cows are required to meet the specifications of the study.</p>
+</div>
+<div id="prospective-cohort-study" class="section level3">
+<h3>Prospective cohort study</h3>
+<p>A prospective cohort study of dry food diets and feline lower urinary tract disease (FLUTD) in mature male cats is planned. A sample of cats will be selected at random from the population and owners who agree to participate in the study will be asked to complete a questionnaire at the time of enrolment. Cats enrolled into the study will be followed for at least 5 years to identify incident cases of FLUTD. The investigators would like to be 0.80 certain of being able to detect when the risk ratio of FLUTD is 1.4 for cats habitually fed a dry food diet, using a 0.05 significance test. Previous evidence suggests that the incidence risk of FLUTD in cats not on a dry food (i.e. ‘other’) diet is around 50 per 1000 per year. Assuming equal numbers of cats on dry food and other diets are sampled, how many cats should be sampled overall?</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">epi.sscohortt</span>(<span class="dt">irexp1 =</span> <span class="dv">50</span><span class="op">/</span><span class="dv">1000</span>, <span class="dt">irexp0 =</span> <span class="dv">70</span><span class="op">/</span><span class="dv">1000</span>, <span class="dt">FT =</span> <span class="dv">5</span>, <span class="dt">n =</span> <span class="ot">NA</span>, <span class="dt">power =</span> <span class="fl">0.80</span>, <span class="dt">r =</span> <span class="dv">1</span>, </span>
+<span id="cb2-2"><a href="#cb2-2"></a>   <span class="dt">design =</span> <span class="dv">1</span>, <span class="dt">sided.test =</span> <span class="dv">2</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)<span class="op">$</span>n.total</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] 2080</span></span></code></pre></div>
+<p>A total of 2080 subjects are required (1040 exposed and 1040 unexposed).</p>
+</div>
+<div id="case-control-study" class="section level3">
+<h3>Case-control study</h3>
+<p>A case-control study of the relationship between white pigmentation around the eyes and ocular squamous cell carcinoma in Hereford cattle is planned. A sample of cattle with newly diagnosed squamous cell carcinoma will be compared for white pigmentation around the eyes with a sample of controls. Assuming an equal number of cases and controls, how many study subjects are required to detect an odds ratio of 2.0 with 0.80 power using a two-sided 0.05 test? Previous surveys have shown that around 0.30 of Hereford cattle without squamous cell carcinoma have white pigmentation around the eyes.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">epi.sscc</span>(<span class="dt">OR =</span> <span class="fl">2.0</span>, <span class="dt">p0 =</span> <span class="fl">0.30</span>, <span class="dt">n =</span> <span class="ot">NA</span>, <span class="dt">power =</span> <span class="fl">0.80</span>, </span>
+<span id="cb3-2"><a href="#cb3-2"></a>   <span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">rho =</span> <span class="dv">0</span>, <span class="dt">design =</span> <span class="dv">1</span>, <span class="dt">sided.test =</span> <span class="dv">2</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, </span>
+<span id="cb3-3"><a href="#cb3-3"></a>   <span class="dt">method =</span> <span class="st">&quot;unmatched&quot;</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">fleiss =</span> <span class="ot">FALSE</span>)<span class="op">$</span>n.total</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; [1] 282</span></span></code></pre></div>
+<p>If the true odds for squamous cell carcinoma in exposed subjects relative to unexposed subjects is 2.0, we will need to enrol 141 cases and 141 controls (282 cattle in total) to reject the null hypothesis that the odds ratio equals one with probability (power) 0.80. The Type I error probability associated with this test of this null hypothesis is 0.05.</p>
+</div>
+<div id="non-inferiority-trial" class="section level3">
+<h3>Non-inferiority trial</h3>
+<p>Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = -0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">epi.ssninfb</span>(<span class="dt">treat =</span> <span class="fl">0.85</span>, <span class="dt">control =</span> <span class="fl">0.65</span>, <span class="dt">delta =</span> <span class="fl">-0.10</span>, <span class="dt">n =</span> <span class="ot">NA</span>, </span>
+<span id="cb4-2"><a href="#cb4-2"></a>   <span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">power =</span> <span class="fl">0.80</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>)<span class="op">$</span>n.total</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<p>A total of 50 subjects need to be enrolled in the trial, 25 in the treatment group and 25 in the control group.</p>
+</div>
+<div id="population-sensitivity-using-a-diagnostic-test-with-imperfect-specificity" class="section level3">
+<h3>Population sensitivity using a diagnostic test with imperfect specificity</h3>
+<p>We’ll continue with the brucellosis example introduced above. Imagine the test we’re using has a diagnostic sensitivity of 0.95 (as before) but this time it has a specificity of 0.98. How many herds need to be sampled to be 95% certain that the prevalence of brucellosis in dairy herds is less than the design prevalence if less than a specified number of tests return a positive result?</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">rsu.sssep.rsfreecalc</span>(<span class="dt">N =</span> <span class="dv">5000</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">mse.p =</span> <span class="fl">0.95</span>, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
+<span id="cb5-3"><a href="#cb5-3"></a>   <span class="dt">max.ss =</span> <span class="dv">32000</span>)<span class="op">$</span>summary</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;     n    N c pstar         p1     se.p      sp.p</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 1 194 5000 7  0.05 0.04898102 0.951019 0.9573939</span></span></code></pre></div>
+<p>A population sensitivity of 95% is achieved with a total sample size of 194 herds, assuming a cut-point of 7 or more positive herds are required to return a positive survey result.</p>
+<p>Note the substantial increase in sample size when diagnostic specificity is imperfect (194 herds when specificity is 0.98 compared with 63 when specificity is 1.00). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are more likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to see its effect on estimated sample size.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">rsu.sssep.rsfreecalc</span>(<span class="dt">N =</span> <span class="dv">5000</span>, <span class="dt">pstar =</span> <span class="fl">0.10</span>, <span class="dt">mse.p =</span> <span class="fl">0.95</span>, </span>
+<span id="cb6-2"><a href="#cb6-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
+<span id="cb6-3"><a href="#cb6-3"></a>   <span class="dt">max.ss =</span> <span class="dv">32000</span>)<span class="op">$</span>summary</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;    n    N c pstar         p1      se.p      sp.p</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 1 66 5000 3   0.1 0.04992274 0.9500773 0.9566218</span></span></code></pre></div>
+<p>The required sample size decreases to 66 and the cut-point to 3 positives due to: (1) the expected reduction in the number of false positives; and (2) the greater difference between true and false positive rates in the first example compared with the second.</p>
+</div>
+<div id="one-stage-cluster-sampling" class="section level3">
+<h3>One-stage cluster sampling</h3>
+<p>An aid project has distributed cook stoves in a single province in a resource-poor country. At the end of three years, the donors would like to know what proportion of households are still using their donated stove. A cross-sectional study is planned where villages in a province will be sampled and all households (approximately 75 per village) will be visited to determine if the donated stove is still in use. A pilot study of the prevalence of stove usage in five villages showed that 0.46 of householders were still using their stove and the intracluster correlation coefficient (ICC) for stove use within villages is in the order of 0.20. If the donor wanted to be 95% confident that the survey estimate of stove usage was within 10% of the true population value, how many villages (clusters) need to be sampled?</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">epi.ssclus1estb</span>(<span class="dt">b =</span> <span class="dv">75</span>, <span class="dt">Py =</span> <span class="fl">0.46</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.10</span>, <span class="dt">rho =</span> <span class="fl">0.20</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)<span class="op">$</span>n.psu</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; [1] 96</span></span></code></pre></div>
+<p>A total of 96 villages need to be sampled to meet the requirements of the study.</p>
+</div>
+<div id="one-stage-cluster-sampling-continued" class="section level3">
+<h3>One-stage cluster sampling (continued)</h3>
+<p>Continuing the example above, we are now told that the number of households per village varies. The average number of households per village is 75 with a 0.025 quartile of 40 households and a 0.975 quartile of 180. Assuming the number of households per village follows a normal distribution the expected standard deviation of the number of households per village is in the order of (180 - 40) <span class="math inline">\(\div\)</span> 4 = 35. How many villages need to be sampled?</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">epi.ssclus1estb</span>(<span class="dt">b =</span> <span class="kw">c</span>(<span class="dv">75</span>,<span class="dv">35</span>), <span class="dt">Py =</span> <span class="fl">0.46</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.10</span>, <span class="dt">rho =</span> <span class="fl">0.20</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)<span class="op">$</span>n.psu</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; [1] 115</span></span></code></pre></div>
+<p>A total of 115 villages need to be sampled to meet the requirements of the study.</p>
+</div>
+<div id="two-stage-cluster-sampling" class="section level3">
+<h3>Two-stage cluster sampling</h3>
+<p>This example is adapted from <span class="citation">Bennett et al. (<a href="#ref-bennett_et_al:2003" role="doc-biblioref">1991</a>)</span>. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># From first principles:</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>n.crude &lt;-<span class="st"> </span><span class="kw">epi.sssimpleestb</span>(<span class="dt">N =</span> <span class="fl">1E+06</span>, <span class="dt">Py =</span> <span class="fl">0.20</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.20</span>,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>   <span class="dt">se =</span> <span class="dv">1</span>, <span class="dt">sp =</span> <span class="dv">1</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>n.crude</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; [1] 246</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co"># A total of 246 subjects need to be enrolled into the study. Calculate the design effect:</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>rho &lt;-<span class="st"> </span><span class="fl">0.02</span>; b &lt;-<span class="st"> </span><span class="dv">20</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>D &lt;-<span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>; D</span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; [1] 1.38</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co"># The design effect is 1.38. Our crude sample size estimate needs to be increased by a factor of 1.38.</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a>n.adj &lt;-<span class="st"> </span><span class="kw">ceiling</span>(n.crude <span class="op">*</span><span class="st"> </span>D)</span>
+<span id="cb9-14"><a href="#cb9-14"></a>n.adj</span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; [1] 340</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co"># After accounting for lack of independence in the data a total of 340 subjects need to be enrolled into the study. How many clusters are required?</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="kw">ceiling</span>(n.adj <span class="op">/</span><span class="st"> </span>b)</span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; [1] 17</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co"># Do all of the above using epi.ssclus2estb:</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="kw">epi.ssclus2estb</span>(<span class="dt">b =</span> <span class="dv">20</span>, <span class="dt">Py =</span> <span class="fl">0.20</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.20</span>, <span class="dt">rho =</span> <span class="fl">0.02</span>, </span>
+<span id="cb9-23"><a href="#cb9-23"></a>   <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; Warning: The calculated number of primary sampling units (n.psu) is 17. At</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; least 25 primary sampling units are recommended for two-stage cluster sampling</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; designs.</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; $n.psu</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; [1] 17</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; </span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; $n.ssu</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="co">#&gt; [1] 340</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="co">#&gt; </span></span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt; $DEF</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt; [1] 1.38</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; </span></span>
+<span id="cb9-36"><a href="#cb9-36"></a><span class="co">#&gt; $rho</span></span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="co">#&gt; [1] 0.02</span></span></code></pre></div>
+<p>A total of 17 clusters need to be sampled to meet the specifications of this study. epi.ssclus2estb returns a warning message that the number of clusters is less than 25.</p>
+</div>
+<div id="two-stage-cluster-sampling-1" class="section level3">
+<h3>Two-stage cluster sampling</h3>
+<p>Continuing the brucellosis prevalence example (above) being seropositive to brucellosis is likely to cluster within herds. <span class="citation">Otte and Gumm (<a href="#ref-otte_gumm:1997" role="doc-biblioref">1997</a>)</span> cite the intracluster correlation coefficient for Brucella abortus in cattle to be in the order of 0.09. Adjust your sample size estimate of 545 to account for lack of independence in the data, i.e. clustering at the herd level. Assume that b = 10 animals will be sampled per herd:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>n.crude &lt;-<span class="st"> </span><span class="kw">epi.sssimpleestb</span>(<span class="dt">N =</span> <span class="fl">1E+06</span>, <span class="dt">Py =</span> <span class="fl">0.15</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.20</span>,</span>
+<span id="cb10-2"><a href="#cb10-2"></a>   <span class="dt">se =</span> <span class="dv">1</span>, <span class="dt">sp =</span> <span class="dv">1</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>n.crude</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; [1] 545</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a></span>
+<span id="cb10-6"><a href="#cb10-6"></a>rho &lt;-<span class="st"> </span><span class="fl">0.09</span>; b &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>D &lt;-<span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>; D</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; [1] 1.81</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a>n.adj &lt;-<span class="st"> </span><span class="kw">ceiling</span>(n.crude <span class="op">*</span><span class="st"> </span>D)</span>
+<span id="cb10-11"><a href="#cb10-11"></a>n.adj</span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; [1] 987</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co"># Similar to the example above, we can do all of these calculations using epi.ssclus2estb:</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="kw">epi.ssclus2estb</span>(<span class="dt">b =</span> <span class="dv">10</span>, <span class="dt">Py =</span> <span class="fl">0.15</span>, <span class="dt">epsilon.r =</span> <span class="fl">0.20</span>, <span class="dt">rho =</span> <span class="fl">0.09</span>, </span>
+<span id="cb10-16"><a href="#cb10-16"></a>   <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt; $n.psu</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt; [1] 99</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; </span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#&gt; $n.ssu</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co">#&gt; [1] 986</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt; </span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co">#&gt; $DEF</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="co">#&gt; [1] 1.81</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co">#&gt; </span></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="co">#&gt; $rho</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co">#&gt; [1] 0.09</span></span></code></pre></div>
+<p>After accounting for clustering at the herd level we estimate that a total of (545 <span class="math inline">\(\times\)</span> 1.81) = 986 cattle need to be sampled to meet the requirements of the survey. If 10 cows are sampled per herd this means that a total of (987 <span class="math inline">\(\div\)</span> 10) = 99 herds are required.</p>
+</div>
+<div id="references" class="section level3 unnumbered">
+<h3 class="unnumbered">References</h3>
+<div id="refs" class="references hanging-indent">
+<div id="ref-bennett_et_al:2003">
+<p>Bennett, S, T Woods, W Liyanage, and D Smith. 1991. “A Simplified General Method for Cluster-Sample Surveys of Health in Developing Countries.” Journal Article. <em>World Health Statistics Quarterly</em> 44: 98–106.</p>
+</div>
+<div id="ref-otte_gumm:1997">
+<p>Otte, JM, and ID Gumm. 1997. “Intra-Cluster Correlation Coefficients of 20 Infections Calculated from the Results of Cluster-Sample Surveys.” Journal Article. <em>Preventive Veterinary Medicine</em> 31: 147–50.</p>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+  fig = 1;
+  caps = document.getElementsByTagName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.nodeName !== 'TABLE') continue;
+    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

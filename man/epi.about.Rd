@@ -22,7 +22,7 @@ The following is a summary of the main functions and datasets in the \pkg{epiR} 
 
 For further information on any of these functions, type \code{help(name)} or \code{?name} where \code{name} is the name of the function or dataset.
 
-For details on how to use \pkg{epR} for routine epidemiological work start R, type \code{help.start()} to open the help browser and navigate to \code{Packages > epiR > Vignettes}.
+For details on how to use \pkg{epiR} for routine epidemiological work start R, type \code{help.start()} to open the help browser and navigate to \code{Packages > epiR > Vignettes}.
 
 }
 

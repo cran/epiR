@@ -1,4 +1,17 @@
-CHANGES IN epiR VERSION 2.0.16
+CHANGES IN epiR VERSION 2.0.19
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.spp.rs code modified.
+    o Documentation for rsu.spp.rs, epi.psi and rsu.sssep.rs updated.
+
+CHANGES IN epiR VERSION 2.0.18
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Vignette on sample size calculations added.
+
+CHANGES IN epiR VERSION 2.0.17
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -1,5 +1,5 @@
 ---
-title: "Design and analysis of disease surveillance programs using epiR"
+title: "Design and Analysis of Disease Surveillance Programs Using epiR"
 author: "Mark Stevenson and Evan Sergeant"
 date: "`r Sys.Date()`"
 bibliography: epiR_surveillance.bib

@@ -36,7 +36,7 @@ A list of comprised of four elements:
 ## EXAMPLE 1:
 ## A cross-sectional study is to be carried out to confirm the absence of 
 ## disease using risk based sampling. Assume a population level design 
-## prevalence of 0.01 and there are 'high', 'medium' and 'low' risk areas  
+## prevalence of 0.10 and there are 'high', 'medium' and 'low' risk areas  
 ## where the risk of disease in the high risk area compared with the low risk 
 ## area is 5 and the risk of disease in the medium risk area compared with 
 ## the low risk area is 3. The proportions of the population at risk in the 

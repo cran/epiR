@@ -15,10 +15,16 @@ rsu.spp.rs(N, n, c = 1, sp.u)
 }
 
 \arguments{
-\item{N}{scalar or vector of the same length as that vector of \code{n} defining the [cluster] population size. Use \code{NA} if the size of the population not known.}
+\item{N}{scalar or vector of the same length as that vector of \code{n} defining the [cluster] population size. Use \code{NA} if the size of the population not known, or for a more general application see details, below.}
 \item{n}{scalar or vector defining the sample size.}
 \item{c}{scalar or vector of the same length as that vector of \code{n} defining the cut-point number of positives to classify a cluster as positive, if the number of positive samples is less than \code{c} the cluster is declared is negative, if the number of positive samples is greater than \code{c} the cluster is declared positive.}
 \item{sp.u}{scalar (0 to 1) or vector of same length as \code{n}, the specificity of the diagnostic test at the surveillance unit level.}
+}
+
+\details{
+This function calculates population specificity using the hypergeometric distribution if \code{N} and \code{c} are provided and the binomial distribution otherwise.
+
+If \code{N} is provided the number of false positives is fixed, based on \code{N} and test specificity \code{sp.u}. This implies that test specificity is a fixed individual-level characteristic (e.g. due to specific cross-reacting infection). If \code{N} is not supplied, cluster (e.g. herd) specificity is a random binomial function based only on the number of samples and test specificity (i.e. specificity is a function of the test and independent of individual characteristics).  
 }
 
 \value{
@@ -29,11 +35,6 @@ A vector of population specificity estimates.
 Martin S, Shoukri M, Thorburn M (1992). Evaluating the health status of herds based on tests applied to individuals. Preventive Veterinary Medicine 14: 33 - 43.
 }
 
-\note{
-This function calculates population specificity using the hypergeometric distribution if \code{N} and \code{c} are provided and the binomial distribution otherwise.
-}
-
- 
 \examples{
 ## EXAMPLE 1:
 ## Calculate the surveillance system specificity (i.e. the probability that 
