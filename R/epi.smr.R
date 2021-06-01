@@ -2,6 +2,10 @@
 
 epi.smr <- function(obs = 4, exp = 3.3, method = "byar", conf.level = 0.95){
 
+  if(length(obs) > 1 | length(exp) > 1){
+    stop(message = "Arguments obs and exp must be of length 1\n")
+  }
+  
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
@@ -116,7 +120,8 @@ epi.smr <- function(obs = 4, exp = 3.3, method = "byar", conf.level = 0.95){
     }
     
     byar.z <- ((9 * .a)^(0.5)) * (1 - (1 / (9 * .a)) - ((lambda / .a)^(1/3)))
-    byar.p <- 2 * (1 - pnorm(q = byar.z, mean = 0, sd = 1))
+    
+    byar.p <- ifelse(byar.z < 0, 2 * pnorm(q = byar.z, mean = 0, sd = 1), 2 * (1 - pnorm(q = byar.z, mean = 0, sd = 1)))
     
     # Confidence interval - Regidor et al. (1993):
     alow <- a * (1 - (1 / (9 * a)) - (z / 3) * sqrt(1 / a))^3

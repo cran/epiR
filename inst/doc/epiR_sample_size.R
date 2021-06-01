@@ -30,16 +30,6 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = NA,
    r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)$n.total
 
 ## ----message = FALSE----------------------------------------------------------
-rsu.sssep.rsfreecalc(N = 5000, pstar = 0.05, mse.p = 0.95, 
-   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
-   max.ss = 32000)$summary
-
-## ----message = FALSE----------------------------------------------------------
-rsu.sssep.rsfreecalc(N = 5000, pstar = 0.10, mse.p = 0.95, 
-   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
-   max.ss = 32000)$summary
-
-## ----message = FALSE----------------------------------------------------------
 epi.ssclus1estb(b = 75, Py = 0.46, epsilon.r = 0.10, rho = 0.20, conf.level = 0.95)$n.psu
 
 ## ----message = FALSE----------------------------------------------------------

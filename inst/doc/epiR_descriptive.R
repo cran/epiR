@@ -213,15 +213,13 @@ ggplot() +
   theme_bw()
 
 ## -----------------------------------------------------------------------------
-library(epiR)
-
 flutd.tab <- matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE)
 rownames(flutd.tab) <- c("DF+", "DF-"); colnames(flutd.tab) <- c("FLUTD+", "FLUTD-")
 flutd.tab <- as.table(flutd.tab); flutd.tab
 
 ## -----------------------------------------------------------------------------
 epi.2by2(dat = flutd.tab, method = "cross.sectional", conf.level = 0.95, 
-   units = 100, outcome = "as.columns")
+   units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## -----------------------------------------------------------------------------
 library(MASS)
@@ -244,7 +242,7 @@ low.tab <- table(bwt$smoke, bwt$low, dnn = c("Smoke", "Low BW")); low.tab
 
 ## -----------------------------------------------------------------------------
 epi.2by2(dat = low.tab, method = "cohort.count", conf.level = 0.95, 
-   units = 100, outcome = "as.columns")
+   units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## -----------------------------------------------------------------------------
 low.stab <- table(bwt$smoke, bwt$low, bwt$race, dnn = c("Smoke", "Low BW", "Race"))
@@ -252,6 +250,6 @@ low.stab
 
 ## -----------------------------------------------------------------------------
 rval <- epi.2by2(dat = low.stab, method = "cohort.count", conf.level = 0.95, 
-   units = 100, outcome = "as.columns")
+   units = 100, interpret = FALSE, outcome = "as.columns")
 print(rval)
 

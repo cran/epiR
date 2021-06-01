@@ -1,8 +1,8 @@
 Package: epiR
-Version: 2.0.19
-Date: 2021-01-12
+Version: 2.0.26
+Date: 2021-05-31
 Title: Tools for the Analysis of Epidemiological Data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay and Charles Reynard.
+Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung and Nagendra Singanallur.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
@@ -12,11 +12,11 @@ Suggests: MASS (>= 3.1-20), knitr, rmarkdown, RColorBrewer, ggplot2,
         rgeos, mapproj
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2021-01-12 06:23:54 UTC; marks1
+Packaged: 2021-05-30 06:33:26 UTC; Mark Stevenson
 URL:
         https://fvas.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
         and https://www.ausvet.com.au/
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2021-01-12 09:30:16 UTC
+Date/Publication: 2021-06-01 07:40:15 UTC

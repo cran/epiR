@@ -56,10 +56,10 @@ Thanks to Karl Ove Hufthammer for helpful suggestions to improve the execution a
 
 \examples{
 ## EXAMPLE 1 (from Thrusfield 2007 pp. 63 - 64):
-## A study was conducted to estimate the seroprevalence of leptospirosis
-## in dogs in Glasgow and Edinburgh, Scotland. For the matrix titled pop
-## the numbers represent dog-years at risk. The following data were 
-## obtained for male and female dogs:
+## A study was conducted to estimate the seroprevalence of leptospirosis in 
+## dogs in Glasgow and Edinburgh, Scotland. Data frame dat.df lists counts 
+## of leptospirosis cases and the number of dog years at risk for male and 
+## female dogs:
 
 dat <- data.frame(obs = c(15,46,53,16), tar = c(48,212,180,71), 
    sex = c("M","F","M","F"), city = c("ED","ED","GL","GL"))
@@ -68,14 +68,13 @@ obs <- matrix(dat$obs, nrow = 2, byrow = TRUE,
    dimnames = list(c("ED","GL"), c("M","F")))
 tar <- matrix(dat$tar, nrow = 2, byrow = TRUE, 
    dimnames = list(c("ED","GL"), c("M","F")))
-std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
-   dimnames = list("", c("M","F")))
 
-## Compute directly adjusted seroprevalence estimates, using a standard 
-## population with equal numbers of male and female dogs:
+## Create a standard population with equal numbers of male and female dogs:
 
 std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
    dimnames = list("", c("M","F")))
+
+## Directly adjusted incidence rates:
 
 epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 
@@ -96,22 +95,24 @@ epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 ## > 1     ED 0.2647406 0.1866047 0.3692766
 ## > 2     GL 0.2598983 0.1964162 0.3406224
 
-## The confounding effect of gender has been removed by the adjusted 
-## incidence rate estimates.
-
 ## The adjusted incidence rate of leptospirosis in Glasgow dogs is 26 (95\%
 ## CI 20 to 34) cases per 100 dog-years at risk.
 
-## EXAMPLE 2 --- A more flexible approach for calculating adjusted incidence
-## rate estimates using Poisson regression. See Frome and Checkoway (1985) for
-## details.
+## The confounding effect of gender has been removed by the adjusted 
+## incidence rate estimates.
+
+
+## EXAMPLE 2 --- Here we provide a more flexible approach for calculating 
+## adjusted incidence rate estimates using Poisson regression. See Frome and 
+## Checkoway (1985) for details.
+
 dat.glm01 <- glm(obs ~ city, offset = log(tar), family = poisson, data = dat)
 summary(dat.glm01)
 
-## If you want to obtain adjusted incidence rate estimates, use the predict 
-## method on a new data set with the time at risk (tar) variable set to 1 
-## (which means log(tar) = 0). This will return the predicted number of 
-## cases per one unit of individual time, i.e. the incidence rate.
+## To obtain adjusted incidence rate estimates, use the predict method on a 
+## new data set with the time at risk (tar) variable set to 1 (which means 
+## log(tar) = 0). This will return the predicted number of cases per one unit 
+## of individual time, i.e. the incidence rate.
 
 dat.pred01 <- predict(object = dat.glm01, newdata = 
    data.frame(city = c("ED","GL"), tar = c(1,1)), 
@@ -129,11 +130,12 @@ round(data.frame(est, lower, upper), 3)
 ##   est lower upper
 ## 0.235 0.183 0.302
 ## 0.275 0.217 0.348
-## Results identical to the crude incidence rate estimates from 
-## epi.directadj.
+
+## Results identical to the crude incidence rate estimates from epi.directadj.
 
 ## We now adjust for the effect of gender and city and report the adjusted 
 ## incidence rate estimates for each city:
+
 dat.glm02 <- dat.glm02 <- glm(obs ~ city + sex, offset = log(tar), 
    family = poisson, data = dat)
 dat.pred02 <- predict(object = dat.glm02, newdata = 
@@ -157,6 +159,7 @@ round(data.frame(est, lower, upper), 3)
 ## in Glasgow dogs was 22 (95\% CI 15 to 32) cases per 100 dog-years at risk.
 ## These results won't be the same as those using direct adjustment because
 ## for direct adjustment we use a contrived standard population.
+
 
 ## EXAMPLE 3 --- Logistic regression to return adjusted incidence risk 
 ## estimates:

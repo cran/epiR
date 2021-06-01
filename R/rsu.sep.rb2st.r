@@ -1,4 +1,4 @@
-rsu.sep.rb2st <- function(H = NA, N = NA, n, pstar.c, pstar.u, rg, rr.c, rr.u, ppr.c, ppr.u, se.u){
+rsu.sep.rb2st <- function(H = NA, N = NA, n, rr.c, ppr.c, pstar.c, rr.u, ppr.u, pstar.u, rg, se.u){
   
   if(length(se.u) == 1) se.u <- rep(se.u, times = nrow(n))
   sep <- numeric(nrow(n))

@@ -11,8 +11,8 @@ Calculates the surveillance system sensitivity for detection of disease assuming
 }
 
 \usage{
-rsu.sep.rb2st(H = NA, N = NA, n, pstar.c, pstar.u, rg, rr.c, rr.u, 
-   ppr.c, ppr.u, se.u)
+rsu.sep.rb2st(H = NA, N = NA, n, rr.c, ppr.c, pstar.c, rr.u, ppr.u, 
+   pstar.u, rg, se.u)
 }
 
 \arguments{
@@ -20,15 +20,16 @@ rsu.sep.rb2st(H = NA, N = NA, n, pstar.c, pstar.u, rg, rr.c, rr.u,
 \item{N}{vector, integer representing the number of surveillance units within each cluster. Use \code{NA} if unknown.}
 \item{n}{vector, integer representing the number of surveillance units tested within each cluster.}
 
+\item{rr.c}{cluster level relative risks (vector of length corresponding to the number of risk strata), use \code{rr.c = c(1,1)} if a risk factor does not apply.}
+\item{ppr.c}{vector listing the cluster level population proportions for each risk category. Use \code{NA} if there are no cluster level risk factors.}
 \item{pstar.c}{scalar, numeric (0 to 1) the cluster-level design prevalence.}
+
+\item{rr.u}{surveillance unit level relative risks (vector of length corresponding to the number of risk strata), \code{use rr.u = c(1,1)} if a risk factor does not apply.}
+\item{ppr.u}{matrix providing the surveillance unit level population proportions for each risk group. One row for each cluster, columns = unit level risk groups, not required if \code{N} is provided.}
 \item{pstar.u}{scalar, numeric (0 to 1) the unit-level design prevalence.}
 
 \item{rg}{vector, listing the risk group (index) for each cluster.}
-\item{rr.c}{cluster level relative risks (vector of length corresponding to the number of risk strata), use \code{rr.c = c(1,1)} if a risk factor does not apply.}
-\item{rr.u}{surveillance unit level relative risks (vector of length corresponding to the number of risk strata), \code{use rr.u = c(1,1)} if a risk factor does not apply.}
 
-\item{ppr.u}{matrix providing the surveillance unit level population proportions for each risk group. One row for each cluster, columns = unit level risk groups, not required if \code{N} is provided.}
-\item{ppr.c}{vector listing the cluster level population proportions for each risk category. Use \code{NA} if there are no cluster level risk factors.}
 \item{se.u}{scalar, numeric (0 to 1), representing the sensitivity of the diagnostic test at the individual surveillance unit level.}
 }
 

@@ -14,8 +14,8 @@ epi.smr(obs, exp, method = "byar", conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{integer, defining the observed number of events.}
-  \item{exp}{number, defining the expected number of events.}
+  \item{obs}{scalar integer, defining the observed number of events.}
+  \item{exp}{scalar number, defining the expected number of events.}
   \item{method}{character string, defining the method used. Options are \code{chi2}, \code{mid.p}, \code{fisher}, \code{byar}, \code{rothman.greenland}, \code{ury.wiggins} and \code{vandenbroucke}. See details, below.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }

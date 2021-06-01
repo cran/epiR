@@ -19,8 +19,8 @@ rsu.sep.rb2rf(N, n, rr1, ppr1, rr2, ppr2, pstar, se.u, method = "binomial")
 \item{n}{matrix of the number of surveillance units tested in each risk group. Rows = levels of \code{rr1}, columns = levels of \code{rr2}.}
 \item{rr1}{scalar or vector defining the first set of relative risk values.}
 \item{ppr1}{scalar or vector of the same length as that vector of \code{rr1} defining the population proportions in each of the first risk strata. Proportions must sum to one. Ignored if \code{method = "hypergeometric"}.}
-\item{rr2}{matrix of relative risks for the second risk factor. Rows = levels of \code{rr1}, columns = levels of \code{rr2}.}
-\item{ppr2}{scalar or vector of the same length as that vector of \code{rr1} defining the population proportions in each of the second risk strata. Row proportions must sum to one. Ignored if \code{method = "hypergeometric"}.}
+\item{rr2}{matrix defining the relative risks for the second risk factor. Rows = levels of \code{rr1}, columns = levels of \code{rr2}.}
+\item{ppr2}{matrix defining the population proportions in each of the second risk strata. Row proportions must sum to one. Rows = levels of \code{rr1}, columns = levels of \code{rr2}. Ignored if \code{method = "hypergeometric"}.}
 \item{pstar}{scalar, defining the design prevalence.}
 \item{se.u}{scalar or vector of the same length as that vector of \code{rr1} defining the unit sensitivity (which can vary across strata).}
 \item{method}{character string indicating the method to be used. Options are \code{binomial} or \code{hypergeometric}. See details, below.}

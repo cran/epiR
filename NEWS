@@ -1,3 +1,49 @@
+CHANGES IN epiR VERSION 2.0.26
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 now provides interpretive statements of the number needed to treat and the number needed to harm (with confidence intervals) following the approach described by Altman (1998).
+    [Suggested by Lucas Huggins]
+    o Documentation for epi.directadj updated.
+    
+    
+CHANGES IN epiR VERSION 2.0.24
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.kappa now handles n by n tables.
+    [Suggested by Anita Tolpinrud]
+    o Inconsistency in calculation of test of significance of SMRs using Byar's method corrected.
+    [Spotted by Zhou Weilong]
+
+
+CHANGES IN epiR VERSION 2.0.23
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.blcm.paras to return the number of unknown parameters to be inferred and the number of informative priors likely to be needed for an identifiable Bayesian latent class model to estimate diagnostic sensitivity and specificity in the absence of a gold standard.
+    [Contributed by Simon Firestone, Allison Cheung and Nagendra Singanallur]
+    o Inconsistency in calculation of test of significance of SMRs using Byar's method corrected.
+    [Spotted by Zhou Weilong]
+
+
+CHANGES IN epiR VERSION 2.0.21
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Major tidy up for epi.2by2. Function includes argument 'interpret' to return interpretive statements for each of the computed measures of association. epi.2by2 object now includes massoc.summary, massoc.interp and massoc.detail objects. 
+    [Suggested by Caitlin Pfeiffer and Petra Mullner] 
+    o print(epi.2by2) now returns Yates corrected chi2 test if any of the cell frequencies are less than 5.
+    [Suggested by Simon Firestone]
+
+
+CHANGES IN epiR VERSION 2.0.20
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.dxtest code modified to check that appropriate values for test covariance have been used. Error returned when inappropriate values entered. The function now returns diagnostic sensitivity and specificity assuming tests are independent as well dependent. Documentation for rsu.dxtest updated with details on how to calculate argument covar.
+    [Suggested by Barbara Moloney] 
+
+
 CHANGES IN epiR VERSION 2.0.19
 
 SIGNIFICANT USER-VISIBLE CHANGES

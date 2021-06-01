@@ -14,7 +14,7 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 
 \usage{
 epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100, 
-   outcome = "as.columns")
+   interpret = TRUE, outcome = "as.columns")
 
 \method{print}{epi.2by2}(x, ...)
 
@@ -26,6 +26,7 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100,
   \item{method}{a character string indicating the study design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}. Based on the study design specified by the user, appropriate measures of association, measures of effect in the exposed and measures of effect in the population are returned by the function.}
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence (risk or rate) estimates.}
+  \item{interpret}{logical. If \code{TRUE} interpretive statements are appended to the \code{print}\code{epi.2by2} object.}
   \item{outcome}{a character string indicating how the outcome variable is represented in the contingency table. Options are \code{as.columns} (outcome as columns) or \code{as.rows} (outcome as rows).}  
   \item{x, object}{an object of class \code{epi.2by2}.}
   \item{...}{Ignored.}
@@ -67,8 +68,12 @@ An object of class \code{epi.2by2} comprised of:
   \item{method}{character string returning the study design specified by the user.}
   \item{n.strata}{number of strata.}
   \item{conf.level}{magnitude of the returned confidence intervals.}
-  \item{massoc}{a list comprised of the computed measures of association, measures of effect in the exposed and measures of effect in the population. See below for details.}
-  \item{tab}{a data frame comprised of of the contingency table data.}
+  \item{interp}{logical. Are interpretative statements included?}
+  \item{units}{character string listing the outcome measure units.}
+  \item{tab}{a data frame comprised of of the contingency table data.}  
+  \item{massoc.summary}{a data frame listing the computed measures of association, measures of effect in the exposed and measures of effect in the population and their confidence intervals.}
+  \item{massoc.interp}{a data frame listing the interpretive statements for each computed measure of association.}
+  \item{massoc.detail}{a list comprised of the computed measures of association, measures of effect in the exposed and measures of effect in the population. See below for details.}
 
 When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population are returned: 
 
@@ -128,9 +133,13 @@ Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed 
 If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios not computed. 
 
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
+
+Intepretive statements for the number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) follow the approach described by Altman (1998). See the examples for details.
 }
 
 \references{
+Altman D (1998). British Medical Journal 317, 1309 - 1312. 
+
 Altman D, Machin D, Bryant T, Gardner M (2000). Statistics with Confidence. British Medical Journal, London, pp. 69.
 
 Anscombe F (1956). On estimating binomial response relations. Biometrika 43, 461 - 464.
@@ -224,25 +233,27 @@ dat <- matrix(c(13,2163,5,3349), nrow = 2, byrow = TRUE)
 rownames(dat) <- c("DF+", "DF-"); colnames(dat) <- c("FUS+", "FUS-"); dat
 
 epi.2by2(dat = as.table(dat), method = "cross.sectional", 
-   conf.level = 0.95, units = 100, outcome = "as.columns")
+   conf.level = 0.95, units = 100, interpret = TRUE, 
+   outcome = "as.columns")
 
 ## Outcome variable (FUS) as rows:
 dat <- matrix(c(13,5,2163,3349), nrow = 2, byrow = TRUE)
 rownames(dat) <- c("FUS+", "FUS-"); colnames(dat) <- c("DF+", "DF-"); dat
 
 epi.2by2(dat =  as.table(dat), method = "cross.sectional", 
-   conf.level = 0.95, units = 100, outcome = "as.rows")
+   conf.level = 0.95, units = 100, interpret = TRUE, 
+   outcome = "as.rows")
 
 ## Prevalence ratio:
-## The prevalence of FUS in DCF exposed cats is 4.01 (95\% CI 1.43 to 11.23) 
+## The prevalence of FUS in DCF exposed cats was 4.01 (95\% CI 1.43 to 11.23) 
 ## times greater than the prevalence of FUS in non-DCF exposed cats.
 
 ## Attributable fraction in the exposed:
-## In DCF exposed cats, 75\% of FUS is attributable to DCF (95\% CI 30\% to 
+## In DCF exposed cats, 75\% of FUS was attributable to DCF (95\% CI 30\% to 
 ## 91\%).
 
 ## Attributable fraction in the population:
-## Fifty-four percent of FUS cases in the cat population are attributable 
+## Fifty-four percent of FUS cases in the cat population was attributable 
 ## to DCF (95\% CI 4\% to 78\%).
 
 ## EXAMPLE 2:
@@ -265,10 +276,11 @@ print(tab1)
 
 ## Compute the incidence risk ratio and other measures of association:
 epi.2by2(dat = tab1, method = "cohort.count", 
-   conf.level = 0.95, units = 100, outcome = "as.columns")
+   conf.level = 0.95, units = 100, interpret = TRUE, 
+   outcome = "as.columns")
 
 ## Odds ratio:
-## The odds of having a low birth weight child for smokers is 2.02 
+## The odds of having a low birth weight child for smokers was 2.02 
 ## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
 ## weight child for non-smokers.
 
@@ -280,7 +292,8 @@ print(tab2)
 ## Compute the crude odds ratio, the Mantel-Haenszel adjusted odds ratio 
 ## and other measures of association:
 rval <- epi.2by2(dat = tab2, method = "cohort.count", 
-   conf.level = 0.95, units = 100, outcome = "as.columns")
+   conf.level = 0.95, units = 100, interpret = TRUE, 
+   outcome = "as.columns")
 print(rval)
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
@@ -289,15 +302,28 @@ print(rval)
 ## each strata of race are the same. 
 
 ## After accounting for the confounding effect of race, the odds of 
-## having a low birth weight child for smokers is 3.09 (95\% CI 1.49 to 6.39)
+## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
 
 ## Compare the Greenland-Robins confidence intervals for the Mantel-Haenszel
 ## adjusted attributable risk with the Wald confidence intervals for the 
 ## Mantel-Haenszel adjusted attributable risk:
 
-rval$massoc$ARisk.mh.green
-rval$massoc$ARisk.mh.wald
+rval$massoc.detail$ARisk.mh.green
+rval$massoc.detail$ARisk.mh.wald
+
+## How many mothers need to stop smoking to avoid one low birth weight baby? 
+rval$massoc.interp$text[rval$massoc.interp$var == "NNTB NNTH (crude)"]
+
+## If we don't account for confounding the number of mothers that need to 
+## stop smoking to avoid one low birth weight baby (NNTB) is 
+## 7 (95% CI 3 to 62).
+
+rval$massoc.interp$text[rval$massoc.interp$var == "NNTB NNTH (M-H)"]
+## After accounting for the confounding effect of race the number of mothers
+## that need to stop smoking to avoid one low birth weight baby (NNTB) is 
+## 5 (95% CI 2 to 71).
+
 
 ## Now turn tab2 into a data frame where the frequencies of individuals in 
 ## each exposure-outcome category are provided. Often your data will be 
@@ -312,7 +338,8 @@ print(tab3)
 
 # tab3 can now be passed to epi.2by2:
 rval <- epi.2by2(dat = tab3, method = "cohort.count", 
-   conf.level = 0.95, units = 100, outcome = "as.columns")
+   conf.level = 0.95, units = 100, interpret = TRUE, 
+   outcome = "as.columns")
 print(rval)
 
 ## The Mantel-Haenszel adjusted odds ratio is 3.09 (95\% CI 1.49 to 6.39). The 
@@ -321,9 +348,9 @@ print(rval)
 
 ## What are the Cornfield confidence limits, the maximum likelihood 
 ## confidence limits and the score confidence limits for the crude odds ratio?
-rval$massoc$OR.crude.cfield
-rval$massoc$OR.crude.mle
-rval$massoc$OR.crude.score
+rval$massoc.detail$OR.crude.cfield
+rval$massoc.detail$OR.crude.mle
+rval$massoc.detail$OR.crude.score
 
 ## Cornfield: 2.02 (95\% CI 1.07 to 3.79)
 ## Maximum likelihood: 2.01 (1.03 to 3.96)
@@ -341,9 +368,12 @@ y.at <- c(nstrata, max(nstrata) + 1)
 y.lab <- c("M-H", strata.lab)
 x.at <- c(0.25, 0.5, 1, 2, 4, 8, 16, 32)
 
-or.l <- c(rval$massoc$OR.mh$lower, rval$massoc$OR.strata.cfield$lower)
-or.u <- c(rval$massoc$OR.mh$upper, rval$massoc$OR.strata.cfield$upper)
-or.p <- c(rval$massoc$OR.mh$est, rval$massoc$OR.strata.cfield$est)
+or.l <- c(rval$massoc.detail$OR.mh$lower, 
+   rval$massoc.detail$OR.strata.cfield$lower)
+or.u <- c(rval$massoc.detail$OR.mh$upper, 
+   rval$massoc.detail$OR.strata.cfield$upper)
+or.p <- c(rval$massoc.detail$OR.mh$est, 
+   rval$massoc.detail$OR.strata.cfield$est)
 dat <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 
 ggplot(dat, aes(or.p, y.at)) +
@@ -365,21 +395,19 @@ ggplot(dat, aes(or.p, y.at)) +
 ## 136/22050 person-years among the blind compared with 1709/127650 person-
 ## years among those who were visually impaired but not blind.
 
-\dontrun{
 dat <- as.table(matrix(c(136,22050,1709,127650), nrow = 2, byrow = TRUE))
 rval <- epi.2by2(dat = dat, method = "cohort.time", conf.level = 0.95, 
-   units = 1000, outcome = "as.columns")
-summary(rval)$ARate.strata.wald
+   units = 1000, interpret = TRUE, outcome = "as.columns")
+summary(rval)$massoc.detail$ARate.strata.wald
 
-## The incidence rate of cancer was 7.22 cases per 1000 person-years less in the 
-## blind, compared with those who were not blind but had severe visual impairment
-## (90\% CI 6.00 to 8.43 cases per 1000 person-years).
+## The incidence rate of cancer was 7.22 cases per 1000 person-years less in 
+## the blind, compared with those who were not blind but had severe visual 
+## impairment (95\% CI 6.00 to 8.43 cases per 1000 person-years).
 
-round(summary(rval)$IRR.strata.wald, digits = 2)
-}
+round(summary(rval)$massoc.detail$IRR.strata.wald, digits = 2)
 
-## The incidence rate of cancer in the blind group was less than half that of the 
-## comparison group (incidence rate ratio 0.46, 90\% CI 0.38 to 0.55).
+## The incidence rate of cancer in the blind group was less than half that 
+## of the comparison group (incidence rate ratio 0.46, 90\% CI 0.38 to 0.55).
 
 ## EXAMPLE 4:
 ## A study has been conducted to assess the effect of a new treatment for 
@@ -404,7 +432,8 @@ dat <- data.frame(hid, exp, out, n = c(ai,bi,ci,di))
 dat <- xtabs(n ~ exp + out + hid, data = dat)
 print(dat)
 
-epi.2by2(dat = dat, method = "cohort.count", outcome = "as.columns")
+epi.2by2(dat = dat, method = "cohort.count", conf.level = 0.95, units = 1000, 
+   interpret = TRUE, outcome = "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
 ## significant (chi square test statistic 5.276; df 7; p-value = 0.63). 
