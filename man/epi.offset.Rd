@@ -33,11 +33,12 @@ Langford IH (1994). Using empirical Bayes estimates in the geographical analysis
 }
 
 \examples{
-dat <- c(1,1,1,2,2,2,2,3,3,3)
-dat <- as.factor(dat)
+## EXAMPLE 1:
+dat.v01 <- c(1,1,1,2,2,2,2,3,3,3)
+dat.v01 <- as.factor(dat.v01)
 
-offset <- epi.offset(dat)
-offset
+dat.ofs01 <- epi.offset(dat.v01)
+dat.ofs01
 ## [1] 1 4 8 10
 
 }

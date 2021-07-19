@@ -27,7 +27,7 @@ For details on how to use \pkg{epiR} for routine epidemiological work start R, t
 }
 
 \section{CONTENTS:}{
-The functions in \pkg{epiR} can be categorised into tools for analysis of epidemiological and surveillance data. A summary of the package functions is as follows:
+The functions in \pkg{epiR} can be categorised into two main groups: tools for epidemioliological analysis and tools for the analysis of surveillance data. A summary of the package functions is as follows:
 }
 
 \section{I. EPIDEMIOLOGY}{
@@ -155,6 +155,8 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
 }
 
 \section{II. SURVEILLANCE}{
+
+Below, SSe stands for surveillance system sensitivity. That is, the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than a specified design prevalence.
 
 \subsection{1. Representative sampling --- sample size}{
 

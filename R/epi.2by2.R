@@ -1,8 +1,11 @@
-"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns"){
+"epi.2by2" <- function(dat, method = "cohort.count", conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns"){
   
   ## Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293.
+  
   ## Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
+  
   ## Hanley JA (2001). A heuristic approach to the formulas for population attributable fraction. J. Epidemiol. Community Health 55: 508 - 514.
+  
   ## Jewell NP (2004). Statistics for Epidemiology. Chapman & Hall/CRC, New York, p 84 - 85.
   
   ## Incidence risk in exposed:                      IRiske
@@ -65,6 +68,58 @@
   ## Prevalence ratio; odds ratio
   ## Attributable prevalence; attributable prevalence in population
   ## Attributable fraction in exposed; attributable fraction in population
+  
+  # If dat is a dplyr object and there's three columns re-jig into a conventional R table: 
+  id <- class(dat) == "grouped_df" | class(dat) == "tbl_df" | class(dat) == "tbl" | class(dat) == "data.frame"
+  
+  # Number of columns:
+  dim <- ifelse(is.null(dim(dat)[2]), 0, dim(dat)[2])
+  
+  if(dim == 3 & sum(id) == 4){
+    
+    # Assign names:
+    names(dat) <- c("exp","out","n")
+    
+    # Counts are in column 3. Must be numeric:
+    if(!is.numeric(dat$n)) stop('Column 3 (cell frequencies) must be integer.')
+    
+    # Exposure variable column 1. Must be a factor:
+    if(!is.factor(dat$exp)) stop('Column 1 (exposure) must be a factor.')
+    
+    # Outcome variable column 2. Must be a factor:
+    if(!is.factor(dat$out)) stop('Column 2 (outcome) must be a factor.')
+    
+    dat <- xtabs(n ~ exp + out, data = dat)
+  }
+  
+  # If dat is a dplyr object and there's four columns re-jig into a conventional R table: 
+  id <- class(dat) == "grouped_df" | class(dat) == "tbl_df" | class(dat) == "tbl" | class(dat) == "data.frame"
+  
+  if(dim == 4 & sum(id) == 4){
+    
+    # Assign names:
+    names(dat) <- c("conf","exp","out","n")
+    
+    # Counts are in column 4. Must be numeric:
+    if(!is.numeric(dat$n)) stop('Column 4 (cell frequencies) must be integer.')
+
+    # Confounder variable column 1. Must be a factor:
+    if(!is.factor(dat$conf)) stop('Column 1 (confounder) must be a factor.')
+        
+    # Exposure variable column 2. Must be a factor:
+    if(!is.factor(dat$exp)) stop('Column 2 (exposure) must be a factor.')
+    
+    # Outcome variable column 3. Must be a factor:
+    if(!is.factor(dat$out)) stop('Column 3 (outcome) must be a factor.')
+
+    # Re-jig data as a conventional R table:
+    dat <- xtabs(n ~ exp + out + conf, data = dat)
+  }
+
+  # If dat vector of length 4 (i.e. cell frequencies) re-jig into a conventional R table:
+  if(length(dat) == 4 & is.vector(dat) == TRUE){
+    dat <- as.table(matrix(dat, nrow = 2, byrow = TRUE))
+  }
   
   ## If outcome is assigned by column, leave the data as is:
   if(outcome == "as.columns"){
@@ -204,8 +259,11 @@
   IRatepop.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
+  
   # American Journal of Epidemiology 100: 165 - 167.
+  
   # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
+  
   # Added 160609.
   Al <- (qbinom(1 - N., size = a + b, prob = (a / (a + b)))) / (a + b)
   Au <- (qbinom(N., size = a + b, prob = (a / (a + b)))) / (a + b)
@@ -264,8 +322,11 @@
   cIRatepop.u <- as.numeric(.tmp[,3]) * units
   
   # Crude odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
+  
   # American Journal of Epidemiology 100: 165 - 167.
+  
   # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
+  
   # Added 160609
   Al <- (qbinom(1 - N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
   u <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
@@ -275,14 +336,14 @@
   
   # Crude odds in unexposed:
   Al <- (qbinom(1 - N., size = sc + sd, prob = (sc / (sc + sd)))) / (sc + sd)
-  u <- (qbinom(N., size = sc + sd, prob = (sc / (sc + sd)))) / (sc + sd)
+  Au <- (qbinom(N., size = sc + sd, prob = (sc / (sc + sd)))) / (sc + sd)
   cOo.p <- sc / sd
   cOo.l <- Al / (1 - Al)
   cOo.u <- Au / (1 - Au)
   
   # Crude odds in population:
   Al <- (qbinom(1 - N., size = sM1 + sM0, prob = (sM1 / (sM1 + sM0)))) / (sM1 + sM0)
-  u <- (qbinom(N., size = sM1 + sM0, prob = (sM1 / (sM1 + sM0)))) / (sM1 + sM0)
+  Au <- (qbinom(N., size = sM1 + sM0, prob = (sM1 / (sM1 + sM0)))) / (sM1 + sM0)
   cOpop.p <- sM1 / sM0
   cOpop.l <- Al / (1 - Al)
   cOpop.u <- Au / (1 - Au)
@@ -312,6 +373,11 @@
     wRR.u <- .tmp[3]
   }
   
+  wRR.p <- ifelse(wRR.p == 0 | is.nan(wRR.p) | is.infinite(wRR.p), NaN, wRR.p)
+  wRR.l <- ifelse(wRR.p == 0 | is.nan(wRR.p) | is.infinite(wRR.p), NaN, wRR.l)
+  wRR.u <- ifelse(wRR.p == 0 | is.nan(wRR.p) | is.infinite(wRR.p), NaN, wRR.u)  
+  
+  
   # Individual strata incidence risk ratio - Taylor confidence limits (Hightower et al 1988):
   tRR.ctype <- "Taylor"
   tRR.p <- c(); tRR.l <- c(); tRR.u <- c()
@@ -332,6 +398,10 @@
     tRR.u <- .tmp[3]
   }
   
+  tRR.p <- ifelse(tRR.p == 0 | is.nan(tRR.p) | is.infinite(tRR.p), NaN, tRR.p)
+  tRR.l <- ifelse(tRR.p == 0 | is.nan(tRR.p) | is.infinite(tRR.p), NaN, tRR.l)
+  tRR.u <- ifelse(tRR.p == 0 | is.nan(tRR.p) | is.infinite(tRR.p), NaN, tRR.u) 
+
   # Individual strata incidence risk ratio - score confidence limits:
   scRR.ctype  <- "Score"
   scRR.p <- c(); scRR.l <- c(); scRR.u <- c()
@@ -352,6 +422,11 @@
     scRR.u <- .tmp[3]
   }
   
+  scRR.p <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.p)
+  scRR.l <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.l)
+  scRR.u <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.u) 
+  
+  
   # Individual strata incidence rate ratio (exact confidence intervals from epibasic.xlsx http://ph.au.dk/uddannelse/software/):
   IRR.ctype <- ""
   IRR.p     <- (a / b) / (c / d)
@@ -359,14 +434,30 @@
   lnIRR.var <- (1 / a) + (1 / c)
   lnIRR.se  <- sqrt((1 / a) + (1 / c))
   IRR.se    <- exp(lnIRR.se)
-  pl        <- a / (a + (c + 1) * (1 / qf(1 - N., 2 * a, 2 * c + 2)))
-  ph        <- (a + 1) / (a + 1 + c / (1 / qf(1 - N., 2 * c, 2 * a + 2)))
-  IRR.l     <- pl * d / ((1 - pl) * b)
-  IRR.u     <- ph * d / ((1 - ph) * b)
-  ## lnIRR.l <- lnIRR - (z * lnIRR.se)
-  ## lnIRR.u <- lnIRR + (z * lnIRR.se)
-  ## IRR.l <- exp(lnIRR.l)
-  ## IRR.u <- exp(lnIRR.u)
+  
+  # See https://stats.stackexchange.com/questions/495622/calculation-of-the-confidence-interval-for-incidence-rate-ratio-using-exact-appr
+
+  IRR.l <- suppressWarnings(d / b * (a / (c + 1)) * 1 / qf(p = (1 - conf.level) / 2, 
+   df1 = 2 * (c + 1), df2 = 2 * a, lower.tail = FALSE))
+  
+  IRR.u <- suppressWarnings(d / b * ((a + 1) / c) * qf(p = (1 - conf.level) / 2, 
+   df1 = 2 * (a + 1), df2 = 2 * c, lower.tail = FALSE))
+
+  # pl        <- a / (a + (c + 1) * (1 / qf(1 - N., 2 * a, 2 * c + 2)))
+  # ph        <- (a + 1) / (a + 1 + c / (1 / qf(1 - N., 2 * c, 2 * a + 2)))
+  # IRR.l     <- pl * d / ((1 - pl) * b)
+  # IRR.u     <- ph * d / ((1 - ph) * b)
+  
+  # lnIRR.l <- lnIRR - (z * lnIRR.se)
+  # IRR.l <- exp(lnIRR.l)
+  
+  # lnIRR.u <- lnIRR + (z * lnIRR.se)
+  # IRR.u <- exp(lnIRR.u)
+  
+  IRR.p <- ifelse(IRR.p == 0 | is.nan(IRR.p) | is.infinite(IRR.p), NaN, IRR.p)
+  IRR.l <- ifelse(IRR.p == 0 | is.nan(IRR.p) | is.infinite(IRR.p), NaN, IRR.l)
+  IRR.u <- ifelse(IRR.p == 0 | is.nan(IRR.p) | is.infinite(IRR.p), NaN, IRR.u)
+  
   ## Incidence rate ratio weights (equal to precision, the inverse of the variance of the IRR. See Woodward page 168):
   IRR.w <- 1 / (exp(lnIRR.var))
   
@@ -389,6 +480,10 @@
     wOR.l <- .tmp[2]
     wOR.u <- .tmp[3]
   }
+  
+  wOR.p <- ifelse(wOR.p == 0 | is.nan(wOR.p) | is.infinite(wOR.p), NaN, wOR.p)
+  wOR.l <- ifelse(wOR.p == 0 | is.nan(wOR.p) | is.infinite(wOR.p), NaN, wOR.l)
+  wOR.u <- ifelse(wOR.p == 0 | is.nan(wOR.p) | is.infinite(wOR.p), NaN, wOR.u)
   
   # Individual strata odds ratio - Cornfield confidence limits. 
   # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
@@ -431,7 +526,11 @@
     cfOR.l <- .tmp[2]
     cfOR.u <- .tmp[3]
   }
-}
+
+    cfOR.p <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.p)
+    cfOR.l <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.l)
+    cfOR.u <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.u)
+    }
 
   if(sum(total) >= 500){ 
     cfOR.ctype <- "Cornfield"
@@ -452,6 +551,11 @@
       cfOR.l <- NA
       cfOR.u <- NA
     }
+
+    cfOR.p <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.p)
+    cfOR.l <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.l)
+    cfOR.u <- ifelse(cfOR.p == 0 | is.nan(cfOR.p) | is.infinite(cfOR.p), NaN, cfOR.u)    
+    
   }
   
   # Individual strata odds ratio - score confidence limits:
@@ -473,6 +577,10 @@
     scOR.l <- .tmp[2]
     scOR.u <- .tmp[3]
   }
+  
+  scOR.p <- ifelse(scOR.p == 0 | is.nan(scOR.p) | is.infinite(scOR.p), NaN, scOR.p)
+  scOR.l <- ifelse(scOR.p == 0 | is.nan(scOR.p) | is.infinite(scOR.p), NaN, scOR.l)
+  scOR.u <- ifelse(scOR.p == 0 | is.nan(scOR.p) | is.infinite(scOR.p), NaN, scOR.u)
   
   # Individual strata odds ratios - maximum likelihood estimate (using fisher.test function):
   # Replaced 130612.
@@ -497,6 +605,10 @@
       mOR.l <- .tmp[2]
       mOR.u <- .tmp[3]
     }
+    
+    mOR.p <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.p)
+    mOR.l <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.l)
+    mOR.u <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.u)
   }
   
   if(sum(total) >= 2E09){
@@ -513,6 +625,10 @@
       mOR.l <- NA
       mOR.u <- NA
     }
+    
+    mOR.p <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.p)
+    mOR.l <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.l)
+    mOR.u <- ifelse(mOR.p == 0 | is.nan(mOR.p) | is.infinite(mOR.p), NaN, mOR.u)
   }
   
   # Individual strata attributable risk (Rothman p 135 equation 7-2):
@@ -657,8 +773,9 @@
   # Individual strata population attributable fractions for rate data (from OpenEpi TwobyTwo - Jewell doesn't provide a method for rate data):
   PAFRate.ctype <- "Sullivan"
   PAFRate.p <- (IRatepop.p - IRateo.p) / IRatepop.p
-  PAFRate.l <- min((IRatepop.l - IRateo.l) / IRatepop.l, (IRatepop.u - IRateo.u) / IRatepop.u)
-  PAFRate.u <- max((IRatepop.l - IRateo.l) / IRatepop.l, (IRatepop.u - IRateo.u) / IRatepop.u)
+  tmp <- cbind((IRatepop.l - IRateo.l) / IRatepop.l, (IRatepop.u - IRateo.u) / IRatepop.u)
+  PAFRate.l <- apply(X = tmp, MARGIN = 1, FUN = min)
+  PAFRate.u <- apply(X = tmp, MARGIN = 1, FUN = max)
   
   # Individual strata estimated population attributable fraction (from Hanley, 2001):
   # PAFest.p <- ((OR.p - 1) / OR.p) * (a / M1)
@@ -1163,7 +1280,7 @@
     Var <- apply(1 / cbind(Astar, Bstar, Cstar, Dstar), 1, sum)^(-1)
     # print(Var)
     
-    bOR.homog <- sum((dat[1,1,] - Astar)^2 / Var)
+    bOR.homog <- sum((dat[1,1,] - Astar)^2 / Var, na.rm = TRUE)
     bOR.homog.p <- 1 - pchisq(bOR.homog, df = n.strata - 1)
 }
   # Test of homogeneity of attributable risks (see Woodward p 207):
@@ -2379,37 +2496,37 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nInc risk ratio                               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc risk ratio                                 %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nOdds ratio                                   %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio                                     %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nAttrib risk in exposed *                     %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib risk in the exposed *                   %.2f (%.2f, %.2f)",
                   est[3],
                   lower[3],
                   upper[3]
       ))
       
-      cat(sprintf("\nAttrib fraction in exposed (%%)              %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nAttrib risk in population *                  %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib risk in the population *                %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
       ))
 
-      cat(sprintf("\nAttrib fraction in population (%%)           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)",
                   est[6],
                   lower[6],
                   upper[6]
@@ -2462,55 +2579,55 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nInc risk ratio (crude)                       %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc risk ratio (crude)                         %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nInc risk ratio (M-H)                         %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc risk ratio (M-H)                           %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nInc risk ratio (crude:M-H)                   %.2f",
+      cat(sprintf("\nInc risk ratio (crude:M-H)                     %.2f",
                   est[3],
                   "",
                   ""
       ))
       
-      cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (crude)                             %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
       ))
 
-      cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
+      cat(sprintf("\nOdds ratio (crude:M-H)                         %.2f",
                   est[6],
                   "",
                   ""
       ))
       
-      cat(sprintf("\nAttrib risk in exposed (crude) *             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib risk in the exposed (crude) *           %.2f (%.2f, %.2f)",
                   est[7],
                   lower[7],
                   upper[7]
       ))
       
-      cat(sprintf("\nAttrib risk in exposed (M-H) *               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib risk in the exposed (M-H) *             %.2f (%.2f, %.2f)",
                   est[8],
                   lower[8],
                   upper[8]
       ))
       
-      cat(sprintf("\nAttrib risk (crude:M-H)                      %.2f",
+      cat(sprintf("\nAttrib risk (crude:M-H)                        %.2f",
                   est[9],
                   "",
                   ""
@@ -2562,31 +2679,31 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nInc rate ratio                               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc rate ratio                                 %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nAttrib rate in exposed *                     %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib rate in the exposed *                   %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nAttrib fraction in exposed (%%)              %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nAttrib rate in population *                  %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib rate in the population *                %.2f (%.2f, %.2f)",
                   est[3],
                   lower[3],
                   upper[3]
       ))
 
-      cat(sprintf("\nAttrib fraction in population (%%)           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
@@ -2617,36 +2734,36 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nInc rate ratio (crude)                       %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc rate ratio (crude)                         %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nInc rate ratio (M-H)                         %.2f (%.2f, %.2f)",
+      cat(sprintf("\nInc rate ratio (M-H)                           %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nInc rate ratio (crude:M-H)                   %.2f",
+      cat(sprintf("\nInc rate ratio (crude:M-H)                     %.2f",
                   est[3],
                   "",
                   ""
       ))
-      cat(sprintf("\nAttrib rate in exposed (crude) *             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib rate in the exposed (crude) *           %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nAttrib rate in exposed (M-H) *               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib rate in the exposed (M-H) *             %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
       ))
       
-      cat(sprintf("\nAttrib rate (crude:M-H)                      %.2f",
+      cat(sprintf("\nAttrib rate (crude:M-H)                        %.2f",
                   est[6],
                   "",
                   ""
@@ -2674,20 +2791,20 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nOdds ratio (W)                               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (W)                                 %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
       
-      cat(sprintf("\nAttrib fraction (est) in exposed (%%)        %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nAttrib fraction (est) in population (%%)     %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction (est) in the population (%%)   %.2f (%.2f, %.2f)",
                   est[3],
                   lower[3],
                   upper[3]
@@ -2734,31 +2851,31 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (crude)                             %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
+      cat(sprintf("\nOdds ratio (crude:M-H)                         %.2f",
                   est[3],
                   "",
                   ""
       ))
       
-      cat(sprintf("\nAttrib fraction (est) in exposed (%%)        %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nAttrib fraction (est) in population (%%) *   %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction (est) in the population (%%) * %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
@@ -2803,37 +2920,37 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nPrevalence ratio                             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nPrevalence ratio                               %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nOdds ratio                                   %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio                                     %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nAttrib prevalence in exposed *               %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib prevalence in exposed *                 %.2f (%.2f, %.2f)",
                   est[3],
                   lower[3],
                   upper[3]
       ))
       
-      cat(sprintf("\nAttrib fraction in exposed (%%)              %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nAttrib prevalence in population *            %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib prevalence in the population *          %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
       ))
       
-      cat(sprintf("\nAttrib fraction in population (%%)           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)",
                   est[6],
                   lower[6],
                   upper[6]
@@ -2883,55 +3000,55 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n-------------------------------------------------------------------")
     with(x$massoc.summary, {
       
-      cat(sprintf("\nPrevalence ratio (crude)                     %.2f (%.2f, %.2f)",
+      cat(sprintf("\nPrevalence ratio (crude)                       %.2f (%.2f, %.2f)",
                   est[1],
                   lower[1],
                   upper[1]
       ))
       
-      cat(sprintf("\nPrevalence ratio (M-H)                       %.2f (%.2f, %.2f)",
+      cat(sprintf("\nPrevalence ratio (M-H)                         %.2f (%.2f, %.2f)",
                   est[2],
                   lower[2],
                   upper[2]
       ))
       
-      cat(sprintf("\nPrevalence ratio (crude:M-H)                 %.2f",
+      cat(sprintf("\nPrevalence ratio (crude:M-H)                   %.2f",
                   est[3],
                   "",
                   ""
       ))
       
-      cat(sprintf("\nOdds ratio (crude)                           %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (crude)                             %.2f (%.2f, %.2f)",
                   est[4],
                   lower[4],
                   upper[4]
       ))
       
-      cat(sprintf("\nOdds ratio (M-H)                             %.2f (%.2f, %.2f)",
+      cat(sprintf("\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)",
                   est[5],
                   lower[5],
                   upper[5]
       ))
       
-      cat(sprintf("\nOdds ratio (crude:M-H)                       %.2f",
+      cat(sprintf("\nOdds ratio (crude:M-H)                         %.2f",
                   est[6],
                   "",
                   ""
       ))
       
-      cat(sprintf("\nAtributable prevalence in exposed (crude) *  %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAtributable prevalence in the exposed (crude) *%.2f (%.2f, %.2f)",
                   est[7],
                   lower[7],
                   upper[7]
       ))
       
-      cat(sprintf("\nAtributable prevalence in exposed (M-H) *    %.2f (%.2f, %.2f)",
+      cat(sprintf("\nAtributable prevalence in the exposed (M-H) *  %.2f (%.2f, %.2f)",
                   est[8],
                   lower[8],
                   upper[8]
       ))
       
-      cat(sprintf("\nAtributable prevalence (crude:M-H)           %.2f",
+      cat(sprintf("\nAtributable prevalence (crude:M-H)             %.2f",
                   est[9],
                   "",
                   ""

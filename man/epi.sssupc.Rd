@@ -58,7 +58,7 @@ When calculating the power of a study, note that the variable \code{n} refers to
 }
 
 \examples{
-## EXAMPLE 1
+## EXAMPLE 1:
 ## A pharmaceutical company is interested in conducting a clinical trial
 ## to compare two cholesterol lowering agents for treatment of patients with
 ## congestive heart disease (CHD) using a parallel design. The primary 

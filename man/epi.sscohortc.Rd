@@ -71,7 +71,7 @@ When calculating study power or minimum detectable incidence risk ratio when \co
 ## 100,000 per year. Assuming equal numbers of smokers and non-smokers are 
 ## sampled, how many men should be sampled overall?
 
-irexp1 = 1.4 * (5 * 413)/100000; irexp0 = (5 * 413)/100000
+irexp1 = 1.4 * (5 * 413) / 100000; irexp0 = (5 * 413) / 100000
 epi.sscohortc(irexp1 = irexp1, irexp0 = irexp0, pexp = NA, n = NA, 
    power = 0.90, r = 1, N = NA, design = 1, sided.test = 1, 
    finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)
@@ -118,7 +118,9 @@ epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, pexp = NA, n = NA,
 ## Calculate the design effect, given rho = (design - 1) / (nbar - 1), 
 ## where nbar equals the average number of individuals per cluster:
 
-design <- 0.05 * (30 - 1) + 1
+design <- 0.05 * (30 - 1) + 1; design
+## The design effect is 2.45.
+
 epi.sscohortc(irexp1 = 0.30, irexp0 = 0.15, pexp = NA, n = NA, 
    power = 0.80, r = 1, N = NA, design = design, sided.test = 2, 
    finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95)

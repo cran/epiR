@@ -66,10 +66,10 @@ When calculating the power of a study, note that the variable \code{n} refers to
 \examples{
 ## EXAMPLE 1 (from Machin, Campbell, Tan and Tan 2009 p. 113):
 ## It is anticipated that patients on a particular drug have a mean diastolic 
-## blood pressure of 96 mmHg, as against 94 mmHg on an alternative. It is also 
+## blood pressure of 96 mm Hg, as against 94 mm Hg on an alternative. It is also 
 ## anticipated that the standard deviation of diastolic BP is approximately 
-## 8 mmHg. If one wishes to confirm that the difference is likely to be less 
-## than 5 mmHg, that is, one wishes to show equivalence, how many patients 
+## 8 mm Hg. If one wishes to confirm that the difference is likely to be less 
+## than 5 mm Hg, that is, one wishes to show equivalence, how many patients 
 ## are need to be enrolled in the trial? Assume 80\% power and 
 ## 95\% significance.
 
@@ -78,6 +78,7 @@ epi.ssequc(treat = 94, control = 96, sd = 8, delta = 5, n = NA,
 
 ## A total of 244 subjects need to be enrolled in the trial, 122 in the 
 ## treatment group and 122 in the control group.
+
 
 ## EXAMPLE 2 (from Chow S, Shao J, Wang H 2008, p. 64):
 ## A pharmaceutical company is interested in conducting a clinical trial
@@ -97,6 +98,7 @@ epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = NA,
 
 ## A total of 216 subjects need to be enrolled in the trial, 108 in the 
 ## treatment group and 108 in the control group.
+
 
 ## EXAMPLE 2 (cont.):
 ## Suppose only 150 subjects were enrolled in the trial, 75 in the treatment

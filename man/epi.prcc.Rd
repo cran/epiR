@@ -45,14 +45,15 @@ Jonathon Marshall, J.C.Marshall@massey.ac.nz.
 }
 
 \examples{
+## EXAMPLE 1:
 ## Create a matrix of simulation results:
 x1 <- rnorm(n = 10, mean = 120, sd = 130)
 x2 <- rnorm(n = 10, mean = 80, sd = 5)
 x3 <- rnorm(n = 10, mean = 40, sd = 20)
 y <- 2 + (0.5 * x1) - (1.7 * x2) + (0.2 * x3)
 
-dat <- data.frame(X1 = x1, X2 = x2, X3 = x3, Y = y)
-epi.prcc(dat, sided.test = 2, conf.level = 0.95)
+dat.df01 <- data.frame(x1 = x1, x2 = x2, x3 = x3, y = y)
+epi.prcc(dat.df01, sided.test = 2, conf.level = 0.95)
 
 }
 

@@ -7,7 +7,7 @@ Extract unique covariate patterns from a data set
 }
 
 \description{
-Extract the set of unique patterns from a set of covariates.
+Extract the set of unique patterns from a set of covariates (explanatory variables).
 }
 
 \usage{
@@ -15,7 +15,7 @@ epi.cp(dat)
 }
 
 \arguments{
-  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent a set of \emph{m} covariates. The function permits one or more covariates for each observation.}
+  \item{dat}{an \emph{i} row by \emph{j} column data frame where the \emph{i} rows represent individual observations and the \emph{m} columns represent a set of \emph{m} covariates. The function allows for one or more covariates for each observation.}
 }
 
 \details{
@@ -37,18 +37,21 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 }
 
 \examples{
+## EXAMPLE 1:
+
 ## Generate a set of covariates:
 set.seed(seed = 1234)
 obs <- round(runif(n = 100, min = 0, max = 1), digits = 0)
 v1 <- round(runif(n = 100, min = 0, max = 4), digits = 0)
 v2 <- round(runif(n = 100, min = 0, max = 4), digits = 0)
-dat <- data.frame(obs, v1, v2)
+dat.df01 <- data.frame(obs, v1, v2)
 
-dat.glm <- glm(obs ~ v1 + v2, family = binomial, data = dat)
-dat.mf <- model.frame(dat.glm)
+dat.glm01 <- glm(obs ~ v1 + v2, family = binomial, data = dat.df01)
+dat.mf01 <- model.frame(dat.glm01)
 
-## Covariate pattern:
-epi.cp(dat.mf[-1])
+## Covariate pattern. Drop the first column of dat.mf01 (since column 1 is the
+## outcome variable:
+epi.cp(dat.mf01[,2:3])
 
 ## There are 25 covariate patterns in this data set. Subject 100 has
 ## covariate pattern 21. 

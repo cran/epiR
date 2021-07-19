@@ -89,6 +89,7 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0,
 
 ## The power of this study, with the given sample size allocation is 0.99.
 
+
 ## EXAMPLE 3:
 ## The following statement appeared in a study proposal to identify risk 
 ## factors for campylobacteriosis in humans:
@@ -96,7 +97,7 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0,
 ## `We will prospectively recruit 300 culture-confirmed Campylobacter cases 
 ## reported under the Public Health Act. We will then recruit one control per 
 ## case from general practices of the enrolled cases, using frequency matching 
-## by age and sex. With exposure levels of 10% (thought to be realistic 
+## by age and sex. With exposure levels of 10\% (thought to be realistic 
 ## given past foodborne disease case control studies) this sample size 
 ## will provide 80\% power to detect an odds ratio of 2 at the 5\% alpha 
 ## level.'
@@ -149,17 +150,17 @@ epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho.cc = 0.01,
 r <- 1
 p0 = seq(from = 0.05, to = 0.95, length = 50)
 OR <- seq(from = 1.05, to = 6, length = 100)
-dat <- expand.grid(p0 = p0, OR = OR)
-dat$n.total <- NA
+dat.df05 <- expand.grid(p0 = p0, OR = OR)
+dat.df05$n.total <- NA
 
-for(i in 1:nrow(dat)){
-   dat$n.total[i] <- epi.sscc(OR = dat$OR[i], p0 = dat$p0[i], n = NA, 
-   power = 0.80, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
+for(i in 1:nrow(dat.df05)){
+   dat.df05$n.total[i] <- epi.sscc(OR = dat.df05$OR[i], p0 = dat.df05$p0[i], 
+   n = NA, power = 0.80, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
    nfractional = FALSE, conf.level = 0.95, method = "unmatched", 
    fleiss = FALSE)$n.total
 }  
 
-grid.n <- matrix(dat$n.total, nrow = length(p0))
+grid.n <- matrix(dat.df05$n.total, nrow = length(p0))
 breaks <- c(22:30,32,34,36,40,45,50,55,60,70,80,90,100,125,150,175,
    200,300,500,1000)
 
@@ -170,10 +171,9 @@ contour(x = p0, y = OR, z = log10(grid.n), add = FALSE, levels = log10(breaks),
 
 \dontrun{
 ## The same plot using ggplot2:
-
 library(ggplot2); library(directlabels)
 
-p <- ggplot(data = dat, aes(x = p0, y = OR, z = n.total)) +
+p <- ggplot(data = dat.df05, aes(x = p0, y = OR, z = n.total)) +
   geom_contour(aes(colour = ..level..), breaks = breaks) +
   scale_x_continuous(limits = c(0,1), name = "Proportion of controls exposed") +
   scale_y_continuous(limits = c(1,6), name = "Minimum OR to detect")
@@ -182,6 +182,7 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
    "enlarge.box", hjust = 1, vjust = 1, box.color = NA, 
    fill = "transparent", "draw.rects")))
 }
+
 
 ## EXAMPLE 6:
 ## From page 1164 of Dupont (1988). A matched case control study is to be 

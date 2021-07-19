@@ -66,6 +66,8 @@ Lin L (2000). A note on the concordance correlation coefficient. Biometrics 56: 
 
 Pitman E (1939). A note on normal correlation. Biometrika 31: 9 - 12.
 
+Rashid M, Stevenson M, Waenga S, Mirams G, Campbell A, Vaughan J, Jabbar A (2018). Comparison of McMaster and FECPAK methods for counting nematode eggs in the faeces of alpacas. Parasites & Vectors 11, 278. DOI:  10.1186/s13071-018-2861-1.
+
 Reynolds M, Gregoire T (1991). Comment on Bradley and Blackwood. American Statistician 45: 163 - 164.
 
 Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University Press.
@@ -76,7 +78,6 @@ Snedecor G, Cochran W (1989). Statistical Methods. Ames: Iowa State University P
 }
 
 \examples{
-
 ## EXAMPLE 1:
 set.seed(seed = 1234)
 method1 <- rnorm(n = 100, mean = 0, sd = 1)
@@ -86,32 +87,32 @@ method2 <- method1 + runif(n = 100, min = -0.25, max = 0.25)
 method1[50] <- NA
 method2[75] <- NA
 
-tmp <- data.frame(method1, method2)
-tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform", conf.level = 0.95, 
+dat.df01 <- data.frame(method1, method2)
+rval.ccc01 <- epi.ccc(method1, method2, ci = "z-transform", conf.level = 0.95, 
    rep.measure = FALSE)
 
-tmp.lab <- data.frame(lab = paste("CCC: ", 
-   round(tmp.ccc$rho.c[,1], digits = 2), " (95\% CI ", 
-   round(tmp.ccc$rho.c[,2], digits = 2), " - ",
-   round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = ""))
+rval.lab01 <- data.frame(lab = paste("CCC: ", 
+   round(rval.ccc01$rho.c[,1], digits = 2), " (95\% CI ", 
+   round(rval.ccc01$rho.c[,2], digits = 2), " - ",
+   round(rval.ccc01$rho.c[,3], digits = 2), ")", sep = ""))
 
 z <- lm(method2 ~ method1)
 alpha <- summary(z)$coefficients[1,1]
 beta <-  summary(z)$coefficients[2,1]
-tmp.lm <- data.frame(alpha, beta)
+rval.lm01 <- data.frame(alpha, beta)
 
 ## Concordance correlation plot:
 \dontrun{
 library(ggplot2)
 
-ggplot(tmp, aes(x = method1, y = method2)) + 
+ggplot(data = dat.df01, aes(x = method1, y = method2)) + 
    geom_point() +
    geom_abline(intercept = 0, slope = 1) +
-   geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 
+   geom_abline(data = rval.lm01, aes(intercept = alpha, slope = beta), 
       linetype = "dashed") +
    scale_x_continuous(limits = c(0,3), name = "Method 1") +
    scale_y_continuous(limits = c(0,3), name = "Method 2") +
-   geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
+   geom_text(data = rval.lab01, x = 0.5, y = 2.95, label = rval.lab01$lab) + 
    coord_fixed(ratio = 1 / 1)
 
 ## In this plot the dashed line represents the line of perfect concordance. 
@@ -127,26 +128,29 @@ x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
 y <- c(512,430,520,428,500,600,364,380,658,445,432,626,260,
    477,259,350,451)
 
-tmp.ccc <- epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, 
+rval.ccc02 <- epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, 
    rep.measure = FALSE)
-tmp <- data.frame(mean = tmp.ccc$blalt[,1], delta = tmp.ccc$blalt[,2])
+rval.df02 <- data.frame(mean = rval.ccc02$blalt[,1], 
+   delta = rval.ccc02$blalt[,2])
 
 \dontrun{
 library(ggplot2)
 
-ggplot(tmp.ccc$blalt, aes(x = mean, y = delta)) + 
+ggplot(data = rval.ccc02$blalt, aes(x = mean, y = delta)) + 
   geom_point() +
-  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
-  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
-  geom_hline(data = tmp.ccc$sblalt, aes(yintercept = est), linetype = 1) +
-  scale_x_continuous(limits = c(0,800), name = "Average PEFR by two meters (L/min)") +
-  scale_y_continuous(limits = c(-150,150), name = "Difference in PEFR (L/min)")   
+  geom_hline(data = rval.ccc02$sblalt, aes(yintercept = lower), linetype = 2) +
+  geom_hline(data = rval.ccc02$sblalt, aes(yintercept = upper), linetype = 2) +
+  geom_hline(data = rval.ccc02$sblalt, aes(yintercept = est), linetype = 1) +
+  scale_x_continuous(limits = c(0,800), 
+     name = "Average PEFR by two meters (L/min)") +
+  scale_y_continuous(limits = c(-150,150), 
+     name = "Difference in PEFR (L/min)")   
 }
 
 
 ## EXAMPLE 3:
 ## Setting limits of agreement when your data are skewed. See Euser et al. 
-## (2008) for details.
+## (2008) for details and Rashid et al. (2018) for an applied example.
 x <- c(0,210,15,90,0,0,15,0,0,0,15,0,15,0,0,0,0,15,0,0,15,135,0,0,15,
    120,30,15,30,0,0,5235,780,1275,10515,1635,1905,1830,720,450,225,420,
    300,15,285,0,225,525,675,5280,465,270,0,1485,15,420,0,60,0,0,0,750,
@@ -155,19 +159,21 @@ y <- c(0,70,0,0,0,0,35,0,0,0,0,0,0,35,0,0,0,0,0,0,35,35,70,0,0,140,35,
    105,0,0,0,1190,385,1190,6930,560,1260,700,840,0,105,385,245,35,105,
    0,140,350,350,3640,385,350,0,1505,0,630,70,0,0,140,0,420,490,0)   
    
-crude.ccc <- epi.ccc(x, y, ci = "z-transform", 
+rval.ccc03 <- epi.ccc(x, y, ci = "z-transform", 
    conf.level = 0.95, rep.measure = FALSE)
 
 \dontrun{
 library(ggplot2)
 
-ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) + 
+ggplot(data = rval.ccc03$blalt, aes(x = mean, y = delta)) + 
   geom_point() +
-  geom_hline(data = crude.ccc$sblalt, aes(yintercept = lower), linetype = 2) +
-  geom_hline(data = crude.ccc$sblalt, aes(yintercept = upper), linetype = 2) +
-  geom_hline(data = crude.ccc$sblalt, aes(yintercept = est), linetype = 1) +
-  scale_x_continuous(limits = c(0,8000), name = "Average of the two measurements") +
-  scale_y_continuous(limits = c(-8000,8000), name = "Difference in the two measurements")  
+  geom_hline(data = rval.ccc03$sblalt, aes(yintercept = lower), linetype = 2) +
+  geom_hline(data = rval.ccc03$sblalt, aes(yintercept = upper), linetype = 2) +
+  geom_hline(data = rval.ccc03$sblalt, aes(yintercept = est), linetype = 1) +
+  scale_x_continuous(limits = c(0,8000), 
+     name = "Average of the two measurements") +
+  scale_y_continuous(limits = c(-8000,8000), 
+     name = "Difference in the two measurements")  
 }
 
 ## In the above plot the spread of the differences increases with increasing 
@@ -177,7 +183,7 @@ ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) +
 logx <- log(x + 50, base = 10)
 logy <- log(y + 50, base = 10)
 
-log10.ccc <- epi.ccc(x = logx, y = logy, ci = "z-transform", 
+log10.ccc03 <- epi.ccc(x = logx, y = logy, ci = "z-transform", 
    conf.level = 0.95, rep.measure = FALSE)
 
 ## Transform the limits of agreement back to the original scale by taking 
@@ -185,7 +191,7 @@ log10.ccc <- epi.ccc(x = logx, y = logy, ci = "z-transform",
 ## and +a, with a = 1.96 * s, the ratio between two measures on the original 
 ## scale is between 10^-a and 10^a. See page 979 of Euser et al. (2008). 
 
-a <- 1.96 * log10.ccc$sblalt$delta.sd
+a <- 1.96 * log10.ccc03$sblalt$delta.sd
 
 ## For a given value for the mean Xbar, it can be shown that x - y is between 
 ## -2Xbar(10^a - 1) / (10^a + 1) and +2Xbar(10^a - 1) / (10^a + 1):
@@ -198,13 +204,15 @@ limits <- data.frame(mean = Xbar, lower = Xbar.low, upper = Xbar.upp)
 \dontrun{
 library(ggplot2)
 
-ggplot(crude.ccc$blalt, aes(x = mean, y = delta)) + 
+ggplot(data = rval.ccc03$blalt, aes(x = mean, y = delta)) + 
   geom_point() +
   geom_line(data = limits, aes(x = mean, y = lower), linetype = 2) +
   geom_line(data = limits, aes(x = mean, y = upper), linetype = 2) +
   geom_line(data = limits, aes(x = mean, y = 0), linetype = 1) +
-    scale_x_continuous(limits = c(0,8000), name = "Average of the two measurements") +
-  scale_y_continuous(limits = c(-8000,8000), name = "Difference in the two measurements") 
+  scale_x_continuous(limits = c(0,8000), 
+     name = "Average of the two measurements") +
+  scale_y_continuous(limits = c(-8000,8000), 
+     name = "Difference in the two measurements") 
 }
 }
 

@@ -6,7 +6,7 @@
 }
 
 \description{
-Computes descriptive statistics from a vector of numbers. 
+Computes descriptive statistics from a vector. 
 }
 
 \usage{
@@ -27,12 +27,17 @@ A list containing the following:
 
 
 \examples{
-id <- 1:1000
-tmp <- rnorm(1000, mean = 0, sd = 1)
-id <- sample(id, size = 20)
-tmp[id] <- NA
+## EXAMPLE 1:
+## Generate some data:
+id <- 1:100
+n <- rnorm(100, mean = 0, sd = 1)
+dat.df01 <- data.frame(id, n)
 
-epi.descriptives(tmp, conf.level = 0.95)
+# Add missing values:
+missing <- dat.df01$id \%in\% sample(dat.df01$id, size = 20)
+dat.df01$n[missing] <- NA
+
+epi.descriptives(dat.df01$n, conf.level = 0.95)
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

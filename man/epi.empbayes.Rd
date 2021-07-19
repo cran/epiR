@@ -36,6 +36,7 @@ Meza J (2003). Empirical Bayes estimation smoothing of relative risks in disease
 }
 
 \examples{
+## EXAMPLE 1:
 data(epi.SClip)
 obs <- epi.SClip$cases; pop <- epi.SClip$population
 
@@ -43,7 +44,8 @@ est <- epi.empbayes(obs, pop)
 crude.p <- ((obs) / (pop)) * 100000
 crude.r <- rank(crude.p)
 ebay.p <- ((obs + est[4]) / (pop + est[3])) * 100000
-dat <- data.frame(rank = c(crude.r, crude.r), 
+
+dat.df01 <- data.frame(rank = c(crude.r, crude.r), 
    Method = c(rep("Crude", times = length(crude.r)), 
       rep("Empirical Bayes", times = length(crude.r))),
    est = c(crude.p, ebay.p)) 
@@ -55,7 +57,7 @@ dat <- data.frame(rank = c(crude.r, crude.r),
 \dontrun{
 library(ggplot2)
 
-ggplot(dat, aes(x = rank, y = est, colour = Method)) + 
+ggplot(dat = dat.df01, aes(x = rank, y = est, colour = Method)) + 
    geom_point() +
    scale_x_continuous(name = "District rank", 
       breaks = seq(from = 0, to = 60, by = 10), 

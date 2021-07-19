@@ -1,4 +1,32 @@
+CHANGES IN epiR VERSION 2.0.30
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 and epi.tests data entry formats simplified. Both functions now accept tables generated from tidyverse.
+    [Suggested by Mark Stevenson]
+    o Documentation for all functions reviewed. Consistency in naming of objects improved.
+    [Suggested by Mark Stevenson]
+    
+    
+
+CHANGES IN epiR VERSION 2.0.29
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 returns NAs for point estimates of incidence rate ratio when number of events equals zero.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.28
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.directadj now returns zero for the directly adjusted incidence rate estimate when the number of observations in a strata equals zero and the time at risk in the same strata equals zero.
+    [Suggested by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.26
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Function epi.2by2 now provides interpretive statements of the number needed to treat and the number needed to harm (with confidence intervals) following the approach described by Altman (1998).
@@ -51,11 +79,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rsu.spp.rs code modified.
     o Documentation for rsu.spp.rs, epi.psi and rsu.sssep.rs updated.
 
+
 CHANGES IN epiR VERSION 2.0.18
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Vignette on sample size calculations added.
+
 
 CHANGES IN epiR VERSION 2.0.17
 
@@ -73,12 +103,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Function epi.ssdetect returns sample size estimates using the binomial and hypergeometric distribution.
     [Suggested by Manuel Sanchez Vazquez]
 
+
 CHANGES IN epiR VERSION 2.0.1
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o New function epi.ssdxtest: Sample size to validate a diagnostic test in the absence of a gold standard.
     o Function epi.sssimpleestb modified to adjust the required sample size to account for imperfect diagnostic sensitivity and specificity.
+
 
 CHANGES IN epiR VERSION 2.0.0
 
@@ -90,12 +122,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Inconsistency in reporting of results of epi.nomogram corrected.
     [Spotted by Pietro Ravani]
 
+
 CHANGES IN epiR VERSION 1.0-16
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Function epi.ssxsectn updated to calculate minimum detectable odds ratio for a cross-sectional study. Function epi.sscohortc updated to calculate minimum detectable odds ratio for a cohort study.
     [Suggested by Alex Hou] 
+
 
 CHANGES IN epiR VERSION 1.0-15
 
@@ -108,11 +142,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     [Spotted by Marco Barbara]
     o Function epi.2by2 now includes Taylor series confidence intervals for the incidence risk and prevalence ratio.
 
+
 CHANGES IN epiR VERSION 1.0-14
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Long overdue vignette included. 
+
 
 CHANGES IN epiR VERSION 1.0-13
 
@@ -127,11 +163,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     [Spotted by Winston Mason]
     Fixed. 
 
+
 CHANGES IN epiR VERSION 1.0-12
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o New function epi.smr: Computes confidence intervals and tests of significance of the standardised mortality [morbidity] ratio.
+
 
 CHANGES IN epiR VERSION 1.0-11
 
@@ -140,6 +178,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o epi.2by2
     Inconsistency in variables returned from print(epi.2by2) and summary(epi.2by2) corrected.
     [Spotted by Jose G Conde Santiago]
+
 
 CHANGES IN epiR VERSION 1.0-10
 
@@ -152,12 +191,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o New function epi.sscohortt: Sample size, power or minimum detectable incidence rate ratio for a cohort study using individual time data.    
     o New function epi.ssxsectn: Sample size, power or minimum detectable preva;ence ratio for a cross-sectional study.
 
+
 CHANGES IN epiR VERSION 1.0-06
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Functions to calculate sample size. Major revision of the naming of functions to calculate sample size.
     o New function epi.ssclus1estb: Sample size to estimate a binary outcome using one-stage cluster sampling.
+
 
 CHANGES IN epiR VERSION 1.0-04
 

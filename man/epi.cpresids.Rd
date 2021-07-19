@@ -33,18 +33,22 @@ Hosmer DW, Lemeshow S (1989). Applied Logistic Regression. John Wiley & Sons, Ne
 }
 
 \examples{
-infert.glm <- glm(case ~ spontaneous + induced, data = infert, 
-   family = binomial())
-   
-infert.mf <- model.frame(infert.glm)
-infert.cp <- epi.cp(infert.mf[-1])
+## EXAMPLE 1:
+dat.glm01 <- glm(case ~ spontaneous + induced, family = binomial(), 
+   data = infert)
 
-infert.obs <- as.vector(by(infert$case, as.factor(infert.cp$id), 
+## Covariate patterns:   
+dat.mf01 <- model.frame(dat.glm01)
+dat.cp01 <- epi.cp(dat.mf01[-1])
+
+dat.obs01 <- as.vector(by(infert$case, as.factor(dat.cp01$id), 
    FUN = sum))
-infert.fit <- as.vector(by(fitted(infert.glm), as.factor(infert.cp$id), 
+dat.fit01 <- as.vector(by(fitted(dat.glm01), as.factor(dat.cp01$id), 
    FUN = min))
-infert.res <- epi.cpresids(obs = infert.obs, fit = infert.fit, 
-   covpattern = infert.cp)
+dat.cpr01 <- epi.cpresids(obs = dat.obs01, fit = dat.fit01, 
+   covpattern = dat.cp01)
+head(dat.cpr01)
+   
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

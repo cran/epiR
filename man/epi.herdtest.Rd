@@ -41,7 +41,7 @@ The method implemented in this function is based on the hypergeometric distribut
 
 \examples{
 ## EXAMPLE 1:
-## We wish to estimate the herd-level sensitivity and specificity of 
+## We want to estimate the herd-level sensitivity and specificity of 
 ## a testing regime using an individual animal test of sensitivity 0.391 
 ## and specificity 0.964. The estimated true prevalence of disease is 0.12.
 ## Assume that 60 individuals will be tested per herd and we have

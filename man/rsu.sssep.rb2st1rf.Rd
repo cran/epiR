@@ -38,6 +38,7 @@ A list comprised of seven elements:
 }
 
 \examples{
+## EXAMPLE 1:
 ## A cross-sectional study is to be carried out to confirm the absence of 
 ## disease using risk based sampling. The population of interest is comprised 
 ## of individual sampling units managed within clusters. 

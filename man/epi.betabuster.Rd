@@ -55,30 +55,30 @@ Simon Firestone (Faculty of Veterinary and Agricultural Sciences, The University
 ## 0.75, what are the shape1 and shape2 parameters for a beta distribution
 ## satisfying these constraints? 
 
-rval <- epi.betabuster(mode = 0.90, conf = 0.80, greaterthan = TRUE, 
+rval.beta01 <- epi.betabuster(mode = 0.90, conf = 0.80, greaterthan = TRUE, 
    x = 0.75, conf.level = 0.95, max.shape1 = 100, step = 0.001)
-rval$shape1; rval$shape2
+rval.beta01$shape1; rval.beta01$shape2
 
 ## The shape1 and shape2 parameters for the beta distribution that satisfy the
 ## constraints listed above are 9.875 and 1.986, respectively.
 
-## This beta distribution reflects the probability distribution 
-## obtained if there were 9 successes, r:
-r <- rval$shape1 - 1; r
+## This beta distribution reflects the probability distribution obtained if 
+## there were 9 successes, r:
+r <- rval.beta01$shape1 - 1; r
 
 ## from 10 trials, n:
-n <- rval$shape2 + rval$shape1 - 2; n
+n <- rval.beta01$shape2 + rval.beta01$shape1 - 2; n
 
-dat <- data.frame(x = seq(from = 0, to = 1, by = 0.001), 
+dat.df01 <- data.frame(x = seq(from = 0, to = 1, by = 0.001), 
    y = dbeta(x = seq(from = 0, to = 1,by = 0.001), 
-   shape1 = rval$shape1, shape2 = rval$shape2))
+   shape1 = rval.beta01$shape1, shape2 = rval.beta01$shape2))
 
 ## Density plot of the estimated beta distribution:
 
 \dontrun{
 library(ggplot2)
 
-ggplot(data = dat, aes(x = x, y = y)) +
+ggplot(data = dat.df01, aes(x = x, y = y)) +
    geom_line() + 
    scale_x_continuous(name = "Test sensitivity") +
    scale_y_continuous(name = "Density")

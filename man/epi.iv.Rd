@@ -64,7 +64,9 @@ The function checks each strata for cells with zero frequencies. If a zero frequ
 }
 
 \examples{
+## EXAMPLE 1:
 data(epi.epidural)
+
 epi.iv(ev.trt = epi.epidural$ev.trt, n.trt = epi.epidural$n.trt, 
    ev.ctrl = epi.epidural$ev.ctrl, n.ctrl = epi.epidural$n.ctrl, 
    names = as.character(epi.epidural$trial), method = "odds.ratio", 

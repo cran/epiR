@@ -62,7 +62,11 @@ epi.nomogram(se = 0.89, sp = 0.85, lr = NA, pre.pos = 0.05, verbose = FALSE)
 ## diagnose around 3 cases of sarcoptic mange per year in a clinic that 
 ## sees approximately 2 -- 3 dogs per week presented with pruritic skin disease.
 
+
+## Calculate the pre-test probability of sarcoptes:
 pre.pos <- 3 / (3 * 52)
+## The pre-test probability that this dog is sarcoptes positive is 0.019. 
+
 epi.nomogram(se = NA, sp = NA, lr = c(9000, 0.1), pre.pos = pre.pos, 
    verbose = FALSE)
 

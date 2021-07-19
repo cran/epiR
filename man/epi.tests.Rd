@@ -7,7 +7,7 @@
 \title{Sensitivity, specificity and predictive value of a diagnostic test}
 
 \description{
-Computes true and apparent prevalence, sensitivity, specificity, positive and negative predictive values, and positive and negative likelihood ratios from count data provided in a 2 by 2 table.
+Computes true and apparent prevalence, sensitivity, specificity, positive and negative predictive values and positive and negative likelihood ratios from count data provided in a 2 by 2 table.
 }
 
 \usage{
@@ -19,7 +19,7 @@ epi.tests(dat, conf.level = 0.95)
 }
 
 \arguments{
-  \item{dat}{an object of class \code{table} containing the individual cell frequencies (see below).}
+  \item{dat}{a vector of length four, an object of class \code{table} or an object of class \code{grouped_df} from package \code{dplyr} containing the individual cell frequencies (see below).}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{x, object}{an object of class \code{epi.tests}.}
   \item{\dots}{Ignored.}
@@ -35,22 +35,22 @@ Diagnostic accuracy is defined as the proportion of all tests that give a correc
 
 \value{
 An object of class \code{epi.tests} containing the following:
-  \item{aprev}{apparent prevalence.}
-  \item{tprev}{true prevalence.}
+  \item{ap}{apparent prevalence.}
+  \item{tp}{true prevalence.}
   \item{se}{test sensitivity.}
   \item{sp}{test specificity.}
-  \item{diag.acc}{diagnostic accuracy.}
+  \item{diag.ac}{diagnostic accuracy.}
   \item{diag.or}{diagnostic odds ratio.}
-  \item{nnd}{number needed to diagnose.}
+  \item{nndx}{number needed to diagnose.}
   \item{youden}{Youden's index.}
-  \item{ppv}{positive predictive value.}
-  \item{npv}{negative predictive value.}
-  \item{plr}{likelihood ratio of a positive test.}
-  \item{nlr}{likelihood ratio of a negative test.}
-  \item{pro}{the proportion of subjects with the outcome ruled out.}
-  \item{pri}{the proportion of subjects with the outcome ruled in.}
-  \item{pfp}{of all the subjects that are truly outcome negative, the proportion that are incorrectly classified as positive (the proportion of false positives).} 
-  \item{pfn}{of all the subjects that are truly outcome positive, the proportion that are incorrectly classified as negative (the proportion of false negative).}   
+  \item{pv.pos}{positive predictive value.}
+  \item{pv.neg}{negative predictive value.}
+  \item{lr.pos}{likelihood ratio of a positive test.}
+  \item{lr.neg}{likelihood ratio of a negative test.}
+  \item{p.rout}{the proportion of subjects with the outcome ruled out.}
+  \item{p.rin}{the proportion of subjects with the outcome ruled in.}
+  \item{p.fpos}{of all the subjects that are truly outcome negative, the proportion that are incorrectly classified as positive (the proportion of false positives).} 
+  \item{p.fneg}{of all the subjects that are truly outcome positive, the proportion that are incorrectly classified as negative (the proportion of false negative).}   
 }
 
 \references{
@@ -85,26 +85,61 @@ Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
 }
 
 \examples{
-## EXAMPLE 1:
-## From Scott et al. 2008, Table 1. A new diagnostic test was trialled 
-## on 1586 patients. Of 744 patients that were disease positive, 670 were 
-## test positive. Of 842 patients that were disease negative, 640 were 
-## test negative. What is the likeliood ratio of a positive test? 
+## EXAMPLE 1 (from Scott et al. 2008, Table 1):
+## A new diagnostic test was trialled on 1586 patients. Of 744 patients that 
+## were disease positive, 670 were test positive. Of 842 patients that were 
+## disease negative, 640 were test negative. What is the likeliood ratio of 
+## a positive test? What is the number needed to diagnose?
+
+dat.v01 <- c(670,202,74,640)
+rval.tes01 <- epi.tests(dat.v01, conf.level = 0.95)
+print(rval.tes01)
+
+## Test sensitivity is 0.90 (95\% CI 0.88 to 0.92). Test specificity is 
+## 0.76 (95\% CI 0.73 to 0.79). The likelihood ratio of a positive test 
+## is 3.75 (95\% CI 3.32 to 4.24). 
+
 ## What is the number needed to diagnose?
+names(rval.tes01$detail)
+rval.tes01$detail$nndx
 
-dat <- as.table(matrix(c(670,202,74,640), nrow = 2, byrow = TRUE))
-colnames(dat) <- c("Dis+","Dis-")
-rownames(dat) <- c("Test+","Test-")
-rval <- epi.tests(dat, conf.level = 0.95)
-print(rval); summary(rval)
+## The number needed to diagnose is 1.51 (95\% CI 1.41 to 1.65). Around 15 
+## persons need to be tested to return 10 positive tests.
 
-## Test sensitivity is 0.90 (95\% CI 0.88 -- 0.92). Test specificity is 
-## 0.76 (95\% CI 0.73 -- 0.79). The likelihood ratio of a positive test 
-## is 3.75 (95\% CI 3.32 to 4.24). The number needed to diagnose is 
-## 1.51 (95\% CI 1.41 to 1.65). Around 15 persons need to be tested 
-## to return 10 positive tests.
 
 ## EXAMPLE 2:
+## Same as Example 1 but showing how a 2 by 2 contingency table can be prepared 
+## using tidyverse:
+
+\dontrun{
+library(tidyverse)
+
+## Generate a data set listing test results and true disease status:
+dis <- c(rep(1, times = 744), rep(0, times = 842))
+tes <- c(rep(1, times = 670), rep(0, times = 74), 
+   rep(1, times = 202), rep(0, times = 640))
+dat.df02 <- data.frame(dis, tes)
+
+tmp.df02 <- dat.df02 \%>\%
+  mutate(dis = factor(dis, levels = c(1,0), labels = c("Dis+","Dis-"))) \%>\%
+  mutate(tes = factor(tes, levels = c(1,0), labels = c("Test+","Test-"))) \%>\%
+  group_by(tes, dis) \%>\%
+  summarise(n = n())
+tmp.df02
+
+## View the data in conventional 2 by 2 table format:
+pivot_wider(tmp.df02, id_cols = c(tes), names_from = dis, values_from = n)
+
+rval.tes02 <- epi.tests(tmp.df02, conf.level = 0.95)
+print(rval.tes02)
+}
+
+## Test sensitivity is 0.90 (95\% CI 0.88 to 0.92). Test specificity is 
+## 0.76 (95\% CI 0.73 to 0.79). The likelihood ratio of a positive test 
+## is 3.75 (95\% CI 3.32 to 4.24).
+
+
+## EXAMPLE 3:
 ## A biomarker assay has been developed to identify patients that are at 
 ## high risk of experiencing myocardial infarction. The assay varies on 
 ## a continuous scale, from 0 to 1. Researchers believe that a biomarker 
@@ -115,35 +150,35 @@ print(rval); summary(rval)
 ## Generate data consistent with the information provided above. Assume the
 ## prevalence of high risk subjects in your population is 0.35:
 set.seed(1234)
-dat <- data.frame(out = rbinom(n = 200, size = 1, prob = 0.35), 
+dat.df03 <- data.frame(out = rbinom(n = 200, size = 1, prob = 0.35), 
    bm = runif(n = 200, min = 0, max = 1))
 
 ## Classify study subjects as either test positive or test negative 
 ## according to their biomarker test result:
-dat$test <- ifelse(dat$bm >= 0.6, 1, 0)
+dat.df03$test <- ifelse(dat.df03$bm >= 0.6, 1, 0)
 
 ## Generate a two-by-two table:
-tab <- table(dat$test, dat$out)[2:1,2:1]
-rval <- epi.tests(tab, conf.level = 0.95)
+dat.tab03 <- table(dat.df03$test, dat.df03$out)[2:1,2:1]
+rval.tes03 <- epi.tests(dat.tab03, conf.level = 0.95)
+print(rval.tes03)
 
 # What proportion of subjects are ruled out as being at high risk of 
 ## myocardial infarction?
-rval$elements$pro
+rval.tes03$detail$p.rout
 # Answer: 0.61 (95\% CI 0.54 to 0.68).
 
 # What proportion of subjects are ruled in as being at high risk of 
 ## myocardial infarction?
-rval$elements$pri
+rval.tes03$detail$p.rin
 # Answer: 0.38 (95\% CI 0.32 to 0.45).
 
 # What is the proportion of false positive results?
-rval$elements$pfp
+rval.tes03$detail$p.fpos
 # Answer: 0.37 (95\% CI 0.29 to 0.45).
 
 # What is the proportion of false negative results?
-rval$elements$pfn
+rval.tes03$detail$p.fneg
 # Answer: 0.58 (95\% CI 0.44 to 0.70).
-
 }
 
 \keyword{univar}

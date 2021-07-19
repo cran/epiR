@@ -74,7 +74,7 @@ When calculating the power of a study, note that the variable \code{n} refers to
 ## where the intended trial is for testing non-inferiority of mean responses 
 ## in LDL. Assume that 80\% power is required at a 5\% level of significance.
 
-## In this example, we assume a 5% (i.e. delta = 0.05) change in LDL is 
+## In this example, we assume a 5\% (i.e. delta = 0.05) change in LDL is 
 ## a clinically meaningful difference. Assume the standard deviation of 
 ## LDL is 0.10 and the LDL concentration in the treatment group is 0.20 
 ## units and the LDL concentration in the control group is 0.20 units.

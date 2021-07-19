@@ -72,7 +72,8 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## intensively managed herds, using a 0.05 significance test. Previous evidence 
 ## suggests that the prevalence of Q fever in extensively managed dairy goat
 ## herds is 5 per 100 herds at risk and the prevalence of intensively managed
-## herds in the population (the prevalence of exposure) is around 0.20. 
+## herds in the population (the prevalence of exposure) is around 0.20.
+ 
 ## Assuming equal numbers of intensively managed and extensively managed 
 ## herds will be sampled, how many herds need to be enrolled into the study?
 ## You estimate that there are around 60 dairy goat herds in your study area.
@@ -91,7 +92,6 @@ epi.ssxsectn(pdexp1 = pdexp1, pdexp0 = pdexp0, pexp = 0.20, n = NA,
 ## described above. What is the minimum and maximum detectable prevalence
 ## ratio and minimum and maximum detectable odds ratio?
 
-pdexp0 = 5 / 100
 epi.ssxsectn(pdexp1 = NA, pdexp0 = pdexp0, pexp = 0.20, n = 45, 
    power = 0.80, r = 1, N = 60, design = 1, sided.test = 2, 
    finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)

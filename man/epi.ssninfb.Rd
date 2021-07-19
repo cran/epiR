@@ -65,13 +65,12 @@ When calculating the power of a study, note that the variable \code{n} refers to
 
 \examples{
 ## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 90):
-## suppose a pharmaceutical company would like to conduct a clinical trial to
+## A pharmaceutical company would like to conduct a clinical trial to
 ## compare the efficacy of two antimicrobial agents when administered orally 
-## to patients with skin infections.
-
-## Assume the true mean cure rate of the treatment is 0.85 and the true mean
-## cure rate of the control is 0.65. We consider a difference of less than 0.10
-## in cure rate to be of no clinical importance (i.e. delta = -0.10).
+## to patients with skin infections. Assume the true mean cure rate of the 
+## treatment is 0.85 and the true mean cure rate of the control is 0.65. 
+## We consider a difference of less than 0.10 in cure rate to be of no 
+## clinical importance (i.e. delta = -0.10).
 
 ## Assuming a one-sided test size of 5\% and a power of 80\% how many 
 ## subjects should be included in the trial?
@@ -81,6 +80,7 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = NA, r = 1,
 
 ## A total of 50 subjects need to be enrolled in the trial, 25 in the 
 ## treatment group and 25 in the control group.
+
 
 ## EXAMPLE 1 (cont.):
 ## Suppose only 40 subjects were enrolled in the trial, 20 in the treatment

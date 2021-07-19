@@ -64,16 +64,16 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## quieter industry. Subjects will be followed up for the rest of their lives or
 ## until their hearing is impaired. The results of a previous small-scale survey
 ## suggest that the annual incidence rate of hearing impairment in the noisy
-## industry may be as much as 25%. How many people should be followed up
+## industry may be as high as 25\%. How many people should be followed up
 ## in each of the groups (which are to be of equal size) to test the hypothesis
 ## that the incidence rates for hearing impairment in the two groups are the
-## same, at the 5% level of significance and with a power of 80%? The
+## same, at the 5\% level of significance and with a power of 80\%? The
 ## alternative hypothesis is that the annual incidence rate for hearing
 ## impairment in the quieter industry is not more than the national average of
-## about 10% (for people in the same age range), whereas in the noisy
+## about 10\% (for people in the same age range), whereas in the noisy
 ## industry it differs from this.
 
-## Note: An anunual incidence rate of 25% is equivalent to 25 cases of hearing 
+## An annuual incidence rate of 25\% is equivalent to 25 cases of hearing 
 ## impairment per 100 individuals per year.
 
 epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, 

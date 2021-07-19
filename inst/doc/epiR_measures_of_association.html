@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mark Stevenson" />
+
+<meta name="date" content="2021-07-19" />
+
+<title>Measures of Association</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 800px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 0;
+padding: 4px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table:not([class]) {
+margin: auto;
+min-width: 40%;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table[summary="R argblock"] {
+width: 100%;
+border: none;
+}
+table:not([class]) th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table:not([class]) td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table:not([class]), table:not([class]) th, table:not([class]) td {
+border-left-style: none;
+border-right-style: none;
+}
+table:not([class]) tr.odd {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 13px;
+padding-bottom: 1px;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f5f5f5;
+border-radius: 3px;
+color: #333;
+}
+pre {
+overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0 10px 0;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: white;
+border: #f5f5f5 1px solid;
+}
+pre:not([class]) code {
+color: #444;
+background-color: white;
+}
+code {
+font-family: monospace;
+font-size: 90%;
+}
+p > code, li > code {
+padding: 2px 4px;
+color: #d14;
+border: 1px solid #e1e1e8;
+white-space: inherit;
+}
+div.figure {
+text-align: center;
+}
+table > caption, div.figure p.caption {
+font-style: italic;
+}
+table > caption span, div.figure p.caption span {
+font-style: normal;
+font-weight: bold;
+}
+p {
+margin: 0 0 10px;
+}
+table:not([class]) {
+margin: auto auto 10px auto;
+}
+img:not([class]) {
+background-color: #FFFFFF;
+padding: 2px;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+max-width: 100%;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f5f5f5;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f5f5f5;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f5f5f5;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+div.r-help-page {
+background-color: #f9f9f9;
+border-bottom: #ddd 1px solid;
+margin-bottom: 10px;
+padding: 10px;
+}
+div.r-help-page:hover {
+background-color: #f4f4f4;
+}
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Measures of Association</h1>
+<h4 class="author">Mark Stevenson</h4>
+<h4 class="date">2021-07-19</h4>
+
+
+
+<p>A common task in epidemiology is to quantify the strength of association between exposures (‘risk factors’) and disease outcomes. In this context the term ‘exposure’ is taken to mean a variable whose association with the outcome is to be estimated.</p>
+<p>Exposures can be harmful, beneficial or both harmful and beneficial (e.g. if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term ‘outcome’ is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions <span class="citation">(Porta, Greenland, and Last <a href="#ref-porta_et_al:2008" role="doc-biblioref">2008</a>)</span>.</p>
+<p>In this vignette we outline describe how <code>epiR</code> can be used to compute the various measures of association used in epidemiology notably the risk ratio, odds ratio, attributable risk in the exposed, attributable fraction in the exposed, attributable risk in the population and attributable fraction in the population. Examples are provided to demonstrate how the package can be used to deal with exposure-outcome data in various formats.</p>
+<p>Some preliminary comments. This vignette has been written assuming the reader routinely formats their 2 by 2 table data with the outcome status as columns and exposure status as rows. If this is not the case the argument <code>outcome = &quot;as.columns&quot;</code> (the default) can be changed to <code>outcome = &quot;as.rows&quot;</code>.</p>
+<p><strong>Direct entry of 2 by 2 table contingency table cell frequencies</strong></p>
+<p>Firstly, a 2 by 2 table can be created by listing the contingency table cell frequencies in vector format. Take the following example.</p>
+<p>A cross sectional study investigating the relationship between dry cat food (DCF) and feline lower urinary tract disease (FLUTD) was conducted <span class="citation">(Willeberg <a href="#ref-willeberg:1977" role="doc-biblioref">1977</a>)</span>. Counts of individuals in each group were as follows. DCF-exposed cats (cases, non-cases) 13, 2163. Non DCF-exposed cats (cases, non-cases) 5, 3349. Enter these data directly into R as a vector of length four. You can check that your counts are in the correct order by viewing the data as a matrix.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>dat.v01 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">2163</span>,<span class="dv">5</span>,<span class="dv">3349</span>); dat.v01</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; [1]   13 2163    5 3349</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># View the data in the usual 2 by 2 table format:</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">matrix</span>(dat.v01, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt; [1,]   13 2163</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; [2,]    5 3349</span></span></code></pre></div>
+<p>Calculate the prevalence ratio, odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function <code>epi.2by2</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(epiR)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.v01, <span class="dt">method =</span> <span class="st">&quot;cross.sectional&quot;</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, </span>
+<span id="cb2-4"><a href="#cb2-4"></a>   <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Prevalence *        Odds</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; Exposed +           13         2163       2176               0.597     0.00601</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; Exposed -            5         3349       3354               0.149     0.00149</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; Total               18         5512       5530               0.325     0.00327</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; </span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; Prevalence ratio                               4.01 (1.43, 11.23)</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; Odds ratio                                     4.03 (1.43, 11.31)</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; Attrib prevalence in exposed *                 0.45 (0.10, 0.80)</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            75.05 (30.11, 91.09)</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; Attrib prevalence in the population *          0.18 (-0.02, 0.38)</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; Attrib fraction in the population (%)         54.20 (3.61, 78.24)</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; Uncorrected chi2 test that OR = 1: chi2(1) = 8.177 Pr&gt;chi2 = 0.004</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt; Fisher exact test that OR = 1: Pr&gt;chi2 = 0.006</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt;  CI: confidence interval</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt;  * Outcomes per 100 population units</span></span></code></pre></div>
+<p>The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats.</p>
+<p>In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were attributable to DCF (95% CI 4% to 78%).</p>
+<p>Need a hand getting the correct wording to explain each of the listed measures of association and measures of effect? Set <code>interpret = TRUE</code> in <code>epi.2by2</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.v01, <span class="dt">method =</span> <span class="st">&quot;cross.sectional&quot;</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, </span>
+<span id="cb3-2"><a href="#cb3-2"></a>   <span class="dt">interpret =</span> <span class="ot">TRUE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Prevalence *        Odds</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; Exposed +           13         2163       2176               0.597     0.00601</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; Exposed -            5         3349       3354               0.149     0.00149</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; Total               18         5512       5530               0.325     0.00327</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; </span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; Prevalence ratio                               4.01 (1.43, 11.23)</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; Odds ratio                                     4.03 (1.43, 11.31)</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; Attrib prevalence in exposed *                 0.45 (0.10, 0.80)</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            75.05 (30.11, 91.09)</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; Attrib prevalence in the population *          0.18 (-0.02, 0.38)</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt; Attrib fraction in the population (%)         54.20 (3.61, 78.24)</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; Uncorrected chi2 test that OR = 1: chi2(1) = 8.177 Pr&gt;chi2 = 0.004</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; Fisher exact test that OR = 1: Pr&gt;chi2 = 0.006</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;  CI: confidence interval</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;  * Outcomes per 100 population units </span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt; </span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt;  Measures of association strength:</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt;  The outcome prevalence among the exposed was 4.01 (95% CI 1.43 to 11.23) times greater than the outcome prevalence among the unexposed. </span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#&gt;  </span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt;  The outcome odds among the exposed was 4.03 (95% CI 1.43 to 11.31) times greater than the outcome odds among the unexposed. </span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">#&gt; </span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#&gt;  Measures of effect in the exposed:</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt;  Exposure changed the outcome prevalence in the exposed by 0.45 (95% CI 0.1 to 0.8) per 100 population units. 75.2% of outcomes in the exposed were attributable to exposure (95% CI 25.7% to 93.1%). </span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt; </span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt;  Number needed to treat for benefit (NNTB) and harm (NNTH):</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt;  The number needed to treat for one subject to benefit (NNTB) is 223 (95% CI 125 to 1008). </span></span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt; </span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt;  Measures of effect in the population:</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="co">#&gt;  Exposure changed the outcome prevalence in the population by 0.18 (95% CI -0.02 to 0.38) per 100 population units. 54.3% of outcomes in the population were attributable to exposure (95% CI 32.5% to 75%).</span></span></code></pre></div>
+<p><strong>Data frame with one row per observation</strong></p>
+<p>Here we provide examples where you have exposure status and outcome status listed for each member of your study population. There are two options for contingency table preparation in this situation: (1) using base R’s table function; or (2) using the <code>tidyverse</code> package.</p>
+<p>For this example we use the low infant birth weight data presented by <span class="citation">Hosmer and Lemeshow (<a href="#ref-hosmer_lemeshow:2000" role="doc-biblioref">2000</a>)</span> and available in the <code>MASS</code> package in R. The <code>birthwt</code> data frame has 189 rows and 10 columns. The data were collected at Baystate Medical Center, Springfield, Massachusetts USA during 1986.</p>
+<p><strong><em>Two by two table preparation using the table function in base R</em></strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">library</span>(MASS)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; </span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; Attaching package: &#39;MASS&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; The following object is masked from &#39;package:spatstat.geom&#39;:</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; </span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;     area</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Load and view the data:</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>dat.df02 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df02)</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span></code></pre></div>
+<p>Each row of this data set represents data for one mother. We’re interested in the association between <code>smoke</code> (the mother’s smoking status during pregnancy) and <code>low</code> (delivery of a baby less than 2.5 kg bodyweight).</p>
+<p>Its important that the table you present to <code>epi.2by2</code> is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the <code>table</code> function on the <code>bwt</code> data the output table is in the wrong format:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>dat.tab02 &lt;-<span class="st"> </span><span class="kw">table</span>(dat.df02<span class="op">$</span>smoke, dat.df02<span class="op">$</span>low, <span class="dt">dnn =</span> <span class="kw">c</span>(<span class="st">&quot;Smoke&quot;</span>, <span class="st">&quot;Low BW&quot;</span>)); dat.tab02</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; Smoke  0  1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;     0 86 29</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;     1 44 30</span></span></code></pre></div>
+<p>There are two ways to fix this problem. The quick fix is to simply ask R to switch the order of the rows and columns in the output table:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>dat.tab02 &lt;-<span class="st"> </span><span class="kw">table</span>(dat.df02<span class="op">$</span>smoke, dat.df02<span class="op">$</span>low, <span class="dt">dnn =</span> <span class="kw">c</span>(<span class="st">&quot;Smoke&quot;</span>, <span class="st">&quot;Low BW&quot;</span>)); dat.tab02</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; Smoke  0  1</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;     0 86 29</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;     1 44 30</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>dat.tab02 &lt;-<span class="st"> </span>dat.tab02[<span class="dv">2</span><span class="op">:</span><span class="dv">1</span>,<span class="dv">2</span><span class="op">:</span><span class="dv">1</span>]; dat.tab02</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; Smoke  1  0</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt;     1 30 44</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt;     0 29 86</span></span></code></pre></div>
+<p>The second approach is to set the exposure variable and the outcome variable as a factor and to define the levels of each factor using <code>levels = c(1,0)</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>dat.df02<span class="op">$</span>low &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.df02<span class="op">$</span>low, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a>dat.df02<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.df02<span class="op">$</span>smoke, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>))</span>
+<span id="cb7-3"><a href="#cb7-3"></a>dat.df02<span class="op">$</span>race &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.df02<span class="op">$</span>race, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>dat.tab02 &lt;-<span class="st"> </span><span class="kw">table</span>(dat.df02<span class="op">$</span>smoke, dat.df02<span class="op">$</span>low, <span class="dt">dnn =</span> <span class="kw">c</span>(<span class="st">&quot;Smoke&quot;</span>, <span class="st">&quot;Low BW&quot;</span>)); dat.tab02</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; Smoke  1  0</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;     1 30 44</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;     0 29 86</span></span></code></pre></div>
+<p>Now compute the odds ratio for smoking and delivery of a low birth weight baby:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>dat.epi02 &lt;-<span class="st"> </span><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.tab02, <span class="dt">method =</span> <span class="st">&quot;cohort.count&quot;</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, </span>
+<span id="cb8-2"><a href="#cb8-2"></a>   <span class="dt">units =</span> <span class="dv">100</span>, <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>dat.epi02</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Inc risk *        Odds</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; Exposed +           30           44         74              40.5       0.682</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; Exposed -           29           86        115              25.2       0.337</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; Total               59          130        189              31.2       0.454</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; Inc risk ratio                                 1.61 (1.06, 2.44)</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; Odds ratio                                     2.02 (1.08, 3.78)</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; Attrib risk in the exposed *                   15.32 (1.61, 29.04)</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            37.80 (5.47, 59.07)</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; Attrib risk in the population *                6.00 (-4.33, 16.33)</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; Attrib fraction in the population (%)         19.22 (-0.21, 34.88)</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt; Uncorrected chi2 test that OR = 1: chi2(1) = 4.924 Pr&gt;chi2 = 0.026</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt; Fisher exact test that OR = 1: Pr&gt;chi2 = 0.036</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt;  CI: confidence interval</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="co">#&gt;  * Outcomes per 100 population units</span></span></code></pre></div>
+<p>The odds of having a low birth weight child for smokers is 2.02 (95% CI 1.08 to 3.78) times greater than the odds of having a low birth weight child for non-smokers.</p>
+<p><strong><em>Two by two table preparation using tidyverse</em></strong></p>
+<p>The <code>tidyverse</code> package can also be used to prepare data in the required format:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; Registered S3 method overwritten by &#39;cli&#39;:</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;   method     from         </span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   print.boxx spatstat.geom</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; v tibble  3.1.2     v dplyr   1.0.5</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; v tidyr   1.1.3     v stringr 1.4.0</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; v readr   1.4.0     v forcats 0.5.1</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; v purrr   0.3.4</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; -- Conflicts ------------------------------------------ tidyverse_conflicts() --</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; x dplyr::arrange()         masks plyr::arrange()</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; x lubridate::as.difftime() masks base::as.difftime()</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; x readr::col_factor()      masks scales::col_factor()</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; x dplyr::collapse()        masks nlme::collapse()</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; x purrr::compact()         masks plyr::compact()</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; x dplyr::count()           masks plyr::count()</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; x lubridate::date()        masks base::date()</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; x purrr::discard()         masks scales::discard()</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; x dplyr::failwith()        masks plyr::failwith()</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; x dplyr::filter()          masks stats::filter()</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt; x dplyr::id()              masks plyr::id()</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; x rgeos::intersect()       masks lubridate::intersect(), base::intersect()</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; x dplyr::lag()             masks stats::lag()</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; x dplyr::mutate()          masks plyr::mutate()</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; x dplyr::rename()          masks plyr::rename()</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; x dplyr::select()          masks MASS::select()</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; x rgeos::setdiff()         masks lubridate::setdiff(), base::setdiff()</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; x dplyr::summarise()       masks plyr::summarise()</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; x dplyr::summarize()       masks plyr::summarize()</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; x rgeos::union()           masks lubridate::union(), base::union()</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a>dat.df03 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df03)</span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
+<span id="cb9-36"><a href="#cb9-36"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
+<span id="cb9-38"><a href="#cb9-38"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span>
+<span id="cb9-40"><a href="#cb9-40"></a></span>
+<span id="cb9-41"><a href="#cb9-41"></a><span class="co"># Here we set the factor levels and tabulate the data in a single call using pipe operators:</span></span>
+<span id="cb9-42"><a href="#cb9-42"></a>dat.tab03 &lt;-<span class="st"> </span>dat.df03 <span class="op">%&gt;%</span></span>
+<span id="cb9-43"><a href="#cb9-43"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">low =</span> <span class="kw">factor</span>(low, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoke =</span> <span class="kw">factor</span>(smoke, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="st">  </span><span class="kw">group_by</span>(smoke, low) <span class="op">%&gt;%</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) </span>
+<span id="cb9-47"><a href="#cb9-47"></a><span class="co">#&gt; `summarise()` has grouped output by &#39;smoke&#39;. You can override using the `.groups` argument.</span></span>
+<span id="cb9-48"><a href="#cb9-48"></a></span>
+<span id="cb9-49"><a href="#cb9-49"></a><span class="co"># View the data:</span></span>
+<span id="cb9-50"><a href="#cb9-50"></a>dat.tab03</span>
+<span id="cb9-51"><a href="#cb9-51"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb9-52"><a href="#cb9-52"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
+<span id="cb9-53"><a href="#cb9-53"></a><span class="co">#&gt;   smoke low       n</span></span>
+<span id="cb9-54"><a href="#cb9-54"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt; &lt;int&gt;</span></span>
+<span id="cb9-55"><a href="#cb9-55"></a><span class="co">#&gt; 1 yes   yes      30</span></span>
+<span id="cb9-56"><a href="#cb9-56"></a><span class="co">#&gt; 2 yes   no       44</span></span>
+<span id="cb9-57"><a href="#cb9-57"></a><span class="co">#&gt; 3 no    yes      29</span></span>
+<span id="cb9-58"><a href="#cb9-58"></a><span class="co">#&gt; 4 no    no       86</span></span>
+<span id="cb9-59"><a href="#cb9-59"></a></span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="co">## View the data in conventional 2 by 2 table format:</span></span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="kw">pivot_wider</span>(dat.tab03, <span class="dt">id_cols =</span> <span class="kw">c</span>(smoke), </span>
+<span id="cb9-62"><a href="#cb9-62"></a>   <span class="dt">names_from =</span> low, <span class="dt">values_from =</span> n)</span>
+<span id="cb9-63"><a href="#cb9-63"></a><span class="co">#&gt; # A tibble: 2 x 3</span></span>
+<span id="cb9-64"><a href="#cb9-64"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
+<span id="cb9-65"><a href="#cb9-65"></a><span class="co">#&gt;   smoke   yes    no</span></span>
+<span id="cb9-66"><a href="#cb9-66"></a><span class="co">#&gt;   &lt;fct&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb9-67"><a href="#cb9-67"></a><span class="co">#&gt; 1 yes      30    44</span></span>
+<span id="cb9-68"><a href="#cb9-68"></a><span class="co">#&gt; 2 no       29    86</span></span></code></pre></div>
+<p>As before, compute the odds ratio for smoking and delivery of a low birth weight baby:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>dat.epi03 &lt;-<span class="st"> </span><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.tab03, <span class="dt">method =</span> <span class="st">&quot;cohort.count&quot;</span>, </span>
+<span id="cb10-2"><a href="#cb10-2"></a>   <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>dat.epi03</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Inc risk *        Odds</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; Exposed +           30           44         74              40.5       0.682</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; Exposed -           29           86        115              25.2       0.337</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; Total               59          130        189              31.2       0.454</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; </span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; Inc risk ratio                                 1.61 (1.06, 2.44)</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; Odds ratio                                     2.02 (1.08, 3.78)</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; Attrib risk in the exposed *                   15.32 (1.61, 29.04)</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            37.80 (5.47, 59.07)</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; Attrib risk in the population *                6.00 (-4.33, 16.33)</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt; Attrib fraction in the population (%)         19.22 (-0.21, 34.88)</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt; Uncorrected chi2 test that OR = 1: chi2(1) = 4.924 Pr&gt;chi2 = 0.026</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; Fisher exact test that OR = 1: Pr&gt;chi2 = 0.036</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co">#&gt;  CI: confidence interval</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt;  * Outcomes per 100 population units</span></span></code></pre></div>
+<p>The odds of having a low birth weight child for smokers is 2.02 (95% CI 1.08 to 3.78) times greater than the odds of having a low birth weight child for non-smokers.</p>
+<p><strong>Confounding</strong></p>
+<p>We’re concerned that the mother’s race may confound the association between low birth weight and delivery of a low birth weight baby so we’ll stratify the data by race and compute the Mantel-Haenszel adjusted odds ratio. As before, our tables can be prepared using either base R or <code>tidyverse</code>.</p>
+<p><strong><em>Stratified two by two table preparation using the table function in base R</em></strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>dat.df04 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df04)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a>dat.tab04 &lt;-<span class="st"> </span><span class="kw">table</span>(dat.df04<span class="op">$</span>smoke, dat.df04<span class="op">$</span>low, dat.df04<span class="op">$</span>race, </span>
+<span id="cb11-11"><a href="#cb11-11"></a>   <span class="dt">dnn =</span> <span class="kw">c</span>(<span class="st">&quot;Smoke&quot;</span>, <span class="st">&quot;Low BW&quot;</span>, <span class="st">&quot;Race&quot;</span>)); dat.tab04</span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; , , Race = 1</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; </span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; Smoke  0  1</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt;     0 40  4</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt;     1 33 19</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; </span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; , , Race = 2</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; </span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt; Smoke  0  1</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt;     0 11  5</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt;     1  4  6</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; </span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; , , Race = 3</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co">#&gt; </span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">#&gt;      Low BW</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co">#&gt; Smoke  0  1</span></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="co">#&gt;     0 35 20</span></span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="co">#&gt;     1  7  5</span></span></code></pre></div>
+<p>Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race. Function <code>epi.2by2</code> automatically calculates the Mantel-Haenszel odds ratio and risk ratio when it is presented with stratified contingency tables.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>dat.epi04 &lt;-<span class="st"> </span><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.tab04, <span class="dt">method =</span> <span class="st">&quot;cohort.count&quot;</span>, </span>
+<span id="cb12-2"><a href="#cb12-2"></a>   <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>dat.epi04</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Inc risk *        Odds</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; Exposed +           86           29        115              74.8        2.97</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; Exposed -           44           30         74              59.5        1.47</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; Total              130           59        189              68.8        2.20</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; </span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; </span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt; Inc risk ratio (crude)                         1.26 (1.01, 1.56)</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt; Inc risk ratio (M-H)                           1.38 (1.12, 1.70)</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="co">#&gt; Inc risk ratio (crude:M-H)                     0.91</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt; Odds ratio (crude)                             2.02 (1.08, 3.78)</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="co">#&gt; Odds ratio (M-H)                               3.09 (1.49, 6.39)</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="co">#&gt; Odds ratio (crude:M-H)                         0.66</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co">#&gt; Attrib risk in the exposed (crude) *           15.32 (1.61, 29.04)</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="co">#&gt; Attrib risk in the exposed (M-H) *             22.17 (2.55, 41.79)</span></span>
+<span id="cb12-20"><a href="#cb12-20"></a><span class="co">#&gt; Attrib risk (crude:M-H)                        0.69</span></span>
+<span id="cb12-21"><a href="#cb12-21"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb12-22"><a href="#cb12-22"></a><span class="co">#&gt;  M-H test of homogeneity of PRs: chi2(2) = 1.160 Pr&gt;chi2 = 0.560</span></span>
+<span id="cb12-23"><a href="#cb12-23"></a><span class="co">#&gt;  M-H test of homogeneity of ORs: chi2(2) = 2.800 Pr&gt;chi2 = 0.247</span></span>
+<span id="cb12-24"><a href="#cb12-24"></a><span class="co">#&gt;  Test that M-H adjusted OR = 1:  chi2(1) = 9.413 Pr&gt;chi2 = 0.001</span></span>
+<span id="cb12-25"><a href="#cb12-25"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb12-26"><a href="#cb12-26"></a><span class="co">#&gt;  M-H: Mantel-Haenszel; CI: confidence interval</span></span>
+<span id="cb12-27"><a href="#cb12-27"></a><span class="co">#&gt;  * Outcomes per 100 population units</span></span></code></pre></div>
+<p>The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are the same it is appropriate to compute a Mantel-Haenszel adjusted odds ratio.</p>
+<p>After accounting for the confounding effect of race, the odds of having a low birth weight child for smokers was 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.</p>
+<p><strong><em>Stratified two by two table preparation using tidyverse</em></strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>dat.df05 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df05)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a>dat.tab05 &lt;-<span class="st"> </span>dat.df05 <span class="op">%&gt;%</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">low =</span> <span class="kw">factor</span>(low, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoke =</span> <span class="kw">factor</span>(smoke, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">race =</span> <span class="kw">factor</span>(race)) <span class="op">%&gt;%</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="st">  </span><span class="kw">group_by</span>(race, smoke, low) <span class="op">%&gt;%</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) </span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt; `summarise()` has grouped output by &#39;race&#39;, &#39;smoke&#39;. You can override using the `.groups` argument.</span></span>
+<span id="cb13-17"><a href="#cb13-17"></a>dat.tab05</span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt; # A tibble: 12 x 4</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="co">#&gt; # Groups:   race, smoke [6]</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a><span class="co">#&gt;   race  smoke low       n</span></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;int&gt;</span></span>
+<span id="cb13-22"><a href="#cb13-22"></a><span class="co">#&gt; 1 1     yes   yes      19</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="co">#&gt; 2 1     yes   no       33</span></span>
+<span id="cb13-24"><a href="#cb13-24"></a><span class="co">#&gt; 3 1     no    yes       4</span></span>
+<span id="cb13-25"><a href="#cb13-25"></a><span class="co">#&gt; 4 1     no    no       40</span></span>
+<span id="cb13-26"><a href="#cb13-26"></a><span class="co">#&gt; # ... with 8 more rows</span></span>
+<span id="cb13-27"><a href="#cb13-27"></a></span>
+<span id="cb13-28"><a href="#cb13-28"></a><span class="co">## View the data in conventional 2 by 2 table format:</span></span>
+<span id="cb13-29"><a href="#cb13-29"></a><span class="kw">pivot_wider</span>(dat.tab05, <span class="dt">id_cols =</span> <span class="kw">c</span>(race, smoke), </span>
+<span id="cb13-30"><a href="#cb13-30"></a>   <span class="dt">names_from =</span> low, <span class="dt">values_from =</span> n)</span>
+<span id="cb13-31"><a href="#cb13-31"></a><span class="co">#&gt; # A tibble: 6 x 4</span></span>
+<span id="cb13-32"><a href="#cb13-32"></a><span class="co">#&gt; # Groups:   race, smoke [6]</span></span>
+<span id="cb13-33"><a href="#cb13-33"></a><span class="co">#&gt;   race  smoke   yes    no</span></span>
+<span id="cb13-34"><a href="#cb13-34"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb13-35"><a href="#cb13-35"></a><span class="co">#&gt; 1 1     yes      19    33</span></span>
+<span id="cb13-36"><a href="#cb13-36"></a><span class="co">#&gt; 2 1     no        4    40</span></span>
+<span id="cb13-37"><a href="#cb13-37"></a><span class="co">#&gt; 3 2     yes       6     4</span></span>
+<span id="cb13-38"><a href="#cb13-38"></a><span class="co">#&gt; 4 2     no        5    11</span></span>
+<span id="cb13-39"><a href="#cb13-39"></a><span class="co">#&gt; # ... with 2 more rows</span></span></code></pre></div>
+<p>Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>dat.epi05 &lt;-<span class="st"> </span><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.tab05, <span class="dt">method =</span> <span class="st">&quot;cohort.count&quot;</span>, </span>
+<span id="cb14-2"><a href="#cb14-2"></a>   <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>dat.epi05</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt;              Outcome +    Outcome -      Total        Inc risk *        Odds</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; Exposed +           30           44         74              40.5       0.682</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; Exposed -           29           86        115              25.2       0.337</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; Total               59          130        189              31.2       0.454</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; </span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; </span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; Point estimates and 95% CIs:</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; Inc risk ratio (crude)                         1.61 (1.06, 2.44)</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt; Inc risk ratio (M-H)                           2.15 (1.29, 3.58)</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; Inc risk ratio (crude:M-H)                     0.75</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt; Odds ratio (crude)                             2.02 (1.08, 3.78)</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt; Odds ratio (M-H)                               3.09 (1.49, 6.39)</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt; Odds ratio (crude:M-H)                         0.66</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt; Attrib risk in the exposed (crude) *           15.32 (1.61, 29.04)</span></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt; Attrib risk in the exposed (M-H) *             22.17 (1.41, 42.94)</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt; Attrib risk (crude:M-H)                        0.69</span></span>
+<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt;  M-H test of homogeneity of PRs: chi2(2) = 3.862 Pr&gt;chi2 = 0.145</span></span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt;  M-H test of homogeneity of ORs: chi2(2) = 2.800 Pr&gt;chi2 = 0.247</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt;  Test that M-H adjusted OR = 1:  chi2(1) = 9.413 Pr&gt;chi2 = 0.001</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt;  Wald confidence limits</span></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt;  M-H: Mantel-Haenszel; CI: confidence interval</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt;  * Outcomes per 100 population units</span></span></code></pre></div>
+<p>The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25) so we accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. After accounting for the confounding effect of race, the odds of having a low birth weight child for smokers is 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.</p>
+<p>Plot the individual strata odds ratios and the Mantel-Haenszel summary odds ratio as an error bar plot to better understand the process of adjustment.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">library</span>(ggplot2); <span class="kw">library</span>(scales)</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a>nstrata &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(<span class="kw">unique</span>(dat.tab05<span class="op">$</span>race))</span>
+<span id="cb15-4"><a href="#cb15-4"></a>strata.lab &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;Strata &quot;</span>, nstrata, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>y.at &lt;-<span class="st"> </span><span class="kw">c</span>(nstrata, <span class="kw">max</span>(nstrata) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>y.lab &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;M-H&quot;</span>, strata.lab)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>x.at &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">16</span>,<span class="dv">32</span>)</span>
+<span id="cb15-8"><a href="#cb15-8"></a></span>
+<span id="cb15-9"><a href="#cb15-9"></a>or.p &lt;-<span class="st"> </span><span class="kw">c</span>(dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.mh<span class="op">$</span>est, </span>
+<span id="cb15-10"><a href="#cb15-10"></a>   dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.strata.cfield<span class="op">$</span>est)</span>
+<span id="cb15-11"><a href="#cb15-11"></a>or.l &lt;-<span class="st"> </span><span class="kw">c</span>(dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.mh<span class="op">$</span>lower, </span>
+<span id="cb15-12"><a href="#cb15-12"></a>   dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.strata.cfield<span class="op">$</span>lower)</span>
+<span id="cb15-13"><a href="#cb15-13"></a>or.u &lt;-<span class="st"> </span><span class="kw">c</span>(dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.mh<span class="op">$</span>upper, </span>
+<span id="cb15-14"><a href="#cb15-14"></a>   dat.epi05<span class="op">$</span>massoc.detail<span class="op">$</span>OR.strata.cfield<span class="op">$</span>upper)</span>
+<span id="cb15-15"><a href="#cb15-15"></a>gdat.df05 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(y.at, y.lab, or.p, or.l, or.u)</span>
+<span id="cb15-16"><a href="#cb15-16"></a></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> gdat.df05, <span class="kw">aes</span>(<span class="dt">x =</span> or.p, <span class="dt">y =</span> y.at)) <span class="op">+</span></span>
+<span id="cb15-18"><a href="#cb15-18"></a><span class="st">   </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-19"><a href="#cb15-19"></a><span class="st">   </span><span class="kw">geom_errorbarh</span>(<span class="kw">aes</span>(<span class="dt">xmax =</span> or.l, <span class="dt">xmin =</span> or.u, <span class="dt">height =</span> <span class="fl">0.2</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-20"><a href="#cb15-20"></a><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Odds ratio&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Strata&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-21"><a href="#cb15-21"></a><span class="st">   </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans =</span> <span class="kw">log2_trans</span>(), <span class="dt">breaks =</span> x.at, </span>
+<span id="cb15-22"><a href="#cb15-22"></a>      <span class="dt">limits =</span> <span class="kw">c</span>(<span class="fl">0.25</span>,<span class="dv">32</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-23"><a href="#cb15-23"></a><span class="st">   </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> y.at, <span class="dt">labels =</span> y.lab) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-24"><a href="#cb15-24"></a><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">lwd =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-25"><a href="#cb15-25"></a><span class="st">   </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="fl">0.75</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-26"><a href="#cb15-26"></a><span class="st">   </span><span class="kw">theme</span>(<span class="dt">axis.title.y =</span> <span class="kw">element_text</span>(<span class="dt">vjust =</span> <span class="dv">0</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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gAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASCIgAJAEAEFgCACCgBBBBQAgggoAAQRUAAIIqAAEERAASDI/wdWVpP6Tu9xsAAAAABJRU5ErkJggg==" width="672" /></p>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references hanging-indent">
+<div id="ref-altman:1998">
+<p>Altman, DG. 1998. “Confidence intervals for the number needed to treat.” Journal Article. <em>British Medical Journal</em> 317: 1309–12.</p>
+</div>
+<div id="ref-grimes_schulz:2008">
+<p>Grimes, DA, and KF Schulz. 2008. “Making sense of odds and odds ratios.” Journal Article. <em>Obstetrics and Gynecology</em> 111: 423–26.</p>
+</div>
+<div id="ref-hosmer_lemeshow:2000">
+<p>Hosmer, DW, and S Lemeshow. 2000. <em>Applied Logistic Regression</em>. London: Jon Wiley; Sons Inc.</p>
+</div>
+<div id="ref-kuritz_et_al:1988">
+<p>Kuritz, SJ, JR Landis, and GG Koch. 1988. “A general overview of Mantel-Haenszel methods: Applications and recent developments.” Journal Article. <em>Annual Reviews in Public Health</em> 9: 123–60.</p>
+</div>
+<div id="ref-porta_et_al:2008">
+<p>Porta, M, S Greenland, and JM Last. 2008. <em>A Dictionary of Epidemiology</em>. London: Oxford University Press.</p>
+</div>
+<div id="ref-prasad_et_al:2007">
+<p>Prasad, K, R Jaeschke, P Wyer, S Keitz, and G Guyatt. 2007. “Tips for teachers of evidence-based medicine: Understanding odds ratios and their relationship to risk ratios.” Journal Article. <em>Journal of General Internal Medicine</em> 23: 635–40.</p>
+</div>
+<div id="ref-siegerink_rohmann:2018">
+<p>Siegerink, B, and JL Rohmann. 2018. “Impact of your results: Beyond the relative risk.” Journal Article. <em>Research and Practice in Thrombosis and Haemostasis</em> 2: 653–57. <a href="https://doi.org/10.1002/rth2.12148">https://doi.org/10.1002/rth2.12148</a>.</p>
+</div>
+<div id="ref-willeberg:1977">
+<p>Willeberg, P. 1977. “Animal disease information processing: Epidemiologic analyses of the feline urologic syndrome.” <em>Acta Veterinaria Scandinavica</em> 64: 1–48.</p>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+  fig = 1;
+  caps = document.getElementsByTagName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.nodeName !== 'TABLE') continue;
+    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

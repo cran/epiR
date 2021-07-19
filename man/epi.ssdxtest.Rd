@@ -60,13 +60,13 @@ Nielsen SS, Gronbaek C, Agger JF, Houe H (2002) Maximum-likelihood estimation of
 
 \examples{
 ## EXAMPLE 1 (from Georgiadis et al. 2005, pp. 5):
-## Nielsen et al. (2002) presented data from the evaluation of a milk 
+## Nielsen et al. (2002) present data from the evaluation of a milk 
 ## antibody ELISA and faecal culture for the diagnosis of Mycobacterium avium 
 ## subsp. paratuberculosis infection in cattle. Because the ELISA detects 
 ## antibodies and culture is based on isolation of the bacterium in faeces 
 ## we can reasonably assume that the two tests are conditionally independent.
 
-## How many cattle need to be sampled if we wanted to be 95% certain that
+## How many cattle need to be sampled if we wanted to be 95\% certain that
 ## our estimate of diagnostic sensitivity and specificity of the two tests 
 ## is within 0.05 of the true population value assuming the number sampled 
 ## in the second population divided by the number sampled in the first 

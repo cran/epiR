@@ -45,13 +45,14 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 }
 
 \examples{
+## EXAMPLE 1:
 ## A survey to estimate the average number of residents over 75 years of 
 ## age that require the services of a nurse in a given retirement village is 
 ## to be carried out using a one-stage cluster sampling strategy. 
 ## There are five housing complexes in the village with 25 residents in each.
 ## We expect that there might be an average of 34 residents meeting this 
 ## criteria (SD 5.5). We would like the estimated sample size to provide us 
-## with an estimate that is within 10% of the true value. Previous studies 
+## with an estimate that is within 10\% of the true value. Previous studies 
 ## report an intracluster correlation for the number of residents requiring the 
 ## services of a nurse in this retirement village housing complexes to 
 ## be 0.10. How many housing complexes (clusters) should be sampled?

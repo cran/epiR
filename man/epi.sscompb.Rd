@@ -72,7 +72,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
    
-## ## A total of 18,316 men should be sampled: 9158 in the treatment group and
+## A total of 18,316 men should be sampled: 9158 in the treatment group and
 ## 9158 in the control group. The risk ratio (that is, the prevalence of 
 ## smoking in males post government initiative divided by the prevalence of 
 ## smoking in males pre inititative is 0.94.

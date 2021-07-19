@@ -33,14 +33,16 @@ Singer J, Willett J (2003). Applied Longitudinal Data Analysis Modeling Change a
 }
 
 \examples{
+## EXAMPLE 1:
 library(survival)
-dat <- lung
+dat.df01 <- lung
 
-dat$status <- ifelse(dat$status == 1, 0, dat$status)
-dat$status <- ifelse(dat$status == 2, 1, dat$status)
-dat$sex <- factor(dat$sex, levels = c(1,2), labels = c("Male","Female"))
+dat.df01$status <- ifelse(dat.df01$status == 1, 0, dat.df01$status)
+dat.df01$status <- ifelse(dat.df01$status == 2, 1, dat.df01$status)
+dat.df01$sex <- factor(dat.df01$sex, levels = c(1,2), 
+   labels = c("Male","Female"))
 
-lung.km01 <- survfit(Surv(time = time, event = status) ~ 1, data = dat)
+lung.km01 <- survfit(Surv(time = time, event = status) ~ 1, data = dat.df01)
 lung.haz01 <- epi.insthaz(lung.km01, conf.level = 0.95)
 
 lung.shaz01 <- data.frame(
@@ -78,9 +80,11 @@ ggplot() +
   scale_y_continuous(limits = c(0,0.05), name = "Daily probability of event") 
 }
 
-## Stratify by gender:
 
-lung.km02 <- survfit(Surv(time = time, event = status) ~ sex, data = dat)
+## EXAMPLE 2:
+## Now stratify by gender:
+
+lung.km02 <- survfit(Surv(time = time, event = status) ~ sex, data = dat.df01)
 lung.haz02 <- epi.insthaz(lung.km02, conf.level = 0.95)
 
 \dontrun{ 

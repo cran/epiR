@@ -5,16 +5,16 @@
 \title{Directly adjusted incidence rate estimates}
 
 \description{
-Compute directly adjusted incidence rates.}
+Compute directly adjusted incidence rate estimates.}
 
 \usage{
 epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names. The columns of \code{obs} must be named with the appropriate level identifiers for the covariate. See the example, below.}
-  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the covariates to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk within each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names. The columns of \code{pop} must be named with the appropriate level identifiers for the covariate. See the example, below.}
-  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for the covariate(s).}
+  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the variables to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names and the columns of \code{obs} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
+  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the variables to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk for each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names and the columns of \code{pop} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
+  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for each explanatory variable.}
   \item{units}{multiplier for the incidence rate estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
@@ -61,86 +61,61 @@ Thanks to Karl Ove Hufthammer for helpful suggestions to improve the execution a
 ## of leptospirosis cases and the number of dog years at risk for male and 
 ## female dogs:
 
-dat <- data.frame(obs = c(15,46,53,16), tar = c(48,212,180,71), 
+dat.df01 <- data.frame(obs = c(15,46,53,16), tar = c(48,212,180,71), 
    sex = c("M","F","M","F"), city = c("ED","ED","GL","GL"))
 
-obs <- matrix(dat$obs, nrow = 2, byrow = TRUE, 
+obs01 <- matrix(dat.df01$obs, nrow = 2, byrow = TRUE, 
    dimnames = list(c("ED","GL"), c("M","F")))
-tar <- matrix(dat$tar, nrow = 2, byrow = TRUE, 
+tar01 <- matrix(dat.df01$tar, nrow = 2, byrow = TRUE, 
    dimnames = list(c("ED","GL"), c("M","F")))
 
 ## Create a standard population with equal numbers of male and female dogs:
 
-std <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
+std01 <- matrix(data = c(250,250), nrow = 1, byrow = TRUE, 
    dimnames = list("", c("M","F")))
 
 ## Directly adjusted incidence rates:
+epi.directadj(obs01, tar01, std01, units = 1, conf.level = 0.95)
 
-epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
+## $crude
+##  strata cov obs tar       est     lower     upper
+##      ED   M  15  48 0.3125000 0.1749039 0.5154212
+##      GL   M  53 180 0.2944444 0.2205591 0.3851406
+##      ED   F  46 212 0.2169811 0.1588575 0.2894224
+##      GL   F  16  71 0.2253521 0.1288082 0.3659577
 
-## > $crude
-## >   strata cov       est     lower     upper
-## > 1     ED   M 0.3125000 0.1749039 0.5154212
-## > 2     GL   M 0.2944444 0.2205591 0.3851406
-## > 3     ED   F 0.2169811 0.1588575 0.2894224
-## > 4     GL   F 0.2253521 0.1288082 0.3659577
+## $crude.strata
+##  strata obs tar       est     lower     upper
+##      ED  61 260 0.2346154 0.1794622 0.3013733
+##      GL  69 251 0.2749004 0.2138889 0.3479040
 
-## > $crude.strata
-## >  strata       est     lower     upper
-## > 1     ED 0.2346154 0.1794622 0.3013733
-## > 2     GL 0.2749004 0.2138889 0.3479040
-
-## > $adj.strata
-## >   strata       est     lower     upper
-## > 1     ED 0.2647406 0.1866047 0.3692766
-## > 2     GL 0.2598983 0.1964162 0.3406224
+## $adj.strata
+##  strata obs tar       est     lower     upper
+##      ED  61 260 0.2647406 0.1866047 0.3692766
+##      GL  69 251 0.2598983 0.1964162 0.3406224
 
 ## The adjusted incidence rate of leptospirosis in Glasgow dogs is 26 (95\%
-## CI 20 to 34) cases per 100 dog-years at risk.
-
-## The confounding effect of gender has been removed by the adjusted 
-## incidence rate estimates.
+## CI 20 to 34) cases per 100 dog-years at risk. The confounding effect of 
+## gender has been removed by the adjusted incidence rate estimates.
 
 
-## EXAMPLE 2 --- Here we provide a more flexible approach for calculating 
+## EXAMPLE 2:
+## Here we provide a more flexible approach for calculating 
 ## adjusted incidence rate estimates using Poisson regression. See Frome and 
 ## Checkoway (1985) for details.
 
-dat.glm01 <- glm(obs ~ city, offset = log(tar), family = poisson, data = dat)
-summary(dat.glm01)
+dat.glm02 <- glm(obs ~ city, offset = log(tar), family = poisson, 
+   data = dat.df01)
+summary(dat.glm02)
 
 ## To obtain adjusted incidence rate estimates, use the predict method on a 
 ## new data set with the time at risk (tar) variable set to 1 (which means 
 ## log(tar) = 0). This will return the predicted number of cases per one unit 
 ## of individual time, i.e. the incidence rate.
 
-dat.pred01 <- predict(object = dat.glm01, newdata = 
+dat.pred02 <- predict(object = dat.glm02, newdata = 
    data.frame(city = c("ED","GL"), tar = c(1,1)), 
    type  = "link", se = TRUE)
-
-conf.level <- 0.95
-critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
-est <- dat.glm01$family$linkinv(dat.pred01$fit)
-lower <- dat.glm01$family$linkinv(dat.pred01$fit - 
-   (critval * dat.pred01$se.fit))
-upper <- dat.glm01$family$linkinv(dat.pred01$fit + 
-   (critval * dat.pred01$se.fit))
-round(data.frame(est, lower, upper), 3)
-
-##   est lower upper
-## 0.235 0.183 0.302
-## 0.275 0.217 0.348
-
-## Results identical to the crude incidence rate estimates from epi.directadj.
-
-## We now adjust for the effect of gender and city and report the adjusted 
-## incidence rate estimates for each city:
-
-dat.glm02 <- dat.glm02 <- glm(obs ~ city + sex, offset = log(tar), 
-   family = poisson, data = dat)
-dat.pred02 <- predict(object = dat.glm02, newdata = 
-   data.frame(sex = c("F","F"), city = c("ED","GL"), tar = c(1,1)), 
-   type  = "link", se.fit = TRUE)
 
 conf.level <- 0.95
 critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
@@ -149,7 +124,33 @@ lower <- dat.glm02$family$linkinv(dat.pred02$fit -
    (critval * dat.pred02$se.fit))
 upper <- dat.glm02$family$linkinv(dat.pred02$fit + 
    (critval * dat.pred02$se.fit))
-round(data.frame(est, lower, upper), 3)
+round(x = data.frame(est, lower, upper), digits = 3)
+
+##   est lower upper
+## 0.235 0.183 0.302
+## 0.275 0.217 0.348
+
+## Results identical to the crude incidence rate estimates from epi.directadj.
+
+
+## EXAMPLE 3:
+## Now adjust for the effect of gender and city and report the adjusted 
+## incidence rate estimates for each city:
+
+dat.glm03 <- glm(obs ~ city + sex, offset = log(tar), 
+   family = poisson, data = dat.df01)
+dat.pred03 <- predict(object = dat.glm03, newdata = 
+   data.frame(sex = c("F","F"), city = c("ED","GL"), tar = c(1,1)), 
+   type  = "link", se.fit = TRUE)
+
+conf.level <- 0.95
+critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
+est <- dat.glm03$family$linkinv(dat.pred03$fit)
+lower <- dat.glm03$family$linkinv(dat.pred03$fit - 
+   (critval * dat.pred03$se.fit))
+upper <- dat.glm03$family$linkinv(dat.pred03$fit + 
+   (critval * dat.pred03$se.fit))
+round(x = data.frame(est, lower, upper), digits = 3)
 
 ##   est lower upper
 ## 0.220 0.168 0.287
@@ -161,7 +162,7 @@ round(data.frame(est, lower, upper), 3)
 ## for direct adjustment we use a contrived standard population.
 
 
-## EXAMPLE 3 --- Logistic regression to return adjusted incidence risk 
+## EXAMPLE 4 --- Logistic regression to return adjusted incidence risk 
 ## estimates:
 
 ## Say, for argument's sake, that we are now working with incidence risk data. 
@@ -170,22 +171,22 @@ round(data.frame(est, lower, upper), 3)
 ## report the adjusted incidence risk of canine leptospirosis estimates for 
 ## each city:
 
-dat$pop <- dat$tar
+dat.df01$pop <- dat.df01$tar
 
-dat.glm03 <- glm(cbind(obs, pop - obs) ~ city + sex, 
-   family = "binomial", data = dat)
-dat.pred03 <- predict(object = dat.glm03, newdata = 
+dat.glm04 <- glm(cbind(obs, pop - obs) ~ city + sex, 
+   family = "binomial", data = dat.df01)
+dat.pred04 <- predict(object = dat.glm04, newdata = 
    data.frame(sex = c("F","F"), city = c("ED","GL")), 
    type  = "link", se.fit = TRUE)
 
 conf.level <- 0.95
 critval <- qnorm(p = 1 - ((1 - conf.level) / 2), mean = 0, sd = 1)
-est <- dat.glm03$family$linkinv(dat.pred03$fit)
-lower <- dat.glm03$family$linkinv(dat.pred03$fit - 
-   (critval * dat.pred03$se.fit))
-upper <- dat.glm03$family$linkinv(dat.pred03$fit + 
-   (critval * dat.pred03$se.fit))
-round(data.frame(est, lower, upper), 3)
+est <- dat.glm04$family$linkinv(dat.pred04$fit)
+lower <- dat.glm04$family$linkinv(dat.pred04$fit - 
+   (critval * dat.pred04$se.fit))
+upper <- dat.glm04$family$linkinv(dat.pred04$fit + 
+   (critval * dat.pred04$se.fit))
+round(x = data.frame(est, lower, upper), digits = 3)
 
 ##   est lower upper
 ## 0.220 0.172 0.276

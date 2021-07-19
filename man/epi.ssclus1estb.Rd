@@ -45,9 +45,10 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 }
 
 \examples{
+## EXAMPLE 1:
 ## An aid project has distributed cook stoves in a single province in a 
 ## resource-poor country. At the end of three years, the donors would like 
-## to know what proportion of households are still using their donated cook 
+## to know what proportion of households are still using their donated  
 ## stove. A cross-sectional study is planned where villages in the province 
 ## will be sampled and all households (approximately 75 per village) will be 
 ## visited to determine whether or not the donated stove is still in use.
@@ -56,7 +57,7 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## intracluster correlation for a study of this type is unknown, but thought
 ## to be relatively high.
 
-# If the donor wanted to be 90% confident that the survey estimate of stove
+# If the donor wanted to be 90\% confident that the survey estimate of stove
 ## usage was within 10\% of the true population value, how many villages 
 ## (i.e. clusters) would need to be sampled?
 

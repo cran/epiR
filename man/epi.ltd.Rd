@@ -35,6 +35,7 @@ Kirkpatrick M, Lofsvold D, Bulmer M (1990). Analysis of the inheritance, selecti
 }
 
 \examples{
+## EXAMPLE 1:
 ## Generate some herd test data:
 ckey <- rep(1, times = 12)
 pkey <- 1:12
@@ -44,13 +45,13 @@ llen <- c(280,280,280,280,280,280,NA,NA,NA,NA,NA,NA)
 vol <- c(18,30,25,22,18,12,20,32,27,24,20,14)
 fat <- c(4.8,4.3,4.5,4.7,4.8,4.9,4.8,4.3,4.5,4.7,4.8,4.9)/100
 pro <- c(3.7,3.5,3.6,3.7,3.8,3.9,3.7,3.5,3.6,3.7,3.8,3.9)/100
-dat <- data.frame(ckey, pkey, lact, dim, llen, vol, fat, pro)
+dat.df01 <- data.frame(ckey, pkey, lact, dim, llen, vol, fat, pro)
 
 ## Lactation to date and 305-day milk, fat, and protein yield:
-epi.ltd(dat, std = "305")
+epi.ltd(dat.df01, std = "305")
 
 ## Lactation to date and 270-day milk, fat, and protein yield:
-epi.ltd(dat, std = "270")
+epi.ltd(dat.df01, std = "270")
 
 }
 

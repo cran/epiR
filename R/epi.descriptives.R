@@ -49,10 +49,8 @@ epi.descriptives <- function(dat, conf.level = 0.95){
     kurt <- ((an + 1) * (r - 3) + 6) * (an - 1)/((an - 2) * (an - 3))
     
     rval <- list(
-        arithmetic = data.frame(n = an, mean = amean, sd = asd, q25 = aq25, q50 = aq50, q75 = aq75, lower = alcl, upper = aucl, 
-            min = amin, max = amax, na = ana),
-        geometric = data.frame(n = gn, mean = gmean, sd = gsd,  q25 = gq25, q50 = gq50, q75 = gq75, lower = glcl, upper = gucl, 
-            min = gmin, max = gmax, na = gna),
+        arithmetic = data.frame(n = an, mean = amean, sd = asd, q25 = aq25, q50 = aq50, q75 = aq75, lower = alcl, upper = aucl, min = amin, max = amax, na = ana),
+        geometric = data.frame(n = gn, mean = gmean, sd = gsd,  q25 = gq25, q50 = gq50, q75 = gq75, lower = glcl, upper = gucl, min = gmin, max = gmax, na = gna),
         symmetry = data.frame(skewness = skew, kurtosis = kurt)
     )
         

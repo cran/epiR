@@ -82,10 +82,10 @@ epi.sscompc(treat = 5, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 ## indicates that the standard deviation of the increase in iron
 ## concentration will be around 4 micrograms\% over a 6-month period.
 ## The average increase in serum iron concentration without supplements is
-## also thought to be 4 micrograms\%. The investigators wish to be 90\% sure
+## also thought to be 4 micrograms\%. The investigators want to be 90\% sure
 ## of detecting when the supplement doubles the serum iron concentration using
 ## a two-sided 5\% significance test. It is decided to allocate 4 times as many
-## women to the treatment group so as to obtain a better idea of its effect.
+## women to the treatment group so as to obtain a better estimate of its effect.
 ## How many women should be enrolled in this study?
 
 epi.sscompc(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 

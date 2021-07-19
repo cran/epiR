@@ -41,8 +41,7 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 }
 
 \examples{
-## EXAMPLE 1:
-## Hospital episodes (Levy and Lemeshow 1999, page 176 -- 178)
+## EXAMPLE 1 (from Levy and Lemeshow 1999, page 176 -- 178):
 ## We plan to take a sample of the members of a health maintenance 
 ## organisation (HMO) for purposes of estimating the average number
 ## of hospital episodes per person per year. The sample will be selected
@@ -55,9 +54,9 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 ## 95\% that the sample estimate of hospital episodes is within 20\% of the 
 ## true value?
 
-strata.n <- c(600, 500, 400)
-strata.xbar <- c(0.164, 0.166, 0.236)
-strata.sigma <- sqrt(c(0.245, 0.296, 0.436))
+strata.n <- c(600,500,400)
+strata.xbar <- c(0.164,0.166,0.236)
+strata.sigma <- sqrt(c(0.245,0.296,0.436))
 epi.ssstrataestc(strata.n, strata.xbar, strata.sigma, epsilon.r = 0.20, 
    nfractional = FALSE, conf.level = 0.95)
 

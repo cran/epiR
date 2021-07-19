@@ -3,7 +3,7 @@
 \alias{epi.popsize}
 
 \title{
-Estimate population size
+Estimate population size on the basis of capture-recapture sampling
 }
 
 \description{
@@ -31,6 +31,7 @@ Cannon RM, Roe RT (1982). Livestock Disease Surveys A Field Manual for Veterinar
 }
 
 \examples{
+## EXAMPLE 1:
 ## In a field survey 400 feral pigs are captured, marked and then released.
 ## On a second occassion 40 of the orignal capture are found when another 400    
 ## pigs are captured. Estimate the size of this feral pig population. Estimate     
@@ -38,8 +39,8 @@ Cannon RM, Roe RT (1982). Livestock Disease Surveys A Field Manual for Veterinar
 
 epi.popsize(T1 = 400, T2 = 400, T12 = 40, conf.level = 0.95, verbose = FALSE)
 
-## Estimated population size: 4000 (95\% CI 3125 - 5557)
-## Estimated number of untested pigs: 3240 (95\% CI 2365 - 4797) 
+## Estimated population size: 4000 (95\% CI 3125 to 5557)
+## Estimated number of untested pigs: 3240 (95\% CI 2365 to 4797) 
 
 }
 

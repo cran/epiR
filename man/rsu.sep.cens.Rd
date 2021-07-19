@@ -36,6 +36,7 @@ rsu.sep.cens(d = 5, se.u = 0.80)
 ## system sensitivity) is 0.99 (i.e. quite high, even though the sensitivity
 ## of the test is relatively low).
 
+
 ## EXAMPLE 2:
 ## Calculate the surveillance system sensitivity assuming every animal in 
 ## populations of size 10, 50, 100, 250 and 500 will be sampled and tested, 

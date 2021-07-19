@@ -65,7 +65,7 @@ n.crude
 
 
 ## EXAMPLE 1 (continued):
-## THE OIE recommends that the compliment fixation test (CFT) is used for 
+## The OIE recommends that the compliment fixation test (CFT) is used for 
 ## bovine brucellosis prevalence estimation. Assume the diagnostic sensitivity 
 ## and specficity of the bovine brucellosis CFT to be used is 0.94 and 0.88
 ## respectively (Getachew et al. 2016). Re-calculate the required sample size 

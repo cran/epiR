@@ -67,11 +67,12 @@ When AP < (1 - Sp) the function issues a warning to alert the user that the esti
 }
 
 \examples{
+## EXAMPLE 1:
 ## A simple random sample of 150 cows from a herd of 2560 is taken.
 ## Each cow is given a screening test for brucellosis which has a 
-## sensitivity of 96% and a specificity of 89%. Of the 150 cows tested
+## sensitivity of 96\% and a specificity of 89\%. Of the 150 cows tested
 ## 45 were positive to the screening test. What is the estimated prevalence 
-## of brucellosis in this herd (and its 95% confidence interval)?
+## of brucellosis in this herd (and its 95\% confidence interval)?
 
 epi.prev(pos = 45, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
    units = 100, conf.level = 0.95)
@@ -79,11 +80,13 @@ epi.prev(pos = 45, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
 ## The estimated true prevalence of brucellosis in this herd is 22 (95\% 14 
 ## to 32) cases per 100 cows at risk.
 
+
+# EXAMPLE 2:
 ## Moujaber et al. (2008) analysed the seroepidemiology of Helicobacter pylori 
 ## infection in Australia. They reported seroprevalence rates together with 
-## 95% confidence intervals by age group using the Clopper-Pearson exact 
-## method (Clopper and Pearson, 1934). The ELISA test they applied had 96.4% 
-## sensitivity and 92.7% specificity. A total of 151 subjects 1 -- 4 years
+## 95\% confidence intervals by age group using the Clopper-Pearson exact 
+## method (Clopper and Pearson, 1934). The ELISA test they applied had 96.4\% 
+## sensitivity and 92.7\% specificity. A total of 151 subjects 1 -- 4 years
 ## of age were tested. Of this group 6 were positive. What is the estimated 
 ## true prevalence of Helicobacter pylori in this age group?
 
@@ -91,9 +94,11 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
    units = 100, conf.level = 0.95)
 
 ## The estimated true prevalence of Helicobacter pylori in 1 -- 4 year olds is
-## -4 (95\% CI -6 to 1) cases per 100. Warning issued by function to alert 
-## user that estimate of true prevalence invalid.
+## -4 (95\% CI -6 to 1) cases per 100. The function issues a warning to alert 
+## the user that estimate of true prevalence invalid.
 
+
+## EXAMPLE 3:
 ## Three dairy herds are tested for tuberculosis. On each herd a different test
 ## regime is used (each with a different diagnostic test sensitivity and 
 ## specificity). The number of animals tested in each herd were 210, 189 and 
@@ -102,10 +107,10 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
 ## specificities were 0.90, 0.95 and 0.99. What is the estimated true 
 ## prevalence of tuberculosis in the three herds?
 
-rval <- epi.prev(pos = c(80,100,50), tested = c(210,189,124), 
+rval.prev03 <- epi.prev(pos = c(80,100,50), tested = c(210,189,124), 
    se = c(0.60,0.65,0.70), sp = c(0.90,0.95,0.99), method = "blaker", 
    units = 100, conf.level = 0.95)
-round(rval$tp, digits = 3)
+round(rval.prev03$tp, digits = 0)
 
 ## True prevalence estimates for each herd:
 ## Herd 1: 56 (95\% CI 43 to 70) cases per 100 cows.

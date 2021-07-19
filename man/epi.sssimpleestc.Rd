@@ -57,6 +57,7 @@ epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon.r = 0.20,
 
 ## Four clinics need to be sampled to meet the requirements of the survey. 
 
+
 ## EXAMPLE 2:
 ## We want to estimate the mean bodyweight of deer on a farm. There are 278
 ## animals present. We anticipate the mean body weight to be around 200 kg

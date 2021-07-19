@@ -52,6 +52,7 @@ rsu.sep.rsfreecalc(N = 150, n = 30, c = 2, pstar = 0.10,
 ## a positive test, the probability of detecting disease if the population is 
 ## diseased at a prevalence of 0.10 is 0.87.
 
+
 ## EXAMPLE 2:
 ## Repeat these calculations assuming herd size is unknown:
 

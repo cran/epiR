@@ -37,17 +37,18 @@ Christensen J, Gardner IA (2000). Herd-level interpretation of test results for 
 }
 
 \examples{
+## EXAMPLE 1:
 ## We want to test dairy herds for Johne's disease using faecal culture 
 ## which has a sensitivity and specificity of 0.647 and 0.981, respectively. 
-## Suppose we pool faecal samples from five cows together and use six pooled 
-## samples per herd. What is the herd level sensitivity and specificity 
+## Suppose we pool faecal samples from five cows together and collect six 
+## pooled samples per herd. What is the herd level sensitivity and specificity 
 ## based on this approach (assuming homogenous mixing)? 
 
 epi.pooled(se = 0.647, sp = 0.981, P = 0.12, m = 5 , r = 6)
 
 ## Herd level sensitivity is 0.927, herd level specificity is 0.562. 
 ## Sensitivity at the herd level is increased using the pooled sampling 
-## approach; herd level specificity is decreased. 
+## approach. Herd level specificity is decreased. 
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

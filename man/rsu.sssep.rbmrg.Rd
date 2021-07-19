@@ -60,6 +60,7 @@ rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
 ## A total of 147 herds need to be sampled: 59 dairy, 59 mixed and 29 
 ## beef herds.
 
+
 ## EXAMPLE 2:
 ## Now assume that one of two tests will be used for each herd. The first 
 ## test has a diagnostic sensitivity of 0.92. The second test has a diagnostic 

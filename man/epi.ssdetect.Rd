@@ -60,6 +60,7 @@ epi.ssdetect(N = 1000, prev = 0.05, se = 0.90, sp = 1.00, interpretation =
 
 ## Using the hypergeometric distribution, we need to sample 65 cows.
 
+
 ## EXAMPLE 2:
 ## We would like to confirm the absence of disease in a study area. If the 
 ## disease is present we expect the between-herd prevalence to be 8\% and the 
@@ -79,6 +80,7 @@ epi.ssdetect(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95),
 ## The sensitivity of this testing regime is 99\%. The specificity of this 
 ## testing regime is 68\%.
 
+
 ## EXAMPLE 3:
 ## You want to document the absence of Mycoplasma from a 200-sow pig herd.
 ## Based on your experience and the literature, a minimum of 20\% of sows  
@@ -88,8 +90,6 @@ epi.ssdetect(N = c(5000, 100), prev = c(0.08, 0.05), se = c(0.90, 0.95),
 epi.ssdetect(N = 200, prev = 0.20, se = 1.00, sp = 1.00, interpretation =
    "series", covar = c(0,0), finite.correction = TRUE, nfractional = FALSE, 
    conf.level = 0.95)
-
-epi.ssdetect(N = 200, prev = 0.20, se = 1.00, sp = 1.00, conf.level = 0.95)
 
 ## If you test 15 sows and all test negative you can state that you are 95\% 
 ## confident that the prevalence rate of Mycoplasma in the herd is less than
