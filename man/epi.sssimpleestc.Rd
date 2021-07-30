@@ -11,15 +11,16 @@ Sample size to estimate a continuous outcome using simple random sampling.
 }
 
 \usage{
-epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon.r, nfractional = FALSE, 
-   conf.level = 0.95)
+epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon, error = "relative",
+   nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{N}{scalar integer, representing the total number of individual listing units in the population.}
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
   \item{sigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
-  \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
+  \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
+  \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
   \item{nfractional}{logical, return fractional sample size.}  
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
@@ -37,7 +38,7 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 }
 
 \note{
-\code{epsilon.r} defines the maximum relative difference between our estimate and the unknown population value. The sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
+If \code{epsilon.r} equals the relative error the sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
 }
 
 \examples{
@@ -52,8 +53,8 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 ## that is within 20\% of the true population value?
 
 pmean <- 1500 * 0.05; psigma <- (300 * 0.05)
-epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon.r = 0.20, 
-   nfractional = FALSE, conf.level = 0.95)
+epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon = 0.20, 
+   error = "relative", nfractional = FALSE, conf.level = 0.95)
 
 ## Four clinics need to be sampled to meet the requirements of the survey. 
 
@@ -65,8 +66,8 @@ epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon.r = 0.20,
 ## be 95\% certain that our estimate is within 10 kg of the true mean. How
 ## many deer should be sampled?
 
-epi.sssimpleestc(N = 278, xbar = 200, sigma = 30, epsilon.r = 10 / 200, 
-   nfractional = FALSE, conf.level = 0.95)
+epi.sssimpleestc(N = 278, xbar = 200, sigma = 30, epsilon = 10, 
+   error = "absolute", nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 31 deer need to be sampled to meet the requirements of the survey.
 }

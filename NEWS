@@ -1,12 +1,28 @@
+CHANGES IN epiR VERSION 2.0.33
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.bohning now handles missing values.
+    [Suggested by Mark Stevenson]
+    o epi.descriptives now reports level frequencies if input data is a factor.
+    [Suggested by Mark Stevenson]
+
+CHANGES IN epiR VERSION 2.0.32
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Sample size functions now allow user to express error in relative or absolute terms.
+    [Suggested by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.30
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Function epi.2by2 and epi.tests data entry formats simplified. Both functions now accept tables generated from tidyverse.
     [Suggested by Mark Stevenson]
-    o Documentation for all functions reviewed. Consistency in naming of objects improved.
+    o Documentation for all functions reviewed. Objects consistently named.
     [Suggested by Mark Stevenson]
-    
     
 
 CHANGES IN epiR VERSION 2.0.29

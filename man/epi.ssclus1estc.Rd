@@ -11,8 +11,8 @@ Sample size to estimate a continuous outcome using one-stage cluster sampling.
 }
 
 \usage{
-epi.ssclus1estc(b, N, xbar, xsigma, epsilon.r, rho, nfractional = FALSE, 
-   conf.level = 0.95)
+epi.ssclus1estc(b, N, xbar, xsigma, epsilon, error = "relative", 
+   rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
@@ -20,7 +20,8 @@ epi.ssclus1estc(b, N, xbar, xsigma, epsilon.r, rho, nfractional = FALSE,
   \item{N}{scalar integer, representing the total number of individual listing units in the population.}
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
   \item{xsigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
-  \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
+  \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
+  \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
   \item{rho}{scalar number, the intracluster correlation.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
@@ -58,7 +59,8 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## be 0.10. How many housing complexes (clusters) should be sampled?
 
 epi.ssclus1estc(b = 25, N = 5 * 25, xbar = 34, xsigma = 5.5, 
-   epsilon.r = 0.10, rho = 0.10, nfractional = FALSE, conf.level = 0.95)
+   epsilon = 0.10, error = "relative", rho = 0.10, nfractional = FALSE, 
+   conf.level = 0.95)
 
 ## A total of 2 housing complexes need to be sampled to meet the specifications 
 ## of this study.

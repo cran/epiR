@@ -1,8 +1,11 @@
-epi.ssstrataestb <- function (strata.n, strata.Py, epsilon.r, nfractional = FALSE, conf.level = 0.95) 
+epi.ssstrataestb <- function (strata.n, strata.Py, epsilon, error = "relative",
+ nfractional = FALSE, conf.level = 0.95) 
 {
     N. <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N., mean = 0, sd = 1)
     
+    epsilon.r <- ifelse(error == "relative", epsilon, epsilon / strata.Py)
+
     # Where method == "proportion" the estimated proportions for each strata are entered into the vector strata.Py:
     N <- sum(strata.n)
     mean <- sum(strata.n * strata.Py) / N

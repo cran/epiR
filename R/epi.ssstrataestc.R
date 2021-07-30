@@ -1,7 +1,9 @@
-epi.ssstrataestc <- function (strata.n, strata.xbar, strata.sigma, epsilon.r, nfractional = FALSE, conf.level = 0.95) 
+epi.ssstrataestc <- function (strata.n, strata.xbar, strata.sigma, epsilon, error = "relative", nfractional = FALSE, conf.level = 0.95) 
 {
     N. <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N., mean = 0, sd = 1)
+    
+    epsilon.r <- ifelse(error == "relative", epsilon, epsilon / strata.xbar)
     
     N <- sum(strata.n)
     mean <- sum(strata.n * strata.xbar) / N

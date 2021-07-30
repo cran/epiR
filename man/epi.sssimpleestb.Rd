@@ -11,14 +11,15 @@ Sample size to estimate a binary outcome using simple random sampling.
 }
 
 \usage{
-epi.sssimpleestb(N = 1E+06, Py, epsilon.r, se, sp, nfractional = FALSE, 
-   conf.level = 0.95)
+epi.sssimpleestb(N = 1E+06, Py, epsilon, error = "relative", 
+   se, sp, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{N}{scalar integer, the total number of individual listing units in the population.}
   \item{Py}{scalar number, an estimate of the population proportion to be estimated.}
-  \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
+  \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
+  \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
   \item{se}{the diagnostic sensitivity of the method used to detect positive outcomes (0 - 1).}
   \item{sp}{the diagnostic specificity of the method used to detect positive outcomes (0 - 1).}  
   \item{nfractional}{logical, return fractional sample size.}
@@ -44,7 +45,7 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 \note{
 The sample size calculation method implemented in this function follows the approach described by Humphry et al. (2004) accounting for imperfect diagnostic sensitivity and specificity. 
 
-\code{epsilon.r} defines the maximum relative difference between our estimate and the unknown population value. The sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
+If \code{epsilon.r} equals the relative error the sample estimate should not differ in absolute value from the true unknown population parameter \code{d} by more than \code{epsilon.r * d}.
 }
 
 \examples{
@@ -56,9 +57,27 @@ The sample size calculation method implemented in this function follows the appr
 ## B. abortus. Calculate the required sample size assuming use of a test
 ## with perfect diagnostic sensitivity and specificity.
 
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon.r = 0.20,
-   se = 1.00, sp = 1.00, nfractional = FALSE, conf.level = 0.95)
+n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+   error = "relative", se = 1.00, sp = 1.00, nfractional = FALSE, 
+   conf.level = 0.95)
 n.crude
+
+## A total of 545 cattle need to be sampled to meet the requirements of the 
+## survey.
+
+
+
+## EXAMPLE 1 (continued):
+## Why don't I get the same results as other sample size calculators? The 
+## most likely reason is misspecification of epsilon. Other sample size 
+## calculators (e.g. OpenEpi) require you to enter the absolute
+## error (as opposed to relative error). For the example above the absolute 
+## error is 0.20 * 0.15 = 0.03. Re-run epi.simpleestb:
+
+n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.03,
+   error = "absolute", se = 0.94, sp = 0.88, nfractional = FALSE, 
+   conf.level = 0.95)
+n.crude 
 
 ## A total of 545 cattle need to be sampled to meet the requirements of the 
 ## survey.
@@ -71,8 +90,9 @@ n.crude
 ## respectively (Getachew et al. 2016). Re-calculate the required sample size 
 ## accounting for imperfect diagnostic test performance. 
 
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon.r = 0.20,
-   se = 0.94, sp = 0.88, nfractional = FALSE, conf.level = 0.95)
+n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+   error = "relative", se = 0.94, sp = 0.88, nfractional = FALSE, 
+   conf.level = 0.95)
 n.crude 
 
 ## A total of 1168 cattle need to be sampled to meet the requirements of the

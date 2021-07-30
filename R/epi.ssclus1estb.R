@@ -1,9 +1,8 @@
-"epi.ssclus1estb" <- function(b, Py, epsilon.r, rho, nfractional = FALSE, conf.level = 0.95){
+"epi.ssclus1estb" <- function(b, Py, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
-  # Convert the relative error to absolute error:
-  epsilon.a <- Py * epsilon.r
+  epsilon.a <- ifelse(error == "absolute", epsilon, Py * epsilon)
   
   # Estimate of the required standard error:
   se <- epsilon.a / z

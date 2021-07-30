@@ -1,6 +1,57 @@
 ## ---- echo = FALSE, message = FALSE-------------------------------------------
+library(knitr); library(kableExtra)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
+
+## ----echo = FALSE, results = 'asis'-------------------------------------------
+twobytwo <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","c","b+c"), "Total" = c("a+b","c+d","a+b+c+d"))
+colnames(twobytwo) <- c("Dis pos","Dis pos","Total")
+rownames(twobytwo) <- c("Exp pos","Exp neg","Total")
+
+kbl(twobytwo, caption = "A 2 by 2 table.") %>%
+   column_spec(1, bold = FALSE, width = "5em") %>%
+   column_spec(2, bold = FALSE, width = "5em") %>%
+   column_spec(3, bold = FALSE, width = "5em")
+   # row_spec(row = 1, bold = TRUE)
+
+## ----echo = FALSE, results = 'asis'-------------------------------------------
+irr <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","c","b+c"), "Total" = c("a+b","c+d","a+b+c+d"),"Risk" = c("RE+ = a/(a+b)","RE- = c/(c+d)", "RT = (a+c)/(a+b+c+d)"))
+
+colnames(irr) <- c("Dis pos","Dis pos","Total","Risk")
+rownames(irr) <- c("Exp pos","Exp neg","Total")
+
+kbl(irr, caption = "A 2 by 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.") %>%
+   column_spec(1, bold = FALSE, width = "5em") %>%
+   column_spec(2, bold = FALSE, width = "5em") %>%
+   column_spec(3, bold = FALSE, width = "5em") %>%
+   column_spec(4, bold = FALSE, width = "10em")
+   # row_spec(row = 1, bold = TRUE)
+
+## ----echo = FALSE, results = 'asis'-------------------------------------------
+or.cohort <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","d","b+d"), "Total" = c("a+b","c+d","a+b+c+d"),"Odds" = c("OE+ = a/b","OE- = c/d", "OT = (a+c)/(b+d)"))
+
+colnames(or.cohort) <- c("Dis pos","Dis pos","Total","Odds")
+rownames(or.cohort) <- c("Exp pos","Exp neg","Total")
+
+kbl(or.cohort, caption = "A 2 by 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.") %>%
+   column_spec(1, bold = FALSE, width = "5em") %>%
+   column_spec(2, bold = FALSE, width = "5em") %>%
+   column_spec(3, bold = FALSE, width = "5em") %>%
+   column_spec(4, bold = FALSE, width = "10em")
+   # row_spec(row = 1, bold = TRUE)
+
+## ----echo = FALSE, results = 'asis'-------------------------------------------
+or.cc <- data.frame("Case" = c("a","c","a+c","OD+ = a/c"), "Control" = c("b","d","b+d","OD- = b/d"), "Total" = c("a+b","c+d","a+b+c+d","OT = (a+b)/(c+d)"))
+
+colnames(or.cc) <- c("Case","Control","Total")
+rownames(or.cc) <- c("Exp pos","Exp neg","Total","Odds")
+
+kbl(or.cc, caption = "A 2 by 2 table with the odds of exposure calculated for cases, controls and the total study population.") %>%
+   column_spec(1, bold = FALSE, width = "5em") %>%
+   column_spec(2, bold = FALSE, width = "5em") %>%
+   column_spec(3, bold = FALSE, width = "5em") %>%
+   column_spec(4, bold = FALSE, width = "10em")
+   # row_spec(row = 1, bold = TRUE)
 
 ## -----------------------------------------------------------------------------
 dat.v01 <- c(13,2163,5,3349); dat.v01

@@ -10,13 +10,15 @@ Number of clusters to be sampled to estimate a binary outcome using two-stage cl
 }
 
 \usage{
-epi.ssclus2estb(b, Py, epsilon.r, rho, nfractional = FALSE, conf.level = 0.95)
+epi.ssclus2estb(b, Py, epsilon, error = "relative", 
+   rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{b}{scalar integer or vector of length two, the number of individual listing units in each cluster to be sampled. See details, below.}
   \item{Py}{scalar number, an estimate of the unknown population proportion.}
-  \item{epsilon.r}{the maximum relative difference between the estimate and the unknown population value.}
+  \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
+  \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
   \item{rho}{scalar number, the intracluster correlation.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
@@ -57,8 +59,8 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## cluster. How many clusters should be sampled to meet the requirements of the
 ## study?
 
-epi.ssclus2estb(b = 20, Py = 0.20, epsilon.r = 0.05 / 0.20, rho = 0.02, 
-   nfractional = FALSE, conf.level = 0.95)
+epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05, error = "absolute", 
+   rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 17 clusters need to be sampled to meet the specifications 
 ## of this study. epi.ssclus2estb returns a warning message that the number of 

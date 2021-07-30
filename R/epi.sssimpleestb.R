@@ -1,10 +1,11 @@
-epi.sssimpleestb <- function(N = 1E+06, Py, epsilon.r, se, sp, nfractional = FALSE, conf.level = 0.95) 
+epi.sssimpleestb <- function(N = 1E+06, Py, epsilon, error = "relative", se, sp, nfractional = FALSE, conf.level = 0.95) 
 {
     N. <- 1 - ((1 - conf.level) / 2)
     z <- qnorm(N., mean = 0, sd = 1)
     
+    epsilon.a <- ifelse(error == "absolute", epsilon, Py * epsilon)
+
     # Equation 2 from Humphry et al. (2004):
-    epsilon.a <- epsilon.r * Py
     p01 <- (z / epsilon.a)^2
     p02.u <- ((se * Py) + (1 - sp) * (1 - Py))  * (1 - (se * Py) - (1 - sp) * (1 - Py))
     p02.l <- (se + sp - 1)^2 

@@ -1,7 +1,9 @@
-"epi.ssclus1estc" <- function(b, N, xbar, xsigma, epsilon.r, rho, nfractional = FALSE, conf.level = 0.95){
+"epi.ssclus1estc" <- function(b, N, xbar, xsigma, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
-  
+ 
+  epsilon.r <- ifelse(error == "relative", epsilon, epsilon / xbar)
+
   # Vsq is the relative variance of the continuous variable to be estimated (i.e. var / mean^2):
   Vsq <- xsigma^2 / xbar^2
   

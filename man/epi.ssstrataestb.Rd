@@ -10,15 +10,15 @@ Sample size to estimate a binary outcome using stratified random sampling.
 }
 
 \usage{
-epi.ssstrataestb(strata.n, strata.Py, epsilon.r, nfractional = FALSE, 
-   conf.level = 0.95)
+epi.ssstrataestb(strata.n, strata.Py, epsilon, error = "relative", 
+   nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{strata.n}{vector of integers, the number of individual listing units in each strata.}
   \item{strata.Py}{vector of numbers, the expected proportion of individual listing units with the outcome of interest for each strata.}
-  \item{epsilon.r}{scalar number, the maximum relative difference between the estimate and the unknown population value.}
-  \item{nfractional}{logical, return fractional sample size.}  
+  \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
+  \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}  \item{nfractional}{logical, return fractional sample size.}  
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
 
@@ -50,8 +50,8 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 
 strata.n <- c(1500, 2500, 4000)
 strata.Py <- c(0.50, 0.60, 0.70)
-epi.ssstrataestb(strata.n, strata.Py, epsilon.r = 0.20, nfractional = FALSE, 
-   conf.level = 0.95)
+epi.ssstrataestb(strata.n, strata.Py, epsilon = 0.20, error = "relative",
+   nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 55 herds should be sampled: 11 small, 18 medium, and 28 large.
 
