@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2021-07-30" />
+<meta name="date" content="2021-09-16" />
 
 <title>Measures of Association</title>
 
@@ -610,12 +610,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Measures of Association</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2021-07-30</h4>
+<h4 class="date">2021-09-16</h4>
 
 
 
 <p>A common task in epidemiology is to quantify the strength of association between exposures (‘risk factors’) and disease outcomes. In this context the term ‘exposure’ is taken to mean a variable whose association with the outcome is to be estimated.</p>
-<p>Exposures can be harmful, beneficial or both harmful and beneficial (e.g. if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term ‘outcome’ is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions <span class="citation">(Porta, Greenland, and Last <a href="#ref-porta_et_al:2008" role="doc-biblioref">2008</a>)</span>. In human and animal health an ‘outcome-positive’ individual is an individual who has experienced a given disease of interest.</p>
+<p>Exposures can be harmful, beneficial or both harmful and beneficial (e.g. if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term ‘outcome’ is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions <span class="citation">(Porta, Greenland, and Last <a href="#ref-porta:2014" role="doc-biblioref">2014</a>)</span>. In human and animal health an ‘outcome-positive’ individual is an individual who has experienced a given disease of interest.</p>
 <p>In this vignette we outline describe how <code>epiR</code> can be used to compute the various measures of association used in epidemiology notably the risk ratio, odds ratio, attributable risk in the exposed, attributable fraction in the exposed, attributable risk in the population and attributable fraction in the population. Examples are provided to demonstrate how the package can be used to deal with exposure-outcome data presented in various formats.</p>
 <p>This vignette has been written assuming the reader routinely formats their 2 <span class="math inline">\(\times\)</span> 2 table data with the outcome status as columns and exposure status as rows. If this is not the case the argument <code>outcome = &quot;as.columns&quot;</code> (the default) can be changed to <code>outcome = &quot;as.rows&quot;</code>.</p>
 <p><strong>Measures of association strength</strong></p>
@@ -1111,7 +1111,7 @@ OT = (a+b)/(c+d)
 <span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;   method     from         </span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   print.boxx spatstat.geom</span></span>
 <span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; v tibble  3.1.2     v dplyr   1.0.6</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; v tibble  3.1.2     v dplyr   1.0.5</span></span>
 <span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; v tidyr   1.1.3     v stringr 1.4.0</span></span>
 <span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; v readr   1.4.0     v forcats 0.5.1</span></span>
 <span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; v purrr   0.3.4</span></span>
@@ -1364,25 +1364,25 @@ OT = (a+b)/(c+d)
 <h2 class="unnumbered">References</h2>
 <div id="refs" class="references hanging-indent">
 <div id="ref-altman:1998">
-<p>Altman, DG. 1998. “Confidence intervals for the number needed to treat.” Journal Article. <em>British Medical Journal</em> 317: 1309–12.</p>
+<p>Altman, DG. 1998. “Confidence Intervals for the Number Needed to Treat.” <em>British Medical Journal</em> 317: 1309–12.</p>
 </div>
 <div id="ref-grimes_schulz:2008">
-<p>Grimes, DA, and KF Schulz. 2008. “Making sense of odds and odds ratios.” Journal Article. <em>Obstetrics and Gynecology</em> 111: 423–26.</p>
+<p>Grimes, DA, and KF Schulz. 2008. “Making Sense of Odds and Odds Ratios.” <em>Obstetrics and Gynecology</em> 111: 423–26.</p>
 </div>
 <div id="ref-hosmer_lemeshow:2000">
 <p>Hosmer, DW, and S Lemeshow. 2000. <em>Applied Logistic Regression</em>. London: Jon Wiley; Sons Inc.</p>
 </div>
 <div id="ref-kuritz_et_al:1988">
-<p>Kuritz, SJ, JR Landis, and GG Koch. 1988. “A general overview of Mantel-Haenszel methods: Applications and recent developments.” Journal Article. <em>Annual Reviews in Public Health</em> 9: 123–60.</p>
+<p>Kuritz, SJ, JR Landis, and GG Koch. 1988. “A general overview of Mantel-Haenszel methods: Applications and recent developments.” <em>Annual Reviews in Public Health</em> 9: 123–60.</p>
 </div>
-<div id="ref-porta_et_al:2008">
-<p>Porta, M, S Greenland, and JM Last. 2008. <em>A Dictionary of Epidemiology</em>. London: Oxford University Press.</p>
+<div id="ref-porta:2014">
+<p>Porta, M, S Greenland, and JM Last. 2014. <em>A Dictionary of Epidemiology</em>. London: Oxford University Press.</p>
 </div>
 <div id="ref-prasad_et_al:2007">
-<p>Prasad, K, R Jaeschke, P Wyer, S Keitz, and G Guyatt. 2007. “Tips for teachers of evidence-based medicine: Understanding odds ratios and their relationship to risk ratios.” Journal Article. <em>Journal of General Internal Medicine</em> 23: 635–40.</p>
+<p>Prasad, K, R Jaeschke, P Wyer, S Keitz, and G Guyatt. 2007. “Tips for teachers of evidence-based medicine: Understanding odds ratios and their relationship to risk ratios.” <em>Journal of General Internal Medicine</em> 23 (5): 635–40.</p>
 </div>
 <div id="ref-siegerink_rohmann:2018">
-<p>Siegerink, B, and JL Rohmann. 2018. “Impact of your results: Beyond the relative risk.” Journal Article. <em>Research and Practice in Thrombosis and Haemostasis</em> 2: 653–57. <a href="https://doi.org/10.1002/rth2.12148">https://doi.org/10.1002/rth2.12148</a>.</p>
+<p>Siegerink, B, and JL Rohmann. 2018. “Impact of your results: Beyond the relative risk.” <em>Research and Practice in Thrombosis and Haemostasis</em> 2: 653–57.</p>
 </div>
 <div id="ref-willeberg:1977">
 <p>Willeberg, P. 1977. “Animal disease information processing: Epidemiologic analyses of the feline urologic syndrome.” <em>Acta Veterinaria Scandinavica</em> 64: 1–48.</p>

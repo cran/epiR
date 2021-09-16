@@ -19,7 +19,7 @@ epi.ssequc(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE,
   \item{treat}{the expected mean of the outcome of interest in the treatment group.}
   \item{control}{the expected mean of the outcome of interest in the control group.}
   \item{sd}{the expected population standard deviation of the outcome of interest.}
-  \item{delta}{the equivalence limit, expressed as the change in the outcome of interest that represents a clinically meaningful diffference.}
+  \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For an equivalence trial the value entered for \code{delta} must be greater than zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
@@ -32,6 +32,7 @@ A list containing the following:
   \item{n.total}{the total number of study subjects required.}
   \item{n.treat}{the required number of study subject in the treatment group.}
   \item{n.control}{the required number of study subject in the control group.}
+  \item{delta}{the equivalence limit, as entered by the user.}
   \item{power}{the specified or calculated study power.}
 }
 
@@ -47,29 +48,41 @@ Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics
 Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
+
+Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (s) and a new treatment (n). In each group, a proportion of subjects respond to the treatment: \eqn{P_{s}} and \eqn{P_{n}}. 
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.
 
-With a superiority trial we specify the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: P_{n} - P_{s} \leq \delta} and the alternative hypothesis is \eqn{H_{1}: P_{n} - P_{s} > \delta}.
+For an equivalence trial the null hypothesis is:
 
-An equivalence trial is used if want to prove that two treatments produce the same clinical outcomes. With an equivalence trial, we specify the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: |P_{s} - P_{n}| \geq \delta} and the alternative hypothesis is \eqn{H_{1}: |P_{s} - P_{n}| < \delta}. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
+\eqn{H_{0}: |N_{s} - N_{n}| \geq \delta} 
+ 
+The alternative hypothesis is:
 
-With a non-inferiority trial, we specify the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. The null hypothesis is \eqn{H_{0}: P_{s} - P_{n} \geq \delta} and the alternative hypothesis is \eqn{H_{1}: P_{s} - P_{n} < \delta}. The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial, (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer, (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer, (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+\eqn{H_{1}: |N_{s} - N_{n}| < \delta}
 
-For a summary of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
+An equivalence trial is used if want to prove that two treatments produce the same clinical outcomes. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
 
-When calculating the power of a study, note that the variable \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+Note that when:
+
+\deqn{sign(P_n - P_s - \delta) \neq sign(z_{1-\alpha} + z_{1-\beta})}
+
+there is no solution for study power. For typical values of \eqn{\alpha} and \eqn{\beta} this would occur if \eqn{P_{n} - P_{s} - \delta < 0}. That is, when the targeted alternative is within the null hypothesis. The function issues a warning if these conditions are met.
+
+When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+
+For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
 }
 
 \examples{
 ## EXAMPLE 1 (from Machin, Campbell, Tan and Tan 2009 p. 113):
 ## It is anticipated that patients on a particular drug have a mean diastolic 
-## blood pressure of 96 mm Hg, as against 94 mm Hg on an alternative. It is also 
+## blood pressure of 96 mmHg, as against 94 mmHg on an alternative. It is also 
 ## anticipated that the standard deviation of diastolic BP is approximately 
-## 8 mm Hg. If one wishes to confirm that the difference is likely to be less 
-## than 5 mm Hg, that is, one wishes to show equivalence, how many patients 
+## 8 mmHg. If one wishes to confirm that the difference is likely to be less 
+## than 5 mmHg, that is, one wishes to show equivalence, how many patients 
 ## are need to be enrolled in the trial? Assume 80\% power and 
 ## 95\% significance.
 
@@ -104,10 +117,10 @@ epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = NA,
 ## Suppose only 150 subjects were enrolled in the trial, 75 in the treatment
 ## group and 75 in the control group. What is the estimated study power?
 
-epi.ssequc(treat = 0.20, control = 0.21, sd = 0.10, delta = 0.05, n = 150, 
+epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = 150, 
    r = 1, power = NA, nfractional = FALSE, alpha = 0.05)
 
-## With only 150 subjects the estimated study power is 0.58.
+## With only 150 subjects enrolled the estimated study power is 0.58.
 }
 
 \keyword{univar}

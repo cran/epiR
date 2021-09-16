@@ -1,10 +1,17 @@
 epi.ssequb <- function(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha){
-
+  
+  # Stop if a negative value for delta entered:
+  if (delta <= 0){
+    stop("For an equivalence trial delta must be greater than zero.")
+  }
+  
+  z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
+  
   # Sample size:
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
     beta <- (1 - power)
     z.beta <- qnorm(1 - beta / 2, mean = 0, sd = 1)
-    z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
+    
     pA <- treat; pB <- control
     qA <- 1 - pA; qB <- 1 - pB
     epsilon <- pA - pB
@@ -27,12 +34,11 @@ epi.ssequb <- function(treat, control, delta, n, r = 1, power, nfractional = FAL
       n.total <- nA + nB
     }
     
-    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, power = power)
+    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, delta = delta, power = power)
   }
   
   # Power:
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
-    z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
     pA <- treat; pB <- control
     qA <- 1 - pA; qB <- 1 - pB
     
@@ -47,24 +53,23 @@ epi.ssequb <- function(treat, control, delta, n, r = 1, power, nfractional = FAL
       nB <- ceiling(1 / (r + 1) * (n))
       n.total <- nA + nB
     }
-
+    
     epsilon <- pA - pB
     
     # Chow et al. page 89, second equation from top of page:
-    # z <- (delta - abs(epsilon)) / sqrt((pA * qA / nA) + (pB * qB / nB))
-    # power <- 2 * pnorm(z - z.alpha, mean = 0, sd = 1) - 1 
+    z <- (delta - abs(epsilon)) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    power <- 2 * pnorm(z - z.alpha, mean = 0, sd = 1) - 1 
     
     # http://powerandsamplesize.com/Calculators/Test-1-Proportion/1-Sample-Equivalence:
-    z = (abs(pA - pB) - delta) / sqrt((pA * qA / nA) + (pB * qB / nB))
-    power = 2 * (pnorm(z - z.alpha) + pnorm(-z - z.alpha)) - 1
-    power
+    # z = (abs(pA - pB) - delta) / sqrt((pA * qA / nA) + (pB * qB / nB))
+    # power = 2 * (pnorm(z - z.alpha) + pnorm(-z - z.alpha)) - 1
 
     # From user (Wu et al. 2008, page 433):
     # z1 <- (delta - abs(pA - pB)) / sqrt((pA * qA / nA) + (pB * qB / nB))
     # z2 <- (delta + abs(pA - pB)) / sqrt((pA * qA / nA) + (pB * qB / nB))
     # power <- 1 - pnorm(-z1 + z.alpha) - pnorm(-z2 + z.alpha)
-
-    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, power = power)
+    
+    rval <- list(n.total = n.total, n.treat = nA, n.control = nB, delta = delta, power = power)
   }
   rval
 }  

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson and Evan Sergeant" />
 
-<meta name="date" content="2021-07-30" />
+<meta name="date" content="2021-09-16" />
 
 <title>Design and Analysis of Disease Surveillance Programs Using epiR</title>
 
@@ -386,12 +386,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Design and Analysis of Disease Surveillance Programs Using epiR</h1>
 <h4 class="author">Mark Stevenson and Evan Sergeant</h4>
-<h4 class="date">2021-07-30</h4>
+<h4 class="date">2021-09-16</h4>
 
 
 
 <p>Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures <span class="citation">(Thacker and Berkelman <a href="#ref-thacker_berkelman:1988" role="doc-biblioref">1988</a>)</span>.</p>
-<p>The Terrestrial Animal Health Code of the World Organisation of Animal Health <span class="citation">(World Organisation for Animal Health <a href="#ref-OIE:2019" role="doc-biblioref">2019</a>)</span> defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners, and (4) identification of hazards or risk factors for disease outbreaks.</p>
+<p>The Terrestrial Animal Health Code of the World Organisation of Animal Health <span class="citation">(OIE <a href="#ref-oie:2021" role="doc-biblioref">2021</a>)</span> defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners, and (4) identification of hazards or risk factors for disease outbreaks.</p>
 <p>This vignette provides instruction on the way R and <code>epiR</code> (and specifically the surveillance functions within <code>epiR</code>) can be used for: (1) the design of disease surveillance programs; and (2) the design of programs to provide a quantitative basis for claims for disease freedom.</p>
 <div id="definitions" class="section level2">
 <h2>Definitions</h2>
@@ -481,7 +481,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] 60</span></span></code></pre></div>
 <p>A total of 60 herds need to be sampled and tested.</p>
 <p>The sample size calculations presented so far assume the use of a test with perfect specificity (that is, if a sample returns a positive result we can be 100% certain that the herd is positive and disease is actually present in the population).</p>
-<p>Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The <code>rsu.ss.rsfreecalc</code> function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software ‘Freecalc’ <span class="citation">(Cameron and Baldock <a href="#ref-cameron_baldock:1998" role="doc-biblioref">1998</a>)</span>.</p>
+<p>Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The <code>rsu.ss.rsfreecalc</code> function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software ‘Freecalc’ <span class="citation">(Cameron and Baldock, <a href="#ref-cameron_baldock:1998a" role="doc-biblioref">n.d.</a>)</span>.</p>
 <p><em>EXAMPLE 2</em></p>
 <p>We’ll continue with the brucellosis example introduced above. Imagine the test we’re using has a diagnostic sensitivity of 0.95 (as before) but this time it has a specificity of 0.98. How many herds need to be sampled to be 95% certain that the prevalence of brucellosis in dairy herds is less than the design prevalence if less than a specified number of tests return a positive result?</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">rsu.sssep.rsfreecalc</span>(<span class="dt">N =</span> <span class="dv">5000</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">mse.p =</span> <span class="fl">0.95</span>, </span>
@@ -968,14 +968,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>
 <div id="refs" class="references hanging-indent">
-<div id="ref-cameron_baldock:1998">
-<p>Cameron, AR, and FC Baldock. 1998. “A new probability formula for surveys to substantiate freedom from disease.” <em>Preventive Veterinary Medicine</em> 34: 1–17.</p>
+<div id="ref-cameron_baldock:1998a">
+<p>Cameron, AR, and FC Baldock. n.d. “A New Probability Formula for Surveys to Substantiate Freedom from Disease.” <em>Preventive Veterinary Medicine</em> 34: 1–17.</p>
+</div>
+<div id="ref-oie:2021">
+<p>OIE. 2021. “Terrestrial Animal Health Code.” In. Paris: World Organisation for Animal Health.</p>
 </div>
 <div id="ref-thacker_berkelman:1988">
-<p>Thacker, SB, and RL Berkelman. 1988. “Public health surveillance in the United States.” <em>Epidemiological Reviews</em> 10: 164–90. <a href="https://doi.org/10.1093/oxfordjournals.epirev.a036021">https://doi.org/10.1093/oxfordjournals.epirev.a036021</a>.</p>
-</div>
-<div id="ref-OIE:2019">
-<p>World Organisation for Animal Health. 2019. “Terrestrial Animal Health Code.” In. Paris: World Organisation for Animal Health.</p>
+<p>Thacker, SB, and RL Berkelman. 1988. “Public health surveillance in the United States.” <em>Epidemiological Reviews</em> 10: 164–90.</p>
 </div>
 </div>
 </div>

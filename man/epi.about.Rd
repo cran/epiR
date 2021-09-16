@@ -102,10 +102,10 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
 \tabular{ll}{
 
     \code{\link{epi.sssimpleestb}}       \tab Sample size to estimate a binary outcome using simple random sampling. \cr
-    \code{\link{epi.sssimpleestc}}       \tab Sample size to estimate a continous outcome using simple random sampling. \cr
+    \code{\link{epi.sssimpleestc}}       \tab Sample size to estimate a continuous outcome using simple random sampling. \cr
                                          \tab  \cr  
     \code{\link{epi.ssstrataestb}}       \tab Sample size to estimate a binary outcome using stratified random sampling. \cr
-    \code{\link{epi.ssstrataestc}}       \tab Sample size to estimate a continous outcome using stratified random sampling. \cr
+    \code{\link{epi.ssstrataestc}}       \tab Sample size to estimate a continuous outcome using stratified random sampling. \cr
                                          \tab  \cr  
     \code{\link{epi.ssclus1estb}}        \tab Sample size to estimate a binary outcome using one-stage cluster sampling. \cr
     \code{\link{epi.ssclus1estc}}        \tab Sample size to estimate a continuous outcome using one-stage cluster sampling. \cr
@@ -132,6 +132,7 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
     \code{\link{epi.ssninfc}}            \tab Sample size for a non-inferiority trial, continuous outcome. \cr
                                          \tab  \cr  
     \code{\link{epi.ssdetect}}           \tab Sample size to detect an event. \cr
+    \code{\link{epi.ssdxsesp}}           \tab Sample size to estimate the sensitivity or specificity of a diagnostic test. \cr
     \code{\link{epi.ssdxtest}}           \tab Sample size to validate a diagnostic test in the absence of a gold standard. \cr
   }
 }

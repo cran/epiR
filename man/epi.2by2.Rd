@@ -377,29 +377,57 @@ ggplot(data = dat.df02, aes(x = or.p, y = y.at)) +
 
 
 ## EXAMPLE 3:
+## Sometimes you'll have only event count data for a stratified analysis. This
+## example shows how to coerce a three column matrix listing (in order) counts
+## of outcome positive individuals, counts of outcome negative individuals (or
+## total time at risk, as in the example below) and strata number into a three 
+## dimensional array. We assume that two rows are recorded for each strata. 
+## The first for those exposed and the second for those unexposed:
+
+dat.m03 <- matrix(c(1308,884,200,190,4325264,13142619,1530342,5586741,1,1,2,2), 
+   nrow = 4, ncol = 3, byrow = FALSE)
+colnames(dat.m03) <- c("obs","tar","grp")
+dat.df03 <- data.frame(dat.m03)
+
+## Here we use the apply function to coerce the two rows for each strata into
+## tabular format. An array is created of with the length of the third 
+## dimension of the array equal to the number of strata: 
+dat.tab03 <- sapply(1:length(unique(dat.df03$grp)), function(x) 
+   as.matrix(dat.df03[dat.df03$grp == x,1:2], ncol = 2, byrow = TRUE), 
+   simplify = "array")
+dat.tab03
+
+epi.2by2(dat = dat.tab03, method = "cohort.time", conf.level = 0.95, 
+   units = 1000 * 365.25, interpret = FALSE, outcome = "as.columns")
+
+## The Mantel-Haenszel adjusted incidence rate ratio was 4.49 (95\% CI 4.15 
+## to 4.86).
+
+
+## EXAMPLE 4:
 ## Same as Example 2 but showing how a 2 by 2 contingency table can be prepared 
 ## using tidyverse:
 
 \dontrun{
 library(MASS); library(tidyverse)
 
-dat.df03 <- birthwt; head(dat.df03)
+dat.df04 <- birthwt; head(dat.df04)
 
-dat.tab03 <- dat.df03 \%>\%
+dat.tab04 <- dat.df04 \%>\%
   mutate(low = factor(low, levels = c(1,0), labels = c("yes","no"))) \%>\%
   mutate(smoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) \%>\%
   mutate(race = factor(race)) \%>\%
   group_by(race, smoke, low) \%>\%
   summarise(n = n()) 
-dat.tab03
+dat.tab04
 
 ## View the data in conventional 2 by 2 table format:
-pivot_wider(dat.tab03, id_cols = c(race, smoke), 
+pivot_wider(dat.tab04, id_cols = c(race, smoke), 
    names_from = low, values_from = n)
 
-dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", 
+dat.epi04 <- epi.2by2(dat = dat.tab04, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
-dat.epi03
+dat.epi04
 }
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
@@ -412,30 +440,30 @@ dat.epi03
 ## times that of non-smokers.
 
 
-## EXAMPLE 4:
+## EXAMPLE 5:
 ## A study was conducted by Feychting et al (1998) comparing cancer occurrence
 ## among the blind with occurrence among those who were not blind but had 
 ## severe visual impairment. From these data we calculate a cancer rate of
 ## 136/22050 person-years among the blind compared with 1709/127650 person-
 ## years among those who were visually impaired but not blind.
 
-dat.v04 <- c(136,22050,1709,127650)
+dat.v05 <- c(136,22050,1709,127650)
 
-dat.epi04 <- epi.2by2(dat = dat.v04, method = "cohort.time", 
+dat.epi05 <- epi.2by2(dat = dat.v05, method = "cohort.time", 
    conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
-summary(dat.epi04)$massoc.detail$ARate.strata.wald
+summary(dat.epi05)$massoc.detail$ARate.strata.wald
 
 ## The incidence rate of cancer was 7.22 (95\% CI 6.00 to 8.43) cases per 
 ## 1000 person-years less in the blind, compared with those who were not 
 ## blind but had severe visual impairment.
 
-round(summary(dat.epi04)$massoc.detail$IRR.strata.wald, digits = 2)
+round(summary(dat.epi05)$massoc.detail$IRR.strata.wald, digits = 2)
 
 ## The incidence rate of cancer in the blind group was less than half that 
 ## of the comparison group (incidence rate ratio 0.46, 95\% CI 0.38 to 0.55).
 
 
-## EXAMPLE 5:
+## EXAMPLE 6:
 ## A study has been conducted to assess the effect of a new treatment for 
 ## mastitis in dairy cows. Eight herds took part in the study. The following 
 ## data were obtained. The vectors ai, bi, ci and di list (for each herd) the 
@@ -447,18 +475,18 @@ ai <- c(23,10,20,5,14,6,10,3)
 bi <- c(10,2,1,2,2,2,3,0)
 ci <- c(3,2,3,2,1,3,3,2)
 di <- c(6,4,3,2,6,3,1,1)
-dat.df05 <- data.frame(hid, ai, bi, ci, di)
-head(dat.df05)
+dat.df06 <- data.frame(hid, ai, bi, ci, di)
+head(dat.df06)
 
 ## Re-format data into a format suitable for epi.2by2:
 hid <- rep(1:8, times = 4)
 exp <- factor(rep(c(1,1,0,0), each = 8), levels = c(1,0))
 out <- factor(rep(c(1,0,1,0), each = 8), levels = c(1,0))
-dat.df05 <- data.frame(hid, exp, out, n = c(ai,bi,ci,di)) 
-dat.tab05 <- xtabs(n ~ exp + out + hid, data = dat.df05)
-print(dat.tab05)
+dat.df06 <- data.frame(hid, exp, out, n = c(ai,bi,ci,di)) 
+dat.tab06 <- xtabs(n ~ exp + out + hid, data = dat.df06)
+print(dat.tab06)
 
-epi.2by2(dat = dat.tab05, method = "cohort.count", conf.level = 0.95, 
+epi.2by2(dat = dat.tab06, method = "cohort.count", conf.level = 0.95, 
    units = 1000, interpret = FALSE, outcome = "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 

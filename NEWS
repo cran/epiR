@@ -1,3 +1,19 @@
+CHANGES IN epiR VERSION 2.0.35
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.ssdxsesp to compute a sample size to estimate the sensitivity or specificity of a diagnostic test.
+    [Suggested by Anou Dreyfus]
+    o Additional example provided in the help for epi.2by2 showing you how to construct an array suitable for a stratified contingency table analysis using count data.
+    [Suggested by Cieran Harries]
+    o Error in power calculation for epi.ssninfb and epi.ssninfc corrected.
+    [Spotted by Aniko Szabo]
+    o epi.ssninfb and epi.ssninfc now requires the user to specify the absolute value of delta (instead of assigning a negative sign to delta, which was prone to user misinterpretation).
+    [Suggested by Aniko Szabo]
+    o Documentation for epi.sssupb, epi.sssupb, epi.ssequb, epi.ssequc, epi.ssninfb and epi.ssninfc revised and improved.
+    [Suggested by Aniko Szabo]
+
+
 CHANGES IN epiR VERSION 2.0.33
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -6,6 +22,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     [Suggested by Mark Stevenson]
     o epi.descriptives now reports level frequencies if input data is a factor.
     [Suggested by Mark Stevenson]
+
 
 CHANGES IN epiR VERSION 2.0.32
 

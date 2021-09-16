@@ -26,7 +26,7 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.80,
    method = "unmatched", nfractional = FALSE, fleiss = FALSE)$n.total
 
 ## ----message = FALSE----------------------------------------------------------
-epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = NA, 
+epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, 
    r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)$n.total
 
 ## ----message = FALSE----------------------------------------------------------

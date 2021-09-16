@@ -63,10 +63,10 @@ If the true odds for squamous cell carcinoma in exposed subjects relative to une
 
 ### Non-inferiority trial
 
-Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = -0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?
+Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = 0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?
 
 ```{r message = FALSE}
-epi.ssninfb(treat = 0.85, control = 0.65, delta = -0.10, n = NA, 
+epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, 
    r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)$n.total
 ```
 A total of 50 subjects need to be enrolled in the trial, 25 in the treatment group and 25 in the control group. 
@@ -91,7 +91,7 @@ A total of 115 villages need to be sampled to meet the requirements of the study
 
 ### Two-stage cluster sampling
 
-This example is adapted from @bennett_et_al:2003. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?
+This example is adapted from @bennett_et_al:1991. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?
 
 ```{r message = FALSE}
 # From first principles:

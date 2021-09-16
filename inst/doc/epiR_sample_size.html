@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2021-07-30" />
+<meta name="date" content="2021-09-16" />
 
 <title>Sample Size Calculations Using epiR</title>
 
@@ -386,7 +386,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Sample Size Calculations Using epiR</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2021-07-30</h4>
+<h4 class="date">2021-09-16</h4>
 
 
 
@@ -417,8 +417,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="non-inferiority-trial" class="section level3">
 <h3>Non-inferiority trial</h3>
-<p>Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = -0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">epi.ssninfb</span>(<span class="dt">treat =</span> <span class="fl">0.85</span>, <span class="dt">control =</span> <span class="fl">0.65</span>, <span class="dt">delta =</span> <span class="fl">-0.10</span>, <span class="dt">n =</span> <span class="ot">NA</span>, </span>
+<p>Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = 0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">epi.ssninfb</span>(<span class="dt">treat =</span> <span class="fl">0.85</span>, <span class="dt">control =</span> <span class="fl">0.65</span>, <span class="dt">delta =</span> <span class="fl">0.10</span>, <span class="dt">n =</span> <span class="ot">NA</span>, </span>
 <span id="cb4-2"><a href="#cb4-2"></a>   <span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">power =</span> <span class="fl">0.80</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>)<span class="op">$</span>n.total</span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
 <p>A total of 50 subjects need to be enrolled in the trial, 25 in the treatment group and 25 in the control group.</p>
@@ -439,7 +439,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="two-stage-cluster-sampling" class="section level3">
 <h3>Two-stage cluster sampling</h3>
-<p>This example is adapted from <span class="citation">Bennett et al. (<a href="#ref-bennett_et_al:2003" role="doc-biblioref">1991</a>)</span>. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?</p>
+<p>This example is adapted from <span class="citation">Bennett et al. (<a href="#ref-bennett_et_al:1991" role="doc-biblioref">1991</a>)</span>. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># From first principles:</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>n.crude &lt;-<span class="st"> </span><span class="kw">epi.sssimpleestb</span>(<span class="dt">N =</span> <span class="fl">1E+06</span>, <span class="dt">Py =</span> <span class="fl">0.20</span>, <span class="dt">epsilon =</span> <span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.20</span>, </span>
 <span id="cb7-3"><a href="#cb7-3"></a>   <span class="dt">error =</span> <span class="st">&quot;relative&quot;</span>, <span class="dt">se =</span> <span class="dv">1</span>, <span class="dt">sp =</span> <span class="dv">1</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</span>
@@ -514,11 +514,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="references" class="section level3 unnumbered">
 <h3 class="unnumbered">References</h3>
 <div id="refs" class="references hanging-indent">
-<div id="ref-bennett_et_al:2003">
-<p>Bennett, S, T Woods, W Liyanage, and D Smith. 1991. “A Simplified General Method for Cluster-Sample Surveys of Health in Developing Countries.” Journal Article. <em>World Health Statistics Quarterly</em> 44: 98–106.</p>
+<div id="ref-bennett_et_al:1991">
+<p>Bennett, S, T Woods, W Liyanage, and D Smith. 1991. “A Simplified General Method for Cluster-Sample Surveys of Health in Developing Countries.” <em>World Health Statistics Quarterly</em> 44: 98–106.</p>
 </div>
 <div id="ref-otte_gumm:1997">
-<p>Otte, JM, and ID Gumm. 1997. “Intra-Cluster Correlation Coefficients of 20 Infections Calculated from the Results of Cluster-Sample Surveys.” Journal Article. <em>Preventive Veterinary Medicine</em> 31: 147–50.</p>
+<p>Otte, JM, and ID Gumm. 1997. “Intra-Cluster Correlation Coefficients of 20 Infections Calculated from the Results of Cluster-Sample Surveys.” <em>Preventive Veterinary Medicine</em> 31: 147–50.</p>
 </div>
 </div>
 </div>

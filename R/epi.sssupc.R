@@ -1,13 +1,17 @@
 epi.sssupc <- function(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE, alpha){
   
-  # alpha <- (1 - conf.level)
-  beta <- (1 - power)
-
+  # Stop if a negative value for delta entered:
+  if (delta < 0){
+    stop("For a superiority trial delta must be greater than or equal to zero.")
+  }
+  
   z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
-  z.beta <- qnorm(1 - beta, mean = 0, sd = 1)
 
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
-      # http://powerandsamplesize.com/Calculators/Compare-2-Means/2-Sample-Non-Inferiority-or-Superiority:
+    beta <- (1 - power) 
+    z.beta <- qnorm(1 - beta, mean = 0, sd = 1)
+    
+    # http://powerandsamplesize.com/Calculators/Compare-2-Means/2-Sample-Non-Inferiority-or-Superiority:
     
     if(nfractional == TRUE){
       n.control <- (1 + 1 / r) * (sd * (z.alpha + z.beta) / (treat - control - delta))^2
@@ -20,13 +24,13 @@ epi.sssupc <- function(treat, control, sd, delta, n, r = 1, power, nfractional =
       n.treat <- ceiling(n.control * r)
       n.total <- n.treat + n.control
     }
-      
-    rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
+    
+    rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, delta = delta, power = power)
   }
   
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(n) & is.na(power) & !is.na(r) & !is.na(alpha)) {
-      # Work out the number of subjects in the control group. r equals the number in the treatment group divided by the number in the control group.
-     
+    # Work out the number of subjects in the control group. r equals the number in the treatment group divided by the number in the control group.
+    
     if(nfractional == TRUE){
       n.control <- 1 / (r + 1) * n
       n.treat <- n - n.control
@@ -38,15 +42,15 @@ epi.sssupc <- function(treat, control, sd, delta, n, r = 1, power, nfractional =
       n.treat <- n - n.control
       n.total <- n.treat + n.control
     } 
+    
+    z <- (treat - control - delta) / (sd * sqrt((1 + 1 / r) / n.control))
+    power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
 
-      z <- (treat - control - delta) / (sd * sqrt((1 + 1 / r) / n.control))
-      power <- pnorm(z - z.alpha) + pnorm(-z - z.alpha)
-      
-      rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
+    rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, delta = delta, power = power)
   }
   rval
 }   
-  
+
 # A superiority trial is one where you want to demonstrate that one treatment or intervention is better than another (or better than no treatment/intervention). An equivalence trial is where you want to demonstrate that a new treatment is no better or worse than an existing treatment and non-inferiority is to show that a new treatment is not worse than an existing treatment.
 
 # epi.supc(treat = 5, control = 5, sd = 20, delta = 5, n = NA, r = 1, power = 0.80, alpha = 0.05)
