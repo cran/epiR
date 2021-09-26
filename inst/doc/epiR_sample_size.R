@@ -21,7 +21,7 @@ epi.sscohortt(irexp1 = 50/1000, irexp0 = 70/1000, FT = 5, n = NA, power = 0.80, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$n.total
 
 ## ----message = FALSE----------------------------------------------------------
-epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.80, 
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
    r = 1, rho = 0, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "unmatched", nfractional = FALSE, fleiss = FALSE)$n.total
 

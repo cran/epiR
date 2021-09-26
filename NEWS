@@ -1,3 +1,11 @@
+CHANGES IN epiR VERSION 2.0.36
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Argument p1 (prevalence of exposure among cases) added to epi.sscc, allowing Fleiss correction to be applied.
+    [Suggested by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.35
 
 SIGNIFICANT USER-VISIBLE CHANGES

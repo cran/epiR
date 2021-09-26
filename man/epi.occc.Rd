@@ -74,12 +74,14 @@ Peter Solymos, solymos@ualberta.ca.
 \examples{
 ## EXAMPLE 1:
 ## Generate some rating data:
+
+\dontrun{
 set.seed(1234)
 p <- runif(n = 10, min = 0, max = 1)
 x <- replicate(n = 5, expr = rbinom(n = 10, size = 4, prob = p) + 1)
 
 rval.occc01 <- epi.occc(dat = x, pairs = TRUE)
 print(rval.occc01); summary(rval.occc01)
-
+}
 }
 \keyword{htest}

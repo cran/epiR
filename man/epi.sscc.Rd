@@ -11,12 +11,14 @@ Calculates the sample size, power or minimum detectable odds ratio for an unmatc
 }
 
 \usage{
-epi.sscc(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
-   nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE)
+epi.sscc(OR, p1 = NA, p0, n, power, r = 1, 
+   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 }
 
 \arguments{
   \item{OR}{scalar, the expected study odds ratio.}
+  \item{p1}{scalar, the prevalence of exposure amongst the cases.}
   \item{p0}{scalar, the prevalence of exposure amongst the controls.}
   \item{n}{scalar, the total number of subjects in the study (i.e. the number of cases plus the number of controls).}
   \item{power}{scalar, the required study power.}
@@ -32,6 +34,8 @@ epi.sscc(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2,
 
 \details{
 This function implements the methodology described by Dupont (1988). A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2005), pp. 381 to 426.
+
+A value for \code{p1} is only required if Fleiss correction is used. For this reason the default for \code{p1} is set to \code{NA}.
 }
 
 \value{
@@ -69,9 +73,9 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## odds ratio of 2.0 with 0.90 power using a two-sided 0.05 test? Previous 
 ## surveys have shown that around 0.30 of males without CHD are smokers.
 
-epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho.cc = 0, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "unmatched", fleiss = FALSE)
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1, 
+   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
 ## A total of 376 men need to be sampled: 188 cases and 188 controls.
 
@@ -83,9 +87,9 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.90, r = 1, rho.cc = 0,
 ## the prevalence of smoking in males without CHD is 0.30.
 
 n <- 188 + 940
-epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "unmatched", fleiss = TRUE)
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5, 
+   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "unmatched", fleiss = TRUE)
 
 ## The power of this study, with the given sample size allocation is 0.99.
 
@@ -105,9 +109,9 @@ epi.sscc(OR = 2.0, p0 = 0.30, n = n, power = NA, r = 5, rho.cc = 0,
 ## Confirm the statement that 300 case subjects will provide 80\% power in 
 ## this study.
 
-epi.sscc(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho.cc = 0.01, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "matched", fleiss = TRUE)
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1, 
+   rho.cc = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "matched", fleiss = TRUE)
 
 ## If the true odds ratio for Campylobacter in exposed subjects relative to 
 ## unexposed subjects is 2.0 we will be able to reject the null hypothesis 
@@ -124,9 +128,9 @@ epi.sscc(OR = 2.0, p0 = 0.10, n = 600, power = NA, r = 1, rho.cc = 0.01,
 ## Three controls will be recruited for every case. How many subjects need 
 ## to be enrolled in the study?
 
-epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho.cc = 0, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "unmatched", fleiss = FALSE)
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3, 
+   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
 ## A total of 620 subjects need to be enrolled in the study: 155 cases and 
 ## 465 controls.
@@ -137,9 +141,9 @@ epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 3, rho.cc = 0,
 ## (rho) is estimated to be 0.01 (low). Using the same assumptions as those
 ## described above, how many study subjects will be required?
 
-epi.sscc(OR = 2.0, p0 = 0.20, n = NA, power = 0.90, r = 1, rho.cc = 0.01, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "matched", fleiss = FALSE)
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 1, 
+   rho.cc = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 456 subjects need to be enrolled in the study: 228 cases and 
 ## 228 controls.
@@ -154,10 +158,10 @@ dat.df05 <- expand.grid(p0 = p0, OR = OR)
 dat.df05$n.total <- NA
 
 for(i in 1:nrow(dat.df05)){
-   dat.df05$n.total[i] <- epi.sscc(OR = dat.df05$OR[i], p0 = dat.df05$p0[i], 
-   n = NA, power = 0.80, r = 1, rho.cc = 0, design = 1, sided.test = 2, 
-   nfractional = FALSE, conf.level = 0.95, method = "unmatched", 
-   fleiss = FALSE)$n.total
+   dat.df05$n.total[i] <- epi.sscc(OR = dat.df05$OR[i], p1 = NA, 
+      p0 = dat.df05$p0[i], n = NA, power = 0.80, r = 1, 
+      rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+      conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
 }  
 
 grid.n <- matrix(dat.df05$n.total, nrow = length(p0))
@@ -174,6 +178,7 @@ contour(x = p0, y = OR, z = log10(grid.n), add = FALSE, levels = log10(breaks),
 library(ggplot2); library(directlabels)
 
 p <- ggplot(data = dat.df05, aes(x = p0, y = OR, z = n.total)) +
+  theme_bw() +
   geom_contour(aes(colour = ..level..), breaks = breaks) +
   scale_x_continuous(limits = c(0,1), name = "Proportion of controls exposed") +
   scale_y_continuous(limits = c(1,6), name = "Minimum OR to detect")
@@ -193,9 +198,9 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
 ## subjects need to be enrolled into the study to detect an odds ratio of 3.0 
 ## with 0.80 power using a two-sided 0.05 test? 
 
-epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho.cc = 0.2, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "matched", fleiss = FALSE)
+epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1, 
+   rho.cc = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 162 subjects need to be enrolled in the study: 81 cases and 
 ## 81 controls. 
@@ -203,9 +208,9 @@ epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 1, rho.cc = 0.2,
 ## How many cases and controls are required if we select three 
 ## controls per case?
 
-epi.sscc(OR = 3.0, p0 = 0.60, n = NA, power = 0.80, r = 3, rho.cc = 0.2, 
-   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, 
-   method = "matched", fleiss = FALSE)
+epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 3, 
+   rho.cc = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
+   conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 204 subjects need to be enrolled in the study: 51 cases and 
 ## 153 controls.

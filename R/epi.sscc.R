@@ -1,4 +1,4 @@
-"epi.sscc" <- function(OR, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
+"epi.sscc" <- function(OR, p1 = NA, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
  
   # p0: proportion of controls exposed.
   # rho.cc: correlation between case and control exposures in matched pairs (defaults to 0).  
@@ -55,18 +55,18 @@
     if(nfractional == TRUE){
       n1 <- n / (1 + r)
       n1 <- n1 * design
-      n2 <- r * n1 
-      n.total <- n1 + n2
+      n0 <- r * n1 
+      n.total <- n0 + n1
     }
     
     if(nfractional == FALSE){
       n1 <- n / (1 + r)
       n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1) 
-      n.total <- n1 + n2
+      n0 <- ceiling(r * n1) 
+      n.total <- n0 + n1
     }
     
-    rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
+    rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
   }
   
   # Unmatched case-control - power: 
@@ -96,17 +96,17 @@
       
       if(nfractional == TRUE){
         n1 <- n1 * design
-        n2 <- n - n1
-        n.total <- n1 + n2             
+        n0 <- n - n1
+        n.total <- n0 + n1             
       }
       
       if(nfractional == FALSE){
         n1 <- ceiling(n1 * design)
-        n2 <- n - n1
-        n.total <- n1 + n2        
+        n0 <- n - n1
+        n.total <- n0 + n1        
       }
       
-      rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
+      rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
     }
   
   # Unmatched case-control - effect:  
@@ -116,15 +116,15 @@
       if(nfractional == TRUE){
         n1 <- n / (r + 1)
         n1 <- n1 * design
-        n2 <- n - n1
-        n.total <- n1 + n2           
+        n0 <- n - n1
+        n.total <- n0 + n1           
       }
       
       if(nfractional == FALSE){
         n1 <- n / (r + 1)
         n1 <- ceiling(n1 * design)
-        n2 <- n - n1
-        n.total <- n1 + n2        
+        n0 <- n - n1
+        n.total <- n0 + n1        
       }
       
 
@@ -140,8 +140,8 @@
         # Account for the design effect:
         n1 <- n / (1 + r)
         n1 <- ceiling(n1 * design)
-        n2 <- n - n1
-        # n2 <- ceiling(r * n1)
+        n0 <- n - n1
+        # n0 <- ceiling(r * n1)
         
         z.beta <- sqrt((n1 * r * (p1 - p0)^2) / (pbar * qbar * (r + 1))) - z.alpha
         
@@ -158,7 +158,7 @@
       # windows(); plot(x, y, xlim = c(0,5)); abline(h = 0, lty = 2)
       # Two possible values for OR meet the conditions of Pfun. So hence we set the lower bound of the search interval to 1.
       
-      rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = c(OR.lo, OR.up))
+      rval <- list(n.total = n1 + n0, n.case = n1, n.control = n0, power = power, OR = c(OR.lo, OR.up))
     }
   
   
@@ -194,19 +194,31 @@
     nu.psi <- sum(nu.psi)
     nu.one <- sum(nu.one)
     
+    n. <- ((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2)
+    
+    if(fleiss == TRUE){
+      d <- 1 + ((2 * (r + 1)) / (n. * r * abs(p0 - p1)))
+      n <- (n. / 4) * (1 + sqrt(d))^2
+    }
+    
+    if(fleiss == FALSE){
+      n <- n.
+    }
+    
+    
     if(nfractional == TRUE){
-      n1 <- ((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2)
-      n2 <- r * n1  
-      n.total <- n1 + n2      
+      n1 <- n
+      n0 <- r * n1  
+      n.total <- n0 + n1      
     }
     
     if(nfractional == FALSE){
-      n1 <- ceiling(((z.beta * sqrt(nu.psi) + z.alpha * sqrt(nu.one))^2) / ((ee.one - ee.psi)^2))
-      n2 <- ceiling(r * n1)  
-      n.total <- n1 + n2
+      n1 <- ceiling(n)
+      n0 <- r * n1  
+      n.total <- n0 + n1
     }
 
-    rval <- list(n.total = n.total, n.case = n1, n.control = n2, power = power, OR = OR)
+    rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
   }
   
   # Matched case-control - power: 
@@ -242,21 +254,21 @@
       if(nfractional == TRUE){
         n1 <- n / (1 + r)
         n1 <- n1 * design
-        n2 <- n - n1
-        n.total <- n1 + n2        
+        n0 <- n - n1
+        n.total <- n0 + n1        
       }
       
       if(nfractional == FALSE){
         n1 <- n / (1 + r)
         n1 <- ceiling(n1 * design)
-        n2 <- n - n1
-        n.total <- n1 + n2       
+        n0 <- n - n1
+        n.total <- n0 + n1       
       }
 
       z.beta <- (sqrt(n1 * ((ee.one - ee.psi)^2)) - z.alpha * sqrt(nu.one)) / sqrt(nu.psi)
       power <- 1 - pnorm(q = z.beta, lower.tail = FALSE)
       
-      rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = OR)
+      rval <- list(n.total = n1 + n0, n.case = n1, n.control = n0, power = power, OR = OR)
     }
   
   # Matched case-control - effect:  
@@ -266,15 +278,15 @@
       if(nfractional == TRUE){
         n1 <- n / (1 + r)
         n1 <- n1 * design
-        n2 <- n - n1
-        n.total <- n1 + n2
+        n0 <- n - n1
+        n.total <- n1 + n0
       }
       
       if(nfractional == FALSE){
         n1 <- n / (1 + r)
         n1 <- ceiling(n1 * design)
-        n2 <- n - n1
-        n.total <- n1 + n2
+        n0 <- n - n1
+        n.total <- n1 + n0
       }
 
       Pfun <- function(OR, power, p0, r, n, design, z.alpha){
@@ -319,7 +331,7 @@
       # windows(); plot(x, y, xlim = c(0,5)); abline(h = 0, lty = 2)
       # Two possible values for OR meet the conditions of Pfun. So hence we set the lower bound of the search interval to 1.
       
-      rval <- list(n.total = n1 + n2, n.case = n1, n.control = n2, power = power, OR = c(OR.lo, OR.up))
+      rval <- list(n.total = n1 + n0, n.case = n1, n.control = n0, power = power, OR = c(OR.lo, OR.up))
     }
   
   # ------------------------------------------------------------------------------------------------------  

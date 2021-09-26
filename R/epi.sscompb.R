@@ -25,18 +25,18 @@
     if(nfractional == TRUE){
       n1 <- n / (r + 1)
       n1 <- n1 * design
-      n2 <- r * n1
-      n.total <- n1 + n2
+      n0 <- r * n1
+      n.total <- n1 + n0
     }
 
     if(nfractional == FALSE){
       n1 <- n / (r + 1)
       n1 <- ceiling(n1 * design)
-      n2 <- ceiling(r * n1)
-      n.total <- n1 + n2
+      n0 <- ceiling(r * n1)
+      n.total <- n1 + n0
     }
     
-    rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = lambda)
+    rval <- list(n.total = n.total, n.treat = n1, n.control = n0, power = power, lambda = lambda)
     
   }
 
@@ -47,15 +47,15 @@
       if(nfractional == TRUE){
         n1 <- n / (r + 1)
         n1 <- n1 * design
-        n2 <- r * n1
-        n.total <- n1 + n2
+        n0 <- r * n1
+        n.total <- n1 + n0
       }
       
       if(nfractional == FALSE){
         n1 <- n / (r + 1)
         n1 <- ceiling(n1 * design)
-        n2 <- ceiling(r * n1)
-        n.total <- n1 + n2
+        n0 <- ceiling(r * n1)
+        n.total <- n1 + n0
       }
       
       # From Woodward's spreadsheet. Changed 130814:
@@ -68,7 +68,7 @@
       # z.beta <- ((delta * sqrt(n)) - (z.alpha * sqrt(treat * (1 - treat))))/(sqrt(control * (1 - control)))
       power <- pnorm(z.beta, mean = 0, sd = 1)
 
-      rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = 1 / lambda)
+      rval <- list(n.total = n.total, n.treat = n1, n.control = n0, power = power, lambda = 1 / lambda)
     }
 
   # Lambda:
@@ -80,15 +80,15 @@
       if(nfractional == TRUE){
         n1 <- n / (r + 1)
         n1 <- n1 * design
-        n2 <- r * n1
-        n.total <- n1 + n2
+        n0 <- r * n1
+        n.total <- n1 + n0
       }
       
       if(nfractional == FALSE){
         n1 <- n / (r + 1)
         n1 <- ceiling(n1 * design)
-        n2 <- ceiling(r * n1)
-        n.total <- n1 + n2
+        n0 <- ceiling(r * n1)
+        n.total <- n1 + n0
       }
 
       # delta <- 1/sqrt(n) * ((z.alpha * sqrt(treat * (1 - treat))) + (z.beta * sqrt(control * (1 - control))))
@@ -125,7 +125,7 @@
       }
       treatl <- uniroot(Pfun, control = control, n = n, r = r, z.alpha = z.alpha, interval = c(1E-6,1))$root
       
-      rval <- list(n.total = n.total, n.treat = n1, n.control = n2, power = power, lambda = sort(c(treatu / control, treatl / control)))
+      rval <- list(n.total = n.total, n.treat = n1, n.control = n0, power = power, lambda = sort(c(treatu / control, treatl / control)))
       
     }
   

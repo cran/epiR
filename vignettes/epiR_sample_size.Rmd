@@ -32,6 +32,8 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ### Prevalence estimation
 
+A review of sample size calculations in (veterinary) epidemiological research is provided by @stevenson:2021.
+
 The expected seroprevalence of brucellosis in a population of cattle is thought to be in the order of 15%. How many cattle need to be sampled and tested to be 95% certain that our seroprevalence estimate is within 20% of the true population value. That is, from 15 - (0.20 $\times$ 0.15) to 15 + (0.20 $\times$ 0.15 = 0.03) i.e. from 12% to 18%. Assume the test you will use has perfect sensitivity and specificity. This formula requires the population size to be specified so we set N to a large number, 1,000,000:
 
 ```{r message = FALSE}
@@ -42,7 +44,7 @@ A total of 545 cows are required to meet the requirements of the study.
 
 ### Prospective cohort study
 
-A prospective cohort study of dry food diets and feline lower urinary tract disease (FLUTD) in mature male cats is planned. A sample of cats will be selected at random from the population of cats in a given area and owners who agree to participate in the study will be asked to complete a questionnaire at the time of enrolment. Cats enrolled into the study will be followed for at least 5 years to identify incident cases of FLUTD. The investigators would like to be 0.80 certain of being able to detect when the risk ratio of FLUTD is 1.4 for cats habitually fed a dry food diet, using a 0.05 significance test. Previous evidence suggests that the incidence risk of FLUTD in cats not on a dry food (i.e. 'other') diet is around 50 per 1000. Assuming equal numbers of cats on dry food and other diets are sampled, how many cats should be sampled to meet the requirements of the study?
+A prospective cohort study of dry food diets and feline lower urinary tract disease (FLUTD) in mature male cats is planned. A sample of cats will be selected at random from the population of cats in a given area and owners who agree to participate in the study will be asked to complete a questionnaire at the time of enrollment. Cats enrolled into the study will be followed for at least 5 years to identify incident cases of FLUTD. The investigators would like to be 0.80 certain of being able to detect when the risk ratio of FLUTD is 1.4 for cats habitually fed a dry food diet, using a 0.05 significance test. Previous evidence suggests that the incidence risk of FLUTD in cats not on a dry food (i.e. 'other') diet is around 50 per 1000. Assuming equal numbers of cats on dry food and other diets are sampled, how many cats should be sampled to meet the requirements of the study?
 
 ```{r message = FALSE}
 epi.sscohortt(irexp1 = 50/1000, irexp0 = 70/1000, FT = 5, n = NA, power = 0.80, r = 1, 
@@ -55,11 +57,11 @@ A total of 2080 subjects are required (1040 exposed and 1040 unexposed).
 A case-control study of the relationship between white pigmentation around the eyes and ocular squamous cell carcinoma in Hereford cattle is planned. A sample of cattle with newly diagnosed squamous cell carcinoma will be compared for white pigmentation around the eyes with a sample of controls. Assuming an equal number of cases and controls, how many study subjects are required to detect an odds ratio of 2.0 with 0.80 power using a two-sided 0.05 test? Previous surveys have shown that around 0.30 of Hereford cattle without squamous cell carcinoma have white pigmentation around the eyes.
 
 ```{r message = FALSE}
-epi.sscc(OR = 2.0, p0 = 0.30, n = NA, power = 0.80, 
+epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
    r = 1, rho = 0, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "unmatched", nfractional = FALSE, fleiss = FALSE)$n.total
 ```
-If the true odds for squamous cell carcinoma in exposed subjects relative to unexposed subjects is 2.0, we will need to enrol 141 cases and 141 controls (282 cattle in total) to reject the null hypothesis that the odds ratio equals one with probability (power) 0.80. The Type I error probability associated with this test of this null hypothesis is 0.05.
+If the true odds for squamous cell carcinoma in exposed subjects relative to unexposed subjects is 2.0, we will need to enroll 141 cases and 141 controls (282 cattle in total) to reject the null hypothesis that the odds ratio equals one with probability (power) 0.80. The Type I error probability associated with this test of this null hypothesis is 0.05.
 
 ### Non-inferiority trial
 
