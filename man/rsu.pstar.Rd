@@ -43,8 +43,8 @@ Martin S, Shoukri M, Thorburn M (1992). Evaluating the health status of herds ba
 rsu.pstar(N = NA, n = 280, se.p = 0.95, se.u = 0.98)
 
 ## If 280 individuals are sampled and tested and each returns a negative test
-## result the maximum prevalence (if disease is actually present in the 
-## population) is 0.011.
+## result we can be 95\% confident that the maximum prevalence (if disease is 
+## actually present in the population) is 0.011.
 
 
 ## EXAMPLE 2:

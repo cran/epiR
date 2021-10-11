@@ -128,7 +128,7 @@ When method equals \code{cross.sectional} the following measures of association 
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 
-Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio are only calculated when the total number of observations is less than 2E09.
+Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the total number of observations is less than 2E09. 
 
 If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios are not computed. 
 

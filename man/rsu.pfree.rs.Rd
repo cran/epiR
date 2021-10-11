@@ -3,7 +3,7 @@
 \alias{rsu.pfree.rs}
 
 \title{
-Calculate Probability of freedom for given population sensitivity and probability of introduction 
+Calculate the probability of freedom for given population sensitivity and probability of introduction 
 }
 
 \description{

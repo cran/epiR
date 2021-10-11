@@ -1155,8 +1155,14 @@
     chi2.strata.yates <- data.frame(test.statistic = as.numeric(.tmp$statistic), df = 1, p.value.1s = .tmp$p.value / 2, p.value.2s = .tmp$p.value)
     
     # Fisher's exact test for individual strata:
-    .tmp <- suppressWarnings(fisher.test(x = dat, alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE)) 
-    chi2.strata.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = .tmp$p.value / 2, p.value.2s = .tmp$p.value)
+    if(sum(total) < 2E09){
+      .tmp <- suppressWarnings(fisher.test(x = dat, alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE)) 
+      chi2.strata.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = .tmp$p.value / 2, p.value.2s = .tmp$p.value)      
+     }
+   
+    if(sum(total) >= 2E09){
+      chi2.strata.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = NA, p.value.2s = NA)      
+    } 
   }
   
   # Uncorrected chi-squared test statistic for individual strata:
@@ -1187,19 +1193,32 @@
       df <- c(df, 1)
       p.value.1s <- c(p.value.1s, .tmp$p.value / 2)
       p.value.2s <- c(p.value.2s, .tmp$p.value)
+      
+      chi2.strata.yates <- data.frame(test.statistic, df, p.value.1s, p.value.2s)
     }
-    chi2.strata.yates <- data.frame(test.statistic, df, p.value.1s, p.value.2s)
-
+    
     # Fisher corrected chi-square test for individual strata:
     test.statistic <- c(); df <- c(); p.value.1s <- c(); p.value.2s <- c()
     
-    for(i in 1:dim(dat)[3]){
-      .tmp <- suppressWarnings(fisher.test(x = dat[,,i], alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE))
-      test.statistic <- c(test.statistic, NA)
-      df <- c(df, NA)
-      p.value.1s <- c(p.value.1s, .tmp$p.value / 2)
-      p.value.2s <- c(p.value.2s, .tmp$p.value)
+    if(sum(total) < 2E09){
+      for(i in 1:dim(dat)[3]){
+        .tmp <- suppressWarnings(fisher.test(x = dat[,,i], alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE))
+        test.statistic <- c(test.statistic, NA)
+        df <- c(df, NA)
+        p.value.1s <- c(p.value.1s, .tmp$p.value / 2)
+        p.value.2s <- c(p.value.2s, .tmp$p.value)
+      }
     }
+
+    if(sum(total) >= 2E09){
+      for(i in 1:dim(dat)[3]){
+        test.statistic <- c(test.statistic, NA)
+        df <- c(df, NA)
+        p.value.1s <- c(p.value.1s, NA)
+        p.value.2s <- c(p.value.2s, NA)
+      }
+    }
+        
     chi2.strata.fisher <- data.frame(test.statistic, df, p.value.1s, p.value.2s)
     
     # Uncorrected chi-squared test statistic across all strata:

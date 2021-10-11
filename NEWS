@@ -1,3 +1,19 @@
+CHANGES IN epiR VERSION 2.0.38
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.sep corrected to return results consistent with rsu.pstar. 
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.37
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 returns NA for Fisher exact test when total number of observations greater than 2E09, removing numeric overflow errors. 
+    [Suggested by Stuart Reece]
+
+
 CHANGES IN epiR VERSION 2.0.36
 
 SIGNIFICANT USER-VISIBLE CHANGES

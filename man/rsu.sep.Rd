@@ -53,9 +53,34 @@ rsu.sep(N = 193000, n = 7764, pstar = 100 / 100000, se.u = 0.85)
 
 rsu.sep(N = 193000, n = 7764, pstar = 10 / 100000, se.u = 0.85)
   
-## If all of the 7764 individuals returned a negative test we can be 48\% 
+## If all of the 7764 individuals returned a negative test we can be 49\% 
 ## confident that the prevalence of COVID-19 in the province is less
 ## than 10 per 100,000.
+
+
+## EXAMPLE 3:
+## In a population of 1000 individuals 474 have been tested for disease X
+## using a test with diagnostic sensitivity of 0.95. If all individuals tested
+## have returned a negative result what is the maximum prevalence expected 
+## if disease is actually present in the population (i.e. what is the design 
+## prevalence)? 
+
+pstar <- rsu.pstar(N = 1000, n = 474, se.p = 0.95, se.u = 0.95)
+pstar
+
+## If 474 individuals are tested from a population of 1000 and each returns a 
+## negative result we can be 95\% confident that the maximum prevalence (if 
+## disease is actually present in the population) is 0.005.
+
+## Confirm these calculations using function rsu.sep. If 474 individuals out 
+## of a population of 1000 are tested using a test with diagnostic sensitivity
+## 0.95 and all return a negative result how confident can we be that the 
+## prevalence of disease in this population is 0.005 or less?
+
+rsu.sep(N = 1000, n = 474, pstar = pstar, se.u = 0.95)
+
+## The surveillance system sensitivity is 0.95.
+
 }
 
 \keyword{methods}
