@@ -28,12 +28,10 @@ epi.betabuster <- function(mode, conf, greaterthan, x, conf.level = 0.95, max.sh
    lower <- qbeta(p = (1 - conf.level) / 2, shape1 = shape1, shape2 = shape2)
    upper <- qbeta(p = 1 - ((1 - conf.level) / 2), shape1 = shape1, shape2 = shape2)      
   
-  # dens <- dbeta(x = seq(from = 0, to = 1,by = 0.001), shape1 = a, shape2 = b)
-  # beta.plot <- plot(x = seq(from = 0, to = 1, by = 0.001), y = dens, type = 'l', xlab = "Proportion", ylab = "Density")
-  rval <- list(shape1 = shape1, shape2 = shape2, mode = .mode, mean = .mean, median = .median, lower = lower, upper = upper, variance = .var)
-  rval
-  
-  # Example:
-  # fred <- epi.betabuster(mode = 0.25, conf.level = 0.95, greaterthan = FALSE, x = 0.30, max.a = 100, step = 0.001); fred$a; fred$b;
-  # plot(seq(from = 0, to = 1,by = 0.001), dbeta(x = seq(from = 0, to = 1,by = 0.001), shape1 = fred$a, shape2 = fred$b), type = 'l', xlab = "Proportion", ylab = "Density")
+   # Issue a warning if the value of shape1 == max.shape1:
+   if(shape1 == max.shape1) warning('The estimated value of shape1 equals max.shape1. Consider increasing the value of max.shape1.', call. = FALSE)
+
+   rval <- list(shape1 = shape1, shape2 = shape2, mode = .mode, mean = .mean, median = .median, lower = lower, upper = upper, variance = .var)
+   rval
+      
 }

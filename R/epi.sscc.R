@@ -1,7 +1,7 @@
-"epi.sscc" <- function(OR, p1 = NA, p0, n, power, r = 1, rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
+"epi.sscc" <- function(OR, p1 = NA, p0, n, power, r = 1, phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
  
   # p0: proportion of controls exposed.
-  # rho.cc: correlation between case and control exposures in matched pairs (defaults to 0).  
+  # phi.coef: correlation between case and control exposures in matched pairs (defaults to 0).  
   
   # https://www2.ccrb.cuhk.edu.hk/stat/epistudies/cc2.htm  
   
@@ -177,8 +177,8 @@
     
     psi <- OR
     pq <- p1 * (1 - p1) * p0 * (1 - p0)
-    p0.p <- (p1 * p0 + rho.cc * sqrt(pq)) / p1
-    p0.n <- (p0 * (1 - p1) - rho.cc * sqrt(pq)) / (1 - p1)
+    p0.p <- (p1 * p0 + phi.coef * sqrt(pq)) / p1
+    p0.n <- (p0 * (1 - p1) - phi.coef * sqrt(pq)) / (1 - p1)
     
     tm <- ee.psi <- ee.one <- nu.psi <- nu.one <- rep(NA, r)
     for(m in 1:r){
@@ -234,8 +234,8 @@
       beta <- 1 - power
       z.beta  <- qnorm(p = beta,lower.tail = FALSE)
       pq <- p1 * (1 - p1) * p0 * (1 - p0)
-      p0.p <- (p1 * p0 + rho.cc * sqrt(pq)) / p1
-      p0.n <- (p0 * (1 - p1) - rho.cc * sqrt(pq)) / (1 - p1)
+      p0.p <- (p1 * p0 + phi.coef * sqrt(pq)) / p1
+      p0.n <- (p0 * (1 - p1) - phi.coef * sqrt(pq)) / (1 - p1)
       
       tm <- ee.psi <- ee.one <- nu.psi <- nu.one <- rep(NA, r)
       for(m in 1:r){
@@ -299,8 +299,8 @@
         beta <- 1 - power
         z.beta  <- qnorm(p = beta, lower.tail = FALSE)
         pq <- p1 * (1 - p1) * p0 * (1 - p0)
-        p0.p <- (p1 * p0 + rho.cc * sqrt(pq)) / p1
-        p0.n <- (p0 * (1 - p1) - rho.cc * sqrt(pq)) / (1 - p1)
+        p0.p <- (p1 * p0 + phi.coef * sqrt(pq)) / p1
+        p0.n <- (p0 * (1 - p1) - phi.coef * sqrt(pq)) / (1 - p1)
         
         tm <- ee.psi <- ee.one <- nu.psi <- nu.one <- rep(NA, r)
         for(m in 1:r){

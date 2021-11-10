@@ -32,7 +32,7 @@ epi.sscohortc(irexp1, irexp0, pexp = NA, n = NA, power = 0.80, r = 1,
 }
 
 \details{
-The methodology in this function follows the approach described in Chapter 8 of Woodward (2005), pp. 381 - 426.
+The methodology in this function follows the approach described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 }
 
 \value{
@@ -48,7 +48,7 @@ A list containing the following:
 \references{
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
-Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 381 - 426.
+Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 295 - 329.
 }
 
 \note{
@@ -60,7 +60,7 @@ When calculating study power or minimum detectable incidence risk ratio when \co
 }
 
 \examples{
-## EXAMPLE 1 (from Woodward 2005 p. 406):
+## EXAMPLE 1 (from Woodward 2014 Example 8.13 p. 314):
 ## A cohort study of smoking and coronary heart disease (CHD) in middle aged men
 ## is planned. A sample of men will be selected at random from the population
 ## and those that agree to participate will be asked to complete a 
@@ -79,7 +79,7 @@ epi.sscohortc(irexp1 = irexp1, irexp0 = irexp0, pexp = NA, n = NA,
 ## A total of 12,130 men need to be sampled (6065 smokers and 6065 non-smokers).
 
 
-## EXAMPLE 2 (from Woodward 2005 p. 406):
+## EXAMPLE 2:
 ## Say, for example, we are only able to enrol 5000 subjects into the study
 ## described above. What is the minimum and maximum detectable risk ratio?
 

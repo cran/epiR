@@ -128,6 +128,7 @@ S3method(summary, epi.occc)
 # Import all packages listed as Imports or Depends
 import(survival)
 import(pander)
+import(sf)
 import(lubridate)
 importFrom(BiasedUrn, dFNCHypergeo)
 importFrom("graphics", "hist")

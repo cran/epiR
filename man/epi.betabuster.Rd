@@ -36,7 +36,9 @@ A list containing the following:
 }
 
 \details{
-The beta distribution has two parameters: \code{shape1} and \code{shape2}, corresponding to \code{a} and \code{b} in the original verion of BetaBuster. If \code{r} equals the number of times an event has occurred after \code{n} trials, \code{shape1} = \code{(r + 1)} and \code{shape2} = \code{(n - r + 1)}.
+The beta distribution has two parameters: \code{shape1} and \code{shape2}, corresponding to \code{a} and \code{b} in the original version of BetaBuster. If \code{r} equals the number of times an event has occurred after \code{n} trials, \code{shape1} = \code{(r + 1)} and \code{shape2} = \code{(n - r + 1)}.
+
+Take care when you're parameterising probability estimates that are at the extremes of the 0 to 1 bounds. If the returned \code{shape1} parameter is equal to the value of \code{max.shape1} (which, by default is 100) consider increasing the value of the \code{max.shape1} argument. The \code{epi.betabuster} functions issues a warning if these conditions are met.
 }
 
 \references{
@@ -83,6 +85,29 @@ ggplot(data = dat.df01, aes(x = x, y = y)) +
    scale_x_continuous(name = "Test sensitivity") +
    scale_y_continuous(name = "Density")
 }
+
+
+## EXAMPLE 2:
+## The most likely value of the specificity of a PCR for coxiellosis in 
+## small ruminants is 1.00 and we're 97.5\% certain that this estimate is 
+## greater than 0.99. What are the shape1 and shape2 parameters for a beta 
+## distribution satisfying these constraints?
+
+epi.betabuster(mode = 1.00, conf = 0.975, greaterthan = TRUE, x = 0.99, 
+   conf.level = 0.95, max.shape1 = 100, step = 0.001)
+
+## The shape1 and shape2 parameters for the beta distribution that satisfy the
+## constraints listed above are 100 and 1, respectively. epi.betabuster 
+## issues a warning that the value of shape1 equals max.shape1. We increase
+## max.shape1 to 500:
+
+epi.betabuster(mode = 1.00, conf = 0.975, greaterthan = TRUE, x = 0.99, 
+   conf.level = 0.95, max.shape1 = 500, step = 0.001)
+
+## The shape1 and shape2 parameters for the beta distribution that satisfy the
+## constraints listed above are 367.04 and 1, respectively.
+
+
 }
 \keyword{univar}% at least one, from doc/KEYWORDS
 \keyword{univar}% __ONLY ONE__ keyword per line

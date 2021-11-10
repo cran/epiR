@@ -32,7 +32,7 @@ epi.ssxsectn(pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1,
 }
 
 \details{
-The methodology in this function follows the approach described in Chapter 8 of Woodward (2005), pp. 381 - 426.
+The methodology in this function follows the approach described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 }
 
 \value{
@@ -50,7 +50,7 @@ Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. 
 
 Mittleman MA (1995). Estimation of exposure prevalence in a population at risk using data from cases and an external estimate of the relative risk. Epidemiology 6: 551 - 553. 
 
-Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 381 - 426.
+Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 295 - 329.
 }
 
 \note{

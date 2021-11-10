@@ -13,8 +13,8 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 }
 
 \usage{
-epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100, 
-   interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat, method = "cohort.count", digits = 2, conf.level = 0.95, 
+   units = 100, interpret = FALSE, outcome = "as.columns")
 
 \method{print}{epi.2by2}(x, ...)
 
@@ -24,6 +24,7 @@ epi.2by2(dat, method = "cohort.count", conf.level = 0.95, units = 100,
 \arguments{
   \item{dat}{a vector of length four, an object of class \code{table} or an object of class \code{grouped_df} from package \code{dplyr} containing the individual cell frequencies (see below).}
   \item{method}{a character string indicating the study design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}. Based on the study design specified by the user, appropriate measures of association, measures of effect in the exposed and measures of effect in the population are returned by the function.}
+  \item{digits}{scalar, number of digits to be reported for \code{print} output. Must be an integer of either 2, 3 or 4.}   
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence (risk or rate) estimates.}
   \item{interpret}{logical. If \code{TRUE} interpretive statements are appended to the \code{print}\code{epi.2by2} object.}
@@ -128,9 +129,11 @@ When method equals \code{cross.sectional} the following measures of association 
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 
-Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are extremely slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the total number of observations is less than 2E09. 
+Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the total number of observations is less than 2E09. 
 
 If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios are not computed. 
+
+Variable \code{phi.coef} equals the phi coefficient (Fleiss et al. 2003, Equation 6.2, p. 98) and is included with the output for each of the uncorrected chi-squared tests. This value can be used for argument \code{rho.cc} in \code{epi.sscc}. Refer to the documentation for \code{\link{epi.sscc}} for details.  
 
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 
@@ -231,13 +234,13 @@ The Mantel-Haenszel (Woolf) test of homogeneity of the odds ratio are based on J
 ## Outcome variable (FUS) as columns:
 dat.v01 <- c(13,2163,5,3349); dat.v01
 
-epi.2by2(dat = dat.v01, method = "cross.sectional", 
+epi.2by2(dat = dat.v01, method = "cross.sectional", digits = 2, 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## Outcome variable (FUS) as rows:
 dat.v01 <- c(13,5,2163,3349); dat.v01
 
-epi.2by2(dat =  dat.v01, method = "cross.sectional", 
+epi.2by2(dat =  dat.v01, method = "cross.sectional", digits = 2, 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.rows")
 
 ## The prevalence of FUS in DCF exposed cats was 4.01 (95\% CI 1.43 to 11.23) 
@@ -267,8 +270,8 @@ dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW"))
 print(dat.tab02)
 
 ## Compute the odds ratio and other measures of association:
-epi.2by2(dat = dat.tab02, method = "cohort.count", conf.level = 0.95, 
-   units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2, 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## The odds of having a low birth weight child for smokers was 2.02 
 ## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
@@ -281,7 +284,7 @@ print(dat.tab02)
 
 ## Compute the crude odds ratio, the Mantel-Haenszel adjusted odds ratio 
 ## and other measures of association:
-dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", 
+dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2,
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 print(dat.epi02)
 
@@ -325,7 +328,7 @@ dat.tab02 <- xtabs(Freq ~ Smoke + Low.BW + Race, data = dat.df02)
 print(dat.tab02)
 
 # dat02.tab can now be passed to epi.2by2:
-dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", 
+dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2, 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 print(dat.epi02)
 
@@ -397,8 +400,9 @@ dat.tab03 <- sapply(1:length(unique(dat.df03$grp)), function(x)
    simplify = "array")
 dat.tab03
 
-epi.2by2(dat = dat.tab03, method = "cohort.time", conf.level = 0.95, 
-   units = 1000 * 365.25, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.tab03, method = "cohort.time", digits = 2, 
+   conf.level = 0.95, units = 1000 * 365.25, interpret = FALSE, 
+   outcome = "as.columns")
 
 ## The Mantel-Haenszel adjusted incidence rate ratio was 4.49 (95\% CI 4.15 
 ## to 4.86).
@@ -425,7 +429,7 @@ dat.tab04
 pivot_wider(dat.tab04, id_cols = c(race, smoke), 
    names_from = low, values_from = n)
 
-dat.epi04 <- epi.2by2(dat = dat.tab04, method = "cohort.count", 
+dat.epi04 <- epi.2by2(dat = dat.tab04, method = "cohort.count", digits = 2, 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi04
 }
@@ -449,7 +453,7 @@ dat.epi04
 
 dat.v05 <- c(136,22050,1709,127650)
 
-dat.epi05 <- epi.2by2(dat = dat.v05, method = "cohort.time", 
+dat.epi05 <- epi.2by2(dat = dat.v05, method = "cohort.time", digits = 2,
    conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
 summary(dat.epi05)$massoc.detail$ARate.strata.wald
 
@@ -486,8 +490,8 @@ dat.df06 <- data.frame(hid, exp, out, n = c(ai,bi,ci,di))
 dat.tab06 <- xtabs(n ~ exp + out + hid, data = dat.df06)
 print(dat.tab06)
 
-epi.2by2(dat = dat.tab06, method = "cohort.count", conf.level = 0.95, 
-   units = 1000, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.tab06, method = "cohort.count", digits = 2, 
+   conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
 ## significant (chi square test statistic 5.276; df 7; p-value = 0.63). 

@@ -45,7 +45,7 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{inc.risk, clopper-pearson}    \tab Clopper and Pearson (1934)\cr
 \code{inc.risk, jeffreys}           \tab Brown et al. (2001)      \cr
 \code{prevalence, exact}            \tab Collett (1999)           \cr
-\code{prevalence, wilson}           \tab Rothman (2002)           \cr
+\code{prevalence, wilson}           \tab Wilson (1927)            \cr
 \code{prevalence, fleiss}           \tab Fleiss (1981)            \cr
 \code{prevalence, agresti}          \tab Agresti and Coull (1998) \cr
 \code{prevalence, clopper-pearson}  \tab Clopper and Pearson (1934)\cr
@@ -60,9 +60,9 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 
 The Wald interval often has inadequate coverage, particularly for small sample sizes and proportion estimates close to 0 or 1. Conversely, the Clopper-Pearson Exact method is conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods when sample sizes are small and Agresti-Coull, Wilson, or Jeffreys methods for larger sample sizes. 
 
-The Clopper-Pearson interval is an early and very common method for calculating binomial confidence intervals. The Clopper-Pearson interval is sometimes called an 'exact' method, because it is based on the cumulative probabilities of the binomial distribution (i.e. exactly the correct distribution rather than an approximation).
+The Clopper-Pearson interval is an early and very common method for calculating binomial confidence intervals. The Clopper-Pearson interval is sometimes called an 'exact' method because it is based on the cumulative probabilities of the binomial distribution (i.e. exactly the correct distribution rather than an approximation).
 
-The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be done on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
+The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be made on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
 }
 
 \references{
@@ -89,6 +89,8 @@ Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections c
 Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
 
 Ulm K (1990). A simple method to calculate the confidence interval of a standardized mortality ratio. American Journal of Epidemiology 131: 373 - 375.
+
+Wilson EB (1927) Probable inference, the law of succession, and statistical inference. Journal of the American Statistical Association 22: 209 - 212.
 }
 
 \examples{

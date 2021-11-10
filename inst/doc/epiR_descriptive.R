@@ -13,7 +13,7 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----message = FALSE----------------------------------------------------------
-library(epiR); library(ggplot2); library(scales); library(lubridate)
+library(epiR); library(ggplot2); library(scales)
 
 ncas <- 4; npop <- 200
 tmp <- as.matrix(cbind(ncas, npop))
@@ -77,10 +77,6 @@ dat.df <- data.frame(sex = c(rep("Male", n.males), rep("Female", n.females)),
 # Sort the data in order of odate:
 dat.df <- dat.df[sort.list(dat.df$odate),] 
 
-
-## -----------------------------------------------------------------------------
-dat.df$eweek <- epiweek(dat.df$odate)
-
 ## ----epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_histogram(binwidth = 7, colour = "gray", size = 0.1) +
@@ -88,12 +84,6 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-## ----epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of epidemiology week, 26 July to 13 December 2004."----
-ggplot(data = dat.df, aes(x = eweek)) +
-  geom_histogram(binwidth = 1, colour = "gray", size = 0.1) +
-  scale_x_continuous(breaks = seq(from = 30, to = 50, by = 1), name = "Epidemiology week") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases")
 
 ## ----epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of time, 26 July to 13 December 2004, conditioned by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
@@ -161,54 +151,57 @@ ggplot(dat.df, aes(x = odate, weight = ncas, fill = factor(dcontrol))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## ----message = FALSE, warning = FALSE-----------------------------------------
-library(spData); library(rgeos); library(rgdal); library(plyr); library(RColorBrewer); library(spatstat)
+library(sf); library(spData); library(rgdal); library(plyr); library(RColorBrewer); library(spatstat)
 
-ncsids.shp <- readOGR(system.file("shapes/sids.shp", package = "spData")[1])
-ncsids.shp@data <- ncsids.shp@data[,c("BIR74","SID74")]
-head(ncsids.shp@data)
-
-## ----message = FALSE----------------------------------------------------------
-ncsids.shp$id <- 1:nrow(ncsids.shp@data)
-ncsids.df <- fortify(ncsids.shp, region = "id")
-ncsids.df <- join(x = ncsids.df, y = ncsids.shp@data, by = "id")
+ncsids.sf <- st_read(dsn = system.file("shapes/sids.shp", package = "spData")[1])
+ncsids.sf <- ncsids.sf[,c("BIR74","SID74")]
+head(ncsids.sf)
 
 ## ----spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Map of North Carolina, USA showing the number of sudden infant death syndrome cases, by county for 1974."----
-ggplot(data = ncsids.df) + 
-  theme_bw() +
-  geom_polygon(aes(x = long, y = lat, group = group, fill = SID74)) + 
-  geom_path(aes(x = long, y = lat, group = group), colour = "grey", size = 0.25) +
-  scale_fill_gradientn(limits = c(0, 60), colours = brewer.pal(n = 5, "Reds"), 
-     guide = "colourbar") +
-  scale_x_continuous(name = "Longitude") +
-  scale_y_continuous(name = "Latitude") +
-  labs(fill = "SIDS 1974") +
-  coord_map()
+ggplot() + 
+   theme_bw() +
+   geom_sf(data = ncsids.sf, aes(fill = SID74), colour = "dark grey") + 
+   scale_fill_gradientn(limits = c(0,60), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
+   scale_x_continuous(name = "Longitude") +
+   scale_y_continuous(name = "Latitude") +
+   labs(fill = "SIDS 1974")
 
 ## ----message = FALSE----------------------------------------------------------
-data(epi.incin); dat.df <- epi.incin
-dat.df$status <- factor(dat.df$status, levels = c(0,1), labels = c("Neg", "Pos"))
-names(dat.df)[3] <- "Status"
+data(epi.incin); incin.df <- epi.incin
+incin.df$status <- factor(incin.df$status, levels = c(0,1), labels = c("Neg", "Pos"))
+names(incin.df)[3] <- "Status"
 
-dat.w <- convexhull.xy(x = dat.df[,1], y = dat.df[,2])
-dat.w <- dilation(dat.w, r = 1000)
-dat.ppp <- ppp(x = dat.df[,1], y = dat.df[,2], marks = factor(dat.df[,3]), window = dat.w)
+incin.sf <- st_as_sf(incin.df, coords = c("xcoord","ycoord"), remove = FALSE)
+st_crs(incin.sf) <- 27700
+
+coppull.ow <- convexhull.xy(x = incin.df[,1], y = incin.df[,2])
+coppull.ow <- dilation(coppull.ow, r = 1000)
 
 ## -----------------------------------------------------------------------------
-coords <- matrix(c(dat.w$bdry[[1]]$x, dat.w$bdry[[1]]$y), ncol = 2, byrow = FALSE)
+coords <- matrix(c(coppull.ow$bdry[[1]]$x, coppull.ow$bdry[[1]]$y), ncol = 2, byrow = FALSE)
 pol <- Polygon(coords, hole = FALSE)
 pol <- Polygons(list(pol),1)
 pol <- SpatialPolygons(list(pol))
-pol.spdf <- SpatialPolygonsDataFrame(Sr = pol, data = data.frame(id = 1), match.ID = TRUE)
-pol.map <- fortify(pol.spdf)
+coppull.spdf <- SpatialPolygonsDataFrame(Sr = pol, data = data.frame(id = 1), match.ID = TRUE)
+
+## -----------------------------------------------------------------------------
+coppull.sf <- as(coppull.spdf, "sf")
+st_crs(coppull.sf) <- 27700
+
+## -----------------------------------------------------------------------------
+mformat <- function(){
+   function(x) format(x / 1000, digits = 2)
+}
 
 ## ----spatial02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial02}Point map showing the place of residence of individuals diagnosed with laryngeal cancer (Pos) and lung cancer (Neg), Copull Lancashire, UK, 1972 to 1980."----
 ggplot() +
-  geom_point(data = dat.df, aes(x = xcoord, y = ycoord, colour = Status, shape = Status)) +
-  geom_polygon(data = pol.map, aes(x = long, y = lat, group = group), col = "black", 
-     fill = "transparent") + 
-  scale_colour_manual(values = c("blue", "red")) +
-  scale_shape_manual(values = c(1,16)) +
-  labs(x = "Easting (m)", y = "Northing (m)", fill = "Status") +
-  coord_equal() + 
-  theme_bw()
+   theme_bw() +
+   geom_sf(data = incin.sf, aes(colour = Status, shape = Status)) +
+   geom_sf(data = coppull.sf, fill = "transparent", colour = "black") +
+   coord_sf(datum = st_crs(coppull.sf)) +
+   scale_colour_manual(values = c("grey","red")) +
+   scale_shape_manual(values = c(1,16)) +
+   scale_x_continuous(name = "Easting (km)", labels = mformat()) +
+   scale_y_continuous(name = "Northing (km)", labels = mformat())
+
 

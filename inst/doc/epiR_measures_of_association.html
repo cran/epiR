@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2021-10-11" />
+<meta name="date" content="2021-11-10" />
 
 <title>Measures of Association</title>
 
@@ -610,7 +610,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Measures of Association</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2021-10-11</h4>
+<h4 class="date">2021-11-10</h4>
 
 
 
@@ -984,7 +984,7 @@ OT = (a+b)/(c+d)
 <span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
 <span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; Prevalence ratio                               4.01 (1.43, 11.23)</span></span>
 <span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; Odds ratio                                     4.03 (1.43, 11.31)</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; Attrib prevalence in exposed *                 0.45 (0.10, 0.80)</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; Attrib prevalence in the exposed *             0.45 (0.10, 0.80)</span></span>
 <span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            75.05 (30.11, 91.09)</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; Attrib prevalence in the population *          0.18 (-0.02, 0.38)</span></span>
 <span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; Attrib fraction in the population (%)         54.20 (3.61, 78.24)</span></span>
@@ -1008,7 +1008,7 @@ OT = (a+b)/(c+d)
 <span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; -------------------------------------------------------------------</span></span>
 <span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; Prevalence ratio                               4.01 (1.43, 11.23)</span></span>
 <span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; Odds ratio                                     4.03 (1.43, 11.31)</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; Attrib prevalence in exposed *                 0.45 (0.10, 0.80)</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; Attrib prevalence in the exposed *             0.45 (0.10, 0.80)</span></span>
 <span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; Attrib fraction in the exposed (%)            75.05 (30.11, 91.09)</span></span>
 <span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; Attrib prevalence in the population *          0.18 (-0.02, 0.38)</span></span>
 <span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt; Attrib fraction in the population (%)         54.20 (3.61, 78.24)</span></span>
@@ -1111,70 +1111,65 @@ OT = (a+b)/(c+d)
 <span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;   method     from         </span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   print.boxx spatstat.geom</span></span>
 <span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; v tibble  3.1.2     v dplyr   1.0.5</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; v tidyr   1.1.3     v stringr 1.4.0</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; v readr   1.4.0     v forcats 0.5.1</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; v tibble  3.1.5     v dplyr   1.0.7</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; v tidyr   1.1.4     v stringr 1.4.0</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; v readr   2.0.2     v forcats 0.5.1</span></span>
 <span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; v purrr   0.3.4</span></span>
 <span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; -- Conflicts ------------------------------------------ tidyverse_conflicts() --</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; x dplyr::arrange()         masks plyr::arrange()</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; x lubridate::as.difftime() masks base::as.difftime()</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; x readr::col_factor()      masks scales::col_factor()</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; x dplyr::collapse()        masks nlme::collapse()</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; x purrr::compact()         masks plyr::compact()</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; x dplyr::count()           masks plyr::count()</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; x lubridate::date()        masks base::date()</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; x purrr::discard()         masks scales::discard()</span></span>
-<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; x dplyr::failwith()        masks plyr::failwith()</span></span>
-<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; x dplyr::filter()          masks stats::filter()</span></span>
-<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt; x dplyr::group_rows()      masks kableExtra::group_rows()</span></span>
-<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; x dplyr::id()              masks plyr::id()</span></span>
-<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; x rgeos::intersect()       masks lubridate::intersect(), base::intersect()</span></span>
-<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; x dplyr::lag()             masks stats::lag()</span></span>
-<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; x dplyr::mutate()          masks plyr::mutate()</span></span>
-<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; x dplyr::rename()          masks plyr::rename()</span></span>
-<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; x dplyr::select()          masks MASS::select()</span></span>
-<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; x rgeos::setdiff()         masks lubridate::setdiff(), base::setdiff()</span></span>
-<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; x dplyr::summarise()       masks plyr::summarise()</span></span>
-<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; x dplyr::summarize()       masks plyr::summarize()</span></span>
-<span id="cb9-31"><a href="#cb9-31"></a><span class="co">#&gt; x rgeos::union()           masks lubridate::union(), base::union()</span></span>
-<span id="cb9-32"><a href="#cb9-32"></a></span>
-<span id="cb9-33"><a href="#cb9-33"></a>dat.df03 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df03)</span>
-<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
-<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
-<span id="cb9-36"><a href="#cb9-36"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
-<span id="cb9-37"><a href="#cb9-37"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
-<span id="cb9-38"><a href="#cb9-38"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
-<span id="cb9-39"><a href="#cb9-39"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
-<span id="cb9-40"><a href="#cb9-40"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span>
-<span id="cb9-41"><a href="#cb9-41"></a></span>
-<span id="cb9-42"><a href="#cb9-42"></a><span class="co"># Here we set the factor levels and tabulate the data in a single call using pipe operators:</span></span>
-<span id="cb9-43"><a href="#cb9-43"></a>dat.tab03 &lt;-<span class="st"> </span>dat.df03 <span class="op">%&gt;%</span></span>
-<span id="cb9-44"><a href="#cb9-44"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">low =</span> <span class="kw">factor</span>(low, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb9-45"><a href="#cb9-45"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoke =</span> <span class="kw">factor</span>(smoke, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb9-46"><a href="#cb9-46"></a><span class="st">  </span><span class="kw">group_by</span>(smoke, low) <span class="op">%&gt;%</span></span>
-<span id="cb9-47"><a href="#cb9-47"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) </span>
-<span id="cb9-48"><a href="#cb9-48"></a><span class="co">#&gt; `summarise()` has grouped output by &#39;smoke&#39;. You can override using the `.groups` argument.</span></span>
-<span id="cb9-49"><a href="#cb9-49"></a></span>
-<span id="cb9-50"><a href="#cb9-50"></a><span class="co"># View the data:</span></span>
-<span id="cb9-51"><a href="#cb9-51"></a>dat.tab03</span>
-<span id="cb9-52"><a href="#cb9-52"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
-<span id="cb9-53"><a href="#cb9-53"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
-<span id="cb9-54"><a href="#cb9-54"></a><span class="co">#&gt;   smoke low       n</span></span>
-<span id="cb9-55"><a href="#cb9-55"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt; &lt;int&gt;</span></span>
-<span id="cb9-56"><a href="#cb9-56"></a><span class="co">#&gt; 1 yes   yes      30</span></span>
-<span id="cb9-57"><a href="#cb9-57"></a><span class="co">#&gt; 2 yes   no       44</span></span>
-<span id="cb9-58"><a href="#cb9-58"></a><span class="co">#&gt; 3 no    yes      29</span></span>
-<span id="cb9-59"><a href="#cb9-59"></a><span class="co">#&gt; 4 no    no       86</span></span>
-<span id="cb9-60"><a href="#cb9-60"></a></span>
-<span id="cb9-61"><a href="#cb9-61"></a><span class="co">## View the data in conventional 2 by 2 table format:</span></span>
-<span id="cb9-62"><a href="#cb9-62"></a><span class="kw">pivot_wider</span>(dat.tab03, <span class="dt">id_cols =</span> <span class="kw">c</span>(smoke), </span>
-<span id="cb9-63"><a href="#cb9-63"></a>   <span class="dt">names_from =</span> low, <span class="dt">values_from =</span> n)</span>
-<span id="cb9-64"><a href="#cb9-64"></a><span class="co">#&gt; # A tibble: 2 x 3</span></span>
-<span id="cb9-65"><a href="#cb9-65"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
-<span id="cb9-66"><a href="#cb9-66"></a><span class="co">#&gt;   smoke   yes    no</span></span>
-<span id="cb9-67"><a href="#cb9-67"></a><span class="co">#&gt;   &lt;fct&gt; &lt;int&gt; &lt;int&gt;</span></span>
-<span id="cb9-68"><a href="#cb9-68"></a><span class="co">#&gt; 1 yes      30    44</span></span>
-<span id="cb9-69"><a href="#cb9-69"></a><span class="co">#&gt; 2 no       29    86</span></span></code></pre></div>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; x dplyr::arrange()    masks plyr::arrange()</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; x readr::col_factor() masks scales::col_factor()</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; x dplyr::collapse()   masks nlme::collapse()</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; x purrr::compact()    masks plyr::compact()</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; x dplyr::count()      masks plyr::count()</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; x purrr::discard()    masks scales::discard()</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; x dplyr::failwith()   masks plyr::failwith()</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; x dplyr::filter()     masks stats::filter()</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; x dplyr::group_rows() masks kableExtra::group_rows()</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; x dplyr::id()         masks plyr::id()</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt; x dplyr::lag()        masks stats::lag()</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; x dplyr::mutate()     masks plyr::mutate()</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; x dplyr::rename()     masks plyr::rename()</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; x dplyr::select()     masks MASS::select()</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; x dplyr::summarise()  masks plyr::summarise()</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; x dplyr::summarize()  masks plyr::summarize()</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a></span>
+<span id="cb9-28"><a href="#cb9-28"></a>dat.df03 &lt;-<span class="st"> </span>birthwt; <span class="kw">head</span>(dat.df03)</span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt;    low age lwt race smoke ptl ht ui ftv  bwt</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; 85   0  19 182    2     0   0  0  1   0 2523</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="co">#&gt; 86   0  33 155    3     0   0  0  0   3 2551</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="co">#&gt; 87   0  20 105    1     1   0  0  0   1 2557</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt; 88   0  21 108    1     1   0  0  1   2 2594</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt; 89   0  18 107    1     1   0  0  1   0 2600</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; 91   0  21 124    3     0   0  0  0   0 2622</span></span>
+<span id="cb9-36"><a href="#cb9-36"></a></span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="co"># Here we set the factor levels and tabulate the data in a single call using pipe operators:</span></span>
+<span id="cb9-38"><a href="#cb9-38"></a>dat.tab03 &lt;-<span class="st"> </span>dat.df03 <span class="op">%&gt;%</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">low =</span> <span class="kw">factor</span>(low, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb9-40"><a href="#cb9-40"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoke =</span> <span class="kw">factor</span>(smoke, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb9-41"><a href="#cb9-41"></a><span class="st">  </span><span class="kw">group_by</span>(smoke, low) <span class="op">%&gt;%</span></span>
+<span id="cb9-42"><a href="#cb9-42"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) </span>
+<span id="cb9-43"><a href="#cb9-43"></a><span class="co">#&gt; `summarise()` has grouped output by &#39;smoke&#39;. You can override using the `.groups` argument.</span></span>
+<span id="cb9-44"><a href="#cb9-44"></a></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="co"># View the data:</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a>dat.tab03</span>
+<span id="cb9-47"><a href="#cb9-47"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
+<span id="cb9-49"><a href="#cb9-49"></a><span class="co">#&gt;   smoke low       n</span></span>
+<span id="cb9-50"><a href="#cb9-50"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt; &lt;int&gt;</span></span>
+<span id="cb9-51"><a href="#cb9-51"></a><span class="co">#&gt; 1 yes   yes      30</span></span>
+<span id="cb9-52"><a href="#cb9-52"></a><span class="co">#&gt; 2 yes   no       44</span></span>
+<span id="cb9-53"><a href="#cb9-53"></a><span class="co">#&gt; 3 no    yes      29</span></span>
+<span id="cb9-54"><a href="#cb9-54"></a><span class="co">#&gt; 4 no    no       86</span></span>
+<span id="cb9-55"><a href="#cb9-55"></a></span>
+<span id="cb9-56"><a href="#cb9-56"></a><span class="co">## View the data in conventional 2 by 2 table format:</span></span>
+<span id="cb9-57"><a href="#cb9-57"></a><span class="kw">pivot_wider</span>(dat.tab03, <span class="dt">id_cols =</span> <span class="kw">c</span>(smoke), </span>
+<span id="cb9-58"><a href="#cb9-58"></a>   <span class="dt">names_from =</span> low, <span class="dt">values_from =</span> n)</span>
+<span id="cb9-59"><a href="#cb9-59"></a><span class="co">#&gt; # A tibble: 2 x 3</span></span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="co">#&gt; # Groups:   smoke [2]</span></span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="co">#&gt;   smoke   yes    no</span></span>
+<span id="cb9-62"><a href="#cb9-62"></a><span class="co">#&gt;   &lt;fct&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb9-63"><a href="#cb9-63"></a><span class="co">#&gt; 1 yes      30    44</span></span>
+<span id="cb9-64"><a href="#cb9-64"></a><span class="co">#&gt; 2 no       29    86</span></span></code></pre></div>
 <p>As before, compute the odds ratio for smoking and delivery of a low birth weight baby:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>dat.epi03 &lt;-<span class="st"> </span><span class="kw">epi.2by2</span>(<span class="dt">dat =</span> dat.tab03, <span class="dt">method =</span> <span class="st">&quot;cohort.count&quot;</span>, </span>
 <span id="cb10-2"><a href="#cb10-2"></a>   <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">units =</span> <span class="dv">100</span>, <span class="dt">interpret =</span> <span class="ot">FALSE</span>, <span class="dt">outcome =</span> <span class="st">&quot;as.columns&quot;</span>)</span>

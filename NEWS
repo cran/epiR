@@ -1,3 +1,25 @@
+CHANGES IN epiR VERSION 2.0.39
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 and epi.tests updated to include option to change the precision of measures of association using the print option.
+    [Suggested by Shikha Chugh]
+    o Function epi.tests updated to include option to calculate exact, Wilson, Agresti, Clopper-Pearson and Jeffreys confidence limits for true prevalence, apparent prevalence, diagnostic sensitivity, diagnostic specificity, positive predictive value and negative predictive value.
+    [Suggested by Shikha Chugh]
+    o Function epi.2by2 now reports variable phi.coef (phi coefficient) for each of the uncorrected chi-square tests. This value can be used as an input for function epi.sscc.
+    [Suggested by Mark Stevenson]
+    o Argument rho.cc in function epi.sscc changed to phi.coef so consistent with the literature and function epi.2by2.
+    [Suggested by Mark Stevenson]
+    o epi.sscompb methodology revised to return results consistent with Woodward (2014).
+    [Spotted by Ajith Ramayyan]
+    o Help for functions epi.sscompb, epi.sscompc, epi.ssxsectn and epi.sscohortc updated to cite the 2014 edition of Woodward (Epidemiology Study Design and Analysis). 
+    [Suggested by Ajith Ramayyan]
+    o epi.tests now returns the proportion of true outcome negative subjects that test positive (false T+ proportion for D-), the proportion of true outcome positive subjects that test negative (false T- proportion for D+), the proportion of test positive subjects that are outcome negative (false T+ proportion for T+) and the proportion of test negative subjects that are outcome positive (false T- proportion for T-). 
+    [Suggested by Ahmad Rabiee]
+    o epi.betabuster returns a warning if the shape1 parameter for the beta distribution equals max.shape1. 
+    [Suggested by Alex Hou]
+    
+
 CHANGES IN epiR VERSION 2.0.38
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -28,7 +50,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o New function epi.ssdxsesp to compute a sample size to estimate the sensitivity or specificity of a diagnostic test.
     [Suggested by Anou Dreyfus]
-    o Additional example provided in the help for epi.2by2 showing you how to construct an array suitable for a stratified contingency table analysis using count data.
+    o Additional example provided in the epi.2by2 documentation showing you how to construct an array suitable for a stratified contingency table analysis using count data.
     [Suggested by Cieran Harries]
     o Error in power calculation for epi.ssninfb and epi.ssninfc corrected.
     [Spotted by Aniko Szabo]
@@ -52,7 +74,7 @@ CHANGES IN epiR VERSION 2.0.32
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Sample size functions now allow user to express error in relative or absolute terms.
+    o All sample size functions now allow user to express error in either relative or absolute terms.
     [Suggested by Mark Stevenson]
 
 

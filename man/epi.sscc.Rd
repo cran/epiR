@@ -12,7 +12,7 @@ Calculates the sample size, power or minimum detectable odds ratio for an unmatc
 
 \usage{
 epi.sscc(OR, p1 = NA, p0, n, power, r = 1, 
-   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 }
 
@@ -23,7 +23,7 @@ epi.sscc(OR, p1 = NA, p0, n, power, r = 1,
   \item{n}{scalar, the total number of subjects in the study (i.e. the number of cases plus the number of controls).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the control group divided by the number in the case group.}
-  \item{rho.cc}{scalar, the correlation between case and control exposures for matched pairs. Ignored when \code{method = "unmatched"}.}
+  \item{phi.coef}{scalar, the correlation between case and control exposures for matched pairs. Ignored when \code{method = "unmatched"}.}
   \item{design}{scalar, the design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the odds of exposure in cases is greater than or less than the odds of exposure in controls. Use a one-sided test to evaluate whether or not the odds of exposure in cases is greater than the odds of exposure in controls.}
   \item{nfractional}{logical, return fractional sample size.}
@@ -33,9 +33,15 @@ epi.sscc(OR, p1 = NA, p0, n, power, r = 1,
 }
 
 \details{
-This function implements the methodology described by Dupont (1988). A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2005), pp. 381 to 426.
+This function implements the methodology described by Dupont (1988). A detailed description of sample size calculations for case-control studies (with numerous worked examples, some of them reproduced below) is provided by Woodward (2014), pp. 295 - 329.
 
 A value for \code{p1} is only required if Fleiss correction is used. For this reason the default for \code{p1} is set to \code{NA}.
+
+The correlation between case and control exposures for matched pairs (\code{phi.coef}) can be estimated from previous studies using Equation (6.2) from Fleiss et al. 2003, p. 98. In the function \code{\link{epi.2by2}} the variable \code{phi.coef} is included with the output for each of the uncorrected chi-squared tests. This value can be used for argument \code{phi.coef} in \code{epi.sscc}. 
+
+The methodology described in Woodward (2014), pp. 295 - 329 uses the proportion of discordant pairs to to determine the sample size for a matched case-control study. Note that the proportion of discordant pairs is likely to vary considerably between different studies since it depends not only on the correlation between case and control exposures but also on the exposure prevalence and the odds ratio. In contrast, estimates of \code{phi.coef} should be more stable between similar studies.
+
+When no estimate of \code{phi.coef} is available, investigators may prefer to perform their power calculations under the assumption that \code{phi.coef} equals, say, 0.2 rather than make the questionable independence assumption required by most other methods.
 }
 
 \value{
@@ -51,11 +57,11 @@ A list containing the following:
 \references{
 Dupont WD (1988) Power calculations for matched case-control studies. Biometrics 44: 1157 - 1168.
 
-Fleiss JL (1981). Statistical Methods for Rates and Proportions. Wiley, New York.
+Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions. John Wiley and Sons, New York. 
 
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
-Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 381 - 426.
+Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 295 - 329.
 }
 
 \note{
@@ -65,7 +71,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 }
 
 \examples{
-## EXAMPLE 1 (from Woodward 2005 p. 412):
+## EXAMPLE 1 (from Woodward 2014 Example 8.17 p. 318):
 ## A case-control study of the relationship between smoking and CHD is 
 ## planned. A sample of men with newly diagnosed CHD will be compared for
 ## smoking status with a sample of controls. Assuming an equal number of 
@@ -74,13 +80,13 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## surveys have shown that around 0.30 of males without CHD are smokers.
 
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1, 
-   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
 ## A total of 376 men need to be sampled: 188 cases and 188 controls.
 
 
-## EXAMPLE 2 (from Woodward 2005 p. 414):
+## EXAMPLE 2 (from Woodward 2014 Example 8.18 p. 320):
 ## Suppose we wish to determine the power to detect an odds ratio of 2.0 
 ## using a two-sided 0.05 test when 188 cases and 940 controls
 ## are available (that is, the ratio of controls to cases is 5:1). Assume 
@@ -88,7 +94,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1,
 
 n <- 188 + 940
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5, 
-   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = TRUE)
 
 ## The power of this study, with the given sample size allocation is 0.99.
@@ -110,7 +116,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5,
 ## this study.
 
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1, 
-   rho.cc = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = TRUE)
 
 ## If the true odds ratio for Campylobacter in exposed subjects relative to 
@@ -129,7 +135,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1,
 ## to be enrolled in the study?
 
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3, 
-   rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
 ## A total of 620 subjects need to be enrolled in the study: 155 cases and 
@@ -138,11 +144,11 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3,
 ## An alternative is to conduct a matched case-control study rather than the 
 ## unmatched design outlined above. One case will be matched to one control 
 ## and the correlation between case and control exposures for matched pairs 
-## (rho) is estimated to be 0.01 (low). Using the same assumptions as those
-## described above, how many study subjects will be required?
+## (phi.coef) is estimated to be 0.01 (low). Using the same assumptions as 
+## those described above, how many study subjects will be required?
 
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 1, 
-   rho.cc = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 456 subjects need to be enrolled in the study: 228 cases and 
@@ -160,7 +166,7 @@ dat.df05$n.total <- NA
 for(i in 1:nrow(dat.df05)){
    dat.df05$n.total[i] <- epi.sscc(OR = dat.df05$OR[i], p1 = NA, 
       p0 = dat.df05$p0[i], n = NA, power = 0.80, r = 1, 
-      rho.cc = 0, design = 1, sided.test = 2, nfractional = FALSE, 
+      phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
       conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
 }  
 
@@ -189,17 +195,17 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
 }
 
 
-## EXAMPLE 6:
-## From page 1164 of Dupont (1988). A matched case control study is to be 
-## carried out to quantify the association between exposure A and an outcome B.
-## Assume the prevalence of exposure in controls is 0.60 and the 
-## correlation between case and control exposures for matched pairs (rho) is 
-## 0.20 (moderate). Assuming an equal number of cases and controls, how many 
-## subjects need to be enrolled into the study to detect an odds ratio of 3.0 
-## with 0.80 power using a two-sided 0.05 test? 
+## EXAMPLE 6 (from Dupont 1988, p. 1164):
+## A matched case control study is to be carried out to quantify the 
+## association between exposure A and an outcome B. Assume the prevalence 
+## of exposure in controls is 0.60 and the correlation between case and 
+## control exposures for matched pairs (phi.coef) is 0.20 (moderate). Assuming 
+## an equal number of cases and controls, how many subjects need to be 
+## enrolled into the study to detect an odds ratio of 3.0 with 0.80 power 
+## using a two-sided 0.05 test? 
 
 epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1, 
-   rho.cc = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 162 subjects need to be enrolled in the study: 81 cases and 
@@ -209,7 +215,7 @@ epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1,
 ## controls per case?
 
 epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 3, 
-   rho.cc = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
+   phi.coef = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 
 ## A total of 204 subjects need to be enrolled in the study: 51 cases and 

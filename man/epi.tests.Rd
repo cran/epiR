@@ -11,7 +11,7 @@ Computes true and apparent prevalence, sensitivity, specificity, positive and ne
 }
 
 \usage{
-epi.tests(dat, conf.level = 0.95)
+epi.tests(dat, method = "exact", digits = 2, conf.level = 0.95)
 
 \method{print}{epi.tests}(x, ...)
 
@@ -19,14 +19,24 @@ epi.tests(dat, conf.level = 0.95)
 }
 
 \arguments{
-  \item{dat}{a vector of length four, an object of class \code{table} or an object of class \code{grouped_df} from package \code{dplyr} containing the individual cell frequencies (see below).}
+  \item{dat}{a vector of length four, an object of class \code{table} or an object of class \code{grouped_df} from package \code{dplyr} containing the individual cell frequencies (see below).}  
+  \item{method}{a character string indicating the method to use. Options are \code{method = "exact"}, \code{method = "wilson"}, \code{method = "agresti"}, \code{method = "clopper-pearson"} and \code{method = "jeffreys"}.} 
+  \item{digits}{scalar, number of digits to be reported for \code{print} output. Must be an integer of either 2, 3 or 4.}   
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
   \item{x, object}{an object of class \code{epi.tests}.}
   \item{\dots}{Ignored.}
 }
 
 \details{
-Exact binomial confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Collett 1999 for details).
+When \code{method = "exact"} exact binomial confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Collett 1999 for details).
+
+When \code{method = "wilson"} Wilson's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Rothman 2002 for details).
+
+When \code{method = "agresti"} Agresti's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Agresti and Coull 1998 for details).
+
+When \code{method = "clopper-pearson"} Clopper-Pearson's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Clopper and Pearson 1934 for details).
+
+When \code{method = "jeffreys"} Jeffrey's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Brown et al., 2001 for details).
 
 Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
 
@@ -39,7 +49,7 @@ An object of class \code{epi.tests} containing the following:
   \item{tp}{true prevalence.}
   \item{se}{test sensitivity.}
   \item{sp}{test specificity.}
-  \item{diag.ac}{diagnostic accuracy.}
+  \item{diag.ac}{diagnostic accuracy (the correctly classified proportion).}
   \item{diag.or}{diagnostic odds ratio.}
   \item{nndx}{number needed to diagnose.}
   \item{youden}{Youden's index.}
@@ -49,22 +59,35 @@ An object of class \code{epi.tests} containing the following:
   \item{lr.neg}{likelihood ratio of a negative test.}
   \item{p.rout}{the proportion of subjects with the outcome ruled out.}
   \item{p.rin}{the proportion of subjects with the outcome ruled in.}
-  \item{p.fpos}{of all the subjects that are truly outcome negative, the proportion that are incorrectly classified as positive (the proportion of false positives).} 
-  \item{p.fneg}{of all the subjects that are truly outcome positive, the proportion that are incorrectly classified as negative (the proportion of false negative).}   
+  \item{p.tpdn}{the proportion of true outcome negative subjects that test positive (false T+ proportion for D-).} 
+  \item{p.tndp}{the proportion of true outcome positive subjects that test negative (false T- proportion for D+).}  
+  \item{p.dntp}{the proportion of test positive subjects that are outcome negative (false T+ proportion for T+).}
+  \item{p.dptn}{the proportion of test negative subjects that are outcome positive (false T- proportion for T-).}      
 }
 
 \references{
-Altman DG, Machin D, Bryant TN, and Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29.
+Agresti A, Coull B (1998). Approximate is better than 'exact' for interval estimation of binomial proportions. The American Statistician 52. DOI: 10.2307/2685469.
+
+Altman DG, Machin D, Bryant TN, Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 28 - 29.
 
 Bangdiwala SI, Haedo AS, Natal ML (2008). The agreement chart as an alternative to the receiver-operating characteristic curve for diagnostic tests. Journal of Clinical Epidemiology 61: 866 - 874.
 
+Brown L, Cai T, Dasgupta A (2001). Interval estimation for a binomial proportion. Statistical Science 16: 101 - 133.
+
+Clopper C, Pearson E (1934) The use of confidence or fiducial limits illustrated in the case of the binomial. Biometrika 26: 404 - 413. DOI: 10.1093/biomet/26.4.404.
+
 Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, pp. 24.
+
+Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
 
 Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interpretation of studies of diagnostic tests. Internal Medicine Journal 38: 120 - 129.
 
 Simel D, Samsa G, Matchar D (1991). Likelihood ratios with confidence: Sample size estimation for diagnostic test studies. Journal of Clinical Epidemiology 44: 763 - 770.
 
 Greg Snow (2008) Need help in calculating confidence intervals for sensitivity, specificity, PPV & NPV. R-sig-Epi Digest 23(1): 3 March 2008.
+
+Wilson EB (1927) Probable inference, the law of succession, and statistical inference. Journal of the American Statistical Association 22: 209 - 212.
+
 }
 
 \author{
@@ -92,7 +115,8 @@ Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
 ## a positive test? What is the number needed to diagnose?
 
 dat.v01 <- c(670,202,74,640)
-rval.tes01 <- epi.tests(dat.v01, conf.level = 0.95)
+rval.tes01 <- epi.tests(dat.v01, method = "exact", digits = 2, 
+   conf.level = 0.95)
 print(rval.tes01)
 
 ## Test sensitivity is 0.90 (95\% CI 0.88 to 0.92). Test specificity is 
@@ -130,8 +154,9 @@ tmp.df02
 ## View the data in conventional 2 by 2 table format:
 pivot_wider(tmp.df02, id_cols = c(tes), names_from = dis, values_from = n)
 
-rval.tes02 <- epi.tests(tmp.df02, conf.level = 0.95)
-print(rval.tes02)
+rval.tes02 <- epi.tests(tmp.df02, method = "exact", digits = 2, 
+   conf.level = 0.95)
+summary(rval.tes02)
 }
 
 ## Test sensitivity is 0.90 (95\% CI 0.88 to 0.92). Test specificity is 
@@ -159,25 +184,30 @@ dat.df03$test <- ifelse(dat.df03$bm >= 0.6, 1, 0)
 
 ## Generate a two-by-two table:
 dat.tab03 <- table(dat.df03$test, dat.df03$out)[2:1,2:1]
-rval.tes03 <- epi.tests(dat.tab03, conf.level = 0.95)
+rval.tes03 <- epi.tests(dat.tab03, method = "exact", digits = 2, 
+   conf.level = 0.95)
 print(rval.tes03)
 
-# What proportion of subjects are ruled out as being at high risk of 
+## What proportion of subjects are ruled out as being at high risk of 
 ## myocardial infarction?
 rval.tes03$detail$p.rout
-# Answer: 0.61 (95\% CI 0.54 to 0.68).
+## Answer: 0.61 (95\% CI 0.54 to 0.68).
 
-# What proportion of subjects are ruled in as being at high risk of 
+## What proportion of subjects are ruled in as being at high risk of 
 ## myocardial infarction?
 rval.tes03$detail$p.rin
 # Answer: 0.38 (95\% CI 0.32 to 0.45).
 
-# What is the proportion of false positive results?
-rval.tes03$detail$p.fpos
+## What is the proportion of false positive results? That is, what is the 
+## proportion of test positive individuals among those that are disease 
+## negative, p.tpdn?
+rval.tes03$detail$p.tpdn
 # Answer: 0.37 (95\% CI 0.29 to 0.45).
 
-# What is the proportion of false negative results?
-rval.tes03$detail$p.fneg
+## What is the proportion of false negative results? That is, what is the 
+## proportion of test negative individuals among those that are disease 
+## positive, p.tndp?
+rval.tes03$detail$p.tndp
 # Answer: 0.58 (95\% CI 0.44 to 0.70).
 }
 

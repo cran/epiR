@@ -172,111 +172,39 @@
       stop("Error: dat must be a two-column matrix")
     
     if(method == "exact"){
-      # Exact binomial confidence limits from function binom::binom.confint. Changed 190716.
-      alpha <- 1 - conf.level
-      alpha2 <- 0.5 * alpha
-      x <- dat[,1]
-      n <- dat[,2]
-      
-      p <- x/n
-      x1 <- x == 0
-      x2 <- x == n
-      lb <- ub <- x
-      lb[x1] <- 1
-      ub[x2] <- n[x2] - 1
-      low <- 1 - qbeta(1 - alpha2, n + 1 - x, lb)
-      upp <- 1 - qbeta(alpha2, n - ub, x + 1)
-      
-      if (any(x1)) 
-        low[x1] <- rep(0, sum(x1))
-      
-      if (any(x2)) 
-        upp[x2] <- rep(1, sum(x2))
-      
-      rval <- data.frame(est = p, lower = low, upper = upp)
+      trval <- zexact(dat, conf.level)
+      rval <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
       rval 
     }
     
     if(method == "wilson"){
-      # Wilson's method (see Rothman, Epidemiology An Introduction, page 132): 
-      a <- dat[,1]
-      n <- dat[,2]
-      p <- a / n
-      
-      a. <- n / (n + z^2)
-      b. <- a/n
-      c. <- z^2/(2 * n)
-      d. <- (a * (n - a)) / n^3
-      e. <- z^2 / (4 * n^2)
-      var.wil <- sqrt(d. + e.)
-      
-      # Design effect equals [var.obs] / [var.srs]. 
-      # var.wil has been computed assuming simple random sampling so if an argument for design effect is provided we need to adjust se.wil accordingly:
-      se.wil <- sqrt(design * var.wil)
-      low <- a. * (b. + c. - (z * se.wil))
-      upp <- a. * (b. + c. + (z * se.wil))
-      
-      rval <- data.frame(est = p, se = se.wil, lower = low, upper = upp)
+      trval <- zwilson(dat, conf.level)
+      rval <- data.frame(est = trval$est, se = trval$se, lower = trval$lower, upper = trval$upper)
+      rval 
     }
     
     if(method == "fleiss"){
-      # Sampling for Epidemiologists, Kevin M Sullivan
-      a <- dat[,1]
-      n <- dat[,2]
-      p <- a / n
-      q <- (1 - p)
-      # 'n' = the total number of subjects sampled. 'N'equals the size of the total population.
-      var.fl <- ((p * q) / (n - 1)) * ((N - n) / N)
-      
-      # Design effect equals [var.obs] / [var.srs]. 
-      # var.fl has been computed assuming simple random sampling so if an argument for design effect is provided we need to adjust se.wil accordingly:
-      se.fl <- sqrt(design * var.fl)
-      df <- n - 1
-      t <- abs(qt(p = N., df = df))
-      low <- p - (t * se.fl)
-      upp <- p + (t * se.fl)
-      
-      rval <- data.frame(est = p, se = se.fl, lower = low, upper = upp)
+      trval <- zfleiss(dat, N = N, design = design, conf.level)
+      rval <- data.frame(est = trval$est, se = trval$se, lower = trval$lower, upper = trval$upper)
+      rval
       }
   
     if(method == "agresti"){
-      # From RSurveillance function binom.agresti:
-      a <- dat[,1]
-      n <- dat[,2]
-
-      z.conf<- stats::qnorm(1 - (1 - conf.level) / tails, 0, 1)
-      a.ac<- a + z.conf^2/2
-      n.ac<- n + z.conf^2
-      p.ac <- a.ac / n.ac
-      q.ac <- 1 - p.ac
-      low <- p.ac - z.conf * (p.ac * q.ac)^0.5 * n.ac^-0.5
-      upp <- p.ac + z.conf * (p.ac * q.ac)^0.5 * n.ac^-0.5
-
-      rval <- data.frame(est = p.ac, lower = low, upper = upp)
+      trval <- zagresti(dat, conf.level)
+      rval <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+      rval
     }
     
     if(method == "clopper-pearson"){
-      # From RSurveillance function binom.cp:
-      a <- dat[,1]
-      n <- dat[,2]
-      p <- a / n
-
-      tails <- 2
-      low <- stats::qbeta((1 - conf.level) / tails, a, n - a + 1)
-      upp <- stats::qbeta(1 - (1 - conf.level) / tails, a + 1, n - a)
-      rval <- data.frame(est = p, lower = low, upper = upp)
+      trval <- zclopperpearson(dat, conf.level)
+      rval <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+      rval
     }
     
     if(method == "jeffreys"){
-      # From RSurveillance function binom.jeffreys:
-      a <- dat[,1]
-      n <- dat[,2]
-      p <- a / n
-
-      tails <- 2      
-      low <- stats::qbeta((1 - conf.level) / tails, a + 0.5, n - a + 0.5)
-      upp <- stats::qbeta(1 - (1 - conf.level) / tails, a + 0.5, n - a + 0.5)
-      rval <- data.frame(est = p, lower = low, upper = upp)
+      trval <- zjeffreys(dat, conf.level)
+      rval <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+      rval
     }
   }
      

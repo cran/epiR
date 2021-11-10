@@ -28,7 +28,7 @@ epi.sscompb(treat, control, n, power, r = 1, design = 1,
 }
 
 \details{
-The methodology in this function follows the approach described in Chapter 8 of Woodward (2005).
+The methodology in this function follows the approach described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 
 With this function it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. Users are referred to the \code{\link{epi.sscohortc}} function which relates to the two-sample problem where neither proportion is known (or assumed, at least). 
 
@@ -49,7 +49,7 @@ Fleiss JL (1981). Statistical Methods for Rates and Proportions. Wiley, New York
 
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
-Woodward M (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 381 - 426.
+Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 295 - 329.
 }
 
 \note{
@@ -61,7 +61,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 }
 
 \examples{
-## EXAMPLE 1 (from Woodward 2005 pp. 403 - 404):
+## EXAMPLE 1 (from Woodward 2014 Example 8.12 p. 312):
 ## A government initiative has decided to reduce the prevalence of male  
 ## smoking to, at most, 30\%. A sample survey is planned to test, at the 
 ## 0.05 level, the hypothesis that the percentage of smokers in the male 
@@ -72,21 +72,21 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
    
-## A total of 18,316 men should be sampled: 9158 in the treatment group and
-## 9158 in the control group. The risk ratio (that is, the prevalence of 
+## A total of 4568 men should be sampled: 2284 in the treatment group and
+## 2284 in the control group. The risk ratio (that is, the prevalence of 
 ## smoking in males post government initiative divided by the prevalence of 
 ## smoking in males pre inititative is 0.94.
 
 
 ## EXAMPLE 2:
-## If we sample only 10,000 men (5000 in the treatment group and 5000 in the 
+## If we sample only 2000 men (1000 in the treatment group and 1000 in the 
 ## control group) what is the maximum detectable risk ratio that is less 
 ## than 1?
 
-epi.sscompb(treat = NA, control = 0.32, n = 10000, power = 0.90, 
+epi.sscompb(treat = NA, control = 0.32, n = 1000, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
 
-## If we sample only 10,000 men the maximum detectable risk ratio will be 0.91.
+## If we sample only 10,000 men the maximum detectable risk ratio will be 0.88.
 
 }
 

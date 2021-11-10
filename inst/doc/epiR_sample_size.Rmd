@@ -58,7 +58,7 @@ A case-control study of the relationship between white pigmentation around the e
 
 ```{r message = FALSE}
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
-   r = 1, rho = 0, design = 1, sided.test = 2, conf.level = 0.95, 
+   r = 1, phi.coef = 0, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "unmatched", nfractional = FALSE, fleiss = FALSE)$n.total
 ```
 If the true odds for squamous cell carcinoma in exposed subjects relative to unexposed subjects is 2.0, we will need to enroll 141 cases and 141 controls (282 cattle in total) to reject the null hypothesis that the odds ratio equals one with probability (power) 0.80. The Type I error probability associated with this test of this null hypothesis is 0.05.

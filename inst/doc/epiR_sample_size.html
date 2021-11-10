@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2021-10-11" />
+<meta name="date" content="2021-11-10" />
 
 <title>Sample Size Calculations Using epiR</title>
 
@@ -386,7 +386,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Sample Size Calculations Using epiR</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2021-10-11</h4>
+<h4 class="date">2021-11-10</h4>
 
 
 
@@ -411,7 +411,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Case-control study</h3>
 <p>A case-control study of the relationship between white pigmentation around the eyes and ocular squamous cell carcinoma in Hereford cattle is planned. A sample of cattle with newly diagnosed squamous cell carcinoma will be compared for white pigmentation around the eyes with a sample of controls. Assuming an equal number of cases and controls, how many study subjects are required to detect an odds ratio of 2.0 with 0.80 power using a two-sided 0.05 test? Previous surveys have shown that around 0.30 of Hereford cattle without squamous cell carcinoma have white pigmentation around the eyes.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">epi.sscc</span>(<span class="dt">OR =</span> <span class="fl">2.0</span>, <span class="dt">p1 =</span> <span class="ot">NA</span>, <span class="dt">p0 =</span> <span class="fl">0.30</span>, <span class="dt">n =</span> <span class="ot">NA</span>, <span class="dt">power =</span> <span class="fl">0.80</span>, </span>
-<span id="cb3-2"><a href="#cb3-2"></a>   <span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">rho =</span> <span class="dv">0</span>, <span class="dt">design =</span> <span class="dv">1</span>, <span class="dt">sided.test =</span> <span class="dv">2</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, </span>
+<span id="cb3-2"><a href="#cb3-2"></a>   <span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">phi.coef =</span> <span class="dv">0</span>, <span class="dt">design =</span> <span class="dv">1</span>, <span class="dt">sided.test =</span> <span class="dv">2</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, </span>
 <span id="cb3-3"><a href="#cb3-3"></a>   <span class="dt">method =</span> <span class="st">&quot;unmatched&quot;</span>, <span class="dt">nfractional =</span> <span class="ot">FALSE</span>, <span class="dt">fleiss =</span> <span class="ot">FALSE</span>)<span class="op">$</span>n.total</span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; [1] 282</span></span></code></pre></div>
 <p>If the true odds for squamous cell carcinoma in exposed subjects relative to unexposed subjects is 2.0, we will need to enroll 141 cases and 141 controls (282 cattle in total) to reject the null hypothesis that the odds ratio equals one with probability (power) 0.80. The Type I error probability associated with this test of this null hypothesis is 0.05.</p>
