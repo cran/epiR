@@ -39,7 +39,7 @@ Fleiss JL (1981). Statistical Methods for Rates and Proportions, Wiley, New York
 
 Frome E, Checkoway H (1985). Use of Poisson regression models in estimating incidence rates and ratios. American Journal of Epidemiology 121: 309 - 323.
 
-Greenland S, Rothman KJ. Introduction to stratified analysis. In: Rothman KJ, Greenland S (1998). Modern Epidemiology. Lippincott Williams, & Wilkins, Philadelphia, pp. 260 - 265.
+Haneuse S, Rothman KJ. Stratification and Standardization. In: Lash TL, VanderWeele TJ, Haneuse S, Rothman KJ (2021). Modern Epidemiology. Lippincott - Raven Philadelphia, USA, pp. 415 - 445.
 
 Thrusfield M (2007). Veterinary Epidemiology, Blackwell Publishing, London, UK, pp. 63 - 64.
 

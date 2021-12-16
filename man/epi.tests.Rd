@@ -30,7 +30,7 @@ epi.tests(dat, method = "exact", digits = 2, conf.level = 0.95)
 \details{
 When \code{method = "exact"} exact binomial confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Collett 1999 for details).
 
-When \code{method = "wilson"} Wilson's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Rothman 2002 for details).
+When \code{method = "wilson"} Wilson's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Rothman 2012 for details).
 
 When \code{method = "agresti"} Agresti's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Agresti and Coull 1998 for details).
 
@@ -78,7 +78,7 @@ Clopper C, Pearson E (1934) The use of confidence or fiducial limits illustrated
 
 Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, pp. 24.
 
-Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
+Rothman KJ (2012). Epidemiology An Introduction. Oxford University Press, London, pp. 164 - 175.
 
 Scott IA, Greenburg PB, Poole PJ (2008). Cautionary tales in the clinical interpretation of studies of diagnostic tests. Internal Medicine Journal 38: 120 - 129.
 

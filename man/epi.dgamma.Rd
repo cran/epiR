@@ -23,7 +23,7 @@ Returns the precision (the inverse variance) of the heterogeneity term.
 }
 
 \references{
-Best, NG. WinBUGS 1.3.1 Short Course, Brisbane, November 2000.
+Best, NG. WinBUGS 1.3.1 Short Course, Brisbane Australia, November 2000.
 }
 
 \examples{

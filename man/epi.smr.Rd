@@ -57,11 +57,11 @@ Only 95\% confidence limits are computed using Vandenbroucke's method. If \code{
 \references{
 Armitage P, Berry G, Mathews J (2002). Statistical Methods in Medical Research. Blackwell Publications London.
 
+Lash TL, VanderWeele TJ, Haneuse S, Rothman KJ (2021). Modern Epidemiology. Lippincott - Raven Philadelphia, USA, pp. 99.
+
 Miettinen OS (1974). Comment. Journal of the American Statistical Association 69: 380 - 382.
 
 Rothman K, Boice J (1979). Epidemiologic Analysis with a Programmable Calculator. U.S. Department of Health, Education, and Welfare, Public Health Service, National Institutes of Health, Washington, USA.
-
-Rothman K, Greenland S, Lash T (2008). Modern Epidemiology. Lippincott, Williams and Wilkins Philadelphia, USA.
 
 Snedecor G, Cochran W (1989). Statistical Methods. Iowa University Press Ames, Iowa.
 

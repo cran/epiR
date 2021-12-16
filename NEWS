@@ -1,3 +1,15 @@
+CHANGES IN epiR VERSION 2.0.40
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Error in documentation for epi.interaction corrected.
+    [Spotted by Colleen Reynolds]
+    o Function epi.kappa updated to include option to calculate Cohen's kappa.
+    [Suggested by Victoria Mussemann]
+    o Descriptive epidemiology vignette updated to include code to add the cumulative number of cases of disease as a function of time to an epidemic curve.
+    [Suggested by Ahmad Rabiee]
+
+
 CHANGES IN epiR VERSION 2.0.39
 
 SIGNIFICANT USER-VISIBLE CHANGES

@@ -15,7 +15,7 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 
 \arguments{
   \item{dat}{an object of class matrix comprised of \code{n} rows and \code{n} columns listing the individual cell frequencies.}
-  \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{watson} or \code{altman}.}
+  \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{watson}, \code{altman} or \code{cohen}.}
   \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{two.sided}, \code{greater} or \code{less}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
@@ -23,9 +23,11 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 \details{
 Kappa is a measure of agreement beyond the level of agreement expected by chance alone. The observed agreement is the proportion of samples for which both methods (or observers) agree.
 
-The bias and prevalence adjusted kappa (Byrt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments. The bias and prevalence adjusted kappa are only returned if the number of rows and columns of argument \code{dat} equal 2.
+The bias and prevalence adjusted kappa (Byrt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments. Bias and prevalence adjusted kappa are only returned if the number of rows and columns of argument \code{dat} equal 2.
 
-Common interpretations for the kappa statistic are as follows: < 0.2 slight agreement, 0.2 - 0.4 fair agreement, 0.4 - 0.6 moderate agreement, 0.6 - 0.8 substantial agreement, > 0.8 almost perfect agreement.
+Common interpretations for the kappa statistic are as follows: < 0.2 slight agreement, 0.2 - 0.4 fair agreement, 0.4 - 0.6 moderate agreement, 0.6 - 0.8 substantial agreement, > 0.8 almost perfect agreement (Sim and Wright, 2005).
+
+Confidence intervals for the proportion of observations where there is agreement are calculated using the exact method (Collett 1999).
 
 The argument \code{alternative = "greater"} tests the hypothesis that kappa is greater than 0. 
 
@@ -55,11 +57,15 @@ Altman DG, Machin D, Bryant TN, Gardner MJ (2000). Statistics with Confidence, s
 
 Byrt T, Bishop J, Carlin JB (1993). Bias, prevalence and kappa. Journal of Clinical Epidemiology 46: 423 - 429. 
 
+Cohen J (1960). A coefficient of agreement for nominal scales. Educational and Psychological Measurement 20: 37 - 46.
+
+Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida, pp. 24.
+
 Dohoo I, Martin W, Stryhn H (2010). Veterinary Epidemiologic Research, second edition. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 98 - 99.
 
 Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions, third edition. John Wiley & Sons, London, 598 - 626.
 
-Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
+Rothman KJ (2012). Epidemiology An Introduction. Oxford University Press, London, pp. 164 - 175.
 
 Silva E, Sterry RA, Kolb D, Mathialagan N, McGrath MF, Ballam JM, Fricke PM (2007) Accuracy of a pregnancy-associated glycoprotein ELISA to determine pregnancy status of lactating dairy cows twenty-seven days after timed artificial insemination. Journal of Dairy Science 90: 4612 - 4622.
 
@@ -80,9 +86,9 @@ Total		        \tab \code{a+c}  	   \tab \code{b+d}  	  \tab \code{a+b+c+d=N}   
 --------------- \tab --------------- \tab --------------- \tab ------------------ \cr           
 }
 
-The kappa coefficient is influenced by the prevalence of the condition being assessed. A prevalence effect exists when the proportion of agreements on the positive classification differs from that of the negative classification. If the prevalence index is high (that is, the prevalence of a positive rating is very high or very low) chance agreement is also high and the value of kappa is reduced accordingly. The effect of prevalence on kappa is greater for large values of kappa than for small values (Byrt et al. 1993). Using the notation above, the prevalence index is calculated as \code{((a/N) - (d/N))}. Confidence intervals for the prevalence index are based on methods used for a difference in two proportions. See Rothman (2002, p 135 equation 7-2) for details.
+The kappa coefficient is influenced by the prevalence of the condition being assessed. A prevalence effect exists when the proportion of agreements on the positive classification differs from that of the negative classification. If the prevalence index is high (that is, the prevalence of a positive rating is very high or very low) chance agreement is also high and the value of kappa is reduced accordingly. The effect of prevalence on kappa is greater for large values of kappa than for small values (Byrt et al. 1993). Using the notation above, the prevalence index is calculated as \code{((a/N) - (d/N))}. Confidence intervals for the prevalence index are based on methods used for a difference in two proportions. See Rothman (2012, p 167 equation 9-2) for details.
 
-Bias is the extent to which raters disagree on the proportion of positive (or negative) cases. Bias affects interpretation of the kappa coefficient. When there is a large amount of bias, kappa is higher than when bias is low or absent. In contrast to prevalence, the effect of bias is greater when kappa is small than when it is large (Byrt et al. 1993). Using the notation above, the bias index is calculated as \code{((a + b)/N - (a + c)/N)}. Confidence intervals for the bias index are based on methods used for a difference in two proportions. See Rothman (2002, p 135 equation 7-2) for details.
+Bias is the extent to which raters disagree on the proportion of positive (or negative) cases. Bias affects interpretation of the kappa coefficient. When there is a large amount of bias, kappa is higher than when bias is low or absent. In contrast to prevalence, the effect of bias is greater when kappa is small than when it is large (Byrt et al. 1993). Using the notation above, the bias index is calculated as \code{((a + b)/N - (a + c)/N)}. Confidence intervals for the bias index are based on methods used for a difference in two proportions. See Rothman (2012, p 167 equation 9-2) for details.
 
 The McNemar test is used to test for the presence of bias. A statistically significant McNemar test (generally if P < 0.05) shows that there is evidence of a systematic difference between the proportion of `positive' responses from the two methods. If one method provides the `true values' (i.e. it is regarded as the gold standard method) the absence of a systematic difference implies that there is no bias. However, a non-significant result indicates only that there is no evidence of a systematic effect. A systematic effect may be present, but the power of the test may be inadequate to determine its presence.
 }

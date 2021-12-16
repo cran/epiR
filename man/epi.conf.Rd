@@ -39,7 +39,7 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{prop.unpaired}                \tab Altman et al. (2000)     \cr
 \code{prop.paired}                  \tab Altman et al. (2000)     \cr
 \code{inc.risk, exact}              \tab Collett (1999)           \cr
-\code{inc.risk, wilson}             \tab Rothman (2002)           \cr
+\code{inc.risk, wilson}             \tab Rothman (2012)           \cr
 \code{inc.risk, fleiss}             \tab Fleiss (1981)            \cr
 \code{inc.risk, agresti}            \tab Agresti and Coull (1998) \cr
 \code{inc.risk, clopper-pearson}    \tab Clopper and Pearson (1934)\cr
@@ -51,7 +51,7 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 \code{prevalence, clopper-pearson}  \tab Clopper and Pearson (1934)\cr
 \code{prevalence, jeffreys}         \tab Brown et al. (2001)      \cr
 \code{inc.rate, exact}              \tab Ulm (1990)               \cr
-\code{inc.rate, byar}               \tab Rothman (2002)           \cr
+\code{inc.rate, byar}               \tab Rothman (2012)           \cr
 \code{odds}                         \tab Ederer and Mantel (1974) \cr
 \code{ratio}                        \tab Ederer and Mantel (1974) \cr
 \code{smr}                          \tab Dobson et al. (1991)     \cr
@@ -86,7 +86,7 @@ Killip S, Mahfoud Z, Pearce K (2004). What is an intracluster correlation coeffi
 
 Otte J, Gumm I (1997). Intra-cluster correlation coefficients of 20 infections calculated from the results of cluster-sample surveys. Preventive Veterinary Medicine 31: 147 - 150.
 
-Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, pp. 130 - 143.
+Rothman KJ (2012). Epidemiology An Introduction. Oxford University Press, London, pp. 164 - 175.
 
 Ulm K (1990). A simple method to calculate the confidence interval of a standardized mortality ratio. American Journal of Epidemiology 131: 373 - 375.
 

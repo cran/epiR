@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.39
-Date: 2021-11-10
+Version: 2.0.40
+Date: 2021-12-16
 Title: Tools for the Analysis of Epidemiological Data
 Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur and Aniko Szabo.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
@@ -12,11 +12,11 @@ Suggests: MASS (>= 3.1-20), knitr, rmarkdown, RColorBrewer, ggplot2,
         rgeos, mapproj, tidyverse, kableExtra
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2021-11-09 13:13:46 UTC; Mark Stevenson
+Packaged: 2021-12-16 01:23:21 UTC; marks1
 URL:
         https://fvas.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
         and https://www.ausvet.com.au/
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2021-11-10 23:00:13 UTC
+Date/Publication: 2021-12-16 03:30:06 UTC

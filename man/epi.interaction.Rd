@@ -26,7 +26,7 @@ Interaction on an additive scale means that the combined effect of two exposures
 
 This function calculates three indices to assess the presence of additive interaction, as defined by Rothman (1998): (1) the relative excess risk due to interaction (RERI, sometimes called the interaction contrast ratio), (2) the proportion of disease among those with both exposures that is attributable to their interaction (AP[AB]), and (3) the synergy index (S). 
 
-A RERI of one means no iteraction or exactly additivity. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
+A RERI of zero  means no additive interaction. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
 
 An AP[AB] of zero means no interaction or exactly additivity. An AP[AB] greater than zero means positive interaction or more than additivity. An AP[AB] of less than zero means negative interaction or less than additivity. AP[AB] ranges from -1 to +1.
 
@@ -57,7 +57,7 @@ Kalilani L, Atashili J (2006). Measuring additive interaction using odds ratios.
 
 Knol MJ, VanderWeele TJ (2012). Recommendations for presenting analyses of effect modification and interaction. International Journal of Epidemiology 41: 514 - 520.
 
-Rothman K, Greenland S (1998). Modern Epidemiology. Lippincott - Raven Philadelphia, USA.
+Lash TL, VanderWeele TJ, Haneuse S, Rothman KJ (2021). Modern Epidemiology. Lippincott - Raven Philadelphia, USA, pp. 621 - 623.
 
 Rothman K, Keller AZ (1972). The effect of joint exposure to alcohol and tabacco on risk of cancer of the mouth and pharynx. Journal of Chronic Diseases 23: 711 - 716.
 
