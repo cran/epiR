@@ -61,9 +61,7 @@ Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) a
 
 For a non-inferiority trial the null hypothesis is:
 
-For a non-inferiority trial the null hypothesis is:
-
-\eqn{H_{0}: P_{s} - P_{n} \geq \delta} 
+\eqn{H_{0}: P_{s} - P_{n} \ge \delta} 
  
 The alternative hypothesis is:
 
@@ -83,7 +81,7 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## to patients with skin infections. Assume the true mean cure rate of the 
 ## treatment is 0.85 and the true mean cure rate of the control is 0.65. 
 ## We consider the proportion cured in the treatment group minus the proportion 
-## cured in the control group (i.e. delta) of 0.10 or less to be of no clinical 
+## cured in the control group (i.e., delta) of 0.10 or less to be of no clinical 
 ## significance.
 
 ## Assuming a one-sided test size of 5\% and a power of 80\% how many 
@@ -109,7 +107,7 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 40, r = 1,
 ## EXAMPLE 2:
 ## Assume the true mean cure rate for a treatment group to be 0.40 and the true
 ## mean cure rate for a control group to be the same, 0.40. We consider a 
-## difference of 0.10 in cured proportions (i.e. delta = 0.10) to be of no 
+## difference of 0.10 in cured proportions (i.e., delta = 0.10) to be of no 
 ## clinical importance.
 
 ## Assuming a one-sided test size of 5\% and a power of 30\% how many 

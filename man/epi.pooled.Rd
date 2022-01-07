@@ -7,7 +7,7 @@ Estimate herd test characteristics when pooled sampling is used
 }
 
 \description{
-We may wish to designate a group of individuals (e.g. a herd) as being either diseased or non-diseased on the basis of pooled samples. This function estimates sensitivity and specificity of this testing regime at the group (or herd) level. 
+We may wish to designate a group of individuals (e.g., a herd) as being either diseased or non-diseased on the basis of pooled samples. This function estimates sensitivity and specificity of this testing regime at the group (or herd) level. 
 }
 
 \usage{

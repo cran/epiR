@@ -70,9 +70,9 @@ Total      \tab 28      	\tab 546        \tab 574        \cr
 -----------\tab ----------\tab ---------- \tab ---------- \cr
 }
 
-The observed proportion of disease positive individuals with a positive test result to both tests as \code{p111}. For this example \code{p111} = 134 / 176 = 0.761.
+The observed proportion of disease positive individuals with a positive test result to both tests as \code{p111}. For this example \code{p111 = 134 / 176 = 0.761}.
 
-The observed proportion of disease negative individuals with a negative test result to both tests as \code{p000}. For this example \code{p000} = 534 / 574 = 0.930.
+The observed proportion of disease negative individuals with a negative test result to both tests as \code{p000}. For this example \code{p000 = 534 / 574 = 0.930}.
 
 Covariance for the disease positive group: \code{covar[1] = p111 - se[1] * se[2] = 0.761 - 0.784 * 0.926 = 0.035}.
  
@@ -98,7 +98,7 @@ rsu.dxtest(se = c(0.90,0.95), sp = c(0.80,0.85),
    interpretation = "series", covar = c(0,0))
    
 ## Interpretation of these tests in series returns a diagnostic sensitivity
-## of 0.855 and a diagnostic specificity of 0.97.
+## of 0.855 and a diagnostic specificity of 0.970.
 
 
 ## EXAMPLE 2 (from Dohoo, Martin and Stryhn p 113):

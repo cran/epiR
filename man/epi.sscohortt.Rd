@@ -19,7 +19,7 @@ epi.sscohortt(irexp1, irexp0, FT = NA, n, power, r = 1, design = 1, sided.test =
   \item{irexp1}{the expected incidence rate of the outcome in the exposed group (0 to 1).}
   \item{irexp0}{the expected incidence rate of the outcome in the non-exposed group (0 to 1).}
   \item{FT}{the follow-up period (in years) for the study.}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in both the exposed and unexposed groups).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in both the exposed and unexposed groups).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
   \item{design}{scalar, the estimated design effect.}
@@ -29,7 +29,7 @@ epi.sscohortt(irexp1, irexp0, FT = NA, n, power, r = 1, design = 1, sided.test =
 }
 
 \details{
-The methodology in this function follows the approach described in Lwanga and Lemeshow (1991).
+The methodology in this function follows the methodology described in Lwanga and Lemeshow (1991).
 }
 
 \value{

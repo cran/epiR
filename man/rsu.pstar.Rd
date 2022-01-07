@@ -37,7 +37,7 @@ Martin S, Shoukri M, Thorburn M (1992). Evaluating the health status of herds ba
 ## a total of 280 individuals are sampled. Assume a desired surveillance system
 ## sensitivity of 0.95 and an individual unit diagnostic sensitivity of 0.98. 
 ## If all unit tests return a negative result, what is the maximum prevalence 
-## if disease is actually present in the population (i.e. what is the design 
+## if disease is actually present in the population (i.e., what is the design 
 ## prevalence)? 
 
 rsu.pstar(N = NA, n = 280, se.p = 0.95, se.u = 0.98)

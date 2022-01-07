@@ -24,7 +24,7 @@ rsu.spp.rs(N, n, c = 1, sp.u)
 \details{
 This function calculates population specificity using the hypergeometric distribution if \code{N} and \code{c} are provided and the binomial distribution otherwise.
 
-If \code{N} is provided the number of false positives is fixed, based on \code{N} and test specificity \code{sp.u}. This implies that test specificity is a fixed individual-level characteristic (e.g. due to specific cross-reacting infection). If \code{N} is not supplied, cluster (e.g. herd) specificity is a random binomial function based only on the number of samples and test specificity (i.e. specificity is a function of the test and independent of individual characteristics).  
+If \code{N} is provided the number of false positives is fixed, based on \code{N} and test specificity \code{sp.u}. This implies that test specificity is a fixed individual-level characteristic (e.g., due to specific cross-reacting infection). If \code{N} is not supplied, cluster (e.g., herd) specificity is a random binomial function based only on the number of samples and test specificity (i.e., specificity is a function of the test and independent of individual characteristics).  
 }
 
 \value{
@@ -37,14 +37,14 @@ Martin S, Shoukri M, Thorburn M (1992). Evaluating the health status of herds ba
 
 \examples{
 ## EXAMPLE 1:
-## Calculate the surveillance system specificity (i.e. the probability that 
+## Calculate the surveillance system specificity (i.e., the probability that 
 ## an uninfected population will be correctly identified as negative) if 30 
 ## surveillance units have been tested from a population of 150 using a 
 ## diagnostic test with surveillance unit specificity of 0.90, using a 
 ## cut-point of one or more positives to consider the population positive.
 
 ## A specificity of 0.90 means that 9 out of 10 samples from disease-negative
-## surveillance units will return a negative result (i.e. one of them will be
+## surveillance units will return a negative result (i.e., one of them will be
 ## a false positive).
  
 rsu.spp.rs(N = 150, n = 30, c = 1, sp.u = 0.90)

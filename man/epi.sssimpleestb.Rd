@@ -70,7 +70,7 @@ n.crude
 ## EXAMPLE 1 (continued):
 ## Why don't I get the same results as other sample size calculators? The 
 ## most likely reason is misspecification of epsilon. Other sample size 
-## calculators (e.g. OpenEpi) require you to enter the absolute
+## calculators (e.g., OpenEpi) require you to enter the absolute
 ## error (as opposed to relative error). For the example above the absolute 
 ## error is 0.20 * 0.15 = 0.03. Re-run epi.simpleestb:
 

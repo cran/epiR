@@ -7,7 +7,7 @@ Sample size to detect an event
 }
 
 \description{
-Sample size to detect at least one event (e.g. a disease-positive individual) in a population. The method adjusts sample size estimates on the basis of test sensitivity and can account for series and parallel test interpretation. 
+Sample size to detect at least one event (e.g., a disease-positive individual) in a population. The method adjusts sample size estimates on the basis of test sensitivity and can account for series and parallel test interpretation. 
 }
 
 \usage{
@@ -38,7 +38,7 @@ Cannon RM (2001). Sense and sensitivity --- designing surveys based on an imperf
 
 Dohoo I, Martin W, Stryhn H (2009). Veterinary Epidemiologic Research. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 54.
 
-MacDiarmid S (1988). Future options for brucellosis surveillance in New Zealand beef herds. New Zealand Veterinary Journal 36, 39 - 42. DOI:  10.1080/00480169.1988.35472.
+MacDiarmid S (1988). Future options for brucellosis surveillance in New Zealand beef herds. New Zealand Veterinary Journal 36, 39 - 42. DOI: 10.1080/00480169.1988.35472.
 }
 
 \note{

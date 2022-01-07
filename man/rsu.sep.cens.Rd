@@ -32,8 +32,8 @@ A vector of surveillance system (population-level) sensitivities.)
 
 rsu.sep.cens(d = 5, se.u = 0.80)
 
-## The probability that disease will be detected (i.e. the surveillance 
-## system sensitivity) is 0.99 (i.e. quite high, even though the sensitivity
+## The probability that disease will be detected (i.e., the surveillance 
+## system sensitivity) is 0.99 (i.e., quite high, even though the sensitivity
 ## of the test is relatively low).
 
 

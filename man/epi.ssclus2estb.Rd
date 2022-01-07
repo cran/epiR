@@ -25,11 +25,13 @@ epi.ssclus2estb(b, Py, epsilon, error = "relative",
 }
 
 \details{
+In many situations it is common for sampling units to be aggregated into clusters. Typical examples include individuals within households, children within classes (within schools) and cows within herds. We use the term primary sampling unit (PSU) to refer to what gets sampled first (clusters) and secondary sampling unit (SSU) to refer to what gets sampled second (individual listing units within each cluster). In this documentation the terms primary sampling unit and cluster are used interchangeably. Similarly, the terms secondary sampling unit and individual listing units are used interchangeably.
+
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
 
-The methodology used in this function follows closely the approach described by Bennett et al. (1991). At least 25 primary sampling units are recommended for two-stage cluster sampling designs. If less than 25 clusters are returned by the function a warning is issued.
+The methodology used in this function follows closely the approach described by Bennett et al. (1991). At least 25 PSUs are recommended for two-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
 
-As a rule of thumb, around 30 clusters will provide good estimates of the true population value with an acceptable level of precision (Binkin et al. 1992) when: (1) the true population value is between 10\% and 90\%; and (2) the desired absolute error is around 5\%. For a fixed number of individuals selected per cluster (e.g. 10 individuals per cluster or 30 individuals per cluster), collecting information on more than 30 clusters can improve the precision of the final population estimate, however, beyond around 60 clusters the improvement in precision is minimal.
+As a rule of thumb, around 30 PSUs will provide good estimates of the true population value with an acceptable level of precision (Binkin et al. 1992) when: (1) the true population value is between 10\% and 90\%; and (2) the desired absolute error is around 5\%. For a fixed number of individual listing units selected per cluster (e.g., 10 individuals per cluster or 30 individuals per cluster), collecting information on more than 30 clusters can improve the precision of the final population estimate, however, beyond around 60 clusters the improvement in precision is minimal.
 }
 
 \value{
@@ -53,11 +55,11 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## We intend to conduct a cross-sectional study to determine the prevalence 
 ## of disease X in a given country. The expected prevalence of disease is 
 ## thought to be around 20\%. Previous studies report an intracluster 
-## correlation for this disease to be 0.02. Suppose that we want to be 95\%
-## certain that our estimate of the prevalence of disease is within 5\% of 
-## the true population value and that we intend to sample 20 individuals per
-## cluster. How many clusters should be sampled to meet the requirements of the
-## study?
+## correlation coefficient for this disease to be 0.02. Suppose that we want 
+## to be 95\% certain that our estimate of the prevalence of disease is 
+## within 5\% of the true population value and that we intend to sample 20 
+## individuals per cluster. How many clusters should be sampled to meet 
+## the requirements of the study?
 
 epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05, error = "absolute", 
    rho = 0.02, nfractional = FALSE, conf.level = 0.95)

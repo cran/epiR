@@ -45,7 +45,7 @@ A data frame listing:
   
   \item{test.statistic}{test statistic of the significance of the SMR.}
   
-  \item{p.value}{the probability that the null hypothesis (i.e. the number of observed events divided by the expected number of events equals 1) is true.}
+  \item{p.value}{the probability that the null hypothesis (i.e., the number of observed events divided by the expected number of events equals 1) is true.}
 }
 
 \note{

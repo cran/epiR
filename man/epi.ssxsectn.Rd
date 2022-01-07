@@ -20,7 +20,7 @@ epi.ssxsectn(pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1,
   \item{pdexp1}{the expected prevalence of the outcome in the exposed group (0 to 1).}
   \item{pdexp0}{the expected prevalence of the outcome in the non-exposed group (0 to 1).}
   \item{pexp}{the expected prevalence of exposure to the hypothesised risk factor in the population (0 to 1).}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in both the exposed and unexposed groups).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in both the exposed and unexposed groups).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
   \item{N}{scalar, the estimated number of individuals in the population.}
@@ -32,7 +32,7 @@ epi.ssxsectn(pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1,
 }
 
 \details{
-The methodology in this function follows the approach described in Chapter 8 of Woodward (2014), pp. 295 - 329.
+The methodology in this function follows the methodology described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 }
 
 \value{

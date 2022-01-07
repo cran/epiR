@@ -18,7 +18,7 @@ epi.sscompb(treat, control, n, power, r = 1, design = 1,
 \arguments{
   \item{treat}{the expected proportion for the treatment group (see below).}
   \item{control}{the expected proportion for the control group (see below).}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in the treatment plus the number in the control group).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment plus the number in the control group).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
@@ -75,7 +75,7 @@ epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90,
 ## A total of 4568 men should be sampled: 2284 in the treatment group and
 ## 2284 in the control group. The risk ratio (that is, the prevalence of 
 ## smoking in males post government initiative divided by the prevalence of 
-## smoking in males pre inititative is 0.94.
+## smoking in males pre inititative) is 0.94.
 
 
 ## EXAMPLE 2:

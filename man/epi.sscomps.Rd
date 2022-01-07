@@ -18,7 +18,7 @@ epi.sscomps(treat, control, n, power, r = 1, design = 1,
 \arguments{
   \item{treat}{the expected value for the treatment group (see below).}
   \item{control}{the expected value for the control group (see below).}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in the treatment and control group).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment and control group).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group. This argument is ignored when \code{method = "proportions"}.}
   \item{design}{scalar, the estimated design effect.}

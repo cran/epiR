@@ -26,9 +26,11 @@ epi.ssclus1estb(b, Py, epsilon, error = "relative",
 }
 
 \details{
+In many situations it is common for sampling units to be aggregated into clusters. Typical examples include individuals within households, children within classes (within schools) and cows within herds. We use the term primary sampling unit (PSU) to refer to what gets sampled first (clusters) and secondary sampling unit (SSU) to refer to what gets sampled second (individual listing units within each cluster). In this documentation the terms primary sampling unit and cluster are used interchangeably. Similarly, the terms secondary sampling unit and individual listing units are used interchangeably. 
+
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
 
-At least 25 primary sampling units are recommended for one-stage cluster sampling designs. If less than 25 clusters are returned by the function a warning is issued.
+At least 25 PSUs (clusters) are recommended for one-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
 }
 
 
@@ -57,11 +59,11 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## A pilot study of the prevalence of stove usage in five villages 
 ## showed that 0.46 of householders were still using their stove. The 
 ## intracluster correlation for a study of this type is unknown, but thought
-## to be relatively high.
+## to be relatively high (rho = 0.20).
 
 # If the donor wanted to be 90\% confident that the survey estimate of stove
 ## usage was within 10\% of the true population value, how many villages 
-## (i.e. clusters) would need to be sampled?
+## (i.e., clusters) would need to be sampled?
 
 epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = "relative", 
    rho = 0.20, nfractional = FALSE, conf.level = 0.90)

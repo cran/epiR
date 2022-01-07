@@ -131,7 +131,7 @@ The point estimates of the \code{wald}, \code{score} and \code{cfield} odds rati
 
 Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the total number of observations is less than 2E09. 
 
-If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios are not computed. 
+If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e., addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios are not computed. 
 
 Variable \code{phi.coef} equals the phi coefficient (Fleiss et al. 2003, Equation 6.2, p. 98) and is included with the output for each of the uncorrected chi-squared tests. This value can be used for argument \code{rho.cc} in \code{epi.sscc}. Refer to the documentation for \code{\link{epi.sscc}} for details.  
 
@@ -196,7 +196,7 @@ Wald A (1943). Tests of statistical hypotheses concerning several parameters whe
 
 Willeberg P (1977). Animal disease information processing: Epidemiologic analyses of the feline urologic syndrome. Acta Veterinaria Scandinavica. Suppl. 64: 1 - 48. 
 
-Woodward MS (2005). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 163 - 214.
+Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 89 - 124.
 
 Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odds ratio in cohort studies of common outcomes. Journal of the American Medical Association 280: 1690 - 1691.
 }

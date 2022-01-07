@@ -57,7 +57,7 @@ Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) a
 
 For an equivalence trial the null hypothesis is:
 
-\eqn{H_{0}: |N_{s} - N_{n}| \geq \delta} 
+\eqn{H_{0}: |N_{s} - N_{n}| \ge \delta} 
  
 The alternative hypothesis is:
 
@@ -83,7 +83,7 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## anticipated that the standard deviation of diastolic BP is approximately 
 ## 8 mmHg. If one wishes to confirm that the difference is likely to be less 
 ## than 5 mmHg, that is, one wishes to show equivalence, how many patients 
-## are need to be enrolled in the trial? Assume 80\% power and 
+## are needed to be enrolled in the trial? Assume 80\% power and 
 ## 95\% significance.
 
 epi.ssequc(treat = 94, control = 96, sd = 8, delta = 5, n = NA, 
@@ -101,7 +101,7 @@ epi.ssequc(treat = 94, control = 96, sd = 8, delta = 5, n = NA,
 ## where the intended trial is for testing equivalence of mean responses 
 ## in LDL. Assume that 80\% power is required at a 5\% level of significance.
 
-## In this example, we assume a 5 unit (i.e. delta = 5) change of LDL is 
+## In this example, we assume a 5 unit (i.e., delta = 5) change of LDL is 
 ## considered of clinically meaningful difference. Assume the standard 
 ## of LDL is 10 units and the LDL concentration in the treatment group is 20 
 ## units and the LDL concentration in the control group is 21 units.

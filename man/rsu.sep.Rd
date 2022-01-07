@@ -62,7 +62,7 @@ rsu.sep(N = 193000, n = 7764, pstar = 10 / 100000, se.u = 0.85)
 ## In a population of 1000 individuals 474 have been tested for disease X
 ## using a test with diagnostic sensitivity of 0.95. If all individuals tested
 ## have returned a negative result what is the maximum prevalence expected 
-## if disease is actually present in the population (i.e. what is the design 
+## if disease is actually present in the population (i.e., what is the design 
 ## prevalence)? 
 
 pstar <- rsu.pstar(N = 1000, n = 474, se.p = 0.95, se.u = 0.95)

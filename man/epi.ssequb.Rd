@@ -35,6 +35,8 @@ A list containing the following:
 }
 
 \references{
+Bennett J, Dismukes W, Duma R, Medoff G, Sande M, Gallis H, Leonard J, Fields B, Bradshaw M, Haywood H, McGee Z, Cate T, Cobbs C, Warner J, Alling D (1979). A comparison of amphotericin B alone and combined with flucytosine in the treatment of cryptoccal meningitis. New England Journal of Medicine 301, 126 - 131. DOI: 10.1056/NEJM197907193010303.
+
 Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series, pp. 91.
 
 Ewald B (2013). Making sense of equivalence and non-inferiority trials. Australian Prescriber 36: 170 - 173.
@@ -71,7 +73,7 @@ Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) a
 
 For an equivalence trial the null hypothesis is:
 
-\eqn{H_{0}: |P_{s} - P_{n}| \geq \delta} 
+\eqn{H_{0}: |P_{s} - P_{n}| \ge \delta} 
  
 The alternative hypothesis is:
 
@@ -95,9 +97,9 @@ When calculating the power of a study, the argument \code{n} refers to the total
 ## as good as conventional therapy for patients with cryptococcal meningitis. 
 ## They recruited 39 patients to each treatment arm and wished to conclude 
 ## that a difference of less than 20\% in response rate between the treatments
-## would indicate equivalence. Assuming a one-sided test size of 10\%, a 
-## power of 80\% and an overall response rate of 50\%, what would be a 
-## realistic sample size if the trial were to be repeated?
+## would indicate equivalence. Assuming a one-sided test size of 10\% and a 
+## power of 80\% what would be a realistic sample size if the trial were 
+## to be repeated?
 
 epi.ssequb(treat = 0.50, control = 0.50, delta = 0.20, n = NA, r = 1, 
    power = 0.80, nfractional = FALSE, alpha = 0.10)

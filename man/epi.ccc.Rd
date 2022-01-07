@@ -27,7 +27,7 @@ epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, rep.measure = FALSE,
 \details{
 Computes Lin's (1989, 2000) concordance correlation coefficient for agreement on a continuous measure obtained by two methods. The concordance correlation coefficient combines measures of both precision and accuracy to determine how far the observed data deviate from the line of perfect concordance (that is, the line at 45 degrees on a square scatter plot). Lin's coefficient increases in value as a function of the nearness of the data's reduced major axis to the line of perfect concordance (the accuracy of the data) and of the tightness of the data about its reduced major axis (the precision of the data).
 
-Both \code{x} and \code{y} values need to be present for a measurement pair to be included in the analysis. If either or both values are missing (i.e. coded \code{NA}) then the measurement pair is deleted before analysis.
+Both \code{x} and \code{y} values need to be present for a measurement pair to be included in the analysis. If either or both values are missing (i.e., coded \code{NA}) then the measurement pair is deleted before analysis.
 }
 
 \value{

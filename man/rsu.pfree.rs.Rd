@@ -78,7 +78,7 @@ range(rval.df$SeP)
 ## 12 monthly estimates of population sensitivity. In addition, based on 
 ## previous data, the monthly probability of the introduction of disease is 
 ## estimated to be in the range of 0.005 (0.5\%) to 0.02 (2\%). The prior 
-## confidence of disease freedom is assumed to be 0.5 (i.e. uninformed). 
+## confidence of disease freedom is assumed to be 0.5 (i.e., uninformed). 
 ## What is your level of confidence of disease freedom at the end of the 12 
 ## month surveillance period?
  

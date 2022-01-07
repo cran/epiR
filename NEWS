@@ -1,3 +1,13 @@
+CHANGES IN epiR VERSION 2.0.41
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function for epi.interaction reports RERI, APAB, S and multiplicative interaction as a list.
+    [Suggested by Mark Stevenson]
+    o Numerous tidy ups to the documentation.
+    [Suggested by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.40
 
 SIGNIFICANT USER-VISIBLE CHANGES

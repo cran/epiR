@@ -20,7 +20,7 @@ epi.sscc(OR, p1 = NA, p0, n, power, r = 1,
   \item{OR}{scalar, the expected study odds ratio.}
   \item{p1}{scalar, the prevalence of exposure amongst the cases.}
   \item{p0}{scalar, the prevalence of exposure amongst the controls.}
-  \item{n}{scalar, the total number of subjects in the study (i.e. the number of cases plus the number of controls).}
+  \item{n}{scalar, the total number of subjects in the study (i.e., the number of cases plus the number of controls).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the control group divided by the number in the case group.}
   \item{phi.coef}{scalar, the correlation between case and control exposures for matched pairs. Ignored when \code{method = "unmatched"}.}
@@ -47,7 +47,7 @@ When no estimate of \code{phi.coef} is available, investigators may prefer to pe
 \value{
 A list containing the following: 
 
-  \item{n.total}{the total number of subjects required to estimate the specified odds ratio at the desired level of confidence and power (i.e. the number of cases plus the number of controls).}
+  \item{n.total}{the total number of subjects required to estimate the specified odds ratio at the desired level of confidence and power (i.e., the number of cases plus the number of controls).}
   \item{n.case}{the total number of case subjects required to estimate the specified odds ratio at the desired level of confidence and power.}
   \item{n.control}{the total number of control subjects required to estimate the specified odds ratio at the desired level of confidence and power.}
   \item{power}{the power of the study given the number of study subjects, the specified odds ratio and the desired level of confidence.}

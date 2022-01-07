@@ -14,7 +14,7 @@ epi.indirectadj(obs, pop, std, units, conf.level = 0.95)
 
 \arguments{
   \item{obs}{a one column matrix representing the number of observed number of events in each strata. The dimensions of \code{obs} must be named (see the examples, below).}
-  \item{pop}{a matrix representing population size. Rows represent strata (e.g. region); columns represent the levels of the explanatory variable to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population size within each stratum. If there are no covariates \code{pop} will be a one column matrix. The dimensions of the \code{pop} matrix must be named (see the examples, below).}
+  \item{pop}{a matrix representing population size. Rows represent strata (e.g., region); columns represent the levels of the explanatory variable to be adjusted for (e.g., age class, gender). The sum of each row will equal the total population size within each stratum. If there are no covariates \code{pop} will be a one column matrix. The dimensions of the \code{pop} matrix must be named (see the examples, below).}
   \item{std}{a one row matrix specifying the standard incidence risks to be applied to each level of the covariate to be adjusted for. The length of \code{std} should be one plus the number of covariates to be adjusted for (the additional value represents the incidence risk in the entire population). If there are no explanatory variables to adjust-for \code{std} is a single number representing the incidence risk in the entire population.}
   \item{units}{multiplier for the incidence risk estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
@@ -56,7 +56,7 @@ Thanks to Dr. Telmo Nunes (UISEE/DETSA, Faculdade de Medicina Veterinaria - UTL,
 \examples{
 ## EXAMPLE 1 (without covariates):
 ## Adapted from Dohoo, Martin and Stryhn (2009). In this example the frequency
-## of tuberculosis is expressed as incidence risk (i.e. the number of 
+## of tuberculosis is expressed as incidence risk (i.e., the number of 
 ## tuberculosis positive herds divided by the size of the herd population at 
 ## risk). In their text Dohoo et al. present the data as incidence rate (the
 ## number of tuberculosis positive herds per herd-year at risk).

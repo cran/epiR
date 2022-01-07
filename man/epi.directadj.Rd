@@ -12,15 +12,15 @@ epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g. region); columns represent the variables to be adjusted for (e.g. age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names and the columns of \code{obs} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
-  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g. region); columns represent the variables to be adjusted for (e.g. age class, gender). The sum of each row will equal the total population time at risk for each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names and the columns of \code{pop} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
+  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g., region); columns represent the variables to be adjusted for (e.g., age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names and the columns of \code{obs} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
+  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g., region); columns represent the variables to be adjusted for (e.g., age class, gender). The sum of each row will equal the total population time at risk for each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names and the columns of \code{pop} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
   \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for each explanatory variable.}
   \item{units}{multiplier for the incidence rate estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
-This function returns unadjusted (crude) and directly adjusted incidence rate estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e. adjust) for when calculating the directly adjusted incidence rate estimates.
+This function returns unadjusted (crude) and directly adjusted incidence rate estimates for each of the specified population strata. The term `covariate' is used here to refer to the factors we want to control (i.e., adjust) for when calculating the directly adjusted incidence rate estimates.
 
 When the outcome of interest is rare, the confidence intervals for the adjusted incidence rates returned by this function (based on Fay and Feuer, 1997) will be appropriate for incidence risk data. In this situation the argument \code{tar} is assumed to represent the size of the population at risk (instead of population time at risk). Example 3 (below) provides an approach if you are working with incidence risk data and the outcome of interest is not rare.
 } 
@@ -111,7 +111,7 @@ summary(dat.glm02)
 ## To obtain adjusted incidence rate estimates, use the predict method on a 
 ## new data set with the time at risk (tar) variable set to 1 (which means 
 ## log(tar) = 0). This will return the predicted number of cases per one unit 
-## of individual time, i.e. the incidence rate.
+## of individual time, i.e., the incidence rate.
 
 dat.pred02 <- predict(object = dat.glm02, newdata = 
    data.frame(city = c("ED","GL"), tar = c(1,1)), 

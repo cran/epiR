@@ -97,7 +97,7 @@ The functions in \pkg{epiR} can be categorised into two main groups: tools for e
 
 \subsection{7. Sample size calculations}{
 
-The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.ss} (sample size) + an abbreviation to represent the sampling design (e.g. \code{simple}, \code{strata}, \code{clus1}, \code{clus2}) + an abbreviation of the objectives of the study (\code{est} when you want to estimate a population parameter or \code{comp} when you want to compare two groups) + a single letter defining the outcome variable type (\code{b} for binary, \code{c} for continuous and \code{s} for survival data).
+The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.ss} (sample size) + an abbreviation to represent the sampling design (e.g., \code{simple}, \code{strata}, \code{clus1}, \code{clus2}) + an abbreviation of the objectives of the study (\code{est} when you want to estimate a population parameter or \code{comp} when you want to compare two groups) + a single letter defining the outcome variable type (\code{b} for binary, \code{c} for continuous and \code{s} for survival data).
 
 \tabular{ll}{
 

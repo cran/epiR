@@ -60,9 +60,9 @@ The methodology implemented here follows Altman, Machin, Bryant, and Gardner (20
 
 The Wald interval often has inadequate coverage, particularly for small sample sizes and proportion estimates close to 0 or 1. Conversely, the Clopper-Pearson Exact method is conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods when sample sizes are small and Agresti-Coull, Wilson, or Jeffreys methods for larger sample sizes. 
 
-The Clopper-Pearson interval is an early and very common method for calculating binomial confidence intervals. The Clopper-Pearson interval is sometimes called an 'exact' method because it is based on the cumulative probabilities of the binomial distribution (i.e. exactly the correct distribution rather than an approximation).
+The Clopper-Pearson interval is an early and very common method for calculating binomial confidence intervals. The Clopper-Pearson interval is sometimes called an 'exact' method because it is based on the cumulative probabilities of the binomial distribution (i.e., exactly the correct distribution rather than an approximation).
 
-The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be made on those prevalence and incidence risk methods that return a standard error (i.e. \code{method = "wilson"} or \code{method = "fleiss"}).
+The design effect is used to adjust the confidence interval around a prevalence or incidence risk estimate in the presence of clustering. The design effect is a measure of the variability between clusters and is calculated as the ratio of the variance calculated assuming a complex sample design divided by the variance calculated assuming simple random sampling. Adjustment for the effect of clustering can only be made on those prevalence and incidence risk methods that return a standard error (i.e., \code{method = "wilson"} or \code{method = "fleiss"}).
 }
 
 \references{
@@ -232,7 +232,7 @@ epi.conf(dat = dat.m09, ctype = "prevalence", method = "fleiss", N = 1000000,
 
 ## The estimated proportion of the population protected is 0.57 (95\% CI
 ## 0.53 to 0.60). Recalculate this estimate assuming the data were from a 
-## simple random sample (i.e. where the design effect is one):
+## simple random sample (i.e., where the design effect is one):
 
 epi.conf(dat = dat.m09, ctype = "prevalence", method = "fleiss", N = 1000000, 
    design = 1, conf.level = 0.95)

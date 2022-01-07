@@ -9,22 +9,22 @@ For two binary explanatory variables included in a logistic regression as an int
 }
 
 \usage{
-epi.interaction(model, coef, param = c("product", "dummy"), 
-   type = c("RERI", "APAB", "S"), conf.level = 0.95)
+epi.interaction(model, coef, param = c("product", "dummy"), conf.level = 0.95)
 }
 
 \arguments{
   \item{model}{an object of class \code{glm}, \code{clogit} or \code{coxph}.}
   \item{coef}{a vector listing the positions of the coefficients of the interaction terms in the model. What row numbers of the regression table summary list the coefficients for the interaction terms included in the model? }
   \item{param}{character stringing specifying the type of coding used for the variables included in the interaction term. Options are \code{product} where two risk factors and one product term are used to represent the interaction and \code{dummy} where the two risk factors are combined into a single variable with four levels. See the examples, below, for details.}
-  \item{type}{character string specifying the type of analysis to be run. Options are \code{RERI} the relative excess risk due to interaction, \code{APAB} the proportion of disease among those with both exposures that is attributable to interaction of the two exposures, and \code{S} the synergy index.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
 \details{
 Interaction on an additive scale means that the combined effect of two exposures is greater (or less) than the sum of the individual effects of two exposures. Interaction on a multiplicative scale means that the combined effect of the two exposures is greater (or less) than the product of the individual effects of the two exposures.
 
-This function calculates three indices to assess the presence of additive interaction, as defined by Rothman (1998): (1) the relative excess risk due to interaction (RERI, sometimes called the interaction contrast ratio), (2) the proportion of disease among those with both exposures that is attributable to their interaction (AP[AB]), and (3) the synergy index (S). 
+This function calculates three indices to assess the presence of additive interaction, as defined by Rothman (1998): (1) the relative excess risk due to interaction (RERI, sometimes called the interaction contrast ratio), (2) the proportion of disease among those with both exposures that is attributable to their interaction (AP[AB]), and (3) the synergy index (S). In addition 
+
+If at least one of the two exposures are preventive (i.e., ORs of less than one) then estimates of RERI and AP are invalid (the SI remains unaffected). In this situation the function issues an appropriate warning. Exposures need to be recoded so the stratum with the lowest outcome risk becomes the new reference category when the two exposures are considered together.
 
 A RERI of zero  means no additive interaction. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
 
@@ -38,14 +38,15 @@ Skrondal (2003) advocates for use of the synergy index as a summary measure of a
                                                                                                          
 This function uses the delta method to calculate the confidence intervals for each of the interaction measures, as described by Hosmer and Lemeshow (1992). An error will be returned if the point estimate of the synergy index is less than one. In this situation a warning is issued advising the user to re-parameterise their model as a linear odds model. See Skrondal (2003) for details.
 
-A measure of multiplicative interaction is RR11 / (RR10 * RR01). If RR11 / (RR10 * RR01) equals one means no multiplicative interaction. If RR11 / (RR10 * RR01) is greater than one multiplicative interaction is said to be positive. If RR11 / (RR10 * RR01) is less than one multiplicative interaction is said to be negative. 
+A measure of multiplicative interaction is \code{RR11 / (RR10 * RR01)}. If \code{RR11 / (RR10 * RR01)} equals one multiplicative interaction is said to be absent. If \code{RR11 / (RR10 * RR01)} is greater than one multiplicative interaction is said to be positive. If \code{RR11 / (RR10 * RR01)} is less than one multiplicative interaction is said to be negative. 
 }
 
 \value{
-A data frame listing:
-  \item{est}{the point estimate of the requested additive interaction measure.}
-  \item{lower}{the lower bound of the confidence interval of the requested additive interaction measure.}
-  \item{upper}{the upper bound of the confidence interval of the requested additive interaction measure.}
+A list containing:
+  \item{reri}{the point estimate and lower and upper bounds of the confidence interval for the relative excess risk due to interaction, RERI.}
+  \item{apab}{the point estimate and lower and upper bounds of the confidence interval for the proportion of disease among those with both exposures that is attributable to their interaction, APAB.}
+  \item{s}{the point estimate and lower and upper bounds of the confidence interval for the synergy index.}
+  \item{multiplicative}{the point estimate and lower and upper bounds of the confidence interval for the odds ratio for multiplicative interaction.}
 }
 
 \references{
@@ -86,7 +87,7 @@ summary(dat.glm01)
 
 ## What is the measure of effect modification on the additive scale?
 epi.interaction(model = dat.glm01, param = "product", coef = c(2,3,4), 
-   type = "RERI", conf.level = 0.95)
+   conf.level = 0.95)
 
 ## Measure of interaction on the additive scale: RERI 3.73 
 ## (95\% CI -1.84 to 9.32), page 453 of Hosmer and Lemeshow (1992).
@@ -127,9 +128,9 @@ summary(dat.glm02)
 
 ## What is the measure of effect modification on the additive scale?
 epi.interaction(model = dat.glm02, param = "dummy", coef = c(2,3,4), 
-   type = "RERI", conf.level = 0.95)
+   conf.level = 0.95)
 
-## Measure of interaction on the additive scale: RERI 3.73 
+## Measure of interaction on the additive scale: RERI 3.74 
 ## (95\% CI -1.84 to 9.32), page 455 of Hosmer and Lemeshow (1992).
 
 }

@@ -63,7 +63,7 @@ Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) a
 
 For a non-inferiority trial the null hypothesis is:
 
-\eqn{H_{0}: N_{s} - N_{n} \geq \delta} 
+\eqn{H_{0}: N_{s} - N_{n} \ge \delta} 
  
 The alternative hypothesis is:
 
@@ -85,10 +85,10 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## where the intended trial is for testing non-inferiority of mean responses 
 ## in LDL. Assume that 80\% power is required at a 5\% level of significance.
 
-## In this example we assume a 5\% (i.e. delta = -0.05) change in LDL is 
-## a clinically meaningful difference. Assume the standard deviation of 
-## LDL is 0.10 and the LDL concentration in the treatment group is 0.20 
-## units and the LDL concentration in the control group is 0.20 units.
+## In this example we assume a -0.05 unit change in LDL is a clinically 
+## meaningful difference. Assume the standard deviation of LDL is 0.10 units 
+## and the LDL concentration in the treatment group is 0.20 units and the 
+## LDL concentration in the control group is 0.20 units.
 
 epi.ssninfc(treat = 0.20, control = 0.20, sd = 0.10, delta = 0.05, n = NA, 
    r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)

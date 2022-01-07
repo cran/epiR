@@ -23,8 +23,8 @@ epi.nomogram(se, sp, lr, pre.pos, verbose = FALSE)
 \value{
 A list containing the following:
   \item{lr}{a data frame listing the likelihood ratio of a positive and negative test.}
-  \item{prior}{a data frame listing the pre-test probability of being outcome (i.e. disease) positive, as entered by the user.}
-  \item{post}{a data frame listing: \code{opos.tpos} the post-test probability of being outcome (i.e. disease) positive given a positive test result and \code{opos.tneg} the post-test probability of being outcome (i.e. disease) positive given a negative test result.}
+  \item{prior}{a data frame listing the pre-test probability of being outcome (i.e., disease) positive, as entered by the user.}
+  \item{post}{a data frame listing: \code{opos.tpos} the post-test probability of being outcome (i.e., disease) positive given a positive test result and \code{opos.tneg} the post-test probability of being outcome (i.e., disease) positive given a negative test result.}
 }
 
 \references{

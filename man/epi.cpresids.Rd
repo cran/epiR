@@ -15,8 +15,8 @@ epi.cpresids(obs, fit, covpattern)
 }
 
 \arguments{
-  \item{obs}{a vector of observed values (i.e. counts of `successes') for each covariate pattern).}
-  \item{fit}{a vector defining the predicted (i.e. fitted) probability of success for each covariate pattern.}
+  \item{obs}{a vector of observed values (i.e., counts of `successes') for each covariate pattern).}
+  \item{fit}{a vector defining the predicted (i.e., fitted) probability of success for each covariate pattern.}
   \item{covpattern}{a \code{\link{epi.cp}} object.}
 }
 

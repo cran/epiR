@@ -16,7 +16,7 @@ rsu.sep.rspool(r, k, pstar, pse, psp = 1)
 
 \arguments{
 \item{r}{scalar or vector representing the number of pools.}
-\item{k}{scalar or vector of the same length as \code{r} representing the number of individual units that contribute to each pool (i.e. the pool size).}
+\item{k}{scalar or vector of the same length as \code{r} representing the number of individual units that contribute to each pool (i.e., the pool size).}
 \item{pstar}{scalar or vector of the same length as \code{r} representing the design prevalence.}
 \item{pse}{scalar or vector of the same length as \code{r} representing the pool-level sensitivity.}
 \item{psp}{scalar or vector of the same length as \code{r} representing the pool-level specificity.}

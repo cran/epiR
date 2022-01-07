@@ -66,14 +66,14 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## A pharmaceutical company is interested in conducting a clinical trial
 ## to compare two cholesterol lowering agents for treatment of patients with
 ## congestive heart disease (CHD) using a parallel design. The primary 
-## efficacy parameter is the concentration of high density lipoproteins.
+## efficacy parameter is the concentration of high density lipoproteins
 ## (HDL). We consider the situation where the intended trial is to test 
 ## superiority of the test drug over the active control agent. Sample 
 ## size calculations are to be calculated to achieve 80\% power at the
 ## 5\% level of significance.
 
 ## In this example, we assume that if treatment results in a 5 unit 
-## (i.e. delta = 5) increase in HDL it is declared to be superior to the
+## (i.e., delta = 5) increase in HDL it is declared to be superior to the
 ## active control. Assume the standard deviation of HDL is 10 units and 
 ## the HDL concentration in the treatment group is 20 units and the 
 ## HDL concentration in the control group is 20 units.

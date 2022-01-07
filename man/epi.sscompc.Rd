@@ -18,7 +18,7 @@ epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
 \arguments{
   \item{treat}{the expected value for the treatment group (see below).}
   \item{control}{the expected value for the control group (see below).}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e. the number in the treatment and control group).}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment and control group).}
   \item{sigma}{the expected standard deviation of the variable of interest for both treatment and control groups.}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
@@ -52,7 +52,7 @@ Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/C
 \note{
 The power of a study is its ability to demonstrate the presence of an association, given that an association actually exists.
 
-A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2005), pages 381 to 426.
+A detailed description of sample size calculations for case-control studies (with numerous worked examples, many of them reproduced below) is provided by Woodward (2014), pages 295 to 329.
 
 See the documentation for \code{\link{epi.sscohortc}} for an example using the \code{design} facility implemented in this function. 
 }
@@ -63,7 +63,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## that cholesterol means in a population are equal in two study years against 
 ## the one-sided alternative that the mean is higher in the second of the 
 ## two years. Suppose that equal sized samples will be taken in each year, 
-## but that these will not necessarily be from the same individuals (i.e. the 
+## but that these will not necessarily be from the same individuals (i.e., the 
 ## two samples are drawn independently). Our test is to have a power of 0.95 
 ## at detecting a difference of 0.5 mmol/L. The standard deviation of serum 
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
