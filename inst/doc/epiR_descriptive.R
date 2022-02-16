@@ -13,7 +13,7 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----message = FALSE----------------------------------------------------------
-library(epiR); library(ggplot2); library(scales)
+library(epiR); library(ggplot2); library(scales); library(zoo)
 
 ncas <- 4; npop <- 200
 tmp <- as.matrix(cbind(ncas, npop))
@@ -87,7 +87,19 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## ----epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of time, 26 July to 13 December 2004, conditioned by sex."----
+## ----epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004. Superimposed on this plot is a smoothed estimate of case density."----
+
+ggplot(data = dat.df, aes(x = odate)) +
+  theme_bw() +
+  geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
+  geom_density(aes(y = ..density.. * (nrow(dat.df) * 7)), colour = "red") +
+  scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
+     name = "Date") +
+  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+## ----epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004, conditioned by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
@@ -97,7 +109,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex)
 
-## ----epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of time, 26 July to 13 December 2004, conditioned by sex. An event that occurred on 31 October 2004 is indicated by the vertical dashed line."----
+## ----epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004, conditioned by sex. An event that occurred on 31 October 2004 is indicated by the vertical dashed line."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
@@ -109,7 +121,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2004", format = "%d/%m/%Y"))), 
    linetype = "dashed")
 
-## ----epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of time, 26 July to 13 December 2004, grouped by sex."----
+## ----epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004, grouped by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", size = 0.1) +
@@ -122,7 +134,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") +
   theme(legend.position = c(0.90, 0.80))
 
-## ----epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of time, 26 July to 13 December 2004, grouped by sex."----
+## ----epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004, grouped by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", size = 0.1, position = "dodge") +
@@ -136,41 +148,53 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme(legend.position = c(0.90, 0.80))
 
 ## -----------------------------------------------------------------------------
-odate <- seq(from = as.Date("1/1/00", format = "%d/%m/%y"), 
-   to = as.Date("1/1/05", format = "%d/%m/%y"), by = "1 month")
-ncas <- round(runif(n = length(odate), min = 0, max = 100), digits = 0)
+edate <- seq(from = as.Date("2020-02-24"), to = as.Date("2020-07-20"), by = 1)
+ncas <- c(1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,2,
+   0,0,1,0,1,1,2,3,2,5,10,15,5,7,17,37,31,34,42,46,73,58,67,57,54,104,77,52,
+   90,59,64,61,21,26,25,32,24,14,11,23,6,8,9,4,5,7,14,14,1,5,1,1,5,3,3,1,3,3,
+   7,5,10,11,21,14,16,15,13,13,8,5,16,7,9,19,13,5,6,6,5,5,10,9,2,2,5,8,10,6,
+   8,8,4,9,7,8,3,1,4,2,0,4,8,5,8,10,12,8,20,16,11,25,19)  
 
-dat.df <- data.frame(odate, ncas)
-dat.df$dcontrol <- "neg"
-dat.df$dcontrol[dat.df$odate >= as.Date("1/1/03", format = "%d/%m/%y") & 
-   dat.df$odate <= as.Date("1/6/03", format = "%d/%m/%y")] <- "pos"
+dat.df <- data.frame(edate, ncas)
+dat.df$edate <- as.Date(dat.df$edate, format = "%Y-%m-%d")
 head(dat.df)
 
-## ----epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of time, 1 January 2000 to 1 January 2005. Colours indicate the presence or absence of disease control measures."----
+## ----epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020."----
 ggplot() +
   theme_bw() +
-  geom_histogram(dat.df, mapping = aes(x = odate, weight = ncas, fill = factor(dcontrol)), binwidth = 60, colour = "gray", size = 0.1) +
-  scale_x_date(breaks = date_breaks("6 months"), labels = date_format("%b %Y"), 
+  geom_histogram(dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", size = 0.1) +
+  scale_x_date(breaks = date_breaks("2 weeks"), labels = date_format("%b %Y"), 
      name = "Date") +
-  scale_y_continuous(limits = c(0,200), name = "Number of cases") +
-  scale_fill_manual(values = c("#738ca6","#d46a6a")) + 
-  guides(fill = "none") +
+  scale_y_continuous(limits = c(0,125), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## -----------------------------------------------------------------------------
 cumsum(dat.df$ncas)
 
-## ----epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of time, 1 January 2000 to 1 January 2005. Colours indicate the presence or absence of disease control measures. Superimposed on this plot is a line showing cumulative case numbers."----
+## ----epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is a line showing cumulative case numbers."----
 
 ggplot() +
   theme_bw() +
-  geom_histogram(data = dat.df, mapping = aes(x = odate, weight = ncas, fill = factor(dcontrol)), binwidth = 60, colour = "gray", size = 0.1) +
-  geom_line(data = dat.df, mapping = aes(x = odate, y = cumsum(ncas) / 10)) + 
-  scale_x_date(breaks = date_breaks("6 months"), labels = date_format("%b %Y"), 
+  geom_histogram(data = dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", size = 0.1) +
+  geom_line(data = dat.df, mapping = aes(x = edate, y = cumsum(ncas) / 15)) + 
+  scale_x_date(breaks = date_breaks("2 weeks"), labels = date_format("%b %Y"), 
      name = "Date") +
-  scale_y_continuous(limits = c(0,350), name = "Number of cases", 
-      sec.axis = sec_axis(~ . * 10, name = "Cumulative number of cases")) +
-  scale_fill_manual(values = c("#738ca6","#d46a6a")) +  
+  scale_y_continuous(limits = c(0,125), name = "Number of cases", 
+      sec.axis = sec_axis(~ . * 15, name = "Cumulative number of cases")) +
+  guides(fill = "none") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+## ----epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is the 5-day rolling mean number of cases per day."----
+
+dat.df$rncas <- rollmean(x = dat.df$ncas, k = 5, fill = NA)
+
+ggplot() +
+  theme_bw() +
+  geom_histogram(data = dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", size = 0.1) +
+  geom_line(data = dat.df, mapping = aes(x = edate, y = dat.df$rncas), colour = "red") + 
+  scale_x_date(breaks = date_breaks("2 weeks"), labels = date_format("%b %Y"), 
+     name = "Date") +
+  scale_y_continuous(limits = c(0,125), name = "Number of cases") +
   guides(fill = "none") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 

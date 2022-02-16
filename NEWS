@@ -1,3 +1,11 @@
+CHANGES IN epiR VERSION 2.0.42
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function for epi.interaction now handles models of class geeglm (from the geepack package) and glmerMod (from lme4).
+    [Suggested by Diana Garofalo]
+
+
 CHANGES IN epiR VERSION 2.0.41
 
 SIGNIFICANT USER-VISIBLE CHANGES

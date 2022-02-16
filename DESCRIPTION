@@ -1,22 +1,22 @@
 Package: epiR
-Version: 2.0.41
-Date: 2022-01-07
+Version: 2.0.43
+Date: 2022-02-17
 Title: Tools for the Analysis of Epidemiological Data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur and Aniko Szabo.
+Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
-Imports: BiasedUrn, pander, methods, sf, lubridate
+Imports: BiasedUrn, pander, methods, sf, lubridate, zoo
 Suggests: MASS (>= 3.1-20), knitr, rmarkdown, RColorBrewer, ggplot2,
         plyr, rgdal, scales, spData, spatstat, foreign, maptools,
         rgeos, mapproj, tidyverse, kableExtra
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2022-01-07 09:54:17 UTC; Mark Stevenson
+Packaged: 2022-02-16 23:08:54 UTC; marks1
 URL:
         https://fvas.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
         and https://www.ausvet.com.au/
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2022-01-07 12:32:47 UTC
+Date/Publication: 2022-02-17 00:20:06 UTC

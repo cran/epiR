@@ -3,28 +3,52 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
    N. <- 1 - ((1 - conf.level)/2)
    z <- qnorm(N., mean = 0, sd = 1)
   
-   if (class(model)[1] != "glm" & class(model)[2] != "lm" & class(model)[1] != "clogit" & class(model)[1] != "coxph")
-     stop("Error: model must be either a glm or coxph object")      
-
-   theta1 <- as.numeric(model$coefficients[coef[1]])
-   theta2 <- as.numeric(model$coefficients[coef[2]])
-   theta3 <- as.numeric(model$coefficients[coef[3]])
-
-   if(theta1 < 0 | theta2 < 0)
-     warning("At least one of the two regression coefficients is less than zero (i.e., OR < 1). Estimates of RERI and AP will be invalid. Estimate of SI valid.")
+   if (class(model)[1] != "glm" & class(model)[2] != "lm" & class(model)[1] != "clogit" & class(model)[1] != "coxph" & class(model)[1] != "geeglm" & class(model)[1] != "glmerMod")
+     stop("Error: model must be either a glm, clogit, coxph, geeglm or glmerMod object")      
 
    if(class(model)[1] == "glm" & class(model)[2] == "lm"){
+     theta1 <- as.numeric(model$coefficients[coef[1]])
+     theta2 <- as.numeric(model$coefficients[coef[2]])
+     theta3 <- as.numeric(model$coefficients[coef[3]])
+
      theta1.se <- summary(model)$coefficients[coef[1],2]
      theta2.se <- summary(model)$coefficients[coef[2],2]
      theta3.se <- summary(model)$coefficients[coef[3],2]
    }
    
    if(class(model)[1] == "clogit" | class(model)[1] == "coxph"){
+     theta1 <- as.numeric(model$coefficients[coef[1]])
+     theta2 <- as.numeric(model$coefficients[coef[2]])
+     theta3 <- as.numeric(model$coefficients[coef[3]])
+     
      theta1.se <- summary(model)$coefficients[coef[1],3]
      theta2.se <- summary(model)$coefficients[coef[2],3]
      theta3.se <- summary(model)$coefficients[coef[3],3]
    }
+
+   if(class(model)[1] == "geeglm" & class(model)[2] == "gee"){
+     theta1 <- as.numeric(model$coefficients[coef[1]])
+     theta2 <- as.numeric(model$coefficients[coef[2]])
+     theta3 <- as.numeric(model$coefficients[coef[3]])
+     
+     theta1.se <- summary(model)$coefficients[coef[1],2]
+     theta2.se <- summary(model)$coefficients[coef[2],2]
+     theta3.se <- summary(model)$coefficients[coef[3],2]
+   }
    
+   if(class(model)[1] == "glmerMod"){
+     theta1 <- as.numeric(summary(model)$coefficients[coef[1]])
+     theta2 <- as.numeric(summary(model)$coefficients[coef[2]])
+     theta3 <- as.numeric(summary(model)$coefficients[coef[3]])
+     
+     theta1.se <- as.numeric(summary(model)$coefficients[coef[1],2])
+     theta2.se <- as.numeric(summary(model)$coefficients[coef[2],2])
+     theta3.se <- as.numeric(summary(model)$coefficients[coef[3],2])
+   }
+   
+   if(theta1 < 0 | theta2 < 0)
+     warning("At least one of the two regression coefficients is less than zero (i.e., OR < 1). Estimates of RERI and AP will be invalid. Estimate of SI valid.")
+      
    if(param == "product"){
      
      # RERI:
@@ -50,8 +74,11 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
      
      # Multiplicative interaction:
      mult.p <- as.numeric(exp(theta3))
-     mult.l <- exp(confint.default(model)[coef[3],1])
-     mult.u <- exp(confint.default(model)[coef[3],2])
+     
+     mult.ci <- suppressMessages(confint(object = model, parm = coef[3]))
+     mult.l <- as.numeric(exp(mult.ci[1]))
+     mult.u <- as.numeric(exp(mult.ci[2]))
+
      multiplicative <- data.frame(est = mult.p, lower = mult.l, upper = mult.u)
      
      
@@ -81,13 +108,21 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
      s.p <- (exp(theta1 + theta2 + theta3) - 1) / (exp(theta1) + exp(theta2) - 2)
      cov.mat <- vcov(model)
      
-     # If model type is glm or cph and point estimate of S is negative terminate analysis.
-     # Advise user to use a linear odds model:
+     # If model type is glm, cph or geeglm and point estimate of S is negative terminate analysis. Advise user to use a linear odds model:
+     
      if(class(model)[1] == "glm" & class(model)[2] == "lm" & s.p < 0){
        warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
      }
      
      if(class(model)[1] == "clogit" & class(model)[2] == "coxph" & s.p < 0){
+       warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
+     }
+     
+     if(class(model)[1] == "geeglm" & class(model)[2] == "gee" & s.p < 0){
+       warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
+     }
+     
+     if(class(model)[1] == "glmerMod" & s.p < 0){
        warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
      }
      
@@ -142,10 +177,13 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
      
      # Multiplicative interaction:
      mult.p <- as.numeric(exp(theta3))
-     mult.l <- exp(confint.default(model)[coef[3],1])
-     mult.u <- exp(confint.default(model)[coef[3],2])
-     multiplicative <- data.frame(est = mult.p, lower = mult.l, upper = mult.u)
      
+     mult.ci <- suppressMessages(confint(object = model, parm = coef[3]))
+     mult.l <- as.numeric(exp(mult.ci[1]))
+     mult.u <- as.numeric(exp(mult.ci[2]))
+     
+     multiplicative <- data.frame(est = mult.p, lower = mult.l, upper = mult.u)
+
      
      # APAB:
      cov.mat <- vcov(model)
@@ -181,6 +219,14 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
      }
      
      if(class(model)[1] == "clogit" & class(model)[2] == "coxph" & s.p < 0){
+       warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
+     }
+     
+     if(class(model)[1] == "geeglm" & class(model)[2] == "gee" & s.p < 0){
+       warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
+     }
+     
+     if(class(model)[1] == "glmerMod" & s.p < 0){
        warning(paste("Point estimate of synergy index (S) is less than zero (", round(s.p, digits = 2), ").\n  Confidence intervals cannot be calculated using the delta method. Consider re-parameterising as linear odds model.", sep = ""))
      }
      

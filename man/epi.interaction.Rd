@@ -13,9 +13,9 @@ epi.interaction(model, coef, param = c("product", "dummy"), conf.level = 0.95)
 }
 
 \arguments{
-  \item{model}{an object of class \code{glm}, \code{clogit} or \code{coxph}.}
-  \item{coef}{a vector listing the positions of the coefficients of the interaction terms in the model. What row numbers of the regression table summary list the coefficients for the interaction terms included in the model? }
-  \item{param}{character stringing specifying the type of coding used for the variables included in the interaction term. Options are \code{product} where two risk factors and one product term are used to represent the interaction and \code{dummy} where the two risk factors are combined into a single variable with four levels. See the examples, below, for details.}
+  \item{model}{an object of class \code{glm}, \code{geeglm}, \code{glmerMod}, \code{clogit} or \code{coxph}.}
+  \item{coef}{a vector of length three listing the positions of the coefficients of the interaction terms in the model. What row numbers of the regression table summary list the coefficients for the interaction terms included in the model? }
+  \item{param}{a character string specifying the type of coding used for the variables included in the interaction term. Options are \code{product} where two (dichotomous) explanatory variables and one product term are used to represent the interaction and \code{dummy} where the two explanatory variables are combined into a single explanatory variable comprised of four levels. See the examples, below, for details.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
@@ -26,7 +26,7 @@ This function calculates three indices to assess the presence of additive intera
 
 If at least one of the two exposures are preventive (i.e., ORs of less than one) then estimates of RERI and AP are invalid (the SI remains unaffected). In this situation the function issues an appropriate warning. Exposures need to be recoded so the stratum with the lowest outcome risk becomes the new reference category when the two exposures are considered together.
 
-A RERI of zero  means no additive interaction. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
+A RERI of zero means no additive interaction. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
 
 An AP[AB] of zero means no interaction or exactly additivity. An AP[AB] greater than zero means positive interaction or more than additivity. An AP[AB] of less than zero means negative interaction or less than additivity. AP[AB] ranges from -1 to +1.
 
@@ -70,8 +70,8 @@ VanderWeele TJ, Knol MJ (2014). A tutorial on interaction. Epidemiologic Methods
 \examples{
 ## EXAMPLE 1:
 ## Data from Rothman and Keller (1972) evaluating the effect of joint exposure 
-## to alcohol and tabacco on risk of cancer of the mouth and pharynx (cited in
-## Hosmer and Lemeshow, 1992):
+## to smoking and alcohol use on the risk of cancer of the mouth and pharynx 
+## (cited in Hosmer and Lemeshow, 1992):
 
 can <- c(rep(1, times = 231), rep(0, times = 178), rep(1, times = 11), 
    rep(0, times = 38))
@@ -87,7 +87,7 @@ summary(dat.glm01)
 
 ## What is the measure of effect modification on the additive scale?
 epi.interaction(model = dat.glm01, param = "product", coef = c(2,3,4), 
-   conf.level = 0.95)
+   conf.level = 0.95)$reri
 
 ## Measure of interaction on the additive scale: RERI 3.73 
 ## (95\% CI -1.84 to 9.32), page 453 of Hosmer and Lemeshow (1992).
@@ -95,12 +95,10 @@ epi.interaction(model = dat.glm01, param = "product", coef = c(2,3,4),
 ## What is the measure of effect modification on the multiplicative scale?
 ## See VanderWeele and Knol (2014) page 36 and Knol and Vanderweele (2012)
 ## for details.
-beta1 <- as.numeric(dat.glm01$coefficients[2])
-beta2 <- as.numeric(dat.glm01$coefficients[3])
-beta3 <- as.numeric(dat.glm01$coefficients[4])
-exp(beta3) / (exp(beta1) * exp(beta2))
-
-## Measure of interaction on the multiplicative scale: 0.093.
+epi.interaction(model = dat.glm01, param = "product", coef = c(2,3,4), 
+   conf.level = 0.95)$multiplicative
+## Measure of interaction on the multiplicative scale: 0.091 (95\% CI 0.14 to 
+## 5.3).
 
 
 ## EXAMPLE 2:
@@ -108,7 +106,8 @@ exp(beta3) / (exp(beta1) * exp(beta2))
 ## parameterising an interaction term. Using this approach, instead of using
 ## two risk factors and one product term to represent the interaction (as 
 ## above) the risk factors are combined into one variable comprised of 
-## (in this case) four levels:
+## (in this case) four levels. Dummy variables are added to the data set using
+## the following code:
 
 ## a.neg b.neg: 0 0 0
 ## a.pos b.neg: 1 0 0
@@ -132,6 +131,35 @@ epi.interaction(model = dat.glm02, param = "dummy", coef = c(2,3,4),
 
 ## Measure of interaction on the additive scale: RERI 3.74 
 ## (95\% CI -1.84 to 9.32), page 455 of Hosmer and Lemeshow (1992).
+
+
+## EXAMPLE 3:
+## Here we demonstrate the use of epi.interaction when you're working with
+## multilevel data. Imagine each of the study subjects listed in data frame 
+## dat.df01 are aggregated into clusters (e.g., community health centres). 
+## Assuming there are five clusters, assign each subject to a cluster:
+
+\dontrun{
+set.seed(1234)
+dat.df01$inst <- round(runif(n = nrow(dat.df01), min = 1, max = 5), digits = 0)
+table(dat.df01$inst)
+
+## Fit a generalised linear mixed-effects model using function glmer in the 
+## lme4 package, with variable inst as a random intercept term:
+
+dat.glmer01 <- glmer(can ~ alc + smk + alc:smk + (1 | inst), family = binomial, 
+   data = dat.df01)
+summary(dat.glmer01)
+
+## What is the measure of effect modification on the additive scale?
+epi.interaction(model = dat.glmer01, param = "product", coef = c(2,3,4), 
+   conf.level = 0.95)
+
+## Measure of interaction on the additive scale: RERI 3.74 
+## (95\% CI -1.84 to 9.32), identical to that produced above largely because 
+## there's no strong institution-level effect due to the contrived way we've 
+## created the multilevel data. 
+}
 
 }
 \keyword{univar}

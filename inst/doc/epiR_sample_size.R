@@ -17,7 +17,7 @@ library(epiR)
 epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
-epi.sscohortt(irexp1 = 50/1000, irexp0 = 70/1000, FT = 5, n = NA, power = 0.80, r = 1, 
+epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = NA, power = 0.80, r = 1, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$n.total
 
 ## ----message = FALSE----------------------------------------------------------
