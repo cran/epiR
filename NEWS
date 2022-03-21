@@ -1,3 +1,11 @@
+CHANGES IN epiR VERSION 2.0.43
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Measures of association vignette updated with code to compute measures of association for a series of candidate risk factors.
+    [Suggested by Bruno Avila]
+    
+
 CHANGES IN epiR VERSION 2.0.42
 
 SIGNIFICANT USER-VISIBLE CHANGES

@@ -23,7 +23,7 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 A common task in epidemiology is to quantify the strength of association between exposures ('risk factors') and disease outcomes. In this context the term 'exposure' is taken to mean a variable whose association with the outcome is to be estimated. 
 
-Exposures can be harmful, beneficial or both harmful and beneficial (e.g. if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term 'outcome' is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions [@porta:2014]. In human and animal health an 'outcome-positive' individual is an individual who has experienced a given disease of interest. 
+Exposures can be harmful, beneficial or both harmful and beneficial (e.g., if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term 'outcome' is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions [@porta:2014]. In human and animal health an 'outcome-positive' individual is an individual who has experienced a given disease of interest. 
 
 In this vignette we outline describe how `epiR` can be used to compute the various measures of association used in epidemiology notably the risk ratio, odds ratio, attributable risk in the exposed, attributable fraction in the exposed, attributable risk in the population and attributable fraction in the population. Examples are provided to demonstrate how the package can be used to deal with exposure-outcome data presented in various formats.  
 
@@ -61,7 +61,8 @@ kbl(irr, caption = "A 2 by 2 table with incidence risks calculated for the expos
    column_spec(4, bold = FALSE, width = "10em")
    # row_spec(row = 1, bold = TRUE)
 ```
-The incidence risk ratio is then the incidence risk of the outcome in the exposed divided by the incidence risk of the outcome in the unexposed (Figure 1).
+
+The incidence risk estimates shown in Table 2 can be presented graphically in the format shown in Figure 1. In Figure 1 we present the calculated incidence risk in the exposed, unexposed and (exposed and unexposed) groups as a bar chart. The incidence risk ratio equals the incidence risk of the outcome in the exposed divided by the incidence risk of the outcome in the unexposed:
 
 ![The incidence risk ratio.](risk_ratio.png)
 
@@ -105,7 +106,14 @@ kbl(or.cc, caption = "A 2 by 2 table with the odds of exposure calculated for ca
    column_spec(4, bold = FALSE, width = "10em")
    # row_spec(row = 1, bold = TRUE)
 ```
-The odds ratio is defined as the odds of exposure in the cases ($O_{D+}$) divided by the odds of exposure in the controls ($O_{D-}$). Note that the numeric estimate of the odds ratio is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. In a cohort study we talk about the odds of disease being $x$ times greater (or less) in the exposed, compared with the unexposed. In a case-control study we talk about the odds of exposure being $x$ times greater (or less) in cases, compared with controls.
+The odds ratio is defined as the odds of exposure in the cases ($O_{D+}$) divided by the odds of exposure in the controls ($O_{D-}$). 
+
+Note that the numeric estimate of the odds ratio is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:
+
+* In a **cohort study** we talk about the odds of disease being $x$ times greater (or less) in **the exposed**, compared with the unexposed. 
+
+* In a **case-control study** we talk about the odds of exposure being $x$ times greater (or less) in **cases**, compared with controls.
+
 
 **Measures of effect in the exposed**
 
@@ -115,7 +123,9 @@ The attributable risk is defined as the increase or decrease in the risk of the 
 
 ![The attributable risk in the exposed.](attributable_risk.png)
 
-A useful way of expressing attributable risk in a clinical setting is in terms of the number needed to treat, NNT. NNT equals the inverse of the attributable risk. Depending on the outcome of interest we often elect to use different labels for NNT. When dealing with an outcome that is 'desirable' (e.g. treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is 'undesirable' (e.g. death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
+A useful way of expressing attributable risk in a clinical setting is in terms of the number needed to treat, NNT. NNT equals the inverse of the attributable risk. Depending on the outcome of interest we often elect to use different labels for NNT. 
+
+When dealing with an outcome that is 'desirable' (e.g., treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is 'undesirable' (e.g., death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
 
 ***The attributable fraction in the exposed***
 
@@ -138,9 +148,7 @@ The population attributable fraction (also known as the aetiologic fraction) is 
 
 ![The attributable fraction in the population](population_attributable_fraction.png)
 
-On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. 
-
-For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome, and (2) the exposure of interest is something amenable to intervention.
+On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome, and (2) the exposure of interest is something amenable to intervention.
 
 **Theory to practice: Calculating measures of association using R**
 
@@ -159,20 +167,18 @@ matrix(dat.v01, nrow = 2, byrow = TRUE)
 
 Calculate the prevalence ratio, odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function `epi.2by2`. Note that we use the term prevalence ratio (instead of incidence risk ratio) here because we're dealing with data from a cross-sectional study --- the frequency of disease is expressed as a prevalence, not an incidence. 
 
-```{r}
+```{r, message = FALSE}
 library(epiR)
 
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = FALSE, outcome = "as.columns")
 ```
 
-The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats.
-
-In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were  attributable to DCF (95% CI 4% to 78%).
+The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats. In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were  attributable to DCF (95% CI 4% to 78%).
 
 Need a hand getting the correct wording to explain each of the listed measures of association and measures of effect? Set `interpret = TRUE` in `epi.2by2`:
 
-```{r}
+```{r, message = FALSE}
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = TRUE, outcome = "as.columns")
 ```
@@ -185,7 +191,7 @@ For this example we use the low infant birth weight data presented by @hosmer_le
 
 **Two by two table preparation using the `table` function in base R**
 
-```{r}
+```{r, message = FALSE}
 library(MASS)
 
 # Load and view the data:
@@ -195,59 +201,75 @@ Each row of this data set represents data for one mother. We're interested in th
 
 Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the wrong format:
 
-```{r}
+```{r, message = FALSE}
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 ```
 There are two ways to fix this problem. The quick fix is to simply ask R to switch the order of the rows and columns in the output table:
 
-```{r}
+```{r, message = FALSE}
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 dat.tab02 <- dat.tab02[2:1,2:1]; dat.tab02
 ```
 The second approach is to set the exposure variable and the outcome variable as a factor and to define the levels of each factor using `levels = c(1,0)`:
 
-```{r}
-dat.df02$low <- factor(dat.df02$low, levels = c(1,0))
-dat.df02$smoke <- factor(dat.df02$smoke, levels = c(1,0))
-dat.df02$race <- factor(dat.df02$race, levels = c(1,2,3))
+```{r, message = FALSE}
+# Variables low, smoke and race as factors. Put an 'f' in front of the variable names to remind you that they're factors:
 
-dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
+dat.df02$flow <- factor(dat.df02$low, levels = c(1,0))
+dat.df02$fsmoke <- factor(dat.df02$smoke, levels = c(1,0))
+dat.df02$frace <- factor(dat.df02$race, levels = c(1,2,3))
+
+dat.tab02 <- table(dat.df02$fsmoke, dat.df02$flow, dnn = c("Smoke", "Low BW")); dat.tab02
 ```
 Now compute the odds ratio for smoking and delivery of a low birth weight baby:
 
-```{r}
+```{r, message = FALSE}
 dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", conf.level = 0.95, 
    units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi02
 ```
-The odds of having a low birth weight child for smokers is 2.02 (95% CI 1.08 to 3.78) times greater than the odds of having a low birth weight child for non-smokers. 
+The odds of having a low birth weight child for smokers is 2.02 (95% CI 1.08 to 3.78) times greater than the odds of having a low birth weight child for non-smokers. All of the calculated measures of association computed by `epi.2by2` can be listed using:
+
+```{r, message = FALSE}
+names(dat.epi02$massoc.detail)
+```
+Compare the Wald confidence intervals for the odds ratio with the score confidence intervals:
+
+```{r, message = FALSE}
+dat.epi02$massoc.detail$OR.strata.wald
+# Wald confidence intervals: 2.02 (95% CI 1.08 to 3.78)
+
+dat.epi02$massoc.detail$OR.strata.score
+# Score confidence intervals: 2.02 (95% CI 1.08 to 3.77)
+
+```
 
 **Two by two table preparation using `tidyverse`**
 
 The `tidyverse` package can also be used to prepare data in the required format:
 
-```{r}
+```{r, message = FALSE}
 library(tidyverse)
 
 dat.df03 <- birthwt; head(dat.df03)
 
 # Here we set the factor levels and tabulate the data in a single call using pipe operators:
 dat.tab03 <- dat.df03 %>%
-  mutate(low = factor(low, levels = c(1,0), labels = c("yes","no"))) %>%
-  mutate(smoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) %>%
-  group_by(smoke, low) %>%
+  mutate(flow = factor(low, levels = c(1,0), labels = c("yes","no"))) %>%
+  mutate(fsmoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) %>%
+  group_by(fsmoke, flow) %>%
   summarise(n = n()) 
 
 # View the data:
 dat.tab03
 
-## View the data in conventional 2 by 2 table format:
-pivot_wider(dat.tab03, id_cols = c(smoke), 
-   names_from = low, values_from = n)
+# View the data in conventional 2 by 2 table format:
+pivot_wider(dat.tab03, id_cols = c(fsmoke), 
+   names_from = flow, values_from = n)
 ```
 As before, compute the odds ratio for smoking and delivery of a low birth weight baby:
 
-```{r}
+```{r, message = FALSE}
 dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi03
@@ -255,88 +277,157 @@ dat.epi03
 
 The odds of having a low birth weight child for smokers is 2.02 (95% CI 1.08 to 3.78) times greater than the odds of having a low birth weight child for non-smokers. 
 
+**Measures of association for a series of candidate risk factors**
+
+The code that follows provides and approach for calculating measures of association for a series of candidate risk factors, writing the results to a data frame. Here we set up a loop to calculate the odds ratio for age, smoke and race:
+
+```{r, message = FALSE}
+dat.df04 <- birthwt; head(dat.df04)
+
+dat.df04$flow <- factor(dat.df04$low, levels = c(1,0))
+
+dat.df04$fage <- ifelse(dat.df04$age > 23, 0,1)
+dat.df04$fage <- factor(dat.df04$fage, levels = c(1,0))
+dat.df04$fsmoke <- factor(dat.df04$smoke, levels = c(1,0))
+
+# Race is coded 1 = white, 2 = black and 3 = other. Set white as the reference level:
+dat.df04$frace <- ifelse(dat.df04$race == 1, 0, 1)
+dat.df04$frace <- factor(dat.df04$frace, levels = c(1,0))
+
+# Empty vectors to collect results:
+rfactor <- ref <- or.p <- or.l <- or.u <- c() 
+
+# The candidate risk factors are in columns 12 to 14 of data frame dat.df04:
+for(i in 12:14){
+  tdat.tab04 <- table(dat.df04[,i], dat.df04$flow)
+  tdat.epi04 <- epi.2by2(dat = tdat.tab04, method = "cohort.count", 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+  
+  trfactor <- as.character(names(dat.df04)[i]) 
+  rfactor <- c(rfactor, trfactor) 
+  
+  tref <- as.character(paste("Reference: ", trfactor, " - ", levels(dat.df04[,i])[2], sep = ""))
+  ref <- c(ref, tref)
+  
+  tor.p <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[1])
+  or.p <- c(or.p, tor.p)
+  
+  tor.l <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[2])
+  or.l <- c(or.l, tor.l)
+  
+  tor.u <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[3])
+  or.u <- c(or.u, tor.u)
+}
+
+gdat.df04 <- data.frame(yat = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
+gdat.df04
+```
+
+Plot the point estimate of the odds ratio for each candidate risk factor and its 95% confidence interval. Annotate the plot with the reference category for each risk factor:
+
+```{r, message = FALSE}
+library(ggplot2); library(scales)
+
+x.at <- c(0.25,0.5,1,2,4,8,16,32)
+
+ggplot(data = gdat.df04, aes(x = or.p, y = yat)) +
+  theme_bw() +
+  geom_point() + 
+  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
+  scale_x_continuous(trans = log2_trans(), breaks = x.at, limits = c(0.25,8), 
+   name = "Odds ratio") + 
+  scale_y_continuous(breaks = gdat.df04$yat, labels = gdat.df04$ylab, 
+   name = "Risk factor") + 
+  geom_vline(xintercept = 1, lwd = 1) + 
+  annotate("text", x = 0.25, y = gdat.df04$yat, label = gdat.df04$ref, hjust = 0, size = 3) +
+  coord_fixed(ratio = 0.75 / 1) + 
+  theme(axis.title.y = element_text(vjust = 0))
+```
+
 **Confounding**
 
 We're concerned that the mother's race may confound the association between low birth weight and delivery of a low birth weight baby so we'll stratify the data by race and compute the Mantel-Haenszel adjusted odds ratio. As before, our tables can be prepared using either base R or `tidyverse`.
 
 ***Stratified two by two table preparation using the table function in base R***
 
-```{r}
-dat.df04 <- birthwt; head(dat.df04)
-
-dat.tab04 <- table(dat.df04$smoke, dat.df04$low, dat.df04$race, 
-   dnn = c("Smoke", "Low BW", "Race")); dat.tab04
-```
-
-Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race. Function `epi.2by2` automatically calculates the Mantel-Haenszel odds ratio and risk ratio when it is presented with stratified contingency tables.
-
-```{r}
-dat.epi04 <- epi.2by2(dat = dat.tab04, method = "cohort.count", 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
-dat.epi04
-```
-
-The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are the same it is appropriate to compute a Mantel-Haenszel adjusted odds ratio.
-
-After accounting for the confounding effect of race, the odds of having a low birth weight child for smokers was 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.
-
-***Stratified two by two table preparation using tidyverse***
-
-```{r}
+```{r, message = FALSE}
 dat.df05 <- birthwt; head(dat.df05)
 
-dat.tab05 <- dat.df05 %>%
-  mutate(low = factor(low, levels = c(1,0), labels = c("yes","no"))) %>%
-  mutate(smoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) %>%
-  mutate(race = factor(race)) %>%
-  group_by(race, smoke, low) %>%
-  summarise(n = n()) 
-dat.tab05
+dat.df05$flow <- factor(dat.df05$low, levels = c(1,0))
 
-## View the data in conventional 2 by 2 table format:
-pivot_wider(dat.tab05, id_cols = c(race, smoke), 
-   names_from = low, values_from = n)
+dat.df05$fsmoke <- factor(dat.df05$smoke, levels = c(1,0))
+dat.df05$frace <- factor(dat.df05$race, levels = c(1,2,3))
+
+dat.tab05 <- table(dat.df05$fsmoke, dat.df05$flow, dat.df05$frace, 
+   dnn = c("Smoke", "Low BW", "Race")); dat.tab05
 ```
 
-Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race:
+Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race. Function `epi.2by2` automatically calculates the Mantel-Haenszel odds ratio and risk ratio when presented with stratified contingency tables.
 
-```{r}
+```{r, message = FALSE}
 dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi05
 ```
 
-The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25) so we accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. After accounting for the confounding effect of race, the odds of having a low birth weight child for smokers is 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.
+The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are not significantly different the Mantel-Haenszel adjusted odds ratio provides an appropriate summary of the association between smoking and low birth weight.
+
+After accounting for the confounding effect of race, the odds of having a low birth weight baby for smokers was 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.
+
+***Stratified two by two table preparation using tidyverse***
+
+```{r, message = FALSE}
+dat.df06 <- birthwt
+
+dat.tab06 <- dat.df06 %>%
+  mutate(flow = factor(low, levels = c(1,0), labels = c("yes","no"))) %>%
+  mutate(fsmoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) %>%
+  mutate(frace = factor(race)) %>%
+  group_by(frace, fsmoke, flow) %>%
+  summarise(n = n()) 
+dat.tab06
+
+# View the data in conventional 2 by 2 table format:
+pivot_wider(dat.tab06, id_cols = c(frace, fsmoke), 
+   names_from = flow, values_from = n)
+```
+
+Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race:
+
+```{r, message = FALSE}
+dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count", 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi06
+```
 
 Plot the individual strata odds ratios and the Mantel-Haenszel summary odds ratio as an error bar plot to better understand how the Mantel-Haenszel adjusted odds ratio relates to the individual strata odds ratios:
 
-```{r}
-library(ggplot2); library(scales)
-
-nstrata <- 1:length(unique(dat.tab05$race))
+```{r, message = FALSE}
+nstrata <- 1:length(unique(dat.tab06$frace))
 strata.lab <- paste("Strata ", nstrata, sep = "")
 y.at <- c(nstrata, max(nstrata) + 1)
 y.lab <- c("M-H", strata.lab)
 x.at <- c(0.25,0.5,1,2,4,8,16,32)
 
-or.p <- c(dat.epi05$massoc.detail$OR.mh$est, 
-   dat.epi05$massoc.detail$OR.strata.cfield$est)
-or.l <- c(dat.epi05$massoc.detail$OR.mh$lower, 
+or.p <- c(dat.epi06$massoc.detail$OR.mh$est, 
+   dat.epi06$massoc.detail$OR.strata.cfield$est)
+or.l <- c(dat.epi06$massoc.detail$OR.mh$lower, 
    dat.epi05$massoc.detail$OR.strata.cfield$lower)
-or.u <- c(dat.epi05$massoc.detail$OR.mh$upper, 
+or.u <- c(dat.epi06$massoc.detail$OR.mh$upper, 
    dat.epi05$massoc.detail$OR.strata.cfield$upper)
-gdat.df05 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
+gdat.df06 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 
-ggplot(data = gdat.df05, aes(x = or.p, y = y.at)) +
-   geom_point() + 
-   geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
-   labs(x = "Odds ratio", y = "Strata") + 
-   scale_x_continuous(trans = log2_trans(), breaks = x.at, 
-      limits = c(0.25,32)) + 
-   scale_y_continuous(breaks = y.at, labels = y.lab) + 
-   geom_vline(xintercept = 1, lwd = 1) + 
-   coord_fixed(ratio = 0.75 / 1) + 
-   theme(axis.title.y = element_text(vjust = 0))
+ggplot(data = gdat.df06, aes(x = or.p, y = y.at)) +
+  theme_bw() + 
+  geom_point() + 
+  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
+  labs(x = "Odds ratio", y = "Strata") + 
+  scale_x_continuous(trans = log2_trans(), breaks = x.at, 
+   limits = c(0.25,32)) + 
+  scale_y_continuous(breaks = y.at, labels = y.lab) + 
+  geom_vline(xintercept = 1, lwd = 1) + 
+  coord_fixed(ratio = 0.75 / 1) + 
+  theme(axis.title.y = element_text(vjust = 0))
 ```
 
 ## References

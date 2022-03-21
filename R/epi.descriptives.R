@@ -3,10 +3,10 @@ epi.descriptives <- function(dat, conf.level = 0.95){
     conf.low <- (1 - conf.level) / 2
     conf.upp <- conf.level + (1 - conf.level) / 2
     
-    if(class(dat) != "numeric" & class(dat) != "factor")
-        stop("Error: dat must be numeric")
+    if(inherits(x = dat, what = "numeric") == FALSE & inherits(x = dat, what = "factor") == FALSE)
+      stop("Error: dat must be either numeric or a factor")
 
-    if(class(dat) == "numeric"){    
+    if(inherits(x = dat, what = "numeric")){    
         an <- length(dat)
         amean <- mean(dat, na.rm = TRUE)
         asd <- sd(dat, na.rm = TRUE)
@@ -60,7 +60,7 @@ epi.descriptives <- function(dat, conf.level = 0.95){
         )
     }
     
-    if(class(dat) == "factor"){
+    if(inherits(x = dat, what = "factor")){
         tmp <- table(dat, useNA = "always")
         total <- data.frame(level = "sum", n = margin.table(tmp))
         tmp <- data.frame(level = row.names(tmp), n = as.numeric(tmp))

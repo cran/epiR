@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson and Evan Sergeant" />
 
-<meta name="date" content="2022-02-17" />
+<meta name="date" content="2022-03-22" />
 
 <title>Design and Analysis of Disease Surveillance Programs Using epiR</title>
 
@@ -386,130 +386,137 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Design and Analysis of Disease Surveillance Programs Using epiR</h1>
 <h4 class="author">Mark Stevenson and Evan Sergeant</h4>
-<h4 class="date">2022-02-17</h4>
+<h4 class="date">2022-03-22</h4>
 
 
 
 <p>Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures <span class="citation">(Thacker and Berkelman <a href="#ref-thacker_berkelman:1988" role="doc-biblioref">1988</a>)</span>.</p>
 <p>The Terrestrial Animal Health Code of the World Organisation of Animal Health <span class="citation">(OIE <a href="#ref-oie:2021" role="doc-biblioref">2021</a>)</span> defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners, and (4) identification of hazards or risk factors for disease outbreaks.</p>
-<p>This vignette provides instruction on the way R and <code>epiR</code> (and specifically the surveillance functions within <code>epiR</code>) can be used for: (1) the design of disease surveillance programs; and (2) the design of programs to provide a quantitative basis for claims for disease freedom.</p>
+<p>This vignette provides instruction on the way R and <code>epiR</code> (specifically, the surveillance functions within <code>epiR</code>) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.</p>
 <div id="definitions" class="section level2">
 <h2>Definitions</h2>
-<p><strong>Design prevalence</strong>. The design prevalence (minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we may reject the null hypothesis and accept the alternative hypothesis to conclude that the prevalence is less than the design prevalence.</p>
-<p>A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn’t need to be described using a distribution. <em>Cluster-level design prevalence</em> refers to a design prevalence assigned at the cluster (e.g. village, herd or household) level. <em>Unit-level design prevalence</em> refers to a design prevalence assigned at the individual unit (e.g. cow, sheep, bird) level. The unit-level prevalence of disease can be applied either within clusters (e.g. herds, flocks, villages) or across broader, unclustered populations (e.g. human populations or wildlife).</p>
-<p><strong>Surveillance system</strong>. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g. on-farm testing, abattoir surveillance, disease hotlines) called <strong>surveillance system components</strong>. Each surveillance system component is comprised of <strong>surveillance system units</strong>. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively.</p>
-<p><strong>Unit sensitivity</strong>. Unit sensitivity is defined as the average probability that a unit (selected from those processed) will return a positive surveillance outcome, given that disease is present in the population at a level equal to or greater than a specified design prevalence.</p>
-<p><strong>Component sensitivity</strong>. Component sensitivity (CSe) is defined as the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.</p>
+<p><strong>Design prevalence</strong>. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we may reject the null hypothesis and accept the alternative hypothesis to conclude that the prevalence is less than the design prevalence.</p>
+<p>A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn’t need to be described using a distribution.</p>
+<p><em>Cluster-level design prevalence</em> refers to a design prevalence assigned at the cluster (e.g., village, herd or household) level.</p>
+<p><em>Unit-level design prevalence</em> refers to a design prevalence assigned at the individual unit (e.g., cow, sheep, bird) level. The unit-level prevalence of disease can be applied either within clusters (e.g., herds, flocks, villages) or across broader, unclustered populations (e.g., human populations or wildlife).</p>
+<p><strong>Surveillance system</strong>. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g., on-farm testing, abattoir surveillance, disease hotlines) called <strong>surveillance system components</strong>. Each surveillance system component is assesses <strong>surveillance system units</strong>. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively.</p>
+<p><strong>Surveillance unit sensitivity</strong>. Surveillance unit sensitivity is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is present in the population at a level equal to or greater than a specified design prevalence.</p>
+<p><strong>Component sensitivity</strong>. Component sensitivity (CSe) is the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.</p>
 <p><strong>Surveillance system sensitivity</strong>. Surveillance system sensitivity (SSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than a specified design prevalence.</p>
 </div>
 <div id="an-approach-for-thinking-about-surveillance-design-and-assessment" class="section level2">
 <h2>An approach for thinking about surveillance design and assessment</h2>
 <p>The first thing to consider when you’re designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen sampling will usually be either <strong>representative</strong> or <strong>risk-based</strong>. Other options include the situation where you might observe every individual in a population (a <strong>census</strong>) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (<strong>passive surveillance</strong>).</p>
 <p>Once we have the method of sampling defined we then move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how we might assess the surveillance system once it has been designed and implemented.</p>
-<p>In terms of design, once you have specified the sampling method you need to determine how many surveillance system units will be sampled (usually to achieve a defined surveillance system sensitivity).</p>
-<p>Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, we then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: (1) What is the surveillance system sensitivity? or (2) What is the probability that the prevalence of disease is less than the specified design prevalence? or (3) What is the surveillance system’s negative predictive value?</p>
-<p>The remainder of this vignette follows this general structure. For each sampling method (representative, risk-based, census and passive) we provide notes and examples on the use of <code>epiR</code> for sample size estimation, estimation of surveillance system sensitivity and estimation of the probability of disease freedom. While ‘estimation of the probability of disease freedom’ is the name assigned to the last group of analyses a more correct label would be ‘estimation of the probability that the prevalence of disease is less than a specified design prevalence’ (i.e. the negative predictive value of the surveillance system). Be aware that we can only truly demonstrate disease freedom if every member of the population at risk is assessed using a test with perfect diagnostic sensitivity and perfect diagnostic specificity.</p>
+<p>In terms of design, once you have specified the sampling method you need to determine how many surveillance system units will be sampled (usually, to achieve a defined surveillance system sensitivity).</p>
+<p>Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, we then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>What is the surveillance system sensitivity? or</p></li>
+<li><p>What is the probability that the prevalence of disease is less than the specified design prevalence? or</p></li>
+<li><p>What is the surveillance system’s negative predictive value?</p></li>
+</ol>
+<p>The remainder of this vignette follows this general structure. For each sampling method (representative, risk-based, census and passive) we provide notes and examples on the use of <code>epiR</code> for sample size estimation, estimation of surveillance system sensitivity and estimation of the probability of disease freedom. While ‘estimation of the probability of disease freedom’ is the name assigned to the last group of analyses a more correct label would be ‘estimation of the probability that the prevalence of disease is less than a specified design prevalence’ (i.e., the negative predictive value of the surveillance system). Be aware that we can only truly demonstrate disease freedom if every member of the population at risk is assessed using a test with perfect diagnostic sensitivity and perfect diagnostic specificity.</p>
 </div>
 <div id="representative-sampling" class="section level2">
 <h2>Representative sampling</h2>
 <div id="sample-size-estimation" class="section level3">
 <h3>Sample size estimation</h3>
 <p>The sample size functions for surveillance representative sampling in <code>epiR</code> fall into two classes: sampling to achieve a defined probability of disease freedom and sampling to achieve a defined surveillance system sensitivity.</p>
-<p>The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g. cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units are sampled.</p>
+<p>The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as being <strong>primary sampling units</strong> (PSUs) and animals and individuals as being <strong>secondary sampling units</strong> (SSUs).</p>
 <table>
 <caption>Functions to estimate sample size using representative population sampling data.</caption>
 <thead>
 <tr class="header">
-<th align="center">Sampling</th>
-<th align="center">Outcome</th>
-<th align="center">Details</th>
-<th align="center">Function</th>
+<th align="left">Sampling</th>
+<th align="left">Outcome</th>
+<th align="left">Details</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Representative</td>
-<td align="center">Prob disease freedom</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sspfree.rs</code></td>
+<td align="left">Representative</td>
+<td align="left">Pr disease freedom</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sspfree.rs</code></td>
 </tr>
 <tr class="even">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sssep.rs</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sssep.rs</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Two stage representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sssep.rs2st</code></td>
+<td align="left">Two stage representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sssep.rs2st</code></td>
 </tr>
 <tr class="even">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, imperfect Sp, known N</td>
-<td align="center"><code>rsu.sssep.rsfreecalc</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, imperfect Sp, known N</td>
+<td align="left"><code>rsu.sssep.rsfreecalc</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Pooled representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, imperfect Sp</td>
-<td align="center"><code>rsu.sssep.rspool</code></td>
+<td align="left">Pooled representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, imperfect Sp</td>
+<td align="left"><code>rsu.sssep.rspool</code></td>
 </tr>
 </tbody>
 </table>
 <p><em>EXAMPLE 1</em></p>
-<p>A cross-sectional study is to be carried out to confirm the absence of brucellosis in dairy herds using a bulk milk tank test assuming a design prevalence of 5%. Assume the total number of dairy herds in your study area is unknown and large and the bulk milk tank test to be used has a diagnostic sensitivity of 0.95 and a specificity of 1.00. How many herds need to be sampled to achieve a system sensitivity of 95%? That is, what is the probability that disease will be detected if it is present in the population at the designated design prevalence?</p>
+<p>A cross-sectional study is to be carried out to confirm the absence of brucellosis in dairy herds using a bulk milk tank test assuming a design prevalence of 5%. Assume the total number of dairy herds in your study area is unknown and large and the bulk milk tank test to be used has a diagnostic sensitivity of 0.90 and specificity of 1.00. How many herds need to be sampled to achieve a surveillance system sensitivity (<code>se.p</code>) of 95%? That is, what is the probability that disease will be detected if it is present in the population at the designated design prevalence?</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(epiR)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; [1] 62</span></span></code></pre></div>
-<p>A total of 62 herds need to be sampled and tested.</p>
-<p>This question can be asked in another way. If our prior estimate of the probability that the population of herds is free of disease is 0.50 and we believe that there’s a 1% chance of disease being introduced into the population during the next time period, how many herds need to be sampled to be 95% confident that disease is absent (i.e. less than the design prevalence) if all tests are negative?</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">rsu.sspfree.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">prior =</span> <span class="fl">0.50</span>, <span class="dt">p.intro =</span> <span class="fl">0.01</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">pfree =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; [1] 66</span></span></code></pre></div>
+<p>A total of 66 herds need to be sampled and tested.</p>
+<p>This question can be asked in another way. If our prior estimate of the probability that the population of herds is free of disease is 0.50 and we believe that there’s a 1% chance of disease being introduced into the population during the next time period, how many herds need to be sampled to be 95% confident that disease is absent (i.e., less than the design prevalence) if all tests are negative?</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">rsu.sspfree.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">prior =</span> <span class="fl">0.50</span>, <span class="dt">p.intro =</span> <span class="fl">0.01</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">pfree =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; $n</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] 61</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] 65</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; </span></span>
 <span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; $se.p</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; [1] 0.9484106</span></span>
 <span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; </span></span>
 <span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; $adj.prior</span></span>
 <span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; [1] 0.495</span></span></code></pre></div>
-<p>A total of 61 herds need to be sampled (similar to the value calculated above). Note that function <code>rsu.sssep.rs</code> returns the sample size to achieve a desired surveillance system sensitivity (‘what’s the probability that disease will be detected?’). Function <code>rsu.sspfree.rs</code> returns the sample size to achieve a desired (posterior) probability of disease freedom.</p>
+<p>A total of 65 herds need to be sampled (similar to the value calculated above). Note that function <code>rsu.sssep.rs</code> returns the sample size to achieve a desired surveillance system sensitivity (‘what’s the probability that disease will be detected?’). Function <code>rsu.sspfree.rs</code> returns the sample size to achieve a desired (posterior) probability of disease freedom.</p>
 <p>Now assume that it is known that there are 500 dairy herds in your study area. Revise your sample size estimate to achieve the desired surveillance system sensitivity in light of this new information.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="dv">500</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] 60</span></span></code></pre></div>
-<p>A total of 60 herds need to be sampled and tested.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="dv">500</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] 63</span></span></code></pre></div>
+<p>A total of 63 herds need to be sampled and tested.</p>
 <p>The sample size calculations presented so far assume the use of a test with perfect specificity (that is, if a sample returns a positive result we can be 100% certain that the herd is positive and disease is actually present in the population).</p>
 <p>Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The <code>rsu.ss.rsfreecalc</code> function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software ‘Freecalc’ <span class="citation">(Cameron and Baldock, <a href="#ref-cameron_baldock:1998a" role="doc-biblioref">n.d.</a>)</span>.</p>
 <p><em>EXAMPLE 2</em></p>
-<p>We’ll continue with the brucellosis example introduced above. Imagine the test we’re using has a diagnostic sensitivity of 0.95 (as before) but this time it has a specificity of 0.98. How many herds need to be sampled to be 95% certain that the prevalence of brucellosis in dairy herds is less than the design prevalence if less than a specified number of tests return a positive result?</p>
+<p>We’ll continue with the brucellosis example introduced above. Imagine the test we’re using has a diagnostic sensitivity of 0.90 (as before) and specificity of 0.98. How many herds need to be sampled to be 95% certain that the prevalence of brucellosis in dairy herds is less than the design prevalence if less than a specified number of tests return a positive result?</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">rsu.sssep.rsfreecalc</span>(<span class="dt">N =</span> <span class="dv">5000</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">mse.p =</span> <span class="fl">0.95</span>, </span>
-<span id="cb4-2"><a href="#cb4-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
+<span id="cb4-2"><a href="#cb4-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
 <span id="cb4-3"><a href="#cb4-3"></a>   <span class="dt">max.ss =</span> <span class="dv">32000</span>)<span class="op">$</span>summary</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;     n    N c pstar         p1     se.p      sp.p</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 1 194 5000 7  0.05 0.04898102 0.951019 0.9573939</span></span></code></pre></div>
-<p>A population sensitivity of 95% is achieved with a total sample size of 194 herds, assuming a cut-point of 7 or more positive herds are required to return a positive survey result.</p>
-<p>Note the substantial increase in sample size when diagnostic specificity is imperfect (194 herds when specificity is 0.98 compared with 63 when specificity is 1.00). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are more likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to see its effect on estimated sample size.</p>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;     n    N c pstar         p1      se.p      sp.p</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 1 221 5000 8  0.05 0.04990684 0.9500932 0.9648964</span></span></code></pre></div>
+<p>A population sensitivity of 95% is achieved with a total sample size of 221 herds, assuming a cut-point of 8 or more positive herds are required to return a positive survey result.</p>
+<p>Note the substantial increase in sample size when diagnostic specificity is imperfect (221 herds when specificity is 0.98 compared with 65 when specificity of the test was perfect). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are more likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to assess its effect on estimated sample size.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">rsu.sssep.rsfreecalc</span>(<span class="dt">N =</span> <span class="dv">5000</span>, <span class="dt">pstar =</span> <span class="fl">0.10</span>, <span class="dt">mse.p =</span> <span class="fl">0.95</span>, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>   <span class="dt">msp.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>, <span class="dt">sp.u =</span> <span class="fl">0.98</span>, <span class="dt">method =</span> <span class="st">&quot;hypergeometric&quot;</span>, </span>
 <span id="cb5-3"><a href="#cb5-3"></a>   <span class="dt">max.ss =</span> <span class="dv">32000</span>)<span class="op">$</span>summary</span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;    n    N c pstar         p1      se.p      sp.p</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 1 66 5000 3   0.1 0.04992274 0.9500773 0.9566218</span></span></code></pre></div>
-<p>The required sample size decreases to 66 and the cut-point to 3 positives due to: (1) the expected reduction in the number of false positives; and (2) the greater difference between true and false positive rates in the first example compared with the second.</p>
-<p>Now consider the situation where individual surveillance units (e.g. animals) are aggregated within groups called ‘clusters’ (e.g. herds). With this type of system <strong>two-stage cluster sampling</strong> is a commonly used approach for disease surveillance studies.</p>
-<p>With two stage cluster sampling herds (clusters) are sampled first and then individual surveillance units are then sampled from each sampled cluster. This means that we have two sample sizes to calculate: the number of clusters and the number of surveillance units from within each sampled cluster.</p>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 1 82 5000 4   0.1 0.04947366 0.9505263 0.9754309</span></span></code></pre></div>
+<p>The required sample size decreases to 82 and the cut-point to 4 positives due to: (1) the expected reduction in the number of false positives; and (2) the greater difference between true and false positive rates in the first example compared with the second.</p>
+<p>Now consider the situation where individual surveillance units (e.g., animals) are aggregated within groups called ‘clusters’ (e.g., herds). With this type of system <strong>two-stage cluster sampling</strong> is a commonly used approach for disease surveillance studies.</p>
+<p>With two stage cluster sampling herds (clusters, PSUs) are sampled first and then individual surveillance units (SSUs) are sampled from each sampled cluster. This means that we have two sample sizes to calculate: the number of PSUs and the number of SSUs from within each PSU.</p>
 <p><em>EXAMPLE 3</em></p>
-<p>For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the herd level is 0.95 and the target sensitivity of disease detection at the population level is the same, 0.95.</p>
-<p>How many herds need to be sampled if you want to be 95% certain of detecting at least one infected herd if that the between-herd prevalence of disease is greater than or equal to 0.005?</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="dv">20000</span>, <span class="dt">pstar =</span> <span class="fl">0.005</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1] 622</span></span></code></pre></div>
+<p>For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is thought to be relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the population level is 0.95.</p>
+<p>How many PSUs (herds) need to be sampled if you want to be 95% certain of detecting at least one infected herd if that the between-herd prevalence of disease is greater than or equal to 0.005?</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="dv">20000</span>, <span class="dt">pstar =</span> <span class="fl">0.005</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1] 656</span></span></code></pre></div>
 <p>We need to sample a total of 622 herds.</p>
-<p>How many animals need to be sampled from each herd if you want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?</p>
+<p>How many animals (SSUs) need to be sampled from each herd (PSU) if you want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">rsu.sssep.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">pstar =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; [1] 66</span></span></code></pre></div>
 <p>Within each selected herd we need to sample at least 66 animals.</p>
-<p>As an alternative we can calculate the required number of herds to sample and the required number of animals to sample from each herd in a single step using the function <code>rsu.sssep.rs2stage</code>:</p>
+<p>We can calculate the required number of herds (PSUs) to sample and the required number of animals to sample from within each herd (SSUs) in a single step using the function <code>rsu.sssep.rs2stage</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">rsu.sssep.rs2st</span>(<span class="dt">H =</span> <span class="dv">20000</span>, <span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">pstar.c =</span> <span class="fl">0.005</span>, <span class="dt">pstar.u =</span> <span class="fl">0.05</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.c =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.90</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; $clusters</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt;       H nsample</span></span>
@@ -531,54 +538,54 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center">Sampling</th>
-<th align="center">Outcome</th>
-<th align="center">Details</th>
-<th align="center">Function</th>
+<th align="left">Sampling</th>
+<th align="left">Outcome</th>
+<th align="left">Details</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sep.rs</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sep.rs</code></td>
 </tr>
 <tr class="even">
-<td align="center">Two stage representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sep.rs2st</code></td>
+<td align="left">Two stage representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sep.rs2st</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp, multiple components</td>
-<td align="center"><code>rsu.sep.rsmult</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp, multiple components</td>
+<td align="left"><code>rsu.sep.rsmult</code></td>
 </tr>
 <tr class="even">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, imperfect Sp</td>
-<td align="center"><code>rsu.sep.rsfreecalc</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, imperfect Sp</td>
+<td align="left"><code>rsu.sep.rsfreecalc</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Pooled representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sep.rspool</code></td>
+<td align="left">Pooled representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sep.rspool</code></td>
 </tr>
 <tr class="even">
-<td align="center">Representative</td>
-<td align="center">SSe</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.sep.rsvarse</code></td>
+<td align="left">Representative</td>
+<td align="left">SSe</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.sep.rsvarse</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Representative</td>
-<td align="center">SSp</td>
-<td align="center">Imperfect Sp</td>
-<td align="center"><code>rsu.spp.rs</code></td>
+<td align="left">Representative</td>
+<td align="left">SSp</td>
+<td align="left">Imperfect Sp</td>
+<td align="left"><code>rsu.spp.rs</code></td>
 </tr>
 </tbody>
 </table>
@@ -620,24 +627,24 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center">Sampling</th>
-<th align="center">Outcome</th>
-<th align="center">Details</th>
-<th align="center">Function</th>
+<th align="left">Sampling</th>
+<th align="left">Outcome</th>
+<th align="left">Details</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Representative</td>
-<td align="center">Prob disease of freedom</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.pfree.rs</code></td>
+<td align="left">Representative</td>
+<td align="left">Prob disease of freedom</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.pfree.rs</code></td>
 </tr>
 <tr class="even">
-<td align="center">Representative</td>
-<td align="center">Equilibrium prob of disease freedom</td>
-<td align="center">Imperfect Se, perfect Sp</td>
-<td align="center"><code>rsu.pfree.equ</code></td>
+<td align="left">Representative</td>
+<td align="left">Equilibrium prob of disease freedom</td>
+<td align="left">Imperfect Se, perfect Sp</td>
+<td align="left"><code>rsu.pfree.equ</code></td>
 </tr>
 </tbody>
 </table>
@@ -652,14 +659,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb12-6"><a href="#cb12-6"></a>rval.df &lt;-<span class="st"> </span><span class="kw">rsu.pfree.rs</span>(<span class="dt">se.p =</span> <span class="kw">rep</span>(<span class="fl">0.65</span>, <span class="dt">times =</span> <span class="dv">12</span>), <span class="dt">p.intro =</span> p.intro, <span class="dt">prior =</span> <span class="fl">0.50</span>, <span class="dt">by.time =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb12-7"><a href="#cb12-7"></a></span>
 <span id="cb12-8"><a href="#cb12-8"></a><span class="co"># Re-format rval.df ready for for ggplot2:</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a>dat.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mnum =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> <span class="dv">2</span>),</span>
+<span id="cb12-9"><a href="#cb12-9"></a>gdat.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mnum =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> <span class="dv">2</span>),</span>
 <span id="cb12-10"><a href="#cb12-10"></a>   <span class="dt">mchar =</span> <span class="kw">rep</span>(<span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2020/1/1&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;month&quot;</span>, <span class="dt">length.out =</span> <span class="dv">12</span>), <span class="dt">times =</span> <span class="dv">2</span>),                 </span>
 <span id="cb12-11"><a href="#cb12-11"></a>   <span class="dt">class =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;Disease introduction&quot;</span>, <span class="dt">times =</span> <span class="kw">length</span>(p.intro)), </span>
 <span id="cb12-12"><a href="#cb12-12"></a>             <span class="kw">rep</span>(<span class="st">&quot;Disease freedom&quot;</span>, <span class="dt">times =</span> <span class="kw">length</span>(p.intro))),</span>
 <span id="cb12-13"><a href="#cb12-13"></a>   <span class="dt">prob =</span> <span class="kw">c</span>(rval.df<span class="op">$</span>PIntro, rval.df<span class="op">$</span>PFree))</span>
 <span id="cb12-14"><a href="#cb12-14"></a></span>
 <span id="cb12-15"><a href="#cb12-15"></a><span class="co"># Plot the results:</span></span>
-<span id="cb12-16"><a href="#cb12-16"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat.df, <span class="kw">aes</span>(<span class="dt">x =</span> mchar, <span class="dt">y =</span> prob, <span class="dt">group =</span> class, <span class="dt">col =</span> class)) <span class="op">+</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> gdat.df, <span class="kw">aes</span>(<span class="dt">x =</span> mchar, <span class="dt">y =</span> prob, <span class="dt">group =</span> class, <span class="dt">col =</span> class)) <span class="op">+</span></span>
 <span id="cb12-17"><a href="#cb12-17"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb12-18"><a href="#cb12-18"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb12-19"><a href="#cb12-19"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
@@ -675,7 +682,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="risk-based-sampling" class="section level2">
 <h2>Risk-based sampling</h2>
-<p>With risk-based sampling we modify the intensity of sampling effort across the population of interest according to risk (as opposed to representative sampling where the probability that an individual unit is sampled is uniform across the population of interest). When our objective is to detect the presence of disease risk-based sampling makes intuitive sense: we concentrate our search effort on those sections of the population where we believe we are more likely to detect disease (i.e. where the risk of disease is high).</p>
+<p>With risk-based sampling we modify the intensity of sampling effort across the population of interest according to risk (as opposed to representative sampling where the probability that an individual unit is sampled is uniform across the population of interest). When our objective is to detect the presence of disease risk-based sampling makes intuitive sense: We concentrate our search effort on those sections of the population where we believe we’re more likely to detect disease (i.e., where the risk of disease is high).</p>
 <div id="how-many-samples-do-i-need" class="section level3">
 <h3>How many samples do I need?</h3>
 <p>The sample size functions all relate to sampling to achieve a defined surveillance system sensitivity.</p>
@@ -683,36 +690,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <caption>Functions to estimate sample size using risk based sampling data.</caption>
 <thead>
 <tr class="header">
-<th align="center">Sampling</th>
-<th align="center">Outcome</th>
-<th align="center">Details</th>
-<th align="center">Function</th>
+<th align="left">Sampling</th>
+<th align="left">Outcome</th>
+<th align="left">Details</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Single Se for risk groups, perfect Sp</td>
-<td align="center"><code>rsu.sssep.rbsrg</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Single Se for risk groups, perfect Sp</td>
+<td align="left"><code>rsu.sssep.rbsrg</code></td>
 </tr>
 <tr class="even">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Multiple Se within risk groups, perfect Sp</td>
-<td align="center"><code>rsu.sssep.rbmrg</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Multiple Se within risk groups, perfect Sp</td>
+<td align="left"><code>rsu.sssep.rbmrg</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Two stage sampling, 1 risk factor</td>
-<td align="center"><code>rsu.sssep.rb2st1rf</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Two stage sampling, 1 risk factor</td>
+<td align="left"><code>rsu.sssep.rb2st1rf</code></td>
 </tr>
 <tr class="even">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Two stage sampling, 2 risk factors</td>
-<td align="center"><code>rsu.sssep.rb2st2rf</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Two stage sampling, 2 risk factors</td>
+<td align="left"><code>rsu.sssep.rb2st2rf</code></td>
 </tr>
 </tbody>
 </table>
@@ -737,7 +744,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt; $mean.se</span></span>
 <span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt; [1] 0.95 0.95 0.95</span></span></code></pre></div>
 <p>A total of 147 herds need to be sampled: 59 dairy, 59 mixed and 29 beef herds.</p>
-<p>Now assume that one of two tests will be used for each herd. The first test has a diagnostic sensitivity of 0.92. The second test has a diagnostic sensitivity of 0.80. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70, respectively (which means that 0.20, 0.50 and 0.30 receive the second test, respectively). Recalculate the sample size.</p>
+<p>Now assume that one of two tests will be used for each herd. The first test has a diagnostic sensitivity of 0.92. The second test has a diagnostic sensitivity of 0.80. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70, respectively (which means that 0.20, 0.50 and 0.30 receive the second test, respectively). Recalculate the required sample size.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>m &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>), <span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>), <span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.3</span>))</span>
 <span id="cb14-3"><a href="#cb14-3"></a></span>
@@ -817,38 +824,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <caption>Functions to estimate surveillance system sensitivity using risk based sampling data.</caption>
 <thead>
 <tr class="header">
-<th align="center">Sampling</th>
-<th align="center">Outcome</th>
-<th align="center">Details</th>
-<th align="center">Function</th>
+<th align="left">Sampling</th>
+<th align="left">Outcome</th>
+<th align="left">Details</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Varying Se, perfect Sp</td>
-<td align="center"><code>rsu.sep.rb</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Varying Se, perfect Sp</td>
+<td align="left"><code>rsu.sep.rb</code></td>
 </tr>
 <tr class="even">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Varying Se, perfect Sp, one risk factor</td>
-<td align="center"><code>rsu.sep.rb1rf</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Varying Se, perfect Sp, one risk factor</td>
+<td align="left"><code>rsu.sep.rb1rf</code></td>
 </tr>
 <tr class="odd">
-<td align="center">Risk-based</td>
-<td align="center">SSe</td>
-<td align="center">Varying Se, perfect Sp, two risk factors</td>
-<td align="center"><code>rsu.sep.rb2rf</code></td>
+<td align="left">Risk-based</td>
+<td align="left">SSe</td>
+<td align="left">Varying Se, perfect Sp, two risk factors</td>
+<td align="left"><code>rsu.sep.rb2rf</code></td>
 </tr>
 </tbody>
 </table>
 <p><em>EXAMPLE 11</em></p>
 <p>You have been asked to provide an assessment of a surveillance program for Actinobacillus hyopneumoniae in pigs. It is known that there are high risk and low risk areas for A. hypopneumoniae in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.</p>
-<p>The risk of A. hypopneumoniae is dependent on age, with adult pigs around five times more likely to be A. hypopneumoniae positive compared with younger (grower) pigs.</p>
-<p>Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested.</p>
-<p>The ELISA for A. hypopneumoniae in pigs has a diagnostic sensitivity of 0.95.</p>
+<p>The risk of A. hypopneumoniae is dependent on age, with adult pigs around five times more likely to be A. hypopneumoniae positive compared with younger (grower) pigs. Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested. The ELISA for A. hypopneumoniae in pigs has a diagnostic sensitivity of 0.95.</p>
 <p>What is the surveillance system sensitivity if we assume a design prevalence of 1 per 100 at the cluster (herd) level and 5 per 100 at the surveillance system unit (pig) level?</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># There are 1784 herds in the study area:</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>H &lt;-<span class="st"> </span><span class="dv">1784</span></span>
@@ -955,8 +960,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>The population size in a provincial area in your country is 193,000. In a given two-week period a total of 7764 individuals have been tested for COVID-19 using an approved PCR which is believed to have a diagnostic sensitivity of 0.85. All of the individuals tested have returned a negative result. What is the maximum prevalence required to provide system sensitivity of 0.95 if COVID-19 is actually present in this population (i.e. what is the back-calculated design prevalence)? Express your result as the number of COVID-19 cases per 100,000 head of population.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">rsu.pstar</span>(<span class="dt">N =</span> <span class="dv">193000</span>, <span class="dt">n =</span> <span class="dv">7764</span>, <span class="dt">se.p =</span> <span class="fl">0.95</span>, <span class="dt">se.u =</span> <span class="fl">0.85</span>) <span class="op">*</span><span class="st"> </span><span class="dv">100000</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; [1] 44.61341</span></span></code></pre></div>
-<p>If the 7764 individuals have all returned a negative test result (using a test with 85% sensitivity) we can be 95% confident that COVID-19, if it is present, is present at a prevalence of 44 cases per 100,000 or less.</p>
-<p>What is the probability that the prevalence of COVID-19 in this population is less than or equal to 10 cases per 100,000?</p>
+<p>If the 7764 individuals have all returned a negative test result (using a test with 85% sensitivity) we can be 95% confident that COVID-19, if it is present, is present at a prevalence of 44 cases per 100,000 or less. What is the probability that the prevalence of COVID-19 in this population is less than or equal to 10 cases per 100,000?</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">rsu.sep</span>(<span class="dt">N =</span> <span class="dv">193000</span>, <span class="dt">n =</span> <span class="dv">7764</span>, <span class="dt">pstar =</span> <span class="dv">10</span> <span class="op">/</span><span class="st"> </span><span class="dv">100000</span>, <span class="dt">se.u =</span> <span class="fl">0.85</span>)</span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="co">#&gt; [1] 0.4890517</span></span></code></pre></div>
 <p>If all of the 7764 individuals returned a negative test we can 48% confident that the prevalence of COVID-19 in the province is less than 10 per 100,000. How many need to be tested to be 95% confident that the prevalence of COVID-19 is less than or equal to 10 cases per 100,000? We return to the sample size functions covered earlier:</p>

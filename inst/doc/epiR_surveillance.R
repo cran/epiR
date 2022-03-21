@@ -15,13 +15,15 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 ## ----ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'------
 library(pander)
 panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.default', 'left')
+panderOptions('table.alignment.rownames', 'left')
 # panderOptions('table.alignment.default', function(df) ifelse(sapply(df, is.numeric), 'right', 'left'))
 
 set.caption("Functions to estimate sample size using representative population sampling data.")
 
 ssrs.tab <- " 
 Sampling       | Outcome               | Details                    | Function
-Representative | Prob disease freedom  | Imperfect Se, perfect Sp   | `rsu.sspfree.rs`
+Representative | Pr disease freedom    | Imperfect Se, perfect Sp   | `rsu.sspfree.rs`
 Representative | SSe                   | Imperfect Se, perfect Sp   | `rsu.sssep.rs`
 Two stage representative | SSe         | Imperfect Se, perfect Sp   | `rsu.sssep.rs2st`
 Representative | SSe                   | Imperfect Se, imperfect Sp, known N | `rsu.sssep.rsfreecalc`
@@ -36,26 +38,26 @@ pander(ssrs.df, style = 'rmarkdown')
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
-rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.95)
+rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.90)
 
 ## ----message = FALSE----------------------------------------------------------
-rsu.sspfree.rs(N = NA, prior = 0.50, p.intro = 0.01, pstar = 0.05, pfree = 0.95, se.u = 0.95)
+rsu.sspfree.rs(N = NA, prior = 0.50, p.intro = 0.01, pstar = 0.05, pfree = 0.95, se.u = 0.90)
 
 ## ----message = FALSE----------------------------------------------------------
-rsu.sssep.rs(N = 500, pstar = 0.05, se.p = 0.95, se.u = 0.95)
+rsu.sssep.rs(N = 500, pstar = 0.05, se.p = 0.95, se.u = 0.90)
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rsfreecalc(N = 5000, pstar = 0.05, mse.p = 0.95, 
-   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
+   msp.p = 0.95, se.u = 0.90, sp.u = 0.98, method = "hypergeometric", 
    max.ss = 32000)$summary
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rsfreecalc(N = 5000, pstar = 0.10, mse.p = 0.95, 
-   msp.p = 0.95, se.u = 0.95, sp.u = 0.98, method = "hypergeometric", 
+   msp.p = 0.95, se.u = 0.90, sp.u = 0.98, method = "hypergeometric", 
    max.ss = 32000)$summary
 
 ## ----message = FALSE----------------------------------------------------------
-rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.95)
+rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.90)
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.90)
@@ -128,14 +130,14 @@ p.intro <- c(0.01,0.01,0.01,0.02,0.04,0.10,0.10,0.10,0.08,0.06,0.04,0.02)
 rval.df <- rsu.pfree.rs(se.p = rep(0.65, times = 12), p.intro = p.intro, prior = 0.50, by.time = TRUE)
 
 # Re-format rval.df ready for for ggplot2:
-dat.df <- data.frame(mnum = rep(1:12, times = 2),
+gdat.df <- data.frame(mnum = rep(1:12, times = 2),
    mchar = rep(seq(as.Date("2020/1/1"), by = "month", length.out = 12), times = 2),                 
    class = c(rep("Disease introduction", times = length(p.intro)), 
              rep("Disease freedom", times = length(p.intro))),
    prob = c(rval.df$PIntro, rval.df$PFree))
 
 # Plot the results:
-ggplot(data = dat.df, aes(x = mchar, y = prob, group = class, col = class)) +
+ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   theme_bw() +
   geom_point() + 
   geom_line() +

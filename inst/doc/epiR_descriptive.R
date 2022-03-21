@@ -169,7 +169,7 @@ ggplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## -----------------------------------------------------------------------------
-cumsum(dat.df$ncas)
+max(cumsum(dat.df$ncas))
 
 ## ----epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is a line showing cumulative case numbers."----
 

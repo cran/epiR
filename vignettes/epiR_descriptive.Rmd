@@ -60,7 +60,7 @@ tmp <- as.matrix(cbind(ncas, npop))
 epi.conf(tmp, ctype = "prevalence", method = "exact", N = 1000, design = 1, 
    conf.level = 0.95) * 100
 ```
-The estimated prevalence of disease X in this population is 2.0 (95% confidence interval [CI] 0.55 -- 5.0) cases per 100 individuals at risk.
+The estimated prevalence of disease X in this population is 2.0 (95% confidence interval [CI] 0.55 to 5.0) cases per 100 individuals at risk.
 
 Another example. A study was conducted by @feychting_et_al:1998 to report the frequency of cancer among the blind. A total of 136 diagnoses of cancer were made from 22,050 person-years at risk. What was the incidence rate of cancer in this population?
 
@@ -126,13 +126,13 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
 
 ## Time
 
-Epidemic curve data are often presented in one of two formats: 
+Epidemic curves are typically used to describe patterns of disease over time. Epidemic curve data are often presented in one of two formats: 
 
 1. One row for each individual identified as a case with an event date assigned to each.
 
 2. One row for every event date with an integer representing the number of cases identified on that date.
 
-Code is provided to generate epidemic curves for each of these scenarios. 
+In the notes that follow we provide details on how to produce an epidemic curve when you're data are in either of these two formats. 
 
 ### One row of data for each case
 
@@ -162,6 +162,8 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+You may want to superimpose a smoothed line to better appreciate trend. Do this using the `geom_density` function in `ggplot2`:
 
 ```{r epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004. Superimposed on this plot is a smoothed estimate of case density."}
 
@@ -268,7 +270,7 @@ This plot has features of a common point source epidemic for the period April 20
 Add a line to the plot to show the cumulative number of cases detected as a function of calendar date. The coding here requires some thought. First question: What was the cumulative number of cases at the end of the follow-up period? Use the `cumsum` (cumulative sum) function in base R:
 
 ```{r}
-cumsum(dat.df$ncas)
+max(cumsum(dat.df$ncas))
 ```
 At the end of the follow-up period the cumulative number of cases was 1834. What we need to do is to get our 0 to 1834 cumulative case numbers to 'fit' into the 0 to 125 vertical axis limits of the epidemic curve. A reasonable approach would be to: (1) divide cumulative case numbers by a number so that the maximum cumulative case number divided by our selected number roughly equals the maximum number of cases identified per day; for this example, 15 would be a good choice (1834 / 15 = 122); and (2) set `sec.axis = sec_axis(~ . * 15)` to multiply the values that appear on the primary vertical axis by 15 for the labels that appear on the secondary vertical axis:
 
