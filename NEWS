@@ -1,3 +1,11 @@
+CHANGES IN epiR VERSION 2.0.44
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.prev updated to return the expected number of false positive test results in addition to apparent and true prevalence.
+    [Suggested by Mark Stevenson]
+    
+
 CHANGES IN epiR VERSION 2.0.43
 
 SIGNIFICANT USER-VISIBLE CHANGES

@@ -8,43 +8,59 @@
    else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')
    
    # Apparent prevalence:
-   ap.p <- pos / tested
-
+   ap.est <- pos / tested
+   ap.low <- ap.cl[1]
+   ap.upp <- ap.cl[2]
+   
    # True prevalence:
-   tp.p <- (ap.p + sp - 1) / (se + sp - 1)
-   
-   # The next two lines commented out 4 Nov 2018. Report TP estimates out of 0-1 range and issue warning.
-   # tp.p[tp.p < 0] <- 0
-   # tp.p[tp.p > 1] <- 1
-
+   tp.est <- (ap.est + sp - 1) / (se + sp - 1)
    tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
+   tp.low <- tp.cl[1]
+   tp.upp <- tp.cl[2]
    
-   # The next two lines commented out 4 Nov 2018. Report TP estimates out of 0-1 range and issue warning.
-   # tp.cl[tp.cl < 0] <- 0
-   # tp.cl[tp.cl > 1] <- 1
-   # tp.cl <- pmax(tp.cl, c(0, 0))
-   # tp.cl <- pmin(tp.cl, c(1, 1))
+   # Number of false positives:
+   p.low <- (1 - conf.level) / 2
+   p.upp <- (1 - (1 - conf.level) / 2)
+   
+   # Expected prevalence of false positives:
+   dntp.p <- (1 - tp.est) * (1 - sp)
+   dntp.est <- qbinom(p = 0.50, size = tested, prob = dntp.p)
+   dntp.low <- qbinom(p = p.low, size = tested, prob = dntp.p)
+   dntp.upp <- qbinom(p = p.upp, size = tested, prob = dntp.p)
 
+   ap = data.frame(est = ap.est * units, lower = ap.low * units, upper = ap.upp * units)
+   tp = data.frame(est = tp.est * units, lower = tp.low * units, upper = tp.upp * units)
+   false.positives = data.frame(est = dntp.est, lower = dntp.low, upper = dntp.upp)
+
+   rval <- list(ap = ap, tp = tp, false.positives = false.positives)
+      
    if(length(pos) == 1){
-     if(ap.p < (1 - sp)) warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
-     if(ap.p > se) warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+     if(ap.est < (1 - sp)){ 
+     warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
+     rval <- list(ap = ap, tp = tp)
+     }
+   }
+   
+   if(length(pos) == 1){
+     if(ap.est > se){
+     warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
+     rval <- list(ap = ap, tp = tp)
+     }
+   }
      
-     result.01 <- data.frame(est = ap.p * units, lower = ap.cl[1] * units, upper = ap.cl[2] * units)
-     result.02 <- data.frame(est = tp.p * units, lower = tp.cl[1] * units, upper = tp.cl[2] * units)
-     } 
+   if(length(pos) > 1){
+     if(sum(ap.est < (1 - sp)) > 0){
+     warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
+     rval <- list(ap = ap, tp = tp)
+     }
+   }
    
    if(length(pos) > 1){
-     id <- ap.p < (1 - sp)
-     if(sum(id) > 0) warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
-     
-     ie <- (ap.p > se)
-     if(sum(ie) > 0) warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
-
-     result.01 <- data.frame(est = ap.p * units, lower = ap.cl[,1] * units, upper = ap.cl[,2] * units)
-     result.02 <- data.frame(est = tp.p * units, lower = tp.cl[,1] * units, upper = tp.cl[,2] * units)
-   } 
-     
-   rval <- list(ap = result.01, tp = result.02)
+     if(sum((ap.est > se)) > 0){
+     warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.  Estimated number of false positives not returned.')
+     rval <- list(ap = ap, tp = tp)
+     }
+   }
    return(rval)
 }
 

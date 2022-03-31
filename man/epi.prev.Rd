@@ -3,11 +3,11 @@
 \alias{epi.prev}
 
 \title{
-Estimate true prevalence
+Estimate true prevalence and the expected number of false positives
 }
 
 \description{
-Compute the true prevalence of a disease in a population on the basis of an imperfect test.
+Compute the true prevalence of a disease and the estimated number of false positive tests on the basis of an imperfect test.
 }
 
 \usage{
@@ -25,7 +25,7 @@ epi.prev(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95)
 }
 
 \details{
-Appropriate confidence intervals for the adjusted prevalence estimate are provided, accounting for the change in variance that arises from imperfect test sensitivity and specificity (see Reiczigel et al 2010 for details). 
+Appropriate confidence intervals for the adjusted prevalence estimate are provided, accounting for the change in variance that arises from imperfect test sensitivity and specificity (see Reiczigel et al. 2010 for details). 
 
 The Clopper-Pearson method is known to be too conservative for two-sided intervals (Blaker 2000, Agresti and Coull 1998). Blaker's and Sterne's methods (Blaker 2000, Sterne 1954) provide smaller exact two-sided confidence interval estimates. 
 }
@@ -34,8 +34,8 @@ The Clopper-Pearson method is known to be too conservative for two-sided interva
 A list containing the following: 
    \item{ap}{the point estimate of apparent prevalence and the lower and upper bounds of the confidence interval around the apparent prevalence estimate.}
    \item{tp}{the point estimate of the true prevalence and the lower and upper bounds of the confidence interval around the true prevalence estimate.}
+   \item{false.positives}{the point estimate of the expected number of false positive test results and the lower and upper quantiles of the estimated number of false positive test results computed using \code{conf.level}.}
 }
-
 
 \references{
 Abel U (1993). DieBewertung Diagnostischer Tests. Hippokrates, Stuttgart. 
@@ -63,7 +63,7 @@ Sterne TE (1954). Some remarks on confidence or fiducial limits. Biometrika 41: 
 
 If apparent prevalence is less than (1 - diagnostic test specificity) the Rogan Gladen estimate of true prevalence will be less than zero (Speybroeck et al. 2012). If the apparent prevalence is greater than the diagnostic test sensitivity the Rogan Gladen estimate of true prevalence will be greater than one.
  
-When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In either situation a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
+When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In both situations the estimated number of false positives is not returned by the function. Where AP < (1 - Sp) or AP > Se a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
 }
 
 \examples{
@@ -78,7 +78,8 @@ epi.prev(pos = 45, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
    units = 100, conf.level = 0.95)
 
 ## The estimated true prevalence of brucellosis in this herd is 22 (95\% 14 
-## to 32) cases per 100 cows at risk.
+## to 32) cases per 100 cows at risk. Using this screening test we can expect
+## anywhere between 7 and 20 false positive test results.
 
 
 # EXAMPLE 2:

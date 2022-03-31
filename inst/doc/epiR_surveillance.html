@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson and Evan Sergeant" />
 
-<meta name="date" content="2022-03-22" />
+<meta name="date" content="2022-04-01" />
 
 <title>Design and Analysis of Disease Surveillance Programs Using epiR</title>
 
@@ -45,6 +45,40 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<style type="text/css">.tabwid table{
+border-spacing:0px !important;
+border-collapse:collapse;
+line-height:1;
+margin-left:auto;
+margin-right:auto;
+border-width: 0;
+display: table;
+margin-top: 1.275em;
+margin-bottom: 1.275em;
+border-color: transparent;
+}
+.tabwid_left table{
+margin-left:0;
+}
+.tabwid_right table{
+margin-right:0;
+}
+.tabwid td {
+padding: 0;
+}
+.tabwid a {
+text-decoration: none;
+}
+.tabwid thead {
+background-color: transparent;
+}
+.tabwid tfoot {
+background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -386,7 +420,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Design and Analysis of Disease Surveillance Programs Using epiR</h1>
 <h4 class="author">Mark Stevenson and Evan Sergeant</h4>
-<h4 class="date">2022-03-22</h4>
+<h4 class="date">2022-04-01</h4>
 
 
 
@@ -423,49 +457,61 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Sample size estimation</h3>
 <p>The sample size functions for surveillance representative sampling in <code>epiR</code> fall into two classes: sampling to achieve a defined probability of disease freedom and sampling to achieve a defined surveillance system sensitivity.</p>
 <p>The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as being <strong>primary sampling units</strong> (PSUs) and animals and individuals as being <strong>secondary sampling units</strong> (SSUs).</p>
-<table>
-<caption>Functions to estimate sample size using representative population sampling data.</caption>
-<thead>
-<tr class="header">
-<th align="left">Sampling</th>
-<th align="left">Outcome</th>
-<th align="left">Details</th>
-<th align="left">Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Representative</td>
-<td align="left">Pr disease freedom</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sspfree.rs</code></td>
-</tr>
-<tr class="even">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sssep.rs</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Two stage representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sssep.rs2st</code></td>
-</tr>
-<tr class="even">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, imperfect Sp, known N</td>
-<td align="left"><code>rsu.sssep.rsfreecalc</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Pooled representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, imperfect Sp</td>
-<td align="left"><code>rsu.sssep.rspool</code></td>
-</tr>
-</tbody>
-</table>
+<template id="de4a8222-aa8a-4fcd-b485-8c8f7d2c0b63"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-561bba9a{}.cl-561493d2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-561493d3{font-family:'Arial';font-size:6.6pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;position: relative;bottom:3.3pt;}.cl-561493d4{font-family:'courier';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-561493d5{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-561493d6{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493d7{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493d8{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493d9{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493da{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493db{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-561493dc{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5616f4ec{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5616f4ed{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5616f4ee{width:288pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5616f4ef{width:180pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5616f4f0{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-561bba9a">
+<caption class="Table Caption">
+<p>Table 1: Functions to estimate sample size using representative population sampling data.</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-5616f4ef"><p class="cl-561493d5"><span class="cl-561493d2">Sampling</span></p></td><td class="cl-5616f4f0"><p class="cl-561493d5"><span class="cl-561493d2">Outcome</span></p></td><td class="cl-5616f4ee"><p class="cl-561493d5"><span class="cl-561493d2">Detail</span></p></td><td class="cl-5616f4f0"><p class="cl-561493d5"><span class="cl-561493d2">Function</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-561493d8"><p class="cl-561493d5"><span class="cl-561493d2">Representative</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d2">Pr DF</span><span class="cl-561493d3"> a</span></p></td><td class="cl-561493d7"><p class="cl-561493d5"><span class="cl-561493d2">Imperf Se, perf Sp</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d4">rsu.sspfree.rs</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-561493d8"><p class="cl-561493d5"><span class="cl-561493d2">Representative</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d2">SSe</span></p></td><td class="cl-561493d7"><p class="cl-561493d5"><span class="cl-561493d2">Imperf Se, perf Sp</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d4">rsu.sssep.rs</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-561493d8"><p class="cl-561493d5"><span class="cl-561493d2">Two stage representative</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d2">SSe</span></p></td><td class="cl-561493d7"><p class="cl-561493d5"><span class="cl-561493d2">Imperf Se, perf Sp</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d4">rsu.sssep.rs2st</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-561493d8"><p class="cl-561493d5"><span class="cl-561493d2">Representative</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d2">SSe</span></p></td><td class="cl-561493d7"><p class="cl-561493d5"><span class="cl-561493d2">Imperf Se, perf Sp, known N</span></p></td><td class="cl-561493d6"><p class="cl-561493d5"><span class="cl-561493d4">rsu.sssep.rsfreecalc</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-561493db"><p class="cl-561493d5"><span class="cl-561493d2">Pooled representative</span></p></td><td class="cl-561493d9"><p class="cl-561493d5"><span class="cl-561493d2">SSe</span></p></td><td class="cl-561493da"><p class="cl-561493d5"><span class="cl-561493d2">Imperf Se, perf Sp</span></p></td><td class="cl-561493d9"><p class="cl-561493d5"><span class="cl-561493d4">rsu.sssep.rspool</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-5616f4ed"><p class="cl-561493d5"><span class="cl-561493d3"> a</span><span class="cl-561493d2"> Pr DF: Probability of disease freedom.</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="2981bbda-263b-4da7-9376-cfcca2066f03"></div>
+<script>
+var dest = document.getElementById("2981bbda-263b-4da7-9376-cfcca2066f03");
+var template = document.getElementById("de4a8222-aa8a-4fcd-b485-8c8f7d2c0b63");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p><em>EXAMPLE 1</em></p>
 <p>A cross-sectional study is to be carried out to confirm the absence of brucellosis in dairy herds using a bulk milk tank test assuming a design prevalence of 5%. Assume the total number of dairy herds in your study area is unknown and large and the bulk milk tank test to be used has a diagnostic sensitivity of 0.90 and specificity of 1.00. How many herds need to be sampled to achieve a surveillance system sensitivity (<code>se.p</code>) of 95%? That is, what is the probability that disease will be detected if it is present in the population at the designated design prevalence?</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(epiR)</span>
@@ -528,67 +574,61 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="estimation-of-surveillance-system-sensitivity-and-specificity" class="section level3">
 <h3>Estimation of surveillance system sensitivity and specificity</h3>
-<table>
-<caption>Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.</caption>
-<colgroup>
-<col width="25%"></col>
-<col width="8%"></col>
-<col width="45%"></col>
-<col width="21%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Sampling</th>
-<th align="left">Outcome</th>
-<th align="left">Details</th>
-<th align="left">Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sep.rs</code></td>
-</tr>
-<tr class="even">
-<td align="left">Two stage representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sep.rs2st</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp, multiple components</td>
-<td align="left"><code>rsu.sep.rsmult</code></td>
-</tr>
-<tr class="even">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, imperfect Sp</td>
-<td align="left"><code>rsu.sep.rsfreecalc</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Pooled representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sep.rspool</code></td>
-</tr>
-<tr class="even">
-<td align="left">Representative</td>
-<td align="left">SSe</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.sep.rsvarse</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Representative</td>
-<td align="left">SSp</td>
-<td align="left">Imperfect Sp</td>
-<td align="left"><code>rsu.spp.rs</code></td>
-</tr>
-</tbody>
-</table>
+<template id="4e1bd8f4-5370-443c-97c5-c63879d2b9d6"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-56a47790{}.cl-569d35fc{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-569d35fd{font-family:'Arial';font-size:6.6pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;position: relative;bottom:3.3pt;}.cl-569d35fe{font-family:'courier';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-569d35ff{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-569d3600{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3601{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3602{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3603{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3604{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3605{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569d3606{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569f995a{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569f995b{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569f995c{width:288pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569f995d{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-569f995e{width:180pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-56a47790">
+<caption class="Table Caption">
+<p>Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-569f995e"><p class="cl-569d35ff"><span class="cl-569d35fc">Sampling</span></p></td><td class="cl-569f995d"><p class="cl-569d35ff"><span class="cl-569d35fc">Outcome</span></p></td><td class="cl-569f995c"><p class="cl-569d35ff"><span class="cl-569d35fc">Detail</span></p></td><td class="cl-569f995d"><p class="cl-569d35ff"><span class="cl-569d35fc">Function</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, perf Sp</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rs</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Two stage representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, perf Sp</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rs2st</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, perf Sp, mult comp</span><span class="cl-569d35fd"> a</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rsmult</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, imperf Sp</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rsfreecalc</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Pooled  representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, perf Sp</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rspool</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3601"><p class="cl-569d35ff"><span class="cl-569d35fc">Representative</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fc">SSe</span></p></td><td class="cl-569d3602"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Se, perf Sp</span></p></td><td class="cl-569d3600"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.sep.rsvarse</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-569d3604"><p class="cl-569d35ff"><span class="cl-569d35fc">Representative</span></p></td><td class="cl-569d3603"><p class="cl-569d35ff"><span class="cl-569d35fc">SSp</span></p></td><td class="cl-569d3605"><p class="cl-569d35ff"><span class="cl-569d35fc">Imperf Sp</span></p></td><td class="cl-569d3603"><p class="cl-569d35ff"><span class="cl-569d35fe">rsu.spp.rs</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-569f995b"><p class="cl-569d35ff"><span class="cl-569d35fd"> a</span><span class="cl-569d35fc"> mult comp: Multiple components.</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="f64cca71-c47b-4238-bb15-170643cd5be9"></div>
+<script>
+var dest = document.getElementById("f64cca71-c47b-4238-bb15-170643cd5be9");
+var template = document.getElementById("4e1bd8f4-5370-443c-97c5-c63879d2b9d6");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p><em>EXAMPLE 4</em></p>
 <p>Three hundred samples are to be tested from a population of animals to confirm the absence of disease. The total size of the population is unknown. Assuming a design prevalence of 0.01 and a test with diagnostic sensitivity of 0.95 will be used what is the surveillance system sensitivity? That is, what is the probability that disease will be detected if it is present in the population at or above the specified design prevalence?</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">rsu.sep.rs</span>(<span class="dt">N =</span> <span class="ot">NA</span>, <span class="dt">n =</span> <span class="dv">300</span>, <span class="dt">pstar =</span> <span class="fl">0.01</span>, <span class="dt">se.u =</span> <span class="fl">0.95</span>)</span>
@@ -617,37 +657,61 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="estimation-of-the-probability-of-disease-freedom" class="section level3">
 <h3>Estimation of the probability of disease freedom</h3>
-<table>
-<caption>Functions to estimate the probability of disease freedom using representative population sampling data.</caption>
-<colgroup>
-<col width="16%"></col>
-<col width="38%"></col>
-<col width="27%"></col>
-<col width="17%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Sampling</th>
-<th align="left">Outcome</th>
-<th align="left">Details</th>
-<th align="left">Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Representative</td>
-<td align="left">Prob disease of freedom</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.pfree.rs</code></td>
-</tr>
-<tr class="even">
-<td align="left">Representative</td>
-<td align="left">Equilibrium prob of disease freedom</td>
-<td align="left">Imperfect Se, perfect Sp</td>
-<td align="left"><code>rsu.pfree.equ</code></td>
-</tr>
-</tbody>
-</table>
+<template id="688485b8-bf28-4b92-9d9d-c396c44e7e33"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-56d01648{}.cl-56c8ee54{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-56c8ee55{font-family:'Arial';font-size:6.6pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;position: relative;bottom:3.3pt;}.cl-56c8ee56{font-family:'courier';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-56c8ee57{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-56c8ee58{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee59{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee5a{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee5b{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee5c{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee5d{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56c8ee5e{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56cb51e4{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56cb51e5{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56cb51e6{width:288pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56cb51e7{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-56cb51e8{width:180pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-56d01648">
+<caption class="Table Caption">
+<p>Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-56cb51e8"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Sampling</span></p></td><td class="cl-56cb51e7"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Outcome</span></p></td><td class="cl-56cb51e6"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Detail</span></p></td><td class="cl-56cb51e7"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Function</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-56c8ee58"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Representative</span></p></td><td class="cl-56c8ee5a"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Pr DF</span><span class="cl-56c8ee55"> a</span></p></td><td class="cl-56c8ee59"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Imperf Se, perf Sp</span></p></td><td class="cl-56c8ee5a"><p class="cl-56c8ee57"><span class="cl-56c8ee56">rsu.pfree.rs</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-56c8ee5c"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Representative</span></p></td><td class="cl-56c8ee5b"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Equilibrium pr DF</span><span class="cl-56c8ee55"> a</span></p></td><td class="cl-56c8ee5d"><p class="cl-56c8ee57"><span class="cl-56c8ee54">Imperf Se, perf Sp</span></p></td><td class="cl-56c8ee5b"><p class="cl-56c8ee57"><span class="cl-56c8ee56">rsu.pfree.equ</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-56cb51e4"><p class="cl-56c8ee57"><span class="cl-56c8ee55"> a</span><span class="cl-56c8ee54"> Pr DF: Probability of disease freedom.</span></p></td></tr><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-56cb51e4"><p class="cl-56c8ee57"><span class="cl-56c8ee55"> a</span><span class="cl-56c8ee54"> Equilibrium pr DF: Equilibrium probability of disease freedom.</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="ebaf7125-3c3c-4ce3-a677-a2a0cc21fb39"></div>
+<script>
+var dest = document.getElementById("ebaf7125-3c3c-4ce3-a677-a2a0cc21fb39");
+var template = document.getElementById("688485b8-bf28-4b92-9d9d-c396c44e7e33");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p><em>EXAMPLE 7</em></p>
 <p>You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated system sensitivity of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is higher during the warmer months of the year (June to August).</p>
 <p>Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is free of disease is 0.50.</p>
@@ -686,43 +750,61 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="how-many-samples-do-i-need" class="section level3">
 <h3>How many samples do I need?</h3>
 <p>The sample size functions all relate to sampling to achieve a defined surveillance system sensitivity.</p>
-<table>
-<caption>Functions to estimate sample size using risk based sampling data.</caption>
-<thead>
-<tr class="header">
-<th align="left">Sampling</th>
-<th align="left">Outcome</th>
-<th align="left">Details</th>
-<th align="left">Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Single Se for risk groups, perfect Sp</td>
-<td align="left"><code>rsu.sssep.rbsrg</code></td>
-</tr>
-<tr class="even">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Multiple Se within risk groups, perfect Sp</td>
-<td align="left"><code>rsu.sssep.rbmrg</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Two stage sampling, 1 risk factor</td>
-<td align="left"><code>rsu.sssep.rb2st1rf</code></td>
-</tr>
-<tr class="even">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Two stage sampling, 2 risk factors</td>
-<td align="left"><code>rsu.sssep.rb2st2rf</code></td>
-</tr>
-</tbody>
-</table>
+<template id="fa168d30-d0ff-4d65-ac5e-a9bfa1ae5ed6"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-57114a3c{}.cl-570a0aba{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-570a0abb{font-family:'Arial';font-size:6.6pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;position: relative;bottom:3.3pt;}.cl-570a0abc{font-family:'courier';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-570a0abd{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-570a0abe{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0abf{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0ac0{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0ac1{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0ac2{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0ac3{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570a0ac4{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570c6d14{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570c6d15{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570c6d16{width:288pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570c6d17{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-570c6d18{width:180pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-57114a3c">
+<caption class="Table Caption">
+<p>Table 4: Functions to estimate sample size using risk based sampling data.</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-570c6d18"><p class="cl-570a0abd"><span class="cl-570a0aba">Sampling</span></p></td><td class="cl-570c6d17"><p class="cl-570a0abd"><span class="cl-570a0aba">Outcome</span></p></td><td class="cl-570c6d16"><p class="cl-570a0abd"><span class="cl-570a0aba">Detail</span></p></td><td class="cl-570c6d17"><p class="cl-570a0abd"><span class="cl-570a0aba">Function</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-570a0ac0"><p class="cl-570a0abd"><span class="cl-570a0aba">Risk-based</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0aba">SSe</span></p></td><td class="cl-570a0abe"><p class="cl-570a0abd"><span class="cl-570a0aba">Single Se for RGs, perf Sp</span><span class="cl-570a0abb"> a</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0abc">rsu.sssep.rbsrg</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-570a0ac0"><p class="cl-570a0abd"><span class="cl-570a0aba">Risk-based</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0aba">SSe</span></p></td><td class="cl-570a0abe"><p class="cl-570a0abd"><span class="cl-570a0aba">Multiple Se within RGs, perf Sp</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0abc">rsu.sssep.rbmrg</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-570a0ac0"><p class="cl-570a0abd"><span class="cl-570a0aba">Risk-based</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0aba">SSe</span></p></td><td class="cl-570a0abe"><p class="cl-570a0abd"><span class="cl-570a0aba">Two stage sampling, 1 risk factor</span></p></td><td class="cl-570a0abf"><p class="cl-570a0abd"><span class="cl-570a0abc">rsu.sssep.rb2st1rf</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-570a0ac3"><p class="cl-570a0abd"><span class="cl-570a0aba">Risk-based</span></p></td><td class="cl-570a0ac2"><p class="cl-570a0abd"><span class="cl-570a0aba">SSe</span></p></td><td class="cl-570a0ac1"><p class="cl-570a0abd"><span class="cl-570a0aba">Two stage sampling, 2 risk factors</span></p></td><td class="cl-570a0ac2"><p class="cl-570a0abd"><span class="cl-570a0abc">rsu.sssep.rb2st2rf</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-570c6d15"><p class="cl-570a0abd"><span class="cl-570a0abb"> a</span><span class="cl-570a0aba"> RGs: Risk groups.</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="acec83b7-3801-4c58-b92d-9268fe0c8358"></div>
+<script>
+var dest = document.getElementById("acec83b7-3801-4c58-b92d-9268fe0c8358");
+var template = document.getElementById("fa168d30-d0ff-4d65-ac5e-a9bfa1ae5ed6");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p><em>EXAMPLE 8</em></p>
 <p>You are working with a disease of cattle where the prevalence of disease is believed to vary according to herd type. The risk of disease is 5 times greater in dairy herds and 3 times greater in mixed herds compared with the reference category, beef herds. The distribution of dairy, mixed and beef herds in the population of interest is 0.10, 0.10 and 0.80, respectively. Assume you intend to distribute your sampling effort 0.4, 0.4 and 0.2 across dairy, mixed and beef herds, respectively.</p>
 <p>Within each of the three risk groups a single test with a diagnostic sensitivity of 0.95 will be used. How many herds need to be sampled if you want to achieve 95% system sensitivity for a prevalence of disease in the population of greater than or equal to 1%?</p>
@@ -820,37 +902,61 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="surveillance-system-sensitivity" class="section level3">
 <h3>Surveillance system sensitivity</h3>
-<table>
-<caption>Functions to estimate surveillance system sensitivity using risk based sampling data.</caption>
-<thead>
-<tr class="header">
-<th align="left">Sampling</th>
-<th align="left">Outcome</th>
-<th align="left">Details</th>
-<th align="left">Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Varying Se, perfect Sp</td>
-<td align="left"><code>rsu.sep.rb</code></td>
-</tr>
-<tr class="even">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Varying Se, perfect Sp, one risk factor</td>
-<td align="left"><code>rsu.sep.rb1rf</code></td>
-</tr>
-<tr class="odd">
-<td align="left">Risk-based</td>
-<td align="left">SSe</td>
-<td align="left">Varying Se, perfect Sp, two risk factors</td>
-<td align="left"><code>rsu.sep.rb2rf</code></td>
-</tr>
-</tbody>
-</table>
+<template id="a2fb182f-d8e5-49c1-b14f-250873eff583"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-573f454a{}.cl-5737ec14{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5737ec15{font-family:'Arial';font-size:6.6pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;position: relative;bottom:3.3pt;}.cl-5737ec16{font-family:'courier';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5737ec17{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5737ec18{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec19{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec1a{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec1b{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec1c{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec1d{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5737ec1e{width:288pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-573a4e46{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-573a4e47{width:180pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-573a4e48{width:288pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-573a4e49{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-573a4e4a{width:180pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-573f454a">
+<caption class="Table Caption">
+<p>Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-573a4e4a"><p class="cl-5737ec17"><span class="cl-5737ec14">Sampling</span></p></td><td class="cl-573a4e49"><p class="cl-5737ec17"><span class="cl-5737ec14">Outcome</span></p></td><td class="cl-573a4e48"><p class="cl-5737ec17"><span class="cl-5737ec14">Detail</span></p></td><td class="cl-573a4e49"><p class="cl-5737ec17"><span class="cl-5737ec14">Function</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-5737ec1a"><p class="cl-5737ec17"><span class="cl-5737ec14">Risk-based</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec14">SSe</span></p></td><td class="cl-5737ec18"><p class="cl-5737ec17"><span class="cl-5737ec14">Single Se for RGs, perf Sp</span><span class="cl-5737ec15"> a</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec16">rsu.sssep.rbsrg</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5737ec1a"><p class="cl-5737ec17"><span class="cl-5737ec14">Risk-based</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec14">SSe</span></p></td><td class="cl-5737ec18"><p class="cl-5737ec17"><span class="cl-5737ec14">Multiple Se within RGs, perf Sp</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec16">rsu.sssep.rbmrg</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5737ec1a"><p class="cl-5737ec17"><span class="cl-5737ec14">Risk-based</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec14">SSe</span></p></td><td class="cl-5737ec18"><p class="cl-5737ec17"><span class="cl-5737ec14">Two stage sampling, 1 risk factor</span></p></td><td class="cl-5737ec19"><p class="cl-5737ec17"><span class="cl-5737ec16">rsu.sssep.rb2st1rf</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5737ec1d"><p class="cl-5737ec17"><span class="cl-5737ec14">Risk-based</span></p></td><td class="cl-5737ec1c"><p class="cl-5737ec17"><span class="cl-5737ec14">SSe</span></p></td><td class="cl-5737ec1b"><p class="cl-5737ec17"><span class="cl-5737ec14">Two stage sampling, 2 risk factors</span></p></td><td class="cl-5737ec1c"><p class="cl-5737ec17"><span class="cl-5737ec16">rsu.sssep.rb2st2rf</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td colspan="4" class="cl-573a4e47"><p class="cl-5737ec17"><span class="cl-5737ec15"> a</span><span class="cl-5737ec14"> RGs: Risk groups.</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="81014d81-6dd2-4f4b-a7de-cb9fe754df03"></div>
+<script>
+var dest = document.getElementById("81014d81-6dd2-4f4b-a7de-cb9fe754df03");
+var template = document.getElementById("a2fb182f-d8e5-49c1-b14f-250873eff583");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p><em>EXAMPLE 11</em></p>
 <p>You have been asked to provide an assessment of a surveillance program for Actinobacillus hyopneumoniae in pigs. It is known that there are high risk and low risk areas for A. hypopneumoniae in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.</p>
 <p>The risk of A. hypopneumoniae is dependent on age, with adult pigs around five times more likely to be A. hypopneumoniae positive compared with younger (grower) pigs. Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested. The ELISA for A. hypopneumoniae in pigs has a diagnostic sensitivity of 0.95.</p>

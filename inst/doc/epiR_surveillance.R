@@ -13,28 +13,39 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'------
-library(pander)
-panderOptions('table.split.table', Inf)
-panderOptions('table.alignment.default', 'left')
-panderOptions('table.alignment.rownames', 'left')
-# panderOptions('table.alignment.default', function(df) ifelse(sapply(df, is.numeric), 'right', 'left'))
+library(knitr); library(tidyverse); library(flextable); library(officer)
 
-set.caption("Functions to estimate sample size using representative population sampling data.")
+tab1.df <- data.frame(
+   sampling = c("Representative","Representative","Two stage representative","Representative","Pooled representative"),
+   outcome = c("Pr DF","SSe","SSe","SSe","SSe"),
+   detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp", 
+    "Imperf Se, perf Sp, known N","Imperf Se, perf Sp"),
+   fun = c("rsu.sspfree.rs","rsu.sssep.rs","rsu.sssep.rs2st","rsu.sssep.rsfreecalc","rsu.sssep.rspool"))
 
-ssrs.tab <- " 
-Sampling       | Outcome               | Details                    | Function
-Representative | Pr disease freedom    | Imperfect Se, perfect Sp   | `rsu.sspfree.rs`
-Representative | SSe                   | Imperfect Se, perfect Sp   | `rsu.sssep.rs`
-Two stage representative | SSe         | Imperfect Se, perfect Sp   | `rsu.sssep.rs2st`
-Representative | SSe                   | Imperfect Se, imperfect Sp, known N | `rsu.sssep.rsfreecalc`
-Pooled representative    | SSe                   | Imperfect Se, imperfect Sp | `rsu.sssep.rspool`"
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
+  h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
-ssrs.df <- read.delim(textConnection(ssrs.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
 
-names(ssrs.df) <- unname(as.list(ssrs.df[1,])) # put headers on
-ssrs.df <- ssrs.df[-1,] # remove first row
-row.names(ssrs.df) <- NULL
-pander(ssrs.df, style = 'rmarkdown')
+flextable(tab1.df) %>%
+  width(j = 1, width = 2.50) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 4.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  font(i = 1:5, j = 4, part = "body", fontname = "courier") %>%
+
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+  
+  footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+
+  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
@@ -66,25 +77,36 @@ rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.90)
 rsu.sssep.rs2st(H = 20000, N = NA, pstar.c = 0.005, pstar.u = 0.05, se.p = 0.95, se.c = 0.95, se.u = 0.90)
 
 ## ----seprs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'-----
+tab2.df <- data.frame(
+   sampling = c("Representative","Two stage representative","Representative","Representative","Pooled  representative","Representative","Representative"),
+   outcome = c("SSe","SSe","SSe","SSe","SSe","SSe","SSp"),
+   detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp, mult comp", "Imperf Se, imperf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Sp"),
+   fun = c("rsu.sep.rs","rsu.sep.rs2st","rsu.sep.rsmult","rsu.sep.rsfreecalc","rsu.sep.rspool","rsu.sep.rsvarse","rsu.spp.rs"))
 
-set.caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
+  h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
-seprs.tab <- " 
-Sampling       | Outcome      | Details                    | Function
-Representative | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rs`
-Two stage representative      | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rs2st`
-Representative | SSe          | Imperfect Se, perfect Sp, multiple components   | `rsu.sep.rsmult`
-Representative | SSe          | Imperfect Se, imperfect Sp | `rsu.sep.rsfreecalc`
-Pooled representative         | SSe   | Imperfect Se, perfect Sp   | `rsu.sep.rspool`
-Representative | SSe          | Imperfect Se, perfect Sp   | `rsu.sep.rsvarse`
-Representative | SSp          | Imperfect Sp               | `rsu.spp.rs`"
+# Create table:
+border_h = fp_border(color = "black", width = 2)
 
-seprs.df <- read.delim(textConnection(seprs.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+flextable(tab2.df) %>%
+  width(j = 1, width = 2.50) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 4.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  font(i = 1:7, j = 4, part = "body", fontname = "courier") %>%
 
-names(seprs.df) <- unname(as.list(seprs.df[1,])) # put headers on
-seprs.df <- seprs.df[-1,] # remove first row
-row.names(seprs.df) <- NULL
-pander(seprs.df, style = 'rmarkdown')
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+  
+  footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+
+  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sep.rs(N = NA, n = 300, pstar = 0.01, se.u = 0.95)
@@ -106,20 +128,38 @@ se.all <- c(rep(se.t1, times = n.lab1), rep(se.t2, times = n.lab2))
 rsu.sep.rsvarse(N = n.lab1 + n.lab2, pstar = 0.05, se.u = se.all)
 
 ## ----pfreers.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'----
+tab3.df <- data.frame(
+   sampling = c("Representative","Representative"),
+   outcome = c("Pr DF","Equilibrium pr DF"),
+   detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp"),
+   fun = c("rsu.pfree.rs","rsu.pfree.equ"))
 
-set.caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
+  h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
-pfreers.tab <- " 
-Sampling       | Outcome                             | Details                    | Function
-Representative | Prob disease of freedom | Imperfect Se, perfect Sp   | `rsu.pfree.rs`
-Representative | Equilibrium prob of disease freedom | Imperfect Se, perfect Sp   | `rsu.pfree.equ`"
+# Create table:
+border_h = fp_border(color = "black", width = 2)
 
-pfreers.df <- read.delim(textConnection(pfreers.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+flextable(tab3.df) %>%
+  width(j = 1, width = 2.50) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 4.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  font(i = 1:2, j = 4, part = "body", fontname = "courier") %>%
 
-names(pfreers.df) <- unname(as.list(pfreers.df[1,])) # put headers on
-pfreers.df <- pfreers.df[-1,] # remove first row
-row.names(pfreers.df) <- NULL
-pander(pfreers.df, style = 'rmarkdown')
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+  
+  footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+
+  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(ggplot2); library(lubridate); library(scales)
@@ -150,21 +190,36 @@ ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   theme(legend.position = c(0.8, 0.5))
 
 ## ----ssrb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'------
-set.caption("Functions to estimate sample size using risk based sampling data.")
+tab4.df <- data.frame(
+   sampling = c("Risk-based","Risk-based","Risk-based","Risk-based"),
+   outcome = c("SSe","SSe","SSe","SSe"),
+   detail = c("Single Se for RGs, perf Sp","Multiple Se within RGs, perf Sp","Two stage sampling, 1 risk factor","Two stage sampling, 2 risk factors"),
+   fun = c("rsu.sssep.rbsrg","rsu.sssep.rbmrg","rsu.sssep.rb2st1rf","rsu.sssep.rb2st2rf"))
 
-ssrb.tab <- " 
-Sampling       | Outcome               | Details                  | Function
-Risk-based     | SSe                   | Single Se for risk groups, perfect Sp        | `rsu.sssep.rbsrg`
-Risk-based     | SSe                   | Multiple Se within risk groups, perfect Sp   | `rsu.sssep.rbmrg`
-Risk-based     | SSe                   | Two stage sampling, 1 risk factor  | `rsu.sssep.rb2st1rf`
-Risk-based     | SSe                   | Two stage sampling, 2 risk factors | `rsu.sssep.rb2st2rf`"
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
+  h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
-ssrb.df <- read.delim(textConnection(ssrb.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
 
-names(ssrb.df) <- unname(as.list(ssrb.df[1,])) # put headers on
-ssrb.df <- ssrb.df[-1,] # remove first row
-row.names(ssrb.df) <- NULL
-pander(ssrb.df, style = 'rmarkdown')
+flextable(tab4.df) %>%
+  width(j = 1, width = 2.50) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 4.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
+
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+  
+  footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+
+  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 # Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
@@ -193,20 +248,38 @@ rsu.sssep.rb2st2rf(
    se.p = 0.95, se.c = 0.95, se.u = 0.95)
 
 ## ----seprb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'-----
-set.caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
+tab5.df <- data.frame(
+   sampling = c("Risk-based","Risk-based","Risk-based"),
+   outcome = c("SSe","SSe","SSe"),
+   detail = c("Varying Se, perf Sp","Varying Se, perf Sp, 1 risk factor","Varying Se, perf Sp, 2 risk factors"),
+   fun = c("rsu.sep.rb","rsu.sep.rb1rf","rsu.sep.rb2rf"))
 
-ssrb.tab <- " 
-Sampling       | Outcome        | Details                  | Function
-Risk-based     | SSe            | Varying Se, perfect Sp   | `rsu.sep.rb`
-Risk-based     | SSe            | Varying Se, perfect Sp, one risk factor   | `rsu.sep.rb1rf`
-Risk-based     | SSe            | Varying Se, perfect Sp, two risk factors  | `rsu.sep.rb2rf`"
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
+  h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
-ssrb.df <- read.delim(textConnection(ssrb.tab), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
 
-names(ssrb.df) <- unname(as.list(ssrb.df[1,])) # put headers on
-ssrb.df <- ssrb.df[-1,] # remove first row
-row.names(ssrb.df) <- NULL
-pander(ssrb.df, style = 'rmarkdown')
+flextable(tab4.df) %>%
+  width(j = 1, width = 2.50) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 4.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
+
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+  
+  fontsize(i = 1, size = 8, part = "footer") %>%
+  
+  footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+
+  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 # There are 1784 herds in the study area:

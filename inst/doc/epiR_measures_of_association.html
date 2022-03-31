@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2022-03-22" />
+<meta name="date" content="2022-04-01" />
 
 <title>Measures of Association</title>
 
@@ -45,228 +45,38 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-<script>$(document).ready(function(){
-    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    if ($('[data-toggle="popover"]').popover === 'function') {
-        $('[data-toggle="popover"]').popover();
-    }
-});
-</script>
-<style type="text/css">
-.lightable-minimal {
-border-collapse: separate;
-border-spacing: 16px 1px;
-width: 100%;
-margin-bottom: 10px;
+<style type="text/css">.tabwid table{
+border-spacing:0px !important;
+border-collapse:collapse;
+line-height:1;
+margin-left:auto;
+margin-right:auto;
+border-width: 0;
+display: table;
+margin-top: 1.275em;
+margin-bottom: 1.275em;
+border-color: transparent;
 }
-.lightable-minimal td {
-margin-left: 5px;
-margin-right: 5px;
+.tabwid_left table{
+margin-left:0;
 }
-.lightable-minimal th {
-margin-left: 5px;
-margin-right: 5px;
+.tabwid_right table{
+margin-right:0;
 }
-.lightable-minimal thead tr:last-child th {
-border-bottom: 2px solid #00000050;
-empty-cells: hide;
+.tabwid td {
+padding: 0;
 }
-.lightable-minimal tbody tr:first-child td {
-padding-top: 0.5em;
+.tabwid a {
+text-decoration: none;
 }
-.lightable-minimal.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
+.tabwid thead {
+background-color: transparent;
 }
-.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
+.tabwid tfoot {
+background-color: transparent;
 }
-.lightable-classic {
-border-top: 0.16em solid #111111;
-border-bottom: 0.16em solid #111111;
-width: 100%;
-margin-bottom: 10px;
-margin: 10px 5px;
-}
-.lightable-classic tfoot tr td {
-border: 0;
-}
-.lightable-classic tfoot tr:first-child td {
-border-top: 0.14em solid #111111;
-}
-.lightable-classic caption {
-color: #222222;
-}
-.lightable-classic td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic thead tr:last-child th {
-border-bottom: 0.10em solid #111111;
-}
-.lightable-classic.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-classic-2 {
-border-top: 3px double #111111;
-border-bottom: 3px double #111111;
-width: 100%;
-margin-bottom: 10px;
-}
-.lightable-classic-2 tfoot tr td {
-border: 0;
-}
-.lightable-classic-2 tfoot tr:first-child td {
-border-top: 3px double #111111;
-}
-.lightable-classic-2 caption {
-color: #222222;
-}
-.lightable-classic-2 td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic-2 th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic-2 tbody tr:last-child td {
-border-bottom: 3px double #111111;
-}
-.lightable-classic-2 thead tr:last-child th {
-border-bottom: 1px solid #111111;
-}
-.lightable-classic-2.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #EEE;
-border-collapse: collapse;
-margin-bottom: 10px;
-}
-.lightable-material tfoot tr td {
-border: 0;
-}
-.lightable-material tfoot tr:first-child td {
-border-top: 1px solid #EEE;
-}
-.lightable-material th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-}
-.lightable-material td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-border-top: 1px solid #eeeeee;
-}
-.lightable-material.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #ddd;
-}
-.lightable-material-dark {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #FFFFFF12;
-border-collapse: collapse;
-margin-bottom: 10px;
-background-color: #363640;
-}
-.lightable-material-dark tfoot tr td {
-border: 0;
-}
-.lightable-material-dark tfoot tr:first-child td {
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF60;
-}
-.lightable-material-dark td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF;
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark.lightable-hover tbody tr:hover {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material-dark.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #FFFFFF12;
-}
-.lightable-paper {
-width: 100%;
-margin-bottom: 10px;
-color: #444;
-}
-.lightable-paper tfoot tr td {
-border: 0;
-}
-.lightable-paper tfoot tr:first-child td {
-border-top: 1px solid #00000020;
-}
-.lightable-paper thead tr:last-child th {
-color: #666;
-vertical-align: bottom;
-border-bottom: 1px solid #00000020;
-line-height: 1.15em;
-padding: 10px 5px;
-}
-.lightable-paper td {
-vertical-align: middle;
-border-bottom: 1px solid #00000010;
-line-height: 1.15em;
-padding: 7px 5px;
-}
-.lightable-paper.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-paper.lightable-striped tbody tr:nth-child(even) {
-background-color: #00000008;
-}
-.lightable-paper.lightable-striped tbody td {
-border: 0;
+.tabwid table tr {
+background-color: transparent;
 }
 </style>
 
@@ -610,7 +420,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Measures of Association</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2022-03-22</h4>
+<h4 class="date">2022-04-01</h4>
 
 
 
@@ -621,147 +431,117 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><strong>Measures of association strength</strong></p>
 <p><strong><em>The incidence risk ratio</em></strong></p>
 <p>Consider a study where subjects are disease free at the start of the study and all are monitored for disease occurrence for a specified time period. At the start of the study period study subjects are classified according to exposure to a hypothesised risk factor. If both exposure and outcome are binary variables (yes or no) we can present the counts of subjects in each of the four exposure-disease categories in a 2 <span class="math inline">\(\times\)</span> 2 table.</p>
-<table>
-<caption>
-A 2 by 2 table.
+<template id="6ab3de35-f7c3-4c89-8d23-bcffb669717e"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-53a25a58{}.cl-539d7bdc{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-539d7bdd{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-539d7bde{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-539d7bdf{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-539d7be0{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-53a25a58">
+<caption class="Table Caption">
+<p>Table 1: A 2 x 2 contingency table.</p>
 </caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Total
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp pos
-</td>
-<td style="text-align:left;width: 5em; ">
-a
-</td>
-<td style="text-align:left;width: 5em; ">
-b
-</td>
-<td style="text-align:left;">
-a+b
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp neg
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;">
-c+d
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Total
-</td>
-<td style="text-align:left;width: 5em; ">
-a+c
-</td>
-<td style="text-align:left;width: 5em; ">
-b+c
-</td>
-<td style="text-align:left;">
-a+b+c+d
-</td>
-</tr>
-</tbody>
-</table>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-539d7be0"><p class="cl-539d7bdd"><span class="cl-539d7bdc"></span></p></td><td class="cl-539d7be0"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Dis +</span></p></td><td class="cl-539d7be0"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Dis -</span></p></td><td class="cl-539d7be0"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Total</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Exp +</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">a</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">b</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">a + b</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Exp -</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">c</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">c</span></p></td><td class="cl-539d7bde"><p class="cl-539d7bdd"><span class="cl-539d7bdc">c + d</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-539d7bdf"><p class="cl-539d7bdd"><span class="cl-539d7bdc">Total</span></p></td><td class="cl-539d7bdf"><p class="cl-539d7bdd"><span class="cl-539d7bdc">a + c</span></p></td><td class="cl-539d7bdf"><p class="cl-539d7bdd"><span class="cl-539d7bdc">b + c</span></p></td><td class="cl-539d7bdf"><p class="cl-539d7bdd"><span class="cl-539d7bdc">a + b + c + d</span></p></td></tr></tbody></table></div></template>
+<div class="flextable-shadow-host" id="328d84e9-2654-4c49-b813-ef4ed4395a9d"></div>
+<script>
+var dest = document.getElementById("328d84e9-2654-4c49-b813-ef4ed4395a9d");
+var template = document.getElementById("6ab3de35-f7c3-4c89-8d23-bcffb669717e");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p>When our data are in this format we can calculate the incidence risk of the outcome in those that were exposed <span class="math inline">\(R_E+\)</span>, the incidence risk in those that were not exposed <span class="math inline">\(R_{E-}\)</span> and finally the incidence risk in the total study population <span class="math inline">\(R_{T}\)</span>:</p>
-<table>
-<caption>
-A 2 by 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.
+<template id="19758623-c358-4733-9497-2ec8dbd87952"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-53ba5f04{}.cl-53b59aa0{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-53b59aa1{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-53b59aa2{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53b59aa3{width:216pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53b59aa4{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53b59aa5{width:216pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53b59aa6{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53b59aa7{width:216pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-53ba5f04">
+<caption class="Table Caption">
+<p>Table 2: A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.</p>
 </caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Total
-</th>
-<th style="text-align:left;">
-Risk
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp pos
-</td>
-<td style="text-align:left;width: 5em; ">
-a
-</td>
-<td style="text-align:left;width: 5em; ">
-b
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b
-</td>
-<td style="text-align:left;">
-RE+ = a/(a+b)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp neg
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;width: 10em; ">
-c+d
-</td>
-<td style="text-align:left;">
-RE- = c/(c+d)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Total
-</td>
-<td style="text-align:left;width: 5em; ">
-a+c
-</td>
-<td style="text-align:left;width: 5em; ">
-b+c
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b+c+d
-</td>
-<td style="text-align:left;">
-RT = (a+c)/(a+b+c+d)
-</td>
-</tr>
-</tbody>
-</table>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-53b59aa6"><p class="cl-53b59aa1"><span class="cl-53b59aa0"></span></p></td><td class="cl-53b59aa6"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Dis +</span></p></td><td class="cl-53b59aa6"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Dis -</span></p></td><td class="cl-53b59aa6"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Total</span></p></td><td class="cl-53b59aa7"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Risk</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0"></span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">a</span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">b</span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">a + b</span></p></td><td class="cl-53b59aa3"><p class="cl-53b59aa1"><span class="cl-53b59aa0">RE+ = a / (a + b)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Exp +</span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">c</span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">c</span></p></td><td class="cl-53b59aa2"><p class="cl-53b59aa1"><span class="cl-53b59aa0">c + d</span></p></td><td class="cl-53b59aa3"><p class="cl-53b59aa1"><span class="cl-53b59aa0">RE- = c / (c + d)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53b59aa4"><p class="cl-53b59aa1"><span class="cl-53b59aa0">Exp -</span></p></td><td class="cl-53b59aa4"><p class="cl-53b59aa1"><span class="cl-53b59aa0">a + c</span></p></td><td class="cl-53b59aa4"><p class="cl-53b59aa1"><span class="cl-53b59aa0">b + c</span></p></td><td class="cl-53b59aa4"><p class="cl-53b59aa1"><span class="cl-53b59aa0">a + b + c + d</span></p></td><td class="cl-53b59aa5"><p class="cl-53b59aa1"><span class="cl-53b59aa0">RT = (a + c) / (a + b + c + d)</span></p></td></tr></tbody></table></div></template>
+<div class="flextable-shadow-host" id="6efb49d7-3323-48f7-b29b-c541fde2111d"></div>
+<script>
+var dest = document.getElementById("6efb49d7-3323-48f7-b29b-c541fde2111d");
+var template = document.getElementById("19758623-c358-4733-9497-2ec8dbd87952");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p>The incidence risk estimates shown in Table 2 can be presented graphically in the format shown in Figure 1. In Figure 1 we present the calculated incidence risk in the exposed, unexposed and (exposed and unexposed) groups as a bar chart. The incidence risk ratio equals the incidence risk of the outcome in the exposed divided by the incidence risk of the outcome in the unexposed:</p>
 <div class="figure">
 <img src="data:image/png;base64,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" alt />
@@ -771,163 +551,119 @@ RT = (a+c)/(a+b+c+d)
 <p>If the incidence risk ratio equals 1, then the risk of the outcome in both the exposed and non-exposed groups are equal. If the incidence risk ratio is greater than 1, then exposure increases the outcome risk with greater departures from 1 indicative of a stronger effect. If the incidence risk ratio is less than 1, exposure reduces the outcome risk and exposure is said to be protective.</p>
 <p><strong><em>The odds ratio — cohort studies</em></strong></p>
 <p>In a cohort study definition of exposure status (exposure-positive, exposure-negative) comes first. Subjects are then followed over time to determine their outcome status (outcome-positive, outcome-negative). The odds of the outcome in the exposed and unexposed populations are calculated as follows:</p>
-<table>
-<caption>
-A 2 by 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.
+<template id="631ddc32-4669-4f62-ad62-de35e6d6513b"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-53d29d4e{}.cl-53cb44ae{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-53cb44af{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-53cb44b0{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53cb44b1{width:216pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53cb44b2{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53cb44b3{width:216pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53cb44b4{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53cb44b5{width:216pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-53d29d4e">
+<caption class="Table Caption">
+<p>Table 3: A 2 x 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.</p>
 </caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Dis pos
-</th>
-<th style="text-align:left;">
-Total
-</th>
-<th style="text-align:left;">
-Odds
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp pos
-</td>
-<td style="text-align:left;width: 5em; ">
-a
-</td>
-<td style="text-align:left;width: 5em; ">
-b
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b
-</td>
-<td style="text-align:left;">
-OE+ = a/b
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp neg
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;width: 5em; ">
-d
-</td>
-<td style="text-align:left;width: 10em; ">
-c+d
-</td>
-<td style="text-align:left;">
-OE- = c/d
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Total
-</td>
-<td style="text-align:left;width: 5em; ">
-a+c
-</td>
-<td style="text-align:left;width: 5em; ">
-b+d
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b+c+d
-</td>
-<td style="text-align:left;">
-OT = (a+c)/(b+d)
-</td>
-</tr>
-</tbody>
-</table>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-53cb44b4"><p class="cl-53cb44af"><span class="cl-53cb44ae"></span></p></td><td class="cl-53cb44b4"><p class="cl-53cb44af"><span class="cl-53cb44ae">Dis +</span></p></td><td class="cl-53cb44b4"><p class="cl-53cb44af"><span class="cl-53cb44ae">Dis -</span></p></td><td class="cl-53cb44b4"><p class="cl-53cb44af"><span class="cl-53cb44ae">Total</span></p></td><td class="cl-53cb44b5"><p class="cl-53cb44af"><span class="cl-53cb44ae">Odds</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae"></span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">a</span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">b</span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">a + b</span></p></td><td class="cl-53cb44b1"><p class="cl-53cb44af"><span class="cl-53cb44ae">OE+ = a / b</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">Exp +</span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">c</span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">d</span></p></td><td class="cl-53cb44b0"><p class="cl-53cb44af"><span class="cl-53cb44ae">c + d</span></p></td><td class="cl-53cb44b1"><p class="cl-53cb44af"><span class="cl-53cb44ae">OE- = c / d</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53cb44b2"><p class="cl-53cb44af"><span class="cl-53cb44ae">Exp -</span></p></td><td class="cl-53cb44b2"><p class="cl-53cb44af"><span class="cl-53cb44ae">a + c</span></p></td><td class="cl-53cb44b2"><p class="cl-53cb44af"><span class="cl-53cb44ae">b + d</span></p></td><td class="cl-53cb44b2"><p class="cl-53cb44af"><span class="cl-53cb44ae">a + b + c + d</span></p></td><td class="cl-53cb44b3"><p class="cl-53cb44af"><span class="cl-53cb44ae">OT = (a + c) / (b + d)</span></p></td></tr></tbody></table></div></template>
+<div class="flextable-shadow-host" id="93dbe689-a200-4be3-9efd-4c87021ac71a"></div>
+<script>
+var dest = document.getElementById("93dbe689-a200-4be3-9efd-4c87021ac71a");
+var template = document.getElementById("631ddc32-4669-4f62-ad62-de35e6d6513b");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p>The odds ratio for a cohort study is then the odds of the outcome in the exposed divided by the odds of the outcome in the unexposed.</p>
 <p><strong><em>The odds ratio — case-control studies</em></strong></p>
 <p>In a case-control study outcome status (disease-positive, disease-negative) is defined first. The history provided by each study subject then provides information about exposure status. For case-control studies, instead of talking about the odds of <em>disease</em> in the exposed and unexposed groups (as we did when we were working with data from a cohort study) we talk about the odds of <em>exposure</em> in the case and control groups.</p>
-<table>
-<caption>
-A 2 by 2 table with the odds of exposure calculated for cases, controls and the total study population.
+<template id="d911472d-f718-465d-8fe6-eef6cbed4744"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-53e842d4{}.cl-53e37d1c{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-53e37d1d{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-53e37d1e{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53e37d1f{width:144pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-53e37d20{width:144pt;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(0, 0, 0, 1.00);border-top: 2pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-53e842d4">
+<caption class="Table Caption">
+<p>Table 4: A 2 x 2 table with the odds of exposure calculated for cases, controls and the total study population.</p>
 </caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-Case
-</th>
-<th style="text-align:left;">
-Control
-</th>
-<th style="text-align:left;">
-Total
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp pos
-</td>
-<td style="text-align:left;width: 5em; ">
-a
-</td>
-<td style="text-align:left;width: 5em; ">
-b
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Exp neg
-</td>
-<td style="text-align:left;width: 5em; ">
-c
-</td>
-<td style="text-align:left;width: 5em; ">
-d
-</td>
-<td style="text-align:left;width: 10em; ">
-c+d
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Total
-</td>
-<td style="text-align:left;width: 5em; ">
-a+c
-</td>
-<td style="text-align:left;width: 5em; ">
-b+d
-</td>
-<td style="text-align:left;width: 10em; ">
-a+b+c+d
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 5em; ">
-Odds
-</td>
-<td style="text-align:left;width: 5em; ">
-OD+ = a/c
-</td>
-<td style="text-align:left;width: 5em; ">
-OD- = b/d
-</td>
-<td style="text-align:left;width: 10em; ">
-OT = (a+b)/(c+d)
-</td>
-</tr>
-</tbody>
-</table>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-53e37d20"><p class="cl-53e37d1d"><span class="cl-53e37d1c"></span></p></td><td class="cl-53e37d20"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Case</span></p></td><td class="cl-53e37d20"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Control</span></p></td><td class="cl-53e37d20"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Total</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Exp +</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">a</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">b</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">a + b</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Exp -</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">c</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">d</span></p></td><td class="cl-53e37d1e"><p class="cl-53e37d1d"><span class="cl-53e37d1c">c + d</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-53e37d1f"><p class="cl-53e37d1d"><span class="cl-53e37d1c">Odds</span></p></td><td class="cl-53e37d1f"><p class="cl-53e37d1d"><span class="cl-53e37d1c">OD+ = a / c</span></p></td><td class="cl-53e37d1f"><p class="cl-53e37d1d"><span class="cl-53e37d1c">OD- = b / d</span></p></td><td class="cl-53e37d1f"><p class="cl-53e37d1d"><span class="cl-53e37d1c">OT = (a + b) / (c + d)</span></p></td></tr></tbody></table></div></template>
+<div class="flextable-shadow-host" id="4e277d30-c3e2-4dc3-9a95-aab3c9452228"></div>
+<script>
+var dest = document.getElementById("4e277d30-c3e2-4dc3-9a95-aab3c9452228");
+var template = document.getElementById("d911472d-f718-465d-8fe6-eef6cbed4744");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
 <p>The odds ratio is defined as the odds of exposure in the cases (<span class="math inline">\(O_{D+}\)</span>) divided by the odds of exposure in the controls (<span class="math inline">\(O_{D-}\)</span>).</p>
 <p>Note that the numeric estimate of the odds ratio is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:</p>
 <ul>

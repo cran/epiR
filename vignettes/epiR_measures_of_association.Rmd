@@ -16,7 +16,7 @@ vignette: >
 \setmainfont{Calibri Light}
 
 ```{r, echo = FALSE, message = FALSE}
-library(knitr); library(kableExtra)
+library(knitr); library(tidyverse); library(flextable); library(officer)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
@@ -36,30 +36,55 @@ This vignette has been written assuming the reader routinely formats their 2 $\t
 Consider a study where subjects are disease free at the start of the study and all are monitored for disease occurrence for a specified time period. At the start of the study period study subjects are classified according to exposure to a hypothesised risk factor. If both exposure and outcome are binary variables (yes or no) we can present the counts of subjects in each of the four exposure-disease categories in a 2 $\times$ 2 table.
 
 ```{r echo = FALSE, results = 'asis'}
-twobytwo <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","c","b+c"), "Total" = c("a+b","c+d","a+b+c+d"))
-colnames(twobytwo) <- c("Dis pos","Dis pos","Total")
-rownames(twobytwo) <- c("Exp pos","Exp neg","Total")
+twobytwo.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"))
 
-kbl(twobytwo, caption = "A 2 by 2 table.") %>%
-   column_spec(1, bold = FALSE, width = "5em") %>%
-   column_spec(2, bold = FALSE, width = "5em") %>%
-   column_spec(3, bold = FALSE, width = "5em")
-   # row_spec(row = 1, bold = TRUE)
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
+  h1 = c("", "Dis +", "Dis -", "Total"), stringsAsFactors = FALSE)
+
+# Create table:
+border_h = fp_border(color = "black", width = 2)
+
+flextable(twobytwo.df) %>%
+  width(j = 1, width = 2.00) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+
+  set_caption("Table 1: A 2 x 2 contingency table.")
 ```
 When our data are in this format we can calculate the incidence risk of the outcome in those that were exposed $R_E+$, the incidence risk in those that were not exposed $R_{E-}$ and finally the incidence risk in the total study population $R_{T}$:
 
 ```{r echo = FALSE, results = 'asis'}
-irr <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","c","b+c"), "Total" = c("a+b","c+d","a+b+c+d"),"Risk" = c("RE+ = a/(a+b)","RE- = c/(c+d)", "RT = (a+c)/(a+b+c+d)"))
+irr.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a / (a + b)","RE- = c / (c + d)", "RT = (a + c) / (a + b + c + d)"))
 
-colnames(irr) <- c("Dis pos","Dis pos","Total","Risk")
-rownames(irr) <- c("Exp pos","Exp neg","Total")
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
+  h1 = c("", "Dis +", "Dis -", "Total", "Risk"), stringsAsFactors = FALSE)
 
-kbl(irr, caption = "A 2 by 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.") %>%
-   column_spec(1, bold = FALSE, width = "5em") %>%
-   column_spec(2, bold = FALSE, width = "5em") %>%
-   column_spec(3, bold = FALSE, width = "5em") %>%
-   column_spec(4, bold = FALSE, width = "10em")
-   # row_spec(row = 1, bold = TRUE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
+
+flextable(irr.df) %>%
+  width(j = 1, width = 2.00) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 2.00) %>%
+  width(j = 5, width = 3.00) %>%
+  
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+
+  set_caption("Table 2: A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
 ```
 
 The incidence risk estimates shown in Table 2 can be presented graphically in the format shown in Figure 1. In Figure 1 we present the calculated incidence risk in the exposed, unexposed and (exposed and unexposed) groups as a bar chart. The incidence risk ratio equals the incidence risk of the outcome in the exposed divided by the incidence risk of the outcome in the unexposed:
@@ -75,17 +100,29 @@ If the incidence risk ratio equals 1, then the risk of the outcome in both the e
 In a cohort study definition of exposure status (exposure-positive, exposure-negative) comes first. Subjects are then followed over time to determine their outcome status (outcome-positive, outcome-negative). The odds of the outcome in the exposed and unexposed populations are calculated as follows:
 
 ```{r echo = FALSE, results = 'asis'}
-or.cohort <- data.frame("Dis pos" = c("a","c","a+c"), "Dis neg" = c("b","d","b+d"), "Total" = c("a+b","c+d","a+b+c+d"),"Odds" = c("OE+ = a/b","OE- = c/d", "OT = (a+c)/(b+d)"))
+orcohort.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a / b","OE- = c / d", "OT = (a + c) / (b + d)"))
 
-colnames(or.cohort) <- c("Dis pos","Dis pos","Total","Odds")
-rownames(or.cohort) <- c("Exp pos","Exp neg","Total")
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
+  h1 = c("", "Dis +", "Dis -", "Total", "Odds"), stringsAsFactors = FALSE)
 
-kbl(or.cohort, caption = "A 2 by 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.") %>%
-   column_spec(1, bold = FALSE, width = "5em") %>%
-   column_spec(2, bold = FALSE, width = "5em") %>%
-   column_spec(3, bold = FALSE, width = "5em") %>%
-   column_spec(4, bold = FALSE, width = "10em")
-   # row_spec(row = 1, bold = TRUE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
+
+flextable(orcohort.df) %>%
+  width(j = 1, width = 2.00) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 2.00) %>%
+  width(j = 5, width = 3.00) %>%
+  
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+
+  set_caption("Table 3: A 2 x 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.")
 ```
 The odds ratio for a cohort study is then the odds of the outcome in the exposed divided by the odds of the outcome in the unexposed.
 
@@ -94,17 +131,28 @@ The odds ratio for a cohort study is then the odds of the outcome in the exposed
 In a case-control study outcome status (disease-positive, disease-negative) is defined first. The history provided by each study subject then provides information about exposure status. For case-control studies, instead of talking about the odds of *disease* in the exposed and unexposed groups (as we did when we were working with data from a cohort study) we talk about the odds of *exposure* in the case and control groups.
 
 ```{r echo = FALSE, results = 'asis'}
-or.cc <- data.frame("Case" = c("a","c","a+c","OD+ = a/c"), "Control" = c("b","d","b+d","OD- = b/d"), "Total" = c("a+b","c+d","a+b+c+d","OT = (a+b)/(c+d)"))
+orcc.df <- data.frame("exp" = c("Exp +","Exp -","Odds"), "dpos" = c("a","c","OD+ = a / c"), "dneg" = c("b","d","OD- = b / d"), "total" = c("a + b","c + d","OT = (a + b) / (c + d)"))
 
-colnames(or.cc) <- c("Case","Control","Total")
-rownames(or.cc) <- c("Exp pos","Exp neg","Total","Odds")
+# Create a header key data frame:
+hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
+  h1 = c("", "Case", "Control", "Total"), stringsAsFactors = FALSE)
 
-kbl(or.cc, caption = "A 2 by 2 table with the odds of exposure calculated for cases, controls and the total study population.") %>%
-   column_spec(1, bold = FALSE, width = "5em") %>%
-   column_spec(2, bold = FALSE, width = "5em") %>%
-   column_spec(3, bold = FALSE, width = "5em") %>%
-   column_spec(4, bold = FALSE, width = "10em")
-   # row_spec(row = 1, bold = TRUE)
+# Create table:
+border_h = fp_border(color = "black", width = 2)
+
+flextable(orcc.df) %>%
+  width(j = 1, width = 2.00) %>%
+  width(j = 2, width = 2.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 2.00) %>%
+  
+  set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  
+  bg(bg = "grey80", part = "header") %>%
+  hline_top(border = border_h, part = "all" ) %>%
+  align(align = "left", part = "all") %>%
+
+  set_caption("Table 4: A 2 x 2 table with the odds of exposure calculated for cases, controls and the total study population.")
 ```
 The odds ratio is defined as the odds of exposure in the cases ($O_{D+}$) divided by the odds of exposure in the controls ($O_{D-}$). 
 
