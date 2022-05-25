@@ -7,63 +7,116 @@
    else if (method == "wilson") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)
    else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')
    
-   # Apparent prevalence:
-   ap.est <- pos / tested
-   ap.low <- ap.cl[1]
-   ap.upp <- ap.cl[2]
+   # Apparent prevalence and true prevalence:
+   if(length(pos) == 1){
+     ap.est <- pos / tested
+     ap.low <- ap.cl[1]
+     ap.upp <- ap.cl[2]
+     
+     tp.est <- (ap.est + sp - 1) / (se + sp - 1)
+     tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
+     tp.low <- tp.cl[1]
+     tp.upp <- tp.cl[2]     
+   }
    
-   # True prevalence:
-   tp.est <- (ap.est + sp - 1) / (se + sp - 1)
-   tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
-   tp.low <- tp.cl[1]
-   tp.upp <- tp.cl[2]
-   
-   # Number of false positives:
-   p.low <- (1 - conf.level) / 2
-   p.upp <- (1 - (1 - conf.level) / 2)
-   
-   # Expected prevalence of false positives:
-   dntp.p <- (1 - tp.est) * (1 - sp)
-   dntp.est <- qbinom(p = 0.50, size = tested, prob = dntp.p)
-   dntp.low <- qbinom(p = p.low, size = tested, prob = dntp.p)
-   dntp.upp <- qbinom(p = p.upp, size = tested, prob = dntp.p)
+   if(length(pos) > 1){
+     ap.est <- pos / tested
+     ap.low <- ap.cl[,1]
+     ap.upp <- ap.cl[,2]
+     
+     tp.est <- (ap.est + sp - 1) / (se + sp - 1)
+     tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
+     tp.low <- tp.cl[,1]
+     tp.upp <- tp.cl[,2]     
+   }
 
    ap = data.frame(est = ap.est * units, lower = ap.low * units, upper = ap.upp * units)
    tp = data.frame(est = tp.est * units, lower = tp.low * units, upper = tp.upp * units)
-   false.positives = data.frame(est = dntp.est, lower = dntp.low, upper = dntp.upp)
 
-   rval <- list(ap = ap, tp = tp, false.positives = false.positives)
-      
-   if(length(pos) == 1){
-     if(ap.est < (1 - sp)){ 
-     warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
-     rval <- list(ap = ap, tp = tp)
-     }
+   if(length(pos) == 1 & sum(ap.est < (1 - sp)) > 0){
+       warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+       rval <- list(ap = ap, tp = tp)
    }
    
-   if(length(pos) == 1){
-     if(ap.est > se){
-     warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
-     rval <- list(ap = ap, tp = tp)
-     }
+   else if(length(pos) == 1 & sum(ap.est > se) > 0){
+       warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+       rval <- list(ap = ap, tp = tp)
    }
+   
+   else if(length(pos) > 1 & sum(as.numeric(ap.est < (1 - sp))) > 0){
+       warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+       rval <- list(ap = ap, tp = tp)
+     }
+   
+   else if(length(pos) > 1 & sum(as.numeric(ap.est > se)) > 0){
+       warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+       rval <- list(ap = ap, tp = tp)
+   }
+  
+   else{   
+     p.low <- (1 - conf.level) / 2
+     p.upp <- (1 - (1 - conf.level) / 2)
      
-   if(length(pos) > 1){
-     if(sum(ap.est < (1 - sp)) > 0){
-     warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid. Estimated number of false positives not returned.')
-     rval <- list(ap = ap, tp = tp)
-     }
+     
+     # Expected number test positive:
+     tp.p <- (tp.est * se) + (1 - tp.est) * (1 - sp)
+     tp.nest <- qbinom(p = 0.50, size = tested, prob = tp.p)
+     tp.nlow <- qbinom(p = p.low, size = tested, prob = tp.p)
+     tp.nupp <- qbinom(p = p.upp, size = tested, prob = tp.p)
+     
+     
+     # Expected number test positive, disease positive (true positives):
+     tpdp.p <- (tp.est * se)
+     tpdp.nest <- qbinom(p = 0.50, size = tested, prob = tpdp.p)
+     tpdp.nlow <- qbinom(p = p.low, size = tested, prob = tpdp.p)
+     tpdp.nupp <- qbinom(p = p.upp, size = tested, prob = tpdp.p)
+     
+     
+     # Expected number test positive, disease negative (false positives):
+     tpdn.p <- (1 - tp.est) * (1 - sp)
+     tpdn.nest <- qbinom(p = 0.50, size = tested, prob = tpdn.p)
+     tpdn.nlow <- qbinom(p = p.low, size = tested, prob = tpdn.p)
+     tpdn.nupp <- qbinom(p = p.upp, size = tested, prob = tpdn.p)
+     
+     
+     # Expected number test negative:
+     tn.p <- (tp.est * (1 - se)) + ((1 - tp.est) * sp)
+     tn.nest <- qbinom(p = 0.50, size = tested, prob = tn.p)
+     tn.nlow <- qbinom(p = p.low, size = tested, prob = tn.p)
+     tn.nupp <- qbinom(p = p.upp, size = tested, prob = tn.p)
+     
+     
+     # Expected number test negative, disease negative (true negatives):
+     tndn.p <- (1 - tp.est) * sp
+     tndn.nest <- qbinom(p = 0.50, size = tested, prob = tndn.p)
+     tndn.nlow <- qbinom(p = p.low, size = tested, prob = tndn.p)
+     tndn.nupp <- qbinom(p = p.upp, size = tested, prob = tndn.p)
+     
+     
+     # Expected number test negative, disease positive (false negatives):
+     tndp.p <- (tp.est * (1 - se))
+     tndp.nest <- qbinom(p = 0.50, size = tested, prob = tndp.p)
+     tndp.nlow <- qbinom(p = p.low, size = tested, prob = tndp.p)
+     tndp.nupp <- qbinom(p = p.upp, size = tested, prob = tndp.p)
+     
+     test.positive = data.frame(est = tp.nest, lower = tp.nlow, upper = tp.nupp)
+     true.positive = data.frame(est = tpdp.nest, lower = tpdp.nlow, upper = tpdp.nupp)
+     false.positive = data.frame(est = tpdn.nest, lower = tpdn.nlow, upper = tpdn.nupp)
+     
+     test.negative = data.frame(est = tn.nest, lower = tn.nlow, upper = tn.nupp)
+     true.negative = data.frame(est = tndn.nest, lower = tndn.nlow, upper = tndn.nupp)
+     false.negative = data.frame(est = tndp.nest, lower = tndp.nlow, upper = tndp.nupp)
+     
+     rval <- list(ap = ap, tp = tp, 
+                  test.positive = test.positive, true.positive = true.positive, false.positive = false.positive,
+                  test.negative = test.negative, true.negative = true.negative, false.negative = false.negative)
+     
    }
-   
-   if(length(pos) > 1){
-     if(sum((ap.est > se)) > 0){
-     warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.  Estimated number of false positives not returned.')
-     rval <- list(ap = ap, tp = tp)
-     }
-   }
-   return(rval)
-}
 
+   return(rval)
+   }   
+
+   
 # -----------------------------------
 # Exact confidence intervals
 # -----------------------------------

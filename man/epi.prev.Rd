@@ -34,7 +34,12 @@ The Clopper-Pearson method is known to be too conservative for two-sided interva
 A list containing the following: 
    \item{ap}{the point estimate of apparent prevalence and the lower and upper bounds of the confidence interval around the apparent prevalence estimate.}
    \item{tp}{the point estimate of the true prevalence and the lower and upper bounds of the confidence interval around the true prevalence estimate.}
-   \item{false.positives}{the point estimate of the expected number of false positive test results and the lower and upper quantiles of the estimated number of false positive test results computed using \code{conf.level}.}
+   \item{test.positive}{the point estimate of the expected number of positive test results and the lower and upper quantiles of the estimated number of positive test results computed using \code{conf.level}.}
+   \item{true.positive}{the point estimate of the expected number of true positive test results and the lower and upper quantiles of the estimated number of true positive test results computed using \code{conf.level}.}
+   \item{false.positive}{the point estimate of the expected number of false positive test results and the lower and upper quantiles of the estimated number of false positive test results computed using \code{conf.level}.}
+   \item{test.negative}{the point estimate of the expected number of negative test results and the lower and upper quantiles of the estimated number of negative test results computed using \code{conf.level}.}
+   \item{true.negative}{the point estimate of the expected number of true negative test results and the lower and upper quantiles of the estimated number of true negative test results computed using \code{conf.level}.}
+   \item{false.negative}{the point estimate of the expected number of false negative test results and the lower and upper quantiles of the estimated number of false negative test results computed using \code{conf.level}.}
 }
 
 \references{
@@ -63,7 +68,7 @@ Sterne TE (1954). Some remarks on confidence or fiducial limits. Biometrika 41: 
 
 If apparent prevalence is less than (1 - diagnostic test specificity) the Rogan Gladen estimate of true prevalence will be less than zero (Speybroeck et al. 2012). If the apparent prevalence is greater than the diagnostic test sensitivity the Rogan Gladen estimate of true prevalence will be greater than one.
  
-When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In both situations the estimated number of false positives is not returned by the function. Where AP < (1 - Sp) or AP > Se a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
+When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In both situations the estimated number of true positives, false positives, true negatives and false negatives is not returned by the function. Where AP < (1 - Sp) or AP > Se a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
 }
 
 \examples{
@@ -79,7 +84,9 @@ epi.prev(pos = 45, tested = 150, se = 0.96, sp = 0.89, method = "blaker",
 
 ## The estimated true prevalence of brucellosis in this herd is 22 (95\% 14 
 ## to 32) cases per 100 cows at risk. Using this screening test we can expect
-## anywhere between 7 and 20 false positive test results.
+## anywhere between 34 and 56 positive test results. Of the positive tests
+## between 23 and 42 are expected to be true positives and between 7 and 20 are
+## expected to be false positives.
 
 
 # EXAMPLE 2:
@@ -96,7 +103,8 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
 
 ## The estimated true prevalence of Helicobacter pylori in 1 -- 4 year olds is
 ## -4 (95\% CI -6 to 1) cases per 100. The function issues a warning to alert 
-## the user that estimate of true prevalence invalid.
+## the user that estimate of true prevalence invalid. True positive, false
+## positive, true negative and false negative counts are not returned. 
 
 
 ## EXAMPLE 3:
@@ -106,7 +114,7 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
 ## 124, respectively. The number of test-positives in each herd were 8, 12 
 ## and 7. Test sensitivities were 0.60, 0.65 and 0.70 (respectively). Test 
 ## specificities were 0.90, 0.95 and 0.99. What is the estimated true 
-## prevalence of tuberculosis in the three herds?
+## prevalence of tuberculosis in each of the three herds?
 
 rval.prev03 <- epi.prev(pos = c(80,100,50), tested = c(210,189,124), 
    se = c(0.60,0.65,0.70), sp = c(0.90,0.95,0.99), method = "blaker", 

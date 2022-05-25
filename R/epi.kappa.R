@@ -107,7 +107,7 @@
   # ================================================================
   # Bias index:
   
-  if(nrow(dat == 2)){
+  if(nrow(dat) == 2){
     # Bias index is the difference in proportions of 'yes' for two raters.
     # See Byrt et al. 1993, added 010814.
     
@@ -129,7 +129,7 @@
   # ================================================================
   # Prevalence index:
   
-  if(nrow(dat == 2)){
+  if(nrow(dat) == 2){
     # Prevalence index is the difference between the probability of 'Yes' and the probability of 'No' (after Byrt et al. 1993, added 010814).
     # PI = (a / N) - (d / N)
     # Confidence interval calculation same as that used for attributable risk (Rothman p 135 equation 7-2).
@@ -163,7 +163,7 @@
   # ================================================================
   # McNemar's test (Dohoo, Martin, Stryhn):
   
-  if(nrow(dat == 2)){
+  if(nrow(dat) == 2){
     mcnemar <- (dat[1,2] - dat[2,1])^2 / (dat[1,2] + dat[2,1])
     p.chi2 <- 1 - pchisq(mcnemar, df = 1)
   }
@@ -172,7 +172,7 @@
   # ================================================================
   # Results:
   
-  if(nrow(dat == 2)){
+  if(nrow(dat) == 2){
     prop.agree <- data.frame(obs = pO.p, exp = pE.p)
     pindex <- data.frame(est = pi.p, se = pi.se, lower = pi.l, upper = pi.u) 
     bindex <- data.frame(est = bi.p, se = bi.se, lower = bi.l, upper = bi.u)

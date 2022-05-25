@@ -1,6 +1,6 @@
-d1de3ae1586348aed72435827ff7a288 *DESCRIPTION
+cc832a4854eb3a1b576f2377d9a0eab9 *DESCRIPTION
 fe030e59bc6bdfa25e01ff18fe997677 *NAMESPACE
-320a199312efeb025230a821033d826d *NEWS
+ca258f9756d6e914db464db8487ccca4 *NEWS
 d366e2643290939d27aff97862e66d9d *R/epi.2by2.R
 90797cfa53b823b298af4c32eb3435bf *R/epi.RtoBUGS.R
 a9a4deaaec9cd9435529455159385225 *R/epi.about.R
@@ -25,7 +25,7 @@ e935ed017215d39b2225f61b23de3bfd *R/epi.herdtest.R
 a9eb519c803f08421b7c12897e441a14 *R/epi.insthaz.R
 b664545dc4655219bfa08ef339c9d6ac *R/epi.interaction.R
 c6d1bbc1733a57b2ed6973bbc9a2689a *R/epi.iv.R
-9cb615f92da0644d226c23aa67e5fdd5 *R/epi.kappa.R
+ec6e59514a0e67a9d0d65e8f93bf925c *R/epi.kappa.R
 dd5a6b971d1652170e84fa8a709215a9 *R/epi.ltd.R
 27df85ca4570d0077ec68ff552739d13 *R/epi.mh.R
 ade4c3e5b52a8828b39e7efdf8238a81 *R/epi.nomogram.R
@@ -34,7 +34,7 @@ dd89f9509954970ef09f36b06192b96c *R/epi.occc.R
 b1c0bdf50b56a4b9df09ac89f2de0b98 *R/epi.pooled.R
 3a35fac64c1bcda32c3dcabe7b7d14b2 *R/epi.popsize.R
 6f62a332c31a596317a7bff79b98a749 *R/epi.prcc.R
-46447a69be310598ac3c490700aa54a3 *R/epi.prev.R
+c663af417fd9c501d9f9242ca542725e *R/epi.prev.R
 e355dbf1148b6d47f0d927a6c683b62c *R/epi.psi.r
 4e719a2b9c4ba572f0ee3c3d70d54190 *R/epi.smd.R
 f5f94b6c6e56a8824a2606c60b4c29ec *R/epi.smr.R
@@ -132,16 +132,16 @@ fd9920dce74d1e6cce1932570a9e85f4 *data/epi.epidural.RData
 64af3548130a5495e0aed3c2b58f864f *data/epi.incin.RData
 ef256cc8e9263f846c418b1bb0b26f2c *inst/doc/epiR_descriptive.R
 1a6818e739aaadb5ec305d25d55ca566 *inst/doc/epiR_descriptive.Rmd
-0ac9deb824cda326770d205ac9740f7d *inst/doc/epiR_descriptive.html
+a575fe79146e3d1d8581a0567c80febd *inst/doc/epiR_descriptive.html
 099cdc069fc4b1847e1bd0f7b3cf0c49 *inst/doc/epiR_measures_of_association.R
 0e5852ab6330de4a53da691a891cf4ff *inst/doc/epiR_measures_of_association.Rmd
-35931f4c8758885067c556a70f828784 *inst/doc/epiR_measures_of_association.html
+22ec3f4e8cd08bedf5f7d78accbdfb25 *inst/doc/epiR_measures_of_association.html
 008e65c79cc8fd66613912a00404efed *inst/doc/epiR_sample_size.R
 04316be9ff0e6caa252551472d7ed47f *inst/doc/epiR_sample_size.Rmd
-8f61ac07325eb60ef26aaa2f960aee9a *inst/doc/epiR_sample_size.html
+5cd306338690006be96e95340ccb2f83 *inst/doc/epiR_sample_size.html
 1e8a127074cbc30da96b4f98e648aa13 *inst/doc/epiR_surveillance.R
-f9bff1123cbe36b7fc94dd8e5f09b1ac *inst/doc/epiR_surveillance.Rmd
-a6771e401b47c614a486dca90259ad78 *inst/doc/epiR_surveillance.html
+3ac10f17f364338f159d843af053e3f4 *inst/doc/epiR_surveillance.Rmd
+9fa2c4f9cab19a426c42a858120b3a1d *inst/doc/epiR_surveillance.html
 1d89952c5c16cc0704ae8da480a23c3c *man/epi.2by2.Rd
 f42bb15fa9bf5d14f728c1c1aa147e36 *man/epi.RtoBUGS.Rd
 189a2a8bdb0082ceeaf7d721ef637686 *man/epi.SClip.Rd
@@ -178,7 +178,7 @@ e5333e25afb89f64c2d81c0996083733 *man/epi.offset.Rd
 9c8d71ba25b9daed141b9a34573ba120 *man/epi.pooled.Rd
 4feba08068fed0d4b92aa7aafef9ca20 *man/epi.popsize.Rd
 5a697af6787a547c5c7d8def3f1498a1 *man/epi.prcc.Rd
-b0c31941159df9f95c0472ff344de039 *man/epi.prev.Rd
+1f904c1c07f0b7730de2287f7fae87c4 *man/epi.prev.Rd
 734daea4b79dcdb8803cb9e64ae09b39 *man/epi.psi.Rd
 ba1d761f07a27f5ac401b50f4a5e0bef *man/epi.smd.Rd
 56c32551473ae1fb881373a652cff1e5 *man/epi.smr.Rd
@@ -245,7 +245,7 @@ dc68a6c64f1e828a863477b3103c6c08 *vignettes/attributable_fraction.png
 19dc51199053ac528a80f18242621ae5 *vignettes/epiR_measures_of_association.bib
 04316be9ff0e6caa252551472d7ed47f *vignettes/epiR_sample_size.Rmd
 46713eb4b7c2fe6566bd367ccc5a2998 *vignettes/epiR_sample_size.bib
-f9bff1123cbe36b7fc94dd8e5f09b1ac *vignettes/epiR_surveillance.Rmd
+3ac10f17f364338f159d843af053e3f4 *vignettes/epiR_surveillance.Rmd
 d68a09664abacf8de9310c3a82e9a056 *vignettes/epiR_surveillance.bib
 7aeda10cf14573c2c0f12e6773e5030b *vignettes/index.html
 eaad89cd0a2046a310e127855a51c765 *vignettes/population_attributable_fraction.png

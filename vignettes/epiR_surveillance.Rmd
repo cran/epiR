@@ -30,15 +30,15 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
+Surveillance is the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
 
-The Terrestrial Animal Health Code of the World Organisation of Animal Health [@oie:2021] defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners, and (4) identification of hazards or risk factors for disease outbreaks.
+The Terrestrial Animal Health Code of the World Organisation of Animal Health [@oie:2021] defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging, (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens, (3) demonstration of disease freedom for trading partners; and (4) identification of hazards or risk factors for disease outbreaks.
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
 
 ## Definitions
 
-**Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we may reject the null hypothesis and accept the alternative hypothesis to conclude that the prevalence is less than the design prevalence. 
+**Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
 
 A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn't need to be described using a distribution.
 
@@ -46,23 +46,23 @@ A design prevalence is not related to any actual prevalence of disease in the po
 
 *Unit-level design prevalence* refers to a design prevalence assigned at the individual unit (e.g., cow, sheep, bird) level. The unit-level prevalence of disease can be applied either within clusters (e.g., herds, flocks, villages) or across broader, unclustered populations (e.g., human populations or wildlife).
 
-**Surveillance system**. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g., on-farm testing, abattoir surveillance, disease hotlines) called **surveillance system components**. Each surveillance system component is assesses **surveillance system units**. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively. 
+**Surveillance system**. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g., on-farm testing, abattoir surveillance, disease hotlines) called **surveillance system components**. Each surveillance system component assesses **surveillance system units**. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively. 
 
-**Surveillance unit sensitivity**. Surveillance unit sensitivity is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is present in the population at a level equal to or greater than a specified design prevalence.
+**Surveillance unit sensitivity**. Surveillance unit sensitivity is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is actually present in the population at a level equal to or greater than the specified design prevalence.
 
 **Component sensitivity**. Component sensitivity (CSe) is the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
 
-**Surveillance system sensitivity**. Surveillance system sensitivity (SSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than a specified design prevalence.
+**Surveillance system sensitivity**. Surveillance system sensitivity (SSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
 
 ## An approach for thinking about surveillance design and assessment
 
 The first thing to consider when you're designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen sampling will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
 
-Once we have the method of sampling defined we then move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how we might assess the surveillance system once it has been designed and implemented.
+Once you have the method of sampling defined we move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how you might assess the surveillance system once it has been designed and implemented.
 
-In terms of design, once you have specified the sampling method you need to determine how many surveillance system units will be sampled (usually, to achieve a defined surveillance system sensitivity). 
+In terms of design, once you've specified the sampling method you need to determine how many surveillance system units will be sampled (usually, to achieve a sufficient surveillance system sensitivity). 
 
-Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, we then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: 
+Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: 
 
 1. What is the surveillance system sensitivity? or 
 
@@ -156,7 +156,7 @@ rsu.sssep.rsfreecalc(N = 5000, pstar = 0.05, mse.p = 0.95,
 
 A population sensitivity of 95% is achieved with a total sample size of 221 herds, assuming a cut-point of 8 or more positive herds are required to return a positive survey result.
 
-Note the substantial increase in sample size when diagnostic specificity is imperfect (221 herds when specificity is 0.98 compared with 65 when specificity of the test was perfect). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are more likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to assess its effect on estimated sample size. 
+Note the substantial increase in sample size when diagnostic specificity is imperfect (221 herds when specificity is 0.98 compared with 65 when specificity of the test was perfect). The relatively low design prevalence in combination with imperfect imperfect specificity means that false positives are likely to be a problem in this population so the number tested needs to be (substantially) increased. Increase the design prevalence to 0.10 to assess its effect on estimated sample size. 
 
 ```{r message = FALSE}
 rsu.sssep.rsfreecalc(N = 5000, pstar = 0.10, mse.p = 0.95, 

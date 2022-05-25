@@ -1,4 +1,20 @@
-CHANGES IN epiR VERSION 2.0.44
+CHANGES IN epiR VERSION 2.0.48
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Bug in function epi.kappa corrected.
+    [Spotted by Valeria Rolle]
+
+
+CHANGES IN epiR VERSION 2.0.47
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.prev further updated to return the expected number of test positives, true positives, false positives, test negatives, true negatives and false negatives in addition to apparent and true prevalence.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.46
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
