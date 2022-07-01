@@ -1,3 +1,21 @@
+CHANGES IN epiR VERSION 2.0.50
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function summary(epi.tests) now returns a data frame of diagnostic test outcome measures (instead of a list).
+    [Suggested by question asked on Stack Overflow]
+    o Numerous tidy ups to documentation.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.49
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.herdtest now calculates and reports HSe and HSp using the binomial and hypergeometric distributions.
+    [Suggested by Mark Stevenson]
+    
+
 CHANGES IN epiR VERSION 2.0.48
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -44,7 +62,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Function for epi.interaction reports RERI, APAB, S and multiplicative interaction as a list.
     [Suggested by Mark Stevenson]
-    o Numerous tidy ups to the documentation.
+    o Numerous tidy ups to documentation.
     [Suggested by Mark Stevenson]
 
 

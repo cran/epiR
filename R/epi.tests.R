@@ -83,7 +83,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  tp <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  tp <- data.frame(statistic = "tp", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- M1; n <- total
@@ -125,7 +125,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  ap <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  ap <- data.frame(statistic = "ap", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- N1; n <- total
@@ -167,7 +167,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  se <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  se <- data.frame(statistic = "se", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- a; n <- M1
@@ -209,7 +209,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  sp <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  sp <- data.frame(statistic = "sp", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- d; n <- M0
@@ -251,7 +251,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  pv.pos <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  pv.pos <- data.frame(statistic = "pv.pos", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- a; n <- N1
@@ -293,7 +293,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  pv.neg <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  pv.neg <- data.frame(statistic = "pv.neg", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- d; n <- N0
@@ -318,7 +318,7 @@
   lrpos.low <- exp(log(lrpos.est) - z * sqrt((1 - se$est) / (M1 * se$est) + (sp$est) / (M0 * (1 - sp$est))))
   lrpos.up <-  exp(log(lrpos.est) + z * sqrt((1 - se$est) / (M1 * se$est) + (sp$est) / (M0 * (1 - sp$est))))
   
-  lr.pos <- data.frame(est = lrpos.est, lower = lrpos.low, upper = lrpos.up)
+  lr.pos <- data.frame(statistic = "lr.pos", est = lrpos.est, lower = lrpos.low, upper = lrpos.up)
   
   
   ## Likelihood ratio of a negative test. Confidence intervals from Simel et al. (1991)
@@ -327,7 +327,7 @@
   lrneg.low <- exp(log(lrneg.est) - z * sqrt((se$est)/(M1 * (1 - se$est)) + (1 - sp$est) / (M0 * (sp$est))))
   lrneg.up <-  exp(log(lrneg.est) + z * sqrt((se$est) / (M1 * (1 - se$est)) + (1 - sp$est) / (M0 * (sp$est))))
   
-  lr.neg <- data.frame(est = lrneg.est, lower = lrneg.low, upper = lrneg.up)
+  lr.neg <- data.frame(statistic = "lr.neg", est = lrneg.est, lower = lrneg.low, upper = lrneg.up)
   
   
   ## Diagnostic accuracy (from Scott et al. (2008)):
@@ -353,7 +353,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  diag.ac <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  diag.ac <- data.frame(statistic = "diag.ac", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   ## Greg Snow:
   ## r <- (a + d); n <- total
@@ -384,7 +384,7 @@
   dOR.low <- exp(lndOR.l)
   dOR.up <- exp(lndOR.u)
   
-  diag.or <- data.frame(est = dOR.p, lower = dOR.low, upper = dOR.up)
+  diag.or <- data.frame(statistic = "diag.or", est = dOR.p, lower = dOR.low, upper = dOR.up)
   
   
   ## Number needed to diagnose (from Scott et al. (2008)):
@@ -394,7 +394,7 @@
   nndx.low <- min(nndx.1, nndx.2)
   nndx.up <- max(nndx.1, nndx.2)
   
-  nndx <- data.frame(est = nndx.est, lower = nndx.low, upper = nndx.up)
+  nndx <- data.frame(statistic = "nndx", est = nndx.est, lower = nndx.low, upper = nndx.up)
   
   
   ## Youden's index (from Bangdiwala et al. (2008)):
@@ -404,7 +404,7 @@
   c.low <- min(c.1, c.2)
   c.up <- max(c.1, c.2)
   
-  youden <- data.frame(est = c.p, lower = c.low, upper = c.up)
+  youden <- data.frame(statistic = "youden", est = c.p, lower = c.low, upper = c.up)
   
   
   ## Proportion ruled out:
@@ -430,7 +430,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  p.rout <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  p.rout <- data.frame(statistic = "p.rout", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   
   ## Proportion ruled in:
@@ -456,7 +456,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  p.rin <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  p.rin <- data.frame(statistic = "p.rin", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   
   ## False T+ proportion for true D-, Pr(T+|D-):
@@ -482,8 +482,8 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  p.fpos <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
-  p.tpdn <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  p.fpos <- data.frame(statistic = "p.fpos", est = trval$est, lower = trval$lower, upper = trval$upper)
+  p.tpdn <- data.frame(statistic = "p.tpdn", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   
   ## False T- proportion for true D+, Pr(T-|D+):
@@ -509,8 +509,8 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  # p.fneg <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
-  p.tndp <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)
+  # p.fneg <- data.frame(statistic = "p.fneg", est = trval$est, lower = trval$lower, upper = trval$upper)
+  p.tndp <- data.frame(statistic = "p.tndp", est = trval$est, lower = trval$lower, upper = trval$upper)
   
   
   ## False T+ proportion for T+, Pr(D-|T+):
@@ -536,7 +536,7 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  p.dntp <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper)   
+  p.dntp <- data.frame(statistic = "p.dntp", est = trval$est, lower = trval$lower, upper = trval$upper)   
   
   ## False T- proportion for T-, Pr(D+|T-):
   tdat <- as.matrix(cbind(c, N0))
@@ -561,17 +561,10 @@
     trval <- zjeffreys(tdat, conf.level)
   }
   
-  p.dptn <- data.frame(est = trval$est, lower = trval$lower, upper = trval$upper) 
+  p.dptn <- data.frame(statistic = "p.dptn", est = trval$est, lower = trval$lower, upper = trval$upper) 
   
-  rval <- list(ap = ap, tp = tp, 
-               se = se, sp = sp, 
-               diag.ac = diag.ac, diag.or = diag.or, nndx = nndx, youden = youden, 
-               pv.pos = pv.pos, pv.neg = pv.neg, 
-               lr.pos = lr.pos, lr.neg = lr.neg, 
-               p.rout = p.rout, p.rin = p.rin, 
-               p.tpdn = p.tpdn, p.tndp = p.tndp, 
-               p.dntp = p.dntp, p.dptn = p.dptn)
-  
+  rval.df <- rbind(ap, tp, se, sp, diag.ac, diag.or, nndx, youden, pv.pos, pv.neg, lr.pos, lr.neg, p.rout, 
+                p.rin, p.tpdn, p.tndp, p.dntp, p.dptn)
   
   ## Define tab:
   r1 <- c(a, b, N1)
@@ -582,7 +575,7 @@
   rownames(tab) <- c("Test +", "Test -", "Total")
   tab <- format.data.frame(tab, digits = 3, justify = "right")
   
-  out <- list(detail = rval, tab = tab, method = method, digits = digits, conf.level = conf.level)
+  out <- list(detail = rval.df, tab = tab, method = method, digits = digits, conf.level = conf.level)
   
   class(out) <- "epi.tests"
   return(out)
@@ -643,83 +636,83 @@ print.epi.tests <- function(x, ...) {
     tdac  <- "\nCorrectly classified proportion *      %.4f (%.4f, %.4f)"
   }
   
-  with(x$detail, {
+  with(x, {
     
     cat(sprintf(tap,
-                ap$est,
-                ap$lower,
-                ap$upper
+                x$detail$est[x$detail$statistic == "ap"],
+                x$detail$lower[x$detail$statistic == "ap"],
+                x$detail$upper[x$detail$statistic == "ap"]
     ))
     cat(sprintf(ttp,
-                tp$est,
-                tp$lower,
-                tp$upper
+                x$detail$est[x$detail$statistic == "tp"],
+                x$detail$lower[x$detail$statistic == "tp"],
+                x$detail$upper[x$detail$statistic == "tp"]
     ))
     
     cat(sprintf(tse,
-                se$est,
-                se$lower,
-                se$upper
+                x$detail$est[x$detail$statistic == "se"],
+                x$detail$lower[x$detail$statistic == "se"],
+                x$detail$upper[x$detail$statistic == "se"]
     ))
     
     cat(sprintf(tsp,
-                sp$est,
-                sp$lower,
-                sp$upper
+                x$detail$est[x$detail$statistic == "sp"],
+                x$detail$lower[x$detail$statistic == "sp"],
+                x$detail$upper[x$detail$statistic == "sp"]
     ))
     
     cat(sprintf(tppv,
-                pv.pos$est,
-                pv.pos$lower,
-                pv.pos$upper
+                x$detail$est[x$detail$statistic == "pv.pos"],
+                x$detail$lower[x$detail$statistic == "pv.pos"],
+                x$detail$upper[x$detail$statistic == "pv.pos"]
     ))
     
     cat(sprintf(tnpv,
-                pv.neg$est,
-                pv.neg$lower,
-                pv.neg$upper
+                x$detail$est[x$detail$statistic == "pv.neg"],
+                x$detail$lower[x$detail$statistic == "pv.neg"],
+                x$detail$upper[x$detail$statistic == "pv.neg"]
     ))
     
     cat(sprintf(tplr,
-                lr.pos$est,
-                lr.pos$lower,
-                lr.pos$upper
+                x$detail$est[x$detail$statistic == "lr.pos"],
+                x$detail$lower[x$detail$statistic == "lr.pos"],
+                x$detail$upper[x$detail$statistic == "lr.pos"]
     ))
     
     cat(sprintf(tnlr,
-                lr.neg$est,
-                lr.neg$lower,
-                lr.neg$upper
+                x$detail$est[x$detail$statistic == "lr.neg"],
+                x$detail$lower[x$detail$statistic == "lr.neg"],
+                x$detail$upper[x$detail$statistic == "lr.neg"]
     ))
     
     cat(sprintf(ttpdn,
-                p.tpdn$est,
-                p.tpdn$lower,
-                p.tpdn$upper
+                x$detail$est[x$detail$statistic == "p.tpdn"],
+                x$detail$lower[x$detail$statistic == "p.tpdn"],
+                x$detail$upper[x$detail$statistic == "p.tpdn"]
     ))
     
     cat(sprintf(ttndp,
-                p.tndp$est,
-                p.tndp$lower,
-                p.tndp$upper
+                x$detail$est[x$detail$statistic == "p.tndp"],
+                x$detail$lower[x$detail$statistic == "p.tndp"],
+                x$detail$upper[x$detail$statistic == "p.tndp"]
     ))
     
     cat(sprintf(tdntp,
-                p.dntp$est,
-                p.dntp$lower,
-                p.dntp$upper
+                x$detail$est[x$detail$statistic == "p.dntp"],
+                x$detail$lower[x$detail$statistic == "p.dntp"],
+                x$detail$upper[x$detail$statistic == "p.dntp"]
     ))
     
     cat(sprintf(tdptn,
-                p.dptn$est,
-                p.dptn$lower,
-                p.dptn$upper
+                x$detail$est[x$detail$statistic == "p.dptn"],
+                x$detail$lower[x$detail$statistic == "p.dptn"],
+                x$detail$upper[x$detail$statistic == "p.dptn"]
     ))
     
     cat(sprintf(tdac,
-                diag.ac$est,
-                diag.ac$lower,
-                diag.ac$upper
+                x$detail$est[x$detail$statistic == "diag.ac"],
+                x$detail$lower[x$detail$statistic == "diag.ac"],
+                x$detail$upper[x$detail$statistic == "diag.ac"]
     ))
     
     
@@ -753,7 +746,8 @@ print.epi.tests <- function(x, ...) {
 summary.epi.tests <- function(object, ...) {
   
   ## Create a data frame:
-  out <- do.call(rbind, object$detail)
+  out <- object$detail
+  # out <- do.call(rbind, object$detail)
   
   ## Return it:
   return(out)

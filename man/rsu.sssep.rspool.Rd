@@ -15,10 +15,10 @@ rsu.sssep.rspool(k, pstar, pse, psp, se.p)
 }
 
 \arguments{
-\item{k}{scalar or vector of the same length as \code{sep} representing the number of individual units that contribute to each pool (i.e the pool size).}
-\item{pstar}{scalar or vector of the same length as \code{sep} representing the design prevalence.}
-\item{pse}{scalar or vector of the same length as \code{sep} representing the pool-level sensitivity.}
-\item{psp}{scalar or vector of the same length as \code{sep} representing the pool-level specificity.}
+\item{k}{scalar or vector of the same length as \code{sep} representing the number of individual units that contribute to each pool (i.e., the pool size).}
+\item{pstar}{scalar or vector of the same length as \code{se.p} representing the design prevalence.}
+\item{pse}{scalar or vector of the same length as \code{se.p} representing the pool-level sensitivity.}
+\item{psp}{scalar or vector of the same length as \code{se.p} representing the pool-level specificity.}
 \item{se.p}{scalar or vector (0 to 1) representing the desired surveillance system (population-level) sensitivity.}
 
 }

@@ -40,30 +40,38 @@ When \code{method = "jeffreys"} Jeffrey's confidence limits are calculated for t
 
 Confidence intervals for positive and negative likelihood ratios are based on formulae provided by Simel et al. (1991).
 
-Diagnostic accuracy is defined as the proportion of all tests that give a correct result. Diagnostic odds ratio is defined as how much more likely will the test make a correct diagnosis than an incorrect diagnosis in patients with the disease (Scott et al. 2008). The number needed to diagnose is defined as the number of paitents that need to be tested to give one correct positive test. Youden's index is the difference between the true positive rate and the false positive rate. Youden's index ranges from -1 to +1 with values closer to 1 if both sensitivity and specificity are high (i.e., close to 1).
+Diagnostic accuracy is defined as the proportion of all tests that give a correct result. Diagnostic odds ratio is defined as how much more likely will the test make a correct diagnosis than an incorrect diagnosis in patients with the disease (Scott et al. 2008). The number needed to diagnose is defined as the number of patients that need to be tested to give one correct positive test. Youden's index is the difference between the true positive rate and the false positive rate. Youden's index ranges from -1 to +1 with values closer to 1 if both sensitivity and specificity are high (i.e., close to 1).
 }
 
 \value{
-An object of class \code{epi.tests} containing the following:
-  \item{ap}{apparent prevalence.}
-  \item{tp}{true prevalence.}
-  \item{se}{test sensitivity.}
-  \item{sp}{test specificity.}
-  \item{diag.ac}{diagnostic accuracy (the correctly classified proportion).}
-  \item{diag.or}{diagnostic odds ratio.}
-  \item{nndx}{number needed to diagnose.}
+A data frame of class \code{epi.tests} listing:
+  \item{statistic}{The name of the outcome measure.}
+  \item{est}{The point estimate of the listed outcome measure.}
+  \item{lower}{The lower bound of the confidence interval of the listed outcome measure.} 
+  \item{upper}{The upper bound of the confidence interval of the listed outcome measure.}
+
+The following outcome measures are returned:
+  \item{tp}{True prevalence.}
+  \item{ap}{Apparent prevalence.}  
+  \item{se}{Diagnostic test sensitivity.}
+  \item{sp}{Diagnostic test specificity.}
+  \item{diag.ac}{Diagnostic accuracy (the correctly classified proportion).}
+  \item{diag.or}{Diagnostic odds ratio.}
+  \item{nndx}{The number needed to diagnose.}
   \item{youden}{Youden's index.}
-  \item{pv.pos}{positive predictive value.}
-  \item{pv.neg}{negative predictive value.}
-  \item{lr.pos}{likelihood ratio of a positive test.}
-  \item{lr.neg}{likelihood ratio of a negative test.}
-  \item{p.rout}{the proportion of subjects with the outcome ruled out.}
-  \item{p.rin}{the proportion of subjects with the outcome ruled in.}
-  \item{p.tpdn}{the proportion of true outcome negative subjects that test positive (false T+ proportion for D-).} 
-  \item{p.tndp}{the proportion of true outcome positive subjects that test negative (false T- proportion for D+).}  
-  \item{p.dntp}{the proportion of test positive subjects that are outcome negative (false T+ proportion for T+).}
-  \item{p.dptn}{the proportion of test negative subjects that are outcome positive (false T- proportion for T-).}      
+  \item{pv.pos}{Positive predictive value.}
+  \item{pv.neg}{Negative predictive value.}
+  \item{lr.pos}{Likelihood ratio of a positive test.}
+  \item{lr.neg}{Likelihood ratio of a negative test.}
+  \item{p.rout}{The proportion of subjects with the outcome ruled out.}
+  \item{p.rin}{The proportion of subjects with the outcome ruled in.}
+  \item{p.tpdn}{The proportion of true outcome negative subjects that test positive (false T+ proportion for D-).} 
+  \item{p.tndp}{The proportion of true outcome positive subjects that test negative (false T- proportion for D+).}  
+  \item{p.dntp}{The proportion of test positive subjects that are outcome negative (false T+ proportion for T+).}
+  \item{p.dptn}{The proportion of test negative subjects that are outcome positive (false T- proportion for T-).}      
 }
+
+
 
 \references{
 Agresti A, Coull B (1998). Approximate is better than 'exact' for interval estimation of binomial proportions. The American Statistician 52. DOI: 10.2307/2685469.
@@ -124,8 +132,7 @@ print(rval.tes01)
 ## is 3.75 (95\% CI 3.32 to 4.24). 
 
 ## What is the number needed to diagnose?
-names(rval.tes01$detail)
-rval.tes01$detail$nndx
+rval.tes01$detail
 
 ## The number needed to diagnose is 1.51 (95\% CI 1.41 to 1.65). Around 15 
 ## persons need to be tested to return 10 positive tests.
@@ -190,24 +197,24 @@ print(rval.tes03)
 
 ## What proportion of subjects are ruled out as being at high risk of 
 ## myocardial infarction?
-rval.tes03$detail$p.rout
+rval.tes03$detail[rval.tes03$detail$statistic == "p.rout",] 
 ## Answer: 0.61 (95\% CI 0.54 to 0.68).
 
 ## What proportion of subjects are ruled in as being at high risk of 
 ## myocardial infarction?
-rval.tes03$detail$p.rin
+rval.tes03$detail[rval.tes03$detail$statistic == "p.rin",]
 # Answer: 0.38 (95\% CI 0.32 to 0.45).
 
 ## What is the proportion of false positive results? That is, what is the 
 ## proportion of test positive individuals among those that are disease 
 ## negative, p.tpdn?
-rval.tes03$detail$p.tpdn
+rval.tes03$detail[rval.tes03$detail$statistic == "p.tpdn",]
 # Answer: 0.37 (95\% CI 0.29 to 0.45).
 
 ## What is the proportion of false negative results? That is, what is the 
 ## proportion of test negative individuals among those that are disease 
 ## positive, p.tndp?
-rval.tes03$detail$p.tndp
+rval.tes03$detail[rval.tes03$detail$statistic == "p.tndp",]
 # Answer: 0.58 (95\% CI 0.44 to 0.70).
 }
 

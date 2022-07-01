@@ -24,7 +24,13 @@ epi.herdtest(se, sp, P, N, n, k)
 }
 
 \value{
-A data frame with four elements: \code{APpos} the probability of obtaining a positive test, \code{APneg} the probability of obtaining a negative test, \code{HSe} the estimated group (herd) sensitivity, and \code{HSp} the estimated group (herd) specificity.
+A list with one scalar and two data frames. 
+
+Scalar \code{sfraction} reports the sampling fraction (i.e., \code{n / N}). The binomial distribution is recommended if \code{sfraction} is less than 0.2.
+  
+Data frame \code{dbinom} lists \code{APpos} the probability of obtaining a positive test, \code{APneg} the probability of obtaining a negative test, \code{HSe} the estimated group (herd) sensitivity, and \code{HSp} the estimated group (herd) specificity calculated using the binomial distribution.
+
+Data frame \code{dhyper} lists \code{APpos} the probability of obtaining a positive test, \code{APneg} the probability of obtaining a negative test, \code{HSe} the estimated group (herd) sensitivity, and \code{HSp} the estimated group (herd) specificity calculated using the hypergeometric.
 }
 
 \references{
@@ -33,10 +39,6 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 
 \author{
 Ron Thornton, MAF New Zealand, PO Box 2526 Wellington, New Zealand.
-}
-
-\note{
-The method implemented in this function is based on the hypergeometric distribution.
 }
 
 \examples{
@@ -50,11 +52,12 @@ The method implemented in this function is based on the hypergeometric distribut
 
 epi.herdtest(se = 0.391, sp = 0.964, P = 0.12, N = 1E06, n = 60, k = 2)
 
-## This testing regime gives a herd sensitivity of 0.95 and a herd
-## specificity of 0.36. With a herd sensitivity of 0.95 we can be
-## confident that we will declare a herd infected if it is infected.
-## With a herd specficity of only 0.36, we will declare 0.64 of disease
-## negative herds as infected, so false positives are a problem.
+## This testing regime gives a herd sensitivity of 0.99 and a herd
+## specificity of 0.36 (using the binomial distribution). With a herd 
+## sensitivity of 0.95 we can be confident that we will declare a herd 
+## as disease positive if it truly is disease positive. With a herd specficity 
+## of only 0.36, we will declare 0.64 of disease negative herds as infected, 
+## so false positives are a problem.
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS
