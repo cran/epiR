@@ -81,6 +81,7 @@ When method equals \code{cohort.count} the following measures of association, me
   \item{\code{RR}}{Wald, Taylor and score confidence intervals for the incidence risk ratios for each strata. Wald, Taylort and score confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk (risk difference) for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
   \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
@@ -118,6 +119,7 @@ When method equals \code{cross.sectional} the following measures of association 
   \item{\code{PR}}{Wald, Taylor and score confidence intervals for the prevalence ratios for each strata. Wald, Taylor and score confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk.}
   \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
@@ -137,7 +139,7 @@ Variable \code{phi.coef} equals the phi coefficient (Fleiss et al. 2003, Equatio
 
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 
-Intepretive statements for the number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) follow the approach described by Altman (1998). See the examples for details.
+Interpretive statements for NNTB and NNTH follow the approach described by Altman (1998). See the examples for details. Note that number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) estimates are not computed when \code{method = "cohort.time"} or \code{method = "case.control"} because attributable risk can't be calculated using these study designs.
 }
 
 \references{
@@ -208,6 +210,8 @@ Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University 
 \note{Measures of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
 
 Measures of effect in the exposed include the attributable risk (or prevalence) and the attributable fraction. The attributable risk is the risk of disease in the exposed group minus the risk of disease in the unexposed group. The attributable risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction is the proportion of study outcomes in the exposed group that is attributable to exposure. 
+
+The number needed to treat (NNT) equals the inverse of the attributable risk. Depending on the outcome of interest we use different labels for NNT. When dealing with an outcome that is desirable (e.g., treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is undesirable (e.g., death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
 
 Measures of effect in the population include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of the study outcome in the population that may be attributed to exposure. The population attributable fraction is the proportion of the study outcomes in the population that is attributable to exposure.
 
@@ -402,8 +406,8 @@ epi.2by2(dat = dat.tab03, method = "cohort.time", digits = 2,
    conf.level = 0.95, units = 1000 * 365.25, interpret = FALSE, 
    outcome = "as.columns")
 
-## The Mantel-Haenszel adjusted incidence rate ratio was 4.49 (95\% CI 4.15 
-## to 4.86).
+## The Mantel-Haenszel adjusted incidence rate ratio was 4.39 (95\% CI 4.06 
+## to 4.75).
 
 
 ## EXAMPLE 4:

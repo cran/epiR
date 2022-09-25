@@ -1,3 +1,21 @@
+CHANGES IN epiR VERSION 2.0.52
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Labelling inconsistency in epi.2by2 corrected.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.51
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Documentation in relation to NNTB and NNTH in epi.2by2 updated.
+    [Suggested by Margaret MacDougall]
+    o Bug in calculation of score confidence intervals for risk ratio corrected.
+    [Spotted by Ki Heun Chung]
+    
+
 CHANGES IN epiR VERSION 2.0.50
 
 SIGNIFICANT USER-VISIBLE CHANGES

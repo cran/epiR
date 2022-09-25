@@ -2755,7 +2755,7 @@ print.epi.2by2 <- function(x, ...) {
     mh.df <-  as.numeric(x$massoc.detail$chi2.mh[2])
     mh.p <-  ifelse(as.numeric(x$massoc.detail$chi2.mh)[3] < 0.001, "<0.001", sprintf("%.3f", x$massoc.detail$chi2.mh[3]))
     
-    cat("\n", " M-H test of homogeneity of PRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
+    cat("\n", " M-H test of homogeneity of IRRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
     
     cat("\n", " M-H test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
     
