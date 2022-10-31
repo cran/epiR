@@ -3,9 +3,9 @@
    N <- 1 - ((1 - conf.level) / 2)
    z <- qnorm(N, mean = 0, sd = 1)
    
-   if(length(survfit.obj$strata) == 0)
-   {
-     dat.df <- data.frame(time = survfit.obj$time, time0 = c(0, survfit.obj$time[-length(survfit.obj$time)]))
+   if(length(survfit.obj$strata) == 0){
+     
+     dat.df <- data.frame(time = survfit.obj$time, time0 = c(0, survfit.obj$time[-length(survfit.obj$time)]), n.risk = survfit.obj$n.risk, n.event = survfit.obj$n.event)
 
      # https://www.real-statistics.com/survival-analysis/kaplan-meier-procedure/confidence-interval-for-the-survival-function/
      # Kaplan-Meier survival and confidence intervals:
@@ -33,14 +33,15 @@
      dat.df$hlow[is.infinite(dat.df$hlow)] <- 0
      dat.df$hupp[is.infinite(dat.df$hupp)] <- 0
      
-     rval <- data.frame(time = dat.df$time, 
+     rval.df <- data.frame(time = dat.df$time,
+        n.risk = dat.df$n.risk, n.event = dat.df$n.event,
         sest = dat.df$sest, slow = dat.df$slow, supp = dat.df$supp,
         hest = dat.df$hest, hlow = dat.df$hlow, hupp = dat.df$hupp)
    }
    
    else
-     if(length(survfit.obj$strata) > 0)
-     {
+     if(length(survfit.obj$strata) > 0){
+       
        # Strata names:  
        strata <- names(survfit.obj$strata)
        strata <- sub(pattern = ".*=", replacement = "", strata)
@@ -72,6 +73,9 @@
        dat.df <- dat.df[,c(1,3,2)]
        dat.df$int <- (dat.df$time - dat.df$time0)
 
+       dat.df$n.risk <- survfit.obj$n.risk
+       dat.df$n.event = survfit.obj$n.event
+       
        # Kaplan-Meier survival and confidence intervals:
        dat.df$sest <- survfit.obj$surv
        dat.df$sse  <- survfit.obj$std.err
@@ -97,10 +101,11 @@
        dat.df$hlow[is.infinite(dat.df$hlow)] <- 0
        dat.df$hupp[is.infinite(dat.df$hupp)] <- 0
        
-       rval <- data.frame(strata = dat.df$strata, time = dat.df$time, 
+       rval.df <- data.frame(strata = dat.df$strata, time = dat.df$time,
+          n.risk = dat.df$n.risk, n.event = dat.df$n.event,
           sest = dat.df$sest, slow = dat.df$slow, supp = dat.df$supp,
           hest = dat.df$hest, hlow = dat.df$hlow, hupp = dat.df$hupp)
      }    
        
-   return(rval)
+   return(rval.df)
 }

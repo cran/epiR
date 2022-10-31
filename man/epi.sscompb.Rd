@@ -83,10 +83,10 @@ epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90,
 ## control group) what is the maximum detectable risk ratio that is less 
 ## than 1?
 
-epi.sscompb(treat = NA, control = 0.32, n = 1000, power = 0.90, 
+epi.sscompb(treat = NA, control = 0.32, n = 2000, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
 
-## If we sample only 10,000 men the maximum detectable risk ratio will be 0.88.
+## If we sample only 2,000 men the maximum detectable risk ratio will be 0.91.
 
 }
 

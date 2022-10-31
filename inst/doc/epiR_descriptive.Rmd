@@ -34,13 +34,13 @@ Epidemiology is the study of the frequency, distribution and determinants of hea
 
 This vignette provides instruction on the way R and `epiR` can be used for descriptive epidemiological analyses, that is, to describe how the frequency of disease varies by individual, place and time.  
 
-## Indivdual
+## Individual
 
 Descriptions of disease frequency involves reporting either the **prevalence** or **incidence** of disease.
 
 Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a specific disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and these notes will follow this convention.
 
-Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time, (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e. the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period). 
+Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time, (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e., the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period). 
 
 Incidence provides a measure of how frequently susceptible individuals become disease cases as they are observed over time. An incident case occurs when an individual changes from being susceptible to being diseased. The count of incident cases is the number of such events that occur in a population during a defined follow-up period. There are two ways to express incidence:
 
@@ -93,7 +93,7 @@ ggplot(data = dat.df, aes(x = dprob)) +
   scale_x_continuous(limits = c(0,1), name = "Prevalence") +
   scale_y_continuous(limits = c(0,10), name = "Number of draws")
 ```
-Generate a vector of population sizes using the uniform distribution. Calculate the number of diseased individuals in each population using `dprob` (calculated above). Finally, calculate the prevalence of disease in each population and its 95% confidence interval using `epi.conf`. The function `epi.conf` provides several options for confidence interval calculation methods for prevalence. Here we'll use the exact method:
+Generate a vector of population sizes using the uniform distribution. Calculate the number of diseased individuals in each population using `dprob` (calculated above). Finally, calculate the prevalence of disease in each population and its 95% confidence interval using `epi.conf`. The function `epi.conf` provides several options for confidence interval calculation methods for prevalence. For this example we'll use the exact method:
 
 ```{r}
 dat.df$rname <- paste("Region ", 1:25, sep = "")

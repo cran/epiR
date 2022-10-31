@@ -1,3 +1,15 @@
+CHANGES IN epiR VERSION 2.0.53
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Number at risk and number of events listed in the output from function epi.insthaz.
+    [Suggested by Prabal Chowdhury]
+    o Inconsistency in the documentation for epi.sscompb corrected.
+    [Suggested by Jose Canevari]
+    o Function rsu.dxtest now includes the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between two of the three tests).
+    [Suggested by Cathy Kneipp]
+
+
 CHANGES IN epiR VERSION 2.0.52
 
 SIGNIFICANT USER-VISIBLE CHANGES

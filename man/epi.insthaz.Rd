@@ -19,11 +19,11 @@ epi.insthaz(survfit.obj, conf.level = 0.95)
 }
 
 \details{
-Computes the instantaneous hazard of the event of interest, equivalent to the proportion of the population failing per unit time.
+Computes the instantaneous hazard of the event of interest, equivalent to the proportion of the group at risk failing per unit time.
 }
 
 \value{
-A data frame with three or four elements: \code{strata} the strata identifier, \code{time} the observed failure times, \code{sest} the observed Kaplan-Meier survival function, \code{slow} the lower bound of the confidence interval for the observed Kaplan-Meier survival function, \code{supp} the upper bound of the confidence interval for the observed Kaplan-Meier survival function, \code{hest} the observed instantaneous hazard (the proportion of the population at risk experiencing the event of interest per unit time), \code{hlow} the lower bound of the confidence interval for the observed instantaneous hazard, and \code{hupp} the upper bound of the confidence interval for the observed instantaneous hazard.
+A data frame with the following variables: \code{strata} the strata identifier, \code{time} the observed event times, \code{n.risk} the number of individuals at risk at the start of the event time, \code{n.event} the number of individuals that experienced the event of interest at the event time, \code{sest} the observed Kaplan-Meier survival function, \code{slow} the lower bound of the confidence interval for the observed Kaplan-Meier survival function, \code{supp} the upper bound of the confidence interval for the observed Kaplan-Meier survival function, \code{hest} the observed instantaneous hazard (the proportion of the population at risk experiencing the event of interest per unit time), \code{hlow} the lower bound of the confidence interval for the observed instantaneous hazard, and \code{hupp} the upper bound of the confidence interval for the observed instantaneous hazard.
 }
 
 \references{
@@ -43,7 +43,7 @@ dat.df01$sex <- factor(dat.df01$sex, levels = c(1,2),
    labels = c("Male","Female"))
 
 lung.km01 <- survfit(Surv(time = time, event = status) ~ 1, data = dat.df01)
-lung.haz01 <- epi.insthaz(lung.km01, conf.level = 0.95)
+lung.haz01 <- epi.insthaz(survfit.obj = lung.km01, conf.level = 0.95)
 
 lung.shaz01 <- data.frame(
   time = lowess(lung.haz01$time, lung.haz01$hlow, f = 0.20)$x,
@@ -85,7 +85,7 @@ ggplot() +
 ## Now stratify by gender:
 
 lung.km02 <- survfit(Surv(time = time, event = status) ~ sex, data = dat.df01)
-lung.haz02 <- epi.insthaz(lung.km02, conf.level = 0.95)
+lung.haz02 <- epi.insthaz(survfit.obj = lung.km02, conf.level = 0.95)
 
 \dontrun{ 
 library(ggplot2)

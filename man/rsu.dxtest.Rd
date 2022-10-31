@@ -7,18 +7,18 @@ Sensitivity and specificity of diagnostic tests interpreted in series or paralle
 }
 
 \description{
-Calculates the sensitivity and specificity of two diagnostic tests interpreted in series or parallel.
+Calculates the sensitivity and specificity of two or three diagnostic tests interpreted in series or parallel.
 }
 
 \usage{
-rsu.dxtest(se, sp, interpretation = "series", covar = c(0,0))
+rsu.dxtest(se, sp, covar = c(0,0), interpretation = "series")
 }
 
 \arguments{
-\item{se}{a vector of length two defining the diagnostic sensitivity of the two tests.}
-\item{sp}{a vector of length two defining the diagnostic specificity of the two tests.}
+\item{se}{a vector of length two or three defining the diagnostic sensitivity of the two or three tests.}
+\item{sp}{a vector of length two or three defining the diagnostic specificity of the two or three tests.}
+\item{covar}{a vector of length two defining the covariance between test results for disease positive and disease negative groups. The first element of the vector is the covariance between test results for disease positive subjects. The second element of the vector is the covariance between test results for disease negative subjects. If three diagnostic tests are used it is assumed that if there is dependence, it is between tests 2 and 3. See the examples, below for details.}
 \item{interpretation}{a character string indicating how the test results should be interpreted. Options are \code{series} or \code{parallel}.}
-\item{covar}{a vector of length two defining the covariance between test results for disease positive and disease negative groups. The first element of the vector is the covariance between test results for disease positive subjects. The second element of the vector is the covariance between test results for disease negative subjects. Use \code{covar = c(0,0)} (the default) if the tests are known to be independent.}
 }
 
 \value{
@@ -27,7 +27,7 @@ A list comprised of two elements:
 \item{independent}{a data frame listing sensitivity \code{se} and specificity \code{sp} assuming the tests are independent.}
 \item{dependent}{a data frame listing sensitivity \code{se} and specificity \code{sp} calculated using the values of \code{covar}, as entered by the user.}
 
-If \code{covar = c(0,0)} data frames \code{independent} and \code{dependent} will be the same. 
+If \code{covar = c(0,0)} data frames \code{independent} and \code{dependent} will be the identical. 
 
 }
 
@@ -37,6 +37,9 @@ Dohoo I, Martin S, Stryhn H (2009). Veterinary Epidemiologic Research. AVC Inc C
 Gardner I, Stryhn H, Lind P, Collins M (2000). Conditional dependence between tests affects the diagnosis and surveillance of animal diseases. Preventive Veterinary Medicine 45: 107 - 122.
 
 Martin S, Meek A, Willeberg P (1987). Veterinary Epidemiology Principles and Methods. Iowa State University Press Ames.
+
+Toft N, Akerstedt J, Tharaldsen J, Hopp P (2007). Evaluation of three serological tests for diagnosis of Maedi-Visna virus infection using latent class analysis. Veterinary Microbiology 120: 77 - 86.
+
 }
 
 \note{
@@ -94,8 +97,8 @@ The covariance for the disease positive group is small. The covariance for the d
 ## What is the diagnostic sensitivity and specificity of this testing 
 ## regime? 
 
-rsu.dxtest(se = c(0.90,0.95), sp = c(0.80,0.85), 
-   interpretation = "series", covar = c(0,0))
+rsu.dxtest(se = c(0.90,0.95), sp = c(0.80,0.85), covar = c(0,0),
+   interpretation = "series")
    
 ## Interpretation of these tests in series returns a diagnostic sensitivity
 ## of 0.855 and a diagnostic specificity of 0.970.
@@ -109,12 +112,42 @@ rsu.dxtest(se = c(0.90,0.95), sp = c(0.80,0.85),
 ## with details of the covariance calculated above. What is the expected 
 ## sensitivity and specificity if the tests are to be interpreted in parallel?   
 
-rsu.dxtest(se = c(0.784,0.926), sp = c(0.951,0.979), 
-   interpretation = "parallel", covar = c(0.035,-0.001))
+rsu.dxtest(se = c(0.784,0.926), sp = c(0.951,0.979), covar = c(0.035,-0.001),
+   interpretation = "parallel")
 
 ## Interpreting test results in parallel and accounting for the lack of 
 ## test indepdendence returns a diagnostic sensitivity of 0.949 and diagnostic 
 ## specificity of 0.930. 
+
+
+## EXAMPLE 3:
+## Three diagnostic tests for Brucella suis in dogs are available: the Rose
+## Bengal test (RBT), complement fixation (CFT) and an ELISA. The diagnostic
+## sensitivities of the three tests are 0.910, 0.907 and 0.930, respectively.
+## The diagnostic specificities of the three tests are 0.955, 0.934, and 0.927, 
+## respectively. The covariance between the CFT and ELISA test results 
+## for disease positive and disease negative groups are 0.063 and 0.042,
+## respectively. What is the expected sensitivity and specificity if all three 
+## tests are run on an individual and interpreted in parallel? Note that the 
+## covariance estimates listed account for dependence between CFT (test 2)
+## and the ELISA (test 3).  
+
+rsu.dxtest(se = c(0.910,0.907,0.930), sp = c(0.955,0.934,0.927), 
+   covar = c(0.063,0.042), interpretation = "parallel")
+
+## Interpreting the test results in parallel and accounting for depdendence 
+## in the CFT and ELISA results returns a diagnostic sensitivity of 
+## 0.994 and a diagnostic specificity of 0.867.
+
+## What is the expected sensitivity and specificity if all three 
+## tests are run on an individual and interpreted in series?
+
+rsu.dxtest(se = c(0.910,0.907,0.930), sp = c(0.955,0.934,0.927), 
+   covar = c(0.063,0.042), interpretation = "series") 
+   
+## Interpreting the test results in series and accounting for depdendence 
+## in the CFT and ELISA results returns a diagnostic sensitivity of 
+## 0.825 and a diagnostic specificity of 0.998.
 
 }
 \keyword{methods}
