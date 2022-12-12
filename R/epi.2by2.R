@@ -1876,11 +1876,24 @@ interp.txt <- list(
     
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(a, b, N1, cIRiske.p, cOe.p)
-      r2 <- c(c, d, N0, cIRisko.p, cOo.p)
-      r3 <- c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Inc risk *", "       Odds")
+      c1 <- c(a, c, M1)
+      c2 <- c(b, d, M0)
+      c3 <- c(N1, N0, N1 + N0)
+      c4 <- c(
+        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.p, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.p, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2005,11 +2018,23 @@ interp.txt <- list(
 
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(sa, sb, sN1, cIRiske.p, cOe.p)
-      r2 <- c(sc, sd, sN0, cIRisko.p, cOo.p)
-      r3 <- c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Inc risk *", "       Odds")
+      c1 <- c(sa, sc, sM1)
+      c2 <- c(sb, sd, sM0)
+      c3 <- c(sN1, sN0, sN1 + sN0)
+      c4 <- c(
+        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.p, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.p, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2064,13 +2089,25 @@ interp.txt <- list(
     
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(a, b, cIRatee.p)
-      r2 <- c(c, d, cIRateo.p)
-      r3 <- c(M1, M0, cIRatepop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Time at risk", "       Inc rate *")
+      c1 <- c(a, c, M1)
+      c2 <- c(b, d, M0)
+      c3 <- c(
+        paste(format(round(cIRatee.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRatee.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRatee.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRateo.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRateo.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRateo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRatepop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRatepop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRatepop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3))
+      colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
+
     }
     
     if(outcome == "as.rows"){
@@ -2138,11 +2175,22 @@ interp.txt <- list(
     
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(sa, sb, cIRatee.p)
-      r2 <- c(sc, sd, cIRateo.p)
-      r3 <- c(sM1, sM0, cIRatepop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Time at risk", "       Inc rate *")
+      c1 <- c(sa, sc, sM1)
+      c2 <- c(sb, sd, sM0)
+      c3 <- c(
+        paste(format(round(cIRatee.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRatee.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRatee.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRateo.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRateo.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRateo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRatepop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRatepop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRatepop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3))
+      colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2197,11 +2245,23 @@ interp.txt <- list(
     
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(a, b, N1, cIRiske.p, cOe.p)
-      r2 <- c(c, d, N0, cIRisko.p, cOo.p)
-      r3 <- c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+      c1 <- c(a, c, M1)
+      c2 <- c(b, d, M0)
+      c3 <- c(N1, N0, N1 + N0)
+      c4 <- c(
+        paste(format(round(cOe.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOe.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOe.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cOo.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOo.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cOpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                      Odds")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2274,11 +2334,23 @@ interp.txt <- list(
     
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(sa, sb, sN1, cIRiske.p, cOe.p)
-      r2 <- c(sc, sd, sN0, cIRisko.p, cOo.p)
-      r3 <- c(sM1, sM0, sM0 + sM1, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+      c1 <- c(sa, sc, sM1)
+      c2 <- c(sb, sd, sM0)
+      c3 <- c(sN1, sN0, sN1 + sN0)
+      c4 <- c(
+        paste(format(round(cOe.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOe.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOe.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cOo.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOo.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cOpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cOpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cOpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2359,11 +2431,23 @@ interp.txt <- list(
 
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(a, b, N1, cIRiske.p, cOe.p)
-      r2 <- c(c, d, N0, cIRisko.p, cOo.p)
-      r3 <- c(M1, M0, M0 + M1, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+      c1 <- c(a, c, M1)
+      c2 <- c(b, d, M0)
+      c3 <- c(N1, N0, N1 + N0)
+      c4 <- c(
+        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRisko.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRisko.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2488,11 +2572,23 @@ interp.txt <- list(
 
     ## Define tab:
     if(outcome == "as.columns"){
-      r1 <- c(sa, sb, sN1, cIRiske.p, cOe.p)
-      r2 <- c(sc, sd, sN0, cIRisko.p, cOo.p)
-      r3 <- c(sM1, sM0, sM1 + sM0, cIRiskpop.p, cOpop.p)
-      tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "       Prevalence *", "       Odds")
+      c1 <- c(sa, sc, sM1)
+      c2 <- c(sb, sd, sM0)
+      c3 <- c(sN1, sN0, sN1 + sN0)
+      c4 <- c(
+        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRisko.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRisko.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        
+        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
+              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
+              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+      tab <- data.frame(cbind(c1, c2, c3, c4))
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -3006,8 +3102,7 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n", "Fisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
     cat("\n", "Wald confidence limits")
     cat("\n", "CI: confidence interval")
-    cat("\n", "*", x$units[1], "\n")
-    
+
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
       cat("\n", x$massoc.interp$text[1], "\n")
@@ -3101,8 +3196,7 @@ print.epi.2by2 <- function(x, ...) {
     
     cat("\n", "Wald confidence limits")
     cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval") 
-    cat("\n", "*", x$units[1], "\n")
-    
+
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
       cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], "\n")

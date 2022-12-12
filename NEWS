@@ -1,3 +1,11 @@
+CHANGES IN epiR VERSION 2.0.54
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Odds, incidence risks and incidence rates in print(epi.2by2) includes confidence intervals.
+    [Suggested by Prabal Chowdhury]
+    
+
 CHANGES IN epiR VERSION 2.0.53
 
 SIGNIFICANT USER-VISIBLE CHANGES
