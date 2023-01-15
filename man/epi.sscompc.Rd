@@ -11,11 +11,12 @@ Sample size, power and minimum detectable difference when comparing continuous o
 }
 
 \usage{
-epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
+epi.sscompc(N = NA, treat, control, n, sigma, power, r = 1, design = 1,
    sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{treat}{the expected value for the treatment group (see below).}
   \item{control}{the expected value for the control group (see below).}
   \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment and control group).}
@@ -30,6 +31,8 @@ epi.sscompc(treat, control, n, sigma, power, r = 1, design = 1,
 
 \details{
 The methodology in this function follows the approach described in Chapter 8 of Woodward (2014), pp. 295 - 329.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -68,8 +71,9 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## at detecting a difference of 0.5 mmol/L. The standard deviation of serum 
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
 
-epi.sscompc(treat = 5.0, control = 4.5, n = NA, sigma = 1.4, power = 0.95, 
-   r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
+epi.sscompc(N = NA, treat = 5.0, control = 4.5, n = NA, sigma = 1.4, 
+   power = 0.95, r = 1, design = 1, sided.test = 1, nfractional = FALSE, 
+   conf.level = 0.95)
 
 ## To satisfy the study requirements 340 individuals need to be tested: 170 in
 ## the first year and 170 in the second year.
@@ -90,11 +94,11 @@ epi.sscompc(treat = 5.0, control = 4.5, n = NA, sigma = 1.4, power = 0.95,
 ## women to the treatment group so as to obtain a better estimate of its effect.
 ## How many women should be enrolled in this study?
 
-epi.sscompc(treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
+epi.sscompc(N = NA, treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
    r = 4, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
    
-## The estimated sample size is 70. We allocate 70/5 = 14 women to the 
-## placebo group and four times as many (n = 56) to the iron treatment group.
+## The estimated sample size is 67. We allocate 70/5 = 14 women to the 
+## placebo group and four times as many (n = 53) to the iron treatment group.
 
 }
 

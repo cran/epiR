@@ -10,11 +10,12 @@ Number of clusters to be sampled to estimate a binary outcome using two-stage cl
 }
 
 \usage{
-epi.ssclus2estb(b, Py, epsilon, error = "relative", 
+epi.ssclus2estb(N.psu = NA, b, Py, epsilon, error = "relative", 
    rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N.psu}{scalar integer, the total number of primary sampling units eligible for inclusion in the study. If \code{N = NA} the eligible primary sampling unit population size is assumed to be infinite.}
   \item{b}{scalar integer or vector of length two, the number of individual listing units in each cluster to be sampled. See details, below.}
   \item{Py}{scalar number, an estimate of the unknown population proportion.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
@@ -32,6 +33,8 @@ In many situations it is common for sampling units to be aggregated into cluster
 The methodology used in this function follows closely the approach described by Bennett et al. (1991). At least 25 PSUs are recommended for two-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
 
 As a rule of thumb, around 30 PSUs will provide good estimates of the true population value with an acceptable level of precision (Binkin et al. 1992) when: (1) the true population value is between 10\% and 90\%; and (2) the desired absolute error is around 5\%. For a fixed number of individual listing units selected per cluster (e.g., 10 individuals per cluster or 30 individuals per cluster), collecting information on more than 30 clusters can improve the precision of the final population estimate, however, beyond around 60 clusters the improvement in precision is minimal.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -61,8 +64,8 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## individuals per cluster. How many clusters should be sampled to meet 
 ## the requirements of the study?
 
-epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05, error = "absolute", 
-   rho = 0.02, nfractional = FALSE, conf.level = 0.95)
+epi.ssclus2estb(N.psu = NA, b = 20, Py = 0.20, epsilon = 0.05, 
+   error = "absolute", rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 17 clusters need to be sampled to meet the specifications 
 ## of this study. epi.ssclus2estb returns a warning message that the number of 

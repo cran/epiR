@@ -11,14 +11,15 @@ Sample size, power or minimum detectable incidence rate ratio for a cohort study
 }
 
 \usage{
-epi.sscohortt(irexp1, irexp0, FT = NA, n, power, r = 1, design = 1, sided.test = 2, 
+epi.sscohortt(FT = NA, irexp1, irexp0, n, power, r = 1, design = 1, sided.test = 2, 
    nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{FT}{scalar integer, the follow-up period for the study. If \code{FT = NA} the follow-up period is assumed to be infinite.}
   \item{irexp1}{the expected incidence rate of the outcome in the exposed group (0 to 1).}
   \item{irexp0}{the expected incidence rate of the outcome in the non-exposed group (0 to 1).}
-  \item{FT}{the follow-up period (in years) for the study.}
+
   \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in both the exposed and unexposed groups).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
@@ -76,7 +77,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## An annuual incidence rate of 25\% is equivalent to 25 cases of hearing 
 ## impairment per 100 individuals per year.
 
-epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, 
+epi.sscohortt(FT = NA, irexp1 = 0.25, irexp0 = 0.10, n = NA, power = 0.80, 
    r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 46 subjects are required for this study: 23 in the exposed 
@@ -88,7 +89,7 @@ epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80,
 ## duration of the study will be limited to 5 years. How many subjects should
 ## be followed up in each group?
 
-epi.sscohortt(irexp1 = 0.25, irexp0 = 0.10, FT = 5, n = NA, power = 0.80, 
+epi.sscohortt(FT = 5, irexp1 = 0.25, irexp0 = 0.10, n = NA, power = 0.80, 
    r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 130 subjects are required for this study: 65 in the exposed 

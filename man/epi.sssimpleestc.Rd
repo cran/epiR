@@ -11,18 +11,22 @@ Sample size to estimate a continuous outcome using simple random sampling.
 }
 
 \usage{
-epi.sssimpleestc(N = 1E+06, xbar, sigma, epsilon, error = "relative",
+epi.sssimpleestc(N = NA, xbar, sigma, epsilon, error = "relative",
    nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
-  \item{N}{scalar integer, representing the total number of individual listing units in the population.}
+  \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
   \item{sigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
   \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
   \item{nfractional}{logical, return fractional sample size.}  
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
+}
+
+\details{
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -69,7 +73,7 @@ epi.sssimpleestc(N = 20, xbar = pmean, sigma = psigma, epsilon = 0.20,
 epi.sssimpleestc(N = 278, xbar = 200, sigma = 30, epsilon = 10, 
    error = "absolute", nfractional = FALSE, conf.level = 0.95)
 
-## A total of 31 deer need to be sampled to meet the requirements of the survey.
+## A total of 28 deer need to be sampled to meet the requirements of the survey.
 }
 
 \keyword{univar}% at least one, from doc/KEYWORDS

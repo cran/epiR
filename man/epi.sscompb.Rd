@@ -11,11 +11,12 @@ Sample size, power and minimum detectable risk ratio when comparing binary outco
 }
 
 \usage{
-epi.sscompb(treat, control, n, power, r = 1, design = 1,
+epi.sscompb(N = NA, treat, control, n, power, r = 1, design = 1,
    sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{treat}{the expected proportion for the treatment group (see below).}
   \item{control}{the expected proportion for the control group (see below).}
   \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment plus the number in the control group).}
@@ -33,6 +34,8 @@ The methodology in this function follows the approach described in Chapter 8 of 
 With this function it is assumed that one of the two proportions is known and we want to test the null hypothesis that the second proportion is equal to the first. Users are referred to the \code{\link{epi.sscohortc}} function which relates to the two-sample problem where neither proportion is known (or assumed, at least). 
 
 Because there is much more uncertainty in the two sample problem where neither proportion is known, \code{epi.sscohortc} returns much larger sample size estimates. This function (\code{epi.sscompb}) should be used in particular situations such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -69,7 +72,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## The survey should be able to find a prevalence of 32\%, when it is true,
 ## with 0.90 power. How many men need to be sampled?
 
-epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90, 
+epi.sscompb(N = NA, treat = 0.30, control = 0.32, n = NA, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
    
 ## A total of 4568 men should be sampled: 2284 in the treatment group and
@@ -83,7 +86,7 @@ epi.sscompb(treat = 0.30, control = 0.32, n = NA, power = 0.90,
 ## control group) what is the maximum detectable risk ratio that is less 
 ## than 1?
 
-epi.sscompb(treat = NA, control = 0.32, n = 2000, power = 0.90, 
+epi.sscompb(N = NA, treat = NA, control = 0.32, n = 2000, power = 0.90, 
    r = 1, design = 1, sided.test = 1, nfractional = FALSE, conf.level = 0.95)
 
 ## If we sample only 2,000 men the maximum detectable risk ratio will be 0.91.

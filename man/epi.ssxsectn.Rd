@@ -11,28 +11,28 @@ Sample size, power or minimum detectable prevalence ratio or odds ratio for a cr
 }
 
 \usage{
-epi.ssxsectn(pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1, 
-   N, design = 1, sided.test = 2, finite.correction = FALSE, 
-   nfractional = FALSE, conf.level = 0.95)
+epi.ssxsectn(N = NA, pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1, 
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{pdexp1}{the expected prevalence of the outcome in the exposed group (0 to 1).}
   \item{pdexp0}{the expected prevalence of the outcome in the non-exposed group (0 to 1).}
   \item{pexp}{the expected prevalence of exposure to the hypothesised risk factor in the population (0 to 1).}
   \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in both the exposed and unexposed groups).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the exposed group divided by the number in the unexposed group.}
-  \item{N}{scalar, the estimated number of individuals in the population.}
   \item{design}{scalar, the estimated design effect.}
   \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the outcome incidence risk in the exposed group is greater than or less than the outcome incidence risk in the unexposed group. Use a one-sided test to evaluate whether or not the outcome incidence risk in the exposed group is greater than the outcome incidence risk in the unexposed group.}
-  \item{finite.correction}{logical, apply a finite correction factor?}
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
 
 \details{
 The methodology in this function follows the methodology described in Chapter 8 of Woodward (2014), pp. 295 - 329.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -79,9 +79,9 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## You estimate that there are around 60 dairy goat herds in your study area.
 
 pdexp1 = 2.0 * (5 / 100); pdexp0 = 5 / 100
-epi.ssxsectn(pdexp1 = pdexp1, pdexp0 = pdexp0, pexp = 0.20, n = NA, 
-   power = 0.80, r = 1, N = 60, design = 1, sided.test = 2, 
-   finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
+epi.ssxsectn(N = 60, pdexp1 = pdexp1, pdexp0 = pdexp0, pexp = 0.20, n = NA, 
+   power = 0.80, r = 1, design = 1, sided.test = 2, 
+   nfractional = FALSE, conf.level = 0.95)
 
 ## A total of 58 of the 60 herds need to be enrolled into the study 
 ## (29 intensively managed and 29 extensively managed herds).
@@ -92,9 +92,9 @@ epi.ssxsectn(pdexp1 = pdexp1, pdexp0 = pdexp0, pexp = 0.20, n = NA,
 ## described above. What is the minimum and maximum detectable prevalence
 ## ratio and minimum and maximum detectable odds ratio?
 
-epi.ssxsectn(pdexp1 = NA, pdexp0 = pdexp0, pexp = 0.20, n = 45, 
-   power = 0.80, r = 1, N = 60, design = 1, sided.test = 2, 
-   finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
+epi.ssxsectn(N = 60, pdexp1 = NA, pdexp0 = pdexp0, pexp = 0.20, n = 45, 
+   power = 0.80, r = 1, design = 1, sided.test = 2, 
+   nfractional = FALSE, conf.level = 0.95)
 
 ## The minimum detectable prevalence ratio >1 is 3.64. The maximum detectable
 ## prevalence ratio <1 is 0.

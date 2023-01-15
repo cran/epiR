@@ -11,11 +11,12 @@ Sample size to estimate a binary outcome using one-stage cluster sampling.
 }
 
 \usage{
-epi.ssclus1estb(b, Py, epsilon, error = "relative", 
+epi.ssclus1estb(N.psu = NA, b, Py, epsilon, error = "relative", 
    rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N.psu}{scalar integer, the total number of primary sampling units eligible for inclusion in the study. If \code{N = NA} the eligible primary sampling unit population size is assumed to be infinite.}
   \item{b}{scalar integer or vector of length two, the number of individual listing units in each cluster to be sampled. See details, below.}
   \item{Py}{scalar number, an estimate of the unknown population proportion.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
@@ -31,6 +32,8 @@ In many situations it is common for sampling units to be aggregated into cluster
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
 
 At least 25 PSUs (clusters) are recommended for one-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 
@@ -65,8 +68,8 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## usage was within 10\% of the true population value, how many villages 
 ## (i.e., clusters) would need to be sampled?
 
-epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = "relative", 
-   rho = 0.20, nfractional = FALSE, conf.level = 0.90)
+epi.ssclus1estb(N.psu = NA, b = 75, Py = 0.46, epsilon = 0.10, 
+   error = "relative", rho = 0.20, nfractional = FALSE, conf.level = 0.90)
 
 ## A total of 67 villages need to be sampled to meet the specifications 
 ## of this study.
@@ -77,12 +80,21 @@ epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = "relative",
 ## households. The expected standard deviation of the number of households
 ## per village is (180 - 40) / 4 = 35. How many villages need to be sampled?
 
-epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = "relative", 
-   rho = 0.20, nfractional = FALSE, conf.level = 0.90)
+epi.ssclus1estb(N.psu = NA, b = c(75,35), Py = 0.46, epsilon = 0.10, 
+   error = "relative", rho = 0.20, nfractional = FALSE, conf.level = 0.90)
 
 ## A total of 81 villages need to be sampled to meet the specifications 
 ## of this study.
 
+## Now imagine the situation where this study is to be carried out on a 
+## remote island where the total number of villages is 220. Recalculate
+## your sample size.
+
+epi.ssclus1estb(N.psu = 220, b = c(75,35), Py = 0.46, epsilon = 0.10, 
+   error = "relative", rho = 0.20, nfractional = FALSE, conf.level = 0.90)
+
+## A total of 60 villages need to be sampled to meet the specifications 
+## of this study.
 }
 
 \keyword{univar}

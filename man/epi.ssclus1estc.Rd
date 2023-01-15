@@ -11,11 +11,12 @@ Sample size to estimate a continuous outcome using one-stage cluster sampling.
 }
 
 \usage{
-epi.ssclus1estc(b, N, xbar, xsigma, epsilon, error = "relative", 
+epi.ssclus1estc(N.psu = NA, b, N, xbar, xsigma, epsilon, error = "relative", 
    rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
+  \item{N.psu}{scalar integer, the total number of primary sampling units eligible for inclusion in the study. If \code{N = NA} the eligible primary sampling unit population size is assumed to be infinite.}
   \item{b}{scalar integer or vector of length two, the number of individual listing units in each cluster to be sampled. See details, below.}
   \item{N}{scalar integer, representing the total number of individual listing units in the population.}
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
@@ -39,6 +40,8 @@ A list containing the following:
 In many situations it is common for sampling units to be aggregated into clusters. Typical examples include individuals within households, children within classes (within schools) and cows within herds. We use the term primary sampling unit (PSU) to refer to what gets sampled first (clusters) and secondary sampling unit (SSU) to refer to what gets sampled second (individual listing units within each cluster). In this documentation the terms primary sampling unit and cluster are used interchangeably. Similarly, the terms secondary sampling unit and individual listing units are used interchangeably.
 
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \references{
@@ -60,7 +63,7 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## services of a nurse in this retirement village housing complexes to 
 ## be 0.10. How many housing complexes (clusters) should be sampled?
 
-epi.ssclus1estc(b = 25, N = 5 * 25, xbar = 34, xsigma = 5.5, 
+epi.ssclus1estc(N.psu = NA, b = 25, N = 5 * 25, xbar = 34, xsigma = 5.5, 
    epsilon = 0.10, error = "relative", rho = 0.10, nfractional = FALSE, 
    conf.level = 0.95)
 

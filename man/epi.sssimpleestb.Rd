@@ -11,12 +11,12 @@ Sample size to estimate a binary outcome using simple random sampling.
 }
 
 \usage{
-epi.sssimpleestb(N = 1E+06, Py, epsilon, error = "relative", 
+epi.sssimpleestb(N = NA, Py, epsilon, error = "relative", 
    se, sp, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
-  \item{N}{scalar integer, the total number of individual listing units in the population.}
+  \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{Py}{scalar number, an estimate of the population proportion to be estimated.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
   \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
@@ -24,6 +24,10 @@ epi.sssimpleestb(N = 1E+06, Py, epsilon, error = "relative",
   \item{sp}{the diagnostic specificity of the method used to detect positive outcomes (0 - 1).}  
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
+}
+
+\details{
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -57,14 +61,12 @@ If \code{epsilon.r} equals the relative error the sample estimate should not dif
 ## B. abortus. Calculate the required sample size assuming use of a test
 ## with perfect diagnostic sensitivity and specificity.
 
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20,
    error = "relative", se = 1.00, sp = 1.00, nfractional = FALSE, 
    conf.level = 0.95)
-n.crude
 
 ## A total of 545 cattle need to be sampled to meet the requirements of the 
 ## survey.
-
 
 
 ## EXAMPLE 1 (continued):
@@ -74,23 +76,23 @@ n.crude
 ## error (as opposed to relative error). For the example above the absolute 
 ## error is 0.20 * 0.15 = 0.03. Re-run epi.simpleestb:
 
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.03,
-   error = "absolute", se = 0.94, sp = 0.88, nfractional = FALSE, 
+epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.03,
+   error = "absolute", se = 1.00, sp = 1.00, nfractional = FALSE, 
    conf.level = 0.95)
-n.crude 
 
 ## A total of 545 cattle need to be sampled to meet the requirements of the 
 ## survey.
 
 
 ## EXAMPLE 1 (continued):
-## The OIE recommends that the compliment fixation test (CFT) is used for 
-## bovine brucellosis prevalence estimation. Assume the diagnostic sensitivity 
-## and specficity of the bovine brucellosis CFT to be used is 0.94 and 0.88
-## respectively (Getachew et al. 2016). Re-calculate the required sample size 
+## The World Organisation for Animal Health (WOAH) recommends that the 
+## compliment fixation test (CFT) is used for bovine brucellosis prevalence 
+## estimation. Assume the diagnostic sensitivity and specficity of the bovine 
+## brucellosis CFT to be used is 0.94 and 0.88 respectively 
+## (Getachew et al. 2016). Re-calculate the required sample size 
 ## accounting for imperfect diagnostic test performance. 
 
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+n.crude <- epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20,
    error = "relative", se = 0.94, sp = 0.88, nfractional = FALSE, 
    conf.level = 0.95)
 n.crude 

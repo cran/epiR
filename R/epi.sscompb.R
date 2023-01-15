@@ -1,4 +1,4 @@
-"epi.sscompb" <- function(treat, control, n, power, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95) {
+"epi.sscompb" <- function(N = NA, treat, control, n, power, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95) {
    
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
@@ -27,22 +27,24 @@
     # T3 <- lambda * control * (1 - lambda * control) + r * control * (1 - control)
     # n <- T1 * (z.alpha * sqrt(T2) + z.beta * sqrt(T3))^2
     
-    if(nfractional == TRUE){
-      n1 <- n / (r + 1)
-      n1 <- n1 * design
-      n0 <- r * n1
-      n.total <- n1 + n0
-    }
-
-    if(nfractional == FALSE){
-      n1 <- n / (r + 1)
-      n1 <- ceiling(n1 * design)
-      n0 <- ceiling(r * n1)
-      n.total <- n1 + n0
-    }
+    n1 <- (n / (1 + r)) * design
+    n0 <- r * n1
+    n.total <- n0 + n1
+    
+    p1 <- n1 / n.total
+    p0 <- n0 / n.total
+    
+    # Finite population correction:
+    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
+    n1 <- ifelse(is.na(N), n1, p1 * n.total)
+    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+    
+    # Fractional:
+    n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
+    n0 <- ifelse(nfractional == TRUE, n0, ceiling(n0))
+    n.total <- n1 + n0
     
     rval <- list(n.total = n.total, n.treat = n1, n.control = n0, power = power, lambda = sort(c(lambda, 1 / lambda)))
-    
   }
 
   # Power.  

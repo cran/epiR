@@ -1,4 +1,4 @@
-epi.ssxsectn <- function(pdexp1 = 0.25, pdexp0 = 0.10, pexp = NA, n = NA, power = 0.80, r = 1, N, design = 1, sided.test = 2, finite.correction = FALSE, nfractional = FALSE, conf.level = 0.95){
+epi.ssxsectn <- function(N = NA, pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
   
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
@@ -29,21 +29,13 @@ epi.ssxsectn <- function(pdexp1 = 0.25, pdexp0 = 0.10, pexp = NA, n = NA, power 
     # Account for the design effect:
     n0 <- n0 * design
     
-    # Finite correction:    
-    n <- ifelse(finite.correction == TRUE, (n0 * N) / (n0 + (N - 1)), n0)
+    # Finite population correction:
+    n <- ifelse(is.na(N), n0, (n0 * N) / (n0 + (N - 1)))
     
-    if(nfractional == TRUE){
-      n.exp1 <- n / (r + 1) * r
-      n.exp0 <- n / (r + 1) * 1
-      n.total <- n.exp1 + n.exp0
-    }
-    
-    if(nfractional == FALSE){
-      n.exp1 <- ceiling(n / (r + 1) * r)
-      n.exp0 <- ceiling(n / (r + 1) * 1)
-      n.total <- n.exp1 + n.exp0
-    }
-    
+    n.exp1 <- ifelse(nfractional == TRUE, n / (r + 1) * r, ceiling(n / (r + 1) * r))
+    n.exp0 <- ifelse(nfractional == TRUE, n / (r + 1) * 1, ceiling(n / (r + 1) * 1))
+    n.total <- n.exp1 + n.exp0
+        
     rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, pr = lambda, or = psi)
   }
   
@@ -74,8 +66,8 @@ epi.ssxsectn <- function(pdexp1 = 0.25, pdexp0 = 0.10, pexp = NA, n = NA, power 
       }
       
       # Convert n (finite corrected sample size) to n0:
-      n0 <- ifelse(finite.correction == TRUE, (n * N - n)  / (N - n), n)
-      
+      n0 <- ifelse(!is.na(N), (n * N - n)  / (N - n), n)
+
       t1 <- ifelse(lambda >= 1, 
                    (pi * (lambda - 1) * sqrt(n0 * r)),
                    (pi * (1 - lambda) * sqrt(n0 * r)))
@@ -110,8 +102,8 @@ epi.ssxsectn <- function(pdexp1 = 0.25, pdexp0 = 0.10, pexp = NA, n = NA, power 
       }
       
       # Convert n (finite corrected sample size) to n0:
-      n0 <- ifelse(finite.correction == TRUE, (n * N - n)  / (N - n), n)
-      
+      n0 <- ifelse(!is.na(N), (n * N - n)  / (N - n), n)
+
       Y <- r * n0 * pi^2
       Z <- (r + 1) * pi * (z.alpha + z.beta)^2
       a <- Y + (pi * Z)

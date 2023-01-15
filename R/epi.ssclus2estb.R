@@ -1,4 +1,4 @@
-"epi.ssclus2estb" <- function(b, Py, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
+"epi.ssclus2estb" <- function(N.psu = NA, b, Py, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
@@ -19,17 +19,15 @@
     n.ssu <- (z^2 * Py * (1 - Py)) * D / epsilon.a^2
     n.psu <- n.ssu / bbar
     
+    # Finite population correction for PSUs:
+    n.psu <- ifelse(is.na(N.psu), n.psu, (n.psu * N.psu) / (n.psu + (N.psu - 1)))
+    
+    # Finite population corrected SSUs:
+    n.ssu <- n.psu * bbar
+    
     # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
-    if(nfractional == TRUE){
-      n.ssu <- n.ssu
-      n.psu <- n.psu
-    }
-    
-    if(nfractional == FALSE){
-      n.ssu <- ceiling(n.ssu)
-      n.psu <- ceiling(n.psu)
-    }
-    
+    n.psu <- ifelse(nfractional == TRUE, n.psu, ceiling(n.psu))
+    n.ssu <- ifelse(nfractional == TRUE, n.ssu, ceiling(n.ssu))
   }
   
   # Design effect when clusters are of equal size:  
@@ -39,19 +37,19 @@
       n.ssu <- (z^2 * Py * (1 - Py)) * D / epsilon.a^2
       n.psu <- n.ssu / b
       
-      # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
-      if(nfractional == TRUE){
-        n.ssu <- n.ssu
-        n.psu <- n.psu
-      }
+      # Finite population correction for PSUs:
+      n.psu <- ifelse(is.na(N.psu), n.psu, (n.psu * N.psu) / (n.psu + (N.psu - 1)))
       
-      if(nfractional == FALSE){
-        n.ssu <- ceiling(n.ssu)
-        n.psu <- ceiling(n.psu)
-      }
+      # Finite population corrected SSUs:
+      n.ssu <- n.psu * b
+      
+      # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
+      n.psu <- ifelse(nfractional == TRUE, n.psu, ceiling(n.psu))
+      n.ssu <- ifelse(nfractional == TRUE, n.ssu, ceiling(n.ssu))
     }
 
   if(n.psu <= 25) warning(paste('The calculated number of primary sampling units (n.psu) is ', n.psu, '. At least 25 primary sampling units are recommended for two-stage cluster sampling designs.', sep = ""), call. = FALSE)
+  
   rval <- list(n.psu = n.psu, n.ssu = n.ssu, DEF = D, rho = rho)
   return(rval)
 }

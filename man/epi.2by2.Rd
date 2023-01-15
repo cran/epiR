@@ -382,56 +382,52 @@ ggplot(data = dat.df02, aes(x = or.p, y = y.at)) +
 
 
 ## EXAMPLE 3:
-## Sometimes you'll have only event count data for a stratified analysis. This
-## example shows how to coerce a three column matrix listing (in order) counts
-## of outcome positive individuals, counts of outcome negative individuals (or
-## total time at risk, as in the example below) and strata number into a three 
-## dimensional array. We assume that two rows are recorded for each strata. 
-## The first for those exposed and the second for those unexposed:
-
-dat.m03 <- matrix(c(1308,884,200,190,4325264,13142619,1530342,5586741,1,1,2,2), 
-   nrow = 4, ncol = 3, byrow = FALSE)
-colnames(dat.m03) <- c("obs","tar","grp")
-dat.df03 <- data.frame(dat.m03)
-
-## Here we use the apply function to coerce the two rows for each strata into
-## tabular format. An array is created of with the length of the third 
-## dimension of the array equal to the number of strata: 
-dat.tab03 <- sapply(1:length(unique(dat.df03$grp)), function(x) 
-   as.matrix(dat.df03[dat.df03$grp == x,1:2], ncol = 2, byrow = TRUE), 
-   simplify = "array")
-dat.tab03
-
-epi.2by2(dat = dat.tab03, method = "cohort.time", digits = 2, 
-   conf.level = 0.95, units = 1000 * 365.25, interpret = FALSE, 
-   outcome = "as.columns")
-
-## The Mantel-Haenszel adjusted incidence rate ratio was 4.39 (95\% CI 4.06 
-## to 4.75).
-
-
-## EXAMPLE 4:
 ## Same as Example 2 but showing how a 2 by 2 contingency table can be prepared 
-## using tidyverse:
+## using functions from the tidyverse package:
 
+\dontrun{
+library(MASS); library(tidyverse)
+
+dat.df03 <- birthwt; head(dat.df03)
+
+dat.df03 <- dat.df03 \%>\%
+  mutate(low = factor(low, levels = c(1,0), labels = c("yes","no"))) \%>\%
+  mutate(smoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) \%>\%
+  group_by(smoke, low) \%>\%
+  summarise(n = n()) 
+dat.df03
+
+## View the data in conventional 2 by 2 table format:
+pivot_wider(dat.df03, id_cols = c(smoke), names_from = low, values_from = n)
+
+dat.epi03 <- epi.2by2(dat = dat.df03, method = "cohort.count", digits = 2, 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi03
+}
+
+## The odds of having a low birth weight child for smokers was 2.02 
+## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
+## weight child for non-smokers.
+
+## Stratify by race:
 \dontrun{
 library(MASS); library(tidyverse)
 
 dat.df04 <- birthwt; head(dat.df04)
 
-dat.tab04 <- dat.df04 \%>\%
+dat.df04 <- dat.df04 \%>\%
   mutate(low = factor(low, levels = c(1,0), labels = c("yes","no"))) \%>\%
   mutate(smoke = factor(smoke, levels = c(1,0), labels = c("yes","no"))) \%>\%
   mutate(race = factor(race)) \%>\%
   group_by(race, smoke, low) \%>\%
-  summarise(n = n()) 
-dat.tab04
+  summarise(n = n())
+dat.df04
 
 ## View the data in conventional 2 by 2 table format:
-pivot_wider(dat.tab04, id_cols = c(race, smoke), 
+pivot_wider(dat.df04, id_cols = c(race, smoke),
    names_from = low, values_from = n)
 
-dat.epi04 <- epi.2by2(dat = dat.tab04, method = "cohort.count", digits = 2, 
+dat.epi04 <- epi.2by2(dat = dat.df04, method = "cohort.count", digits = 2, 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi04
 }
@@ -444,6 +440,38 @@ dat.epi04
 ## After accounting for the confounding effect of race, the odds of 
 ## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
+
+
+## EXAMPLE 4:
+## Sometimes you'll have only event count data for a stratified analysis. This
+## example shows how to coerce a three column matrix listing (in order) counts
+## of outcome positive individuals, counts of outcome negative individuals (or
+## total time at risk, as in the example below) and strata into a three 
+## dimensional array.
+
+## We assume that two rows are recorded for each strata. The first for those 
+## exposed and the second for those unexposed. Note that the strata variable
+## needs to be numeric (not a factor).
+
+dat.m04 <- matrix(c(1308,884,200,190,4325264,13142619,1530342,5586741,1,1,2,2), 
+   nrow = 4, ncol = 3, byrow = FALSE)
+colnames(dat.m04) <- c("obs","tar","grp")
+dat.df04 <- data.frame(dat.m04)
+
+## Here we use the apply function to coerce the two rows for each strata into
+## tabular format. An array is created of with the length of the third 
+## dimension of the array equal to the number of strata: 
+dat.tab04 <- sapply(1:length(unique(dat.df04$grp)), function(x) 
+   as.matrix(dat.df04[dat.df04$grp == x,1:2], ncol = 2, byrow = TRUE), 
+   simplify = "array")
+dat.tab04
+
+epi.2by2(dat = dat.tab04, method = "cohort.time", digits = 2, 
+   conf.level = 0.95, units = 1000 * 365.25, interpret = FALSE, 
+   outcome = "as.columns")
+
+## The Mantel-Haenszel adjusted incidence rate ratio was 4.39 (95\% CI 4.06 
+## to 4.75).
 
 
 ## EXAMPLE 5:

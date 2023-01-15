@@ -1,3 +1,16 @@
+CHANGES IN epiR VERSION 2.0.56
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Finite population correction adjustments added to each of the sample size calculation functions
+    [Suggested by Mark Stevenson]
+
+CHANGES IN epiR VERSION 2.0.55
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Consistent approach for crude and stratified table preparation using the tidyverse package now provided in the documentation for function epi.2by2.
+    [Suggested by Prabal Chowdhury]
+    
+
 CHANGES IN epiR VERSION 2.0.54
 
 SIGNIFICANT USER-VISIBLE CHANGES

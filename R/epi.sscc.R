@@ -1,4 +1,4 @@
-"epi.sscc" <- function(OR, p1 = NA, p0, n, power, r = 1, phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
+"epi.sscc" <- function(N = NA, OR, p1 = NA, p0, n, power, r = 1, phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95, method = "unmatched", fleiss = FALSE) {
  
   # p0: proportion of controls exposed.
   # phi.coef: correlation between case and control exposures in matched pairs (defaults to 0).  
@@ -52,21 +52,25 @@
       n <- n.
     }
     
-    if(nfractional == TRUE){
-      n1 <- n / (1 + r)
-      n1 <- n1 * design
-      n0 <- r * n1 
-      n.total <- n0 + n1
-    }
+    n1 <- (n / (1 + r)) * design
+    n0 <- r * n1
+    n.total <- n0 + n1
     
-    if(nfractional == FALSE){
-      n1 <- n / (1 + r)
-      n1 <- ceiling(n1 * design)
-      n0 <- ceiling(r * n1) 
-      n.total <- n0 + n1
-    }
+    p1 <- n1 / n.total
+    p0 <- n0 / n.total
+
+    # Finite population correction:
+    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
+    n1 <- ifelse(is.na(N), n1, p1 * n.total)
+    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+        
+    # Fractional:
+    n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
+    n0 <- ifelse(nfractional == TRUE, n0, ceiling(n0))
+    n.total <- n1 + n0
     
     rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
+
   }
   
   # Unmatched case-control - power: 
@@ -205,18 +209,22 @@
       n <- n.
     }
     
+    n1 <- n * design
+    n0 <- r * n1
+    n.total <- n0 + n1
     
-    if(nfractional == TRUE){
-      n1 <- n
-      n0 <- r * n1  
-      n.total <- n0 + n1      
-    }
+    p1 <- n1 / n.total
+    p0 <- n0 / n.total
     
-    if(nfractional == FALSE){
-      n1 <- ceiling(n)
-      n0 <- r * n1  
-      n.total <- n0 + n1
-    }
+    # Finite population correction:
+    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
+    n1 <- ifelse(is.na(N), n1, p1 * n.total)
+    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+    
+    # Fractional:
+    n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
+    n0 <- ifelse(nfractional == TRUE, r * n1, ceiling(r * n1))
+    n.total <- n1 + n0
 
     rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
   }

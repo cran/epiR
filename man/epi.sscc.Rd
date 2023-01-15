@@ -11,12 +11,13 @@ Calculates the sample size, power or minimum detectable odds ratio for an unmatc
 }
 
 \usage{
-epi.sscc(OR, p1 = NA, p0, n, power, r = 1, 
+epi.sscc(N = NA, OR, p1 = NA, p0, n, power, r = 1, 
    phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 }
 
 \arguments{
+  \item{N}{scalar, the total number of subjects eligible for inclusion in the study. If \code{N = NA} the eligible population size is assumed to be infinite.}
   \item{OR}{scalar, the expected study odds ratio.}
   \item{p1}{scalar, the prevalence of exposure amongst the cases.}
   \item{p0}{scalar, the prevalence of exposure amongst the controls.}
@@ -42,6 +43,8 @@ The correlation between case and control exposures for matched pairs (\code{phi.
 The methodology described in Woodward (2014), pp. 295 - 329 uses the proportion of discordant pairs to to determine the sample size for a matched case-control study. Note that the proportion of discordant pairs is likely to vary considerably between different studies since it depends not only on the correlation between case and control exposures but also on the exposure prevalence and the odds ratio. In contrast, estimates of \code{phi.coef} should be more stable between similar studies.
 
 When no estimate of \code{phi.coef} is available, investigators may prefer to perform their power calculations under the assumption that \code{phi.coef} equals, say, 0.2 rather than make the questionable independence assumption required by most other methods.
+
+A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
 }
 
 \value{
@@ -79,7 +82,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## odds ratio of 2.0 with 0.90 power using a two-sided 0.05 test? Previous 
 ## surveys have shown that around 0.30 of males without CHD are smokers.
 
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1, 
    phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
@@ -93,7 +96,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.90, r = 1,
 ## the prevalence of smoking in males without CHD is 0.30.
 
 n <- 188 + 940
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5, 
    phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = TRUE)
 
@@ -115,7 +118,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = n, power = NA, r = 5,
 ## Confirm the statement that 300 case subjects will provide 80\% power in 
 ## this study.
 
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1, 
    phi.coef = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = TRUE)
 
@@ -134,7 +137,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.10, n = 600, power = NA, r = 1,
 ## Three controls will be recruited for every case. How many subjects need 
 ## to be enrolled in the study?
 
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3, 
    phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "unmatched", fleiss = FALSE)
 
@@ -147,7 +150,7 @@ epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 3,
 ## (phi.coef) is estimated to be 0.01 (low). Using the same assumptions as 
 ## those described above, how many study subjects will be required?
 
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 1, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.20, n = NA, power = 0.90, r = 1, 
    phi.coef = 0.01, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 
@@ -164,7 +167,7 @@ dat.df05 <- expand.grid(p0 = p0, OR = OR)
 dat.df05$n.total <- NA
 
 for(i in 1:nrow(dat.df05)){
-   dat.df05$n.total[i] <- epi.sscc(OR = dat.df05$OR[i], p1 = NA, 
+   dat.df05$n.total[i] <- epi.sscc(N = NA, OR = dat.df05$OR[i], p1 = NA, 
       p0 = dat.df05$p0[i], n = NA, power = 0.80, r = 1, 
       phi.coef = 0, design = 1, sided.test = 2, nfractional = FALSE, 
       conf.level = 0.95, method = "unmatched", fleiss = FALSE)$n.total
@@ -181,17 +184,13 @@ contour(x = p0, y = OR, z = log10(grid.n), add = FALSE, levels = log10(breaks),
 
 \dontrun{
 ## The same plot using ggplot2:
-library(ggplot2); library(directlabels)
+library(ggplot2)
 
-p <- ggplot(data = dat.df05, aes(x = p0, y = OR, z = n.total)) +
+ggplot(data = dat.df05, aes(x = p0, y = OR, z = n.total)) +
   theme_bw() +
   geom_contour(aes(colour = ..level..), breaks = breaks) +
   scale_x_continuous(limits = c(0,1), name = "Proportion of controls exposed") +
   scale_y_continuous(limits = c(1,6), name = "Minimum OR to detect")
-
-print(direct.label(p, list("far.from.others.borders", "calc.boxes", 
-   "enlarge.box", hjust = 1, vjust = 1, box.color = NA, 
-   fill = "transparent", "draw.rects")))
 }
 
 
@@ -204,7 +203,7 @@ print(direct.label(p, list("far.from.others.borders", "calc.boxes",
 ## enrolled into the study to detect an odds ratio of 3.0 with 0.80 power 
 ## using a two-sided 0.05 test? 
 
-epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1, 
+epi.sscc(N = NA, OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1, 
    phi.coef = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 
@@ -214,7 +213,7 @@ epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 1,
 ## How many cases and controls are required if we select three 
 ## controls per case?
 
-epi.sscc(OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 3, 
+epi.sscc(N = NA, OR = 3.0, p1 = NA, p0 = 0.60, n = NA, power = 0.80, r = 3, 
    phi.coef = 0.2, design = 1, sided.test = 2, nfractional = FALSE, 
    conf.level = 0.95, method = "matched", fleiss = FALSE)
 

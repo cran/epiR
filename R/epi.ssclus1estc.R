@@ -1,4 +1,4 @@
-"epi.ssclus1estc" <- function(b, N, xbar, xsigma, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
+"epi.ssclus1estc" <- function(N.psu = NA, b, N, xbar, xsigma, epsilon, error = "relative", rho, nfractional = FALSE, conf.level = 0.95){
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
  
@@ -21,16 +21,16 @@
     n.ssu <- (z^2 * N * Vsq * D) / (z^2 * Vsq + ((N - 1) * epsilon.r^2))
     n.psu <- n.ssu / bbar
     
-    # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
-    if(nfractional == TRUE){
-      n.ssu <- n.ssu
-      n.psu <- n.psu
-    }
+    # Finite population correction for PSUs:
+    n.psu <- ifelse(is.na(N.psu), n.psu, (n.psu * N.psu) / (n.psu + (N.psu - 1)))
     
-    if(nfractional == FALSE){
-      n.ssu <- ceiling(n.ssu)
-      n.psu <- ceiling(n.psu)
-    }
+    # Finite population corrected SSUs:
+    n.ssu <- n.psu * bbar
+    
+    # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
+    n.psu <- ifelse(nfractional == TRUE, n.psu, ceiling(n.psu))
+    n.ssu <- ifelse(nfractional == TRUE, n.ssu, ceiling(n.ssu))
+    
   }
   
   # Design effect when clusters are of equal size:  
@@ -42,16 +42,15 @@
       n.ssu <- (z^2 * N * Vsq * D) / (z^2 * Vsq + ((N - 1) * epsilon.r^2))
       n.psu <- n.ssu / b
       
-      # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
-      if(nfractional == TRUE){
-        n.ssu <- n.ssu
-        n.psu <- n.psu
-      }
+      # Finite population correction for PSUs:
+      n.psu <- ifelse(is.na(N.psu), n.psu, (n.psu * N.psu) / (n.psu + (N.psu - 1)))
       
-      if(nfractional == FALSE){
-        n.ssu <- ceiling(n.ssu)
-        n.psu <- ceiling(n.psu)
-      }
+      # Finite population corrected SSUs:
+      n.ssu <- n.psu * b
+      
+      # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205:
+      n.psu <- ifelse(nfractional == TRUE, n.psu, ceiling(n.psu))
+      n.ssu <- ifelse(nfractional == TRUE, n.ssu, ceiling(n.ssu))
     }
 
   rval <- list(n.psu = n.psu, n.ssu = n.ssu, DEF = D, rho = rho)

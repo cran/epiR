@@ -1,4 +1,4 @@
-"epi.sscohortt" <- function(irexp1 = 0.25, irexp0 = 0.10, FT = NA, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
+"epi.sscohortt" <- function(FT = NA, irexp1 = 0.25, irexp0 = 0.10, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
 
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)
