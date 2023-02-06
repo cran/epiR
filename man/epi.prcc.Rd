@@ -27,7 +27,7 @@ If the number of parameters \code{K} is greater than the number of model replica
 }
 
 \value{
-A data frame with three elements: \code{est} the point estimate of the partial rank corellation coefficient between each input parameter and the outcome, \code{lower} the lower bound of the confidence interval of the partial rank corellation coefficient, \code{upper} the upper bound of the confidence interval of the partial rank corellation coefficient, \code{test.statistic} the test statistic used to determine the significance of non-zero values of the partial rank correlation coefficient, and \code{p.value} the associated P-value.
+A data frame with seven elements: \code{var} input variable name, \code{est} the point estimate of the partial rank corellation coefficient between each input variable and the outcome, \code{lower} the lower bound of the confidence interval of the partial rank corellation coefficient, \code{upper} the upper bound of the confidence interval of the partial rank corellation coefficient, \code{test.statistic} the test statistic used to determine the significance of non-zero values of the partial rank correlation coefficient, \code{df} the degrees of freedom and \code{p.value} the associated P-value.
 }
 
 \references{

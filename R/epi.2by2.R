@@ -1880,18 +1880,18 @@ interp.txt <- list(
       c2 <- c(b, d, M0)
       c3 <- c(N1, N0, N1 + N0)
       c4 <- c(
-        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRiske.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiske.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiske.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.p, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.p, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRisko.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRisko.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRisko.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
-      
+        paste(format(round(cIRiskpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
+
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2022,17 +2022,17 @@ interp.txt <- list(
       c2 <- c(sb, sd, sM0)
       c3 <- c(sN1, sN0, sN1 + sN0)
       c4 <- c(
-        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRiske.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiske.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiske.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.p, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.p, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRisko.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRisko.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRisko.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cIRiskpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2092,17 +2092,17 @@ interp.txt <- list(
       c1 <- c(a, c, M1)
       c2 <- c(b, d, M0)
       c3 <- c(
-        paste(format(round(cIRatee.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRatee.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRatee.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRatee.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRatee.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRatee.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRateo.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRateo.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRateo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRateo.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRateo.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRateo.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRatepop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRatepop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRatepop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cIRatepop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRatepop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRatepop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3))
       colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2178,17 +2178,17 @@ interp.txt <- list(
       c1 <- c(sa, sc, sM1)
       c2 <- c(sb, sd, sM0)
       c3 <- c(
-        paste(format(round(cIRatee.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRatee.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRatee.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRatee.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRatee.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRatee.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRateo.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRateo.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRateo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRateo.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRateo.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRateo.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRatepop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRatepop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRatepop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cIRatepop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRatepop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRatepop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3))
       colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2249,17 +2249,17 @@ interp.txt <- list(
       c2 <- c(b, d, M0)
       c3 <- c(N1, N0, N1 + N0)
       c4 <- c(
-        paste(format(round(cOe.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOe.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOe.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cOe.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOe.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOe.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cOo.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOo.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cOo.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOo.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOo.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cOpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cOpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                      Odds")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2338,17 +2338,17 @@ interp.txt <- list(
       c2 <- c(sb, sd, sM0)
       c3 <- c(sN1, sN0, sN1 + sN0)
       c4 <- c(
-        paste(format(round(cOe.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOe.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOe.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cOe.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOe.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOe.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cOo.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOo.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOo.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cOo.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOo.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOo.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cOpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cOpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cOpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cOpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cOpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cOpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2435,17 +2435,17 @@ interp.txt <- list(
       c2 <- c(b, d, M0)
       c3 <- c(N1, N0, N1 + N0)
       c4 <- c(
-        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRiske.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiske.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiske.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRisko.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRisko.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRisko.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRisko.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRisko.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cIRiskpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
@@ -2576,17 +2576,17 @@ interp.txt <- list(
       c2 <- c(sb, sd, sM0)
       c3 <- c(sN1, sN0, sN1 + sN0)
       c4 <- c(
-        paste(format(round(cIRiske.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiske.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiske.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRiske.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiske.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiske.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRisko.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRisko.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRisko.u, digits = 2), nsmall = 2), ")", sep = ""), 
+        paste(format(round(cIRisko.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRisko.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRisko.u, digits = digits), nsmall = digits), ")", sep = ""), 
         
-        paste(format(round(cIRiskpop.p, digits = 2), nsmall = 2), " (", 
-              format(round(cIRiskpop.l, digits = 2), nsmall = 2), " to ", 
-              format(round(cIRiskpop.u, digits = 2), nsmall = 2), ")", sep = "")) 
+        paste(format(round(cIRiskpop.p, digits = digits), nsmall = digits), " (", 
+              format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
+              format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
       colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")

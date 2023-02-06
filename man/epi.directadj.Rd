@@ -12,10 +12,14 @@ epi.directadj(obs, tar, std, units = 1, conf.level = 0.95)
 }
 
 \arguments{
-  \item{obs}{a matrix representing the observed number of events. Rows represent strata (e.g., region); columns represent the variables to be adjusted for (e.g., age class, gender). The sum of each row will equal the total number of events for each stratum. The rows of the \code{obs} matrix must be named with the appropriate strata names and the columns of \code{obs} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
-  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g., region); columns represent the variables to be adjusted for (e.g., age class, gender). The sum of each row will equal the total population time at risk for each stratum. The rows of the \code{pop} matrix must be named with the appropriate strata names and the columns of \code{pop} must be named with the appropriate level identifiers for each explanatory variable. See the example, below.}
-  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The columns of \code{std} must be named with the appropriate level identifiers for each explanatory variable.}
+  \item{obs}{a matrix providing counts of the observed number of events. Rows represent strata (e.g., region); columns represent the different levels of the variable to be adjusted for (e.g., age class) --- the covariate. The sum of each row will equal the total number of observed events for each stratum. The row names of matrix \code{obs} are the appropriate strata names. The column names of \code{obs} are the appropriate level identifiers for the adjustment covariate. See the examples, below.}
+
+  \item{tar}{a matrix representing population time at risk. Rows represent strata (e.g., region); columns represent the different levels of the variable to be adjusted for (e.g., age class) --- the covariate. The sum of each row will equal the total population time at risk for each stratum. The row names of matrix \code{pop} must be the same as the row names used for matrix \code{obs}. The column names of matrix \code{pop} must be the same as the column names used for matrix \code{pop}. See the examples, below.}
+
+  \item{std}{a matrix representing the standard population size for the different levels of the covariate to be adjusted for. The column names of matrix \code{std} must be the same as the column names used for matrices \code{obs} and \code{pop}.}
+
   \item{units}{multiplier for the incidence rate estimates.}
+
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
 
@@ -59,7 +63,10 @@ Thanks to Karl Ove Hufthammer for helpful suggestions to improve the execution a
 ## A study was conducted to estimate the seroprevalence of leptospirosis in 
 ## dogs in Glasgow and Edinburgh, Scotland. Data frame dat.df lists counts 
 ## of leptospirosis cases and the number of dog years at risk for male and 
-## female dogs:
+## female dogs. In this example we stratify the data by city and the covariate 
+## is gender (with levels male and female). The data are presented as a matrix
+## with two rows and two columns with city (Edinburgh, Glasgow) as the row 
+## names and levels of gender (male, female) as column names: 
 
 dat.df01 <- data.frame(obs = c(15,46,53,16), tar = c(48,212,180,71), 
    sex = c("M","F","M","F"), city = c("ED","ED","GL","GL"))

@@ -1,7 +1,22 @@
+CHANGES IN epiR VERSION 2.0.57
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Documentation updates for function epi.directadj.
+    [Suggested by Ayesha Siddiqua and Mark Stevenson]
+    o Function in epi.prcc lists variable names in the output table.
+    [Suggested by Mark Stevenson]
+    o Bug in epi.kappa where pindex, bindex and results of McNemar not returned if number of rows and columns equal to two corrected.
+    [Spotted by Shirley Regev]
+    o Bug in epi.2by2 relating to reporting of confidence intervals for incidence risk estimates for method = "cohort.count" corrected.
+    [Spotted by Mollie Wood]
+    o digits argument in epi.2by2 sets the number of digits for incidence risk, incidence rate and odds estimates in ouput summary table.
+    [Suggested by Mollie Wood]
+
+
 CHANGES IN epiR VERSION 2.0.56
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Finite population correction adjustments added to each of the sample size calculation functions
+    o Finite population correction adjustments added to each of the sample size calculation functions.
     [Suggested by Mark Stevenson]
 
 CHANGES IN epiR VERSION 2.0.55

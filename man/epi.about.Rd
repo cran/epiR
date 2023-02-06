@@ -13,7 +13,7 @@ epi.about()
 }
 
 \details{
-More information about the \code{epiR} package can be found at \url{https://fvas.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne} and  \url{https://www.ausvet.com.au/}.
+More information about the \code{epiR} package can be found at \url{https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne} and  \url{https://www.ausvet.com.au/}.
 }
 
 \section{FUNCTIONS AND DATASETS}{
@@ -246,11 +246,11 @@ Below, SSe stands for surveillance system sensitivity. That is, the average prob
 }
 
 \author{
-Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Faculty of Veterinary and Agricultural Sciences, University of Melbourne, Parkville Victoria 3010, Australia.
+Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Melbourne Veterinary School, Faculty of Science, University of Melbourne, Parkville Victoria 3010, Australia.
 
 Evan Sergeant (\email{evansergeant@gmail.com}), Ausvet Pty Ltd, Level 1 34 Thynne St, Bruce ACT 2617, Australia.
 
-Simon Firestone, Faculty of Veterinary and Agricultural Sciences, University of Melbourne, Parkville Victoria 3010, Australia.
+Simon Firestone, Melbourne Veterinary School, Faculty of Science, University of Melbourne, Parkville Victoria 3010, Australia.
 
 Telmo Nunes, UISEE/DETSA, Faculdade de Medicina Veterinaria --- UTL, Rua Prof. Cid dos Santos, 1300 - 477 Lisboa Portugal.
 

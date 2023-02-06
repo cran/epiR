@@ -155,7 +155,7 @@
   # Test of effect (Equation 18.14 in Fleiss). Code for p-value taken from z.test function in TeachingDemos package:
   
   effect.z <- kappa.p / kappa.se
-  alternative <- match.arg(alternative)
+  alternative <- match.arg(alternative, choices = c("two.sided", "less", "greater"))
   
   p.effect <- switch(alternative, two.sided = 2 * pnorm(abs(effect.z), lower.tail = FALSE), less = pnorm(effect.z), greater = pnorm(effect.z, lower.tail = FALSE))
   
@@ -184,7 +184,7 @@
     rval <- list(prop.agree = prop.agree, pindex = pindex, bindex = bindex, pabak = pabak, kappa = kappa, z = z, mcnemar = mcnemar)
   }
 
-  if(nrow(dat >= 2)){
+  else if(nrow(dat >= 2)){
     prop.agree <- data.frame(obs = pO.p, exp = pE.p)
     pabak <- data.frame(est = pabak.p, lower = pabak.l, upper = pabak.u)
     kappa <- data.frame(est = kappa.p, se = kappa.se, lower = kappa.l, upper = kappa.u)

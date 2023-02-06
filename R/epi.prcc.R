@@ -3,6 +3,7 @@ epi.prcc <- function(dat, sided.test = 2, conf.level = 0.95){
   # Calculate mu and number of parameters:
   N <- dim(dat)[1]
   K <- dim(dat)[2] - 1
+  
   # Return an error message if the number of parameters is greater than the number of model replications:
   if(K > N) 
     stop("Error: the number of replications of the model must be greater than the number of model parameters")
@@ -28,8 +29,7 @@ epi.prcc <- function(dat, sided.test = 2, conf.level = 0.95){
   }
   
   # Fudge to deal with response variables that are all the same:
-  if(is.na(C[K + 1,K + 1]))
-  {
+  if(is.na(C[K + 1,K + 1])){
     gamma.iy <- rep(0, times = K)
     
     # Test statistic:
@@ -49,7 +49,8 @@ epi.prcc <- function(dat, sided.test = 2, conf.level = 0.95){
     gamma.upp <- gamma.iy + (t * se.t)
 
     # Results:
-    rval <- data.frame(est = gamma.iy, lower = gamma.low, upper = gamma.upp, test.statistic = t.iy, df = df, p.value = p) 
+    var <- names(dat)[1:ncol(dat) - 1]
+    rval <- data.frame(var = var, est = gamma.iy, lower = gamma.low, upper = gamma.upp, test.statistic = t.iy, df = df, p.value = p) 
     return(rval)
   }
   
@@ -100,7 +101,8 @@ epi.prcc <- function(dat, sided.test = 2, conf.level = 0.95){
     gamma.upp <- gamma.iy + (t * se.t)
     
     # Results:
-    rval <- data.frame(est = gamma.iy, lower = gamma.low, upper = gamma.upp, test.statistic = t.iy, df = df, p.value = p) 
+    var <- names(dat)[1:ncol(dat) - 1]
+    rval <- data.frame(var = var, est = gamma.iy, lower = gamma.low, upper = gamma.upp, test.statistic = t.iy, df = df, p.value = p) 
     return(rval)
   }
 }
