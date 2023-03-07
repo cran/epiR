@@ -13,7 +13,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'------
-library(knitr); library(tidyverse); library(flextable); library(officer)
+library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
 
 tab1.df <- data.frame(
    sampling = c("Representative","Representative","Two stage representative","Representative","Pooled representative"),

@@ -1,5 +1,5 @@
 ## ---- echo = FALSE, message = FALSE-------------------------------------------
-library(knitr); library(tidyverse); library(flextable); library(officer)
+library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
@@ -156,7 +156,7 @@ dat.epi02$massoc.detail$OR.strata.score
 
 
 ## ---- message = FALSE---------------------------------------------------------
-library(tidyverse)
+library(dplyr); library(tidyr)
 
 dat.df03 <- birthwt; head(dat.df03)
 

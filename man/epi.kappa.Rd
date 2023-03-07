@@ -14,7 +14,7 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 }
 
 \arguments{
-  \item{dat}{an object of class matrix comprised of \code{n} rows and \code{n} columns listing the individual cell frequencies.}
+  \item{dat}{an object of class matrix comprised of \code{n} rows and \code{n} columns listing the individual cell frequencies (as integers).}
   \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{watson}, \code{altman} or \code{cohen}.}
   \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{two.sided}, \code{greater} or \code{less}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}

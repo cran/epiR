@@ -14,11 +14,18 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
-epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
+epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
+
+## ----message = FALSE----------------------------------------------------------
+epi.sssimpleestb(N = 4000, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
 epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = NA, power = 0.80, r = 1, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$n.total
+
+## ----message = FALSE----------------------------------------------------------
+epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = 1500, power = NA, r = 1, 
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$power
 
 ## ----message = FALSE----------------------------------------------------------
 epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
@@ -37,27 +44,29 @@ epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = "relative", rho
 
 ## ----message = FALSE----------------------------------------------------------
 # From first principles:
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.20, epsilon = 0.05 / 0.20, 
+n.crude <- epi.sssimpleestb(N = NA, Py = 0.20, epsilon = 0.05 / 0.20, 
    error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 n.crude
 
-# A total of 246 subjects need to be enrolled into the study. Calculate the design effect:
+# A total of 246 individuals (SSUs) need to be enrolled into the study. Calculate the design effect:
 rho <- 0.02; b <- 20
 D <- rho * (b - 1) + 1; D
 # The design effect is 1.38. Our crude sample size estimate needs to be increased by a factor of 1.38.
 
 n.adj <- ceiling(n.crude * D)
 n.adj
-# After accounting for lack of independence in the data a total of 340 subjects need to be enrolled into the study. How many clusters are required?
+# After accounting for lack of independence in the data a total of 340 individuals (SSUs) need to be enrolled into the study. 
 
+# How many villages (PSUs) are required?
 ceiling(n.adj / b)
+# A total of 17 villages need to be sampled to meet the requirements of the study.
 
 # Do all of the above using epi.ssclus2estb:
 epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = "relative", 
    rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+n.crude <- epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20,
    error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 n.crude
 

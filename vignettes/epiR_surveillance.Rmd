@@ -36,6 +36,8 @@ The Terrestrial Animal Health Code of the World Organisation of Animal Health [@
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
 
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the surveillance functions in `epiR` using a smart phone.
+
 ## Definitions
 
 **Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
@@ -81,7 +83,7 @@ The sample size functions for surveillance representative sampling in `epiR` fal
 The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as being **primary sampling units** (PSUs) and animals and individuals as being **secondary sampling units** (SSUs).  
 
 ```{r ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-library(knitr); library(tidyverse); library(flextable); library(officer)
+library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
 
 tab1.df <- data.frame(
    sampling = c("Representative","Representative","Two stage representative","Representative","Pooled representative"),
@@ -179,7 +181,7 @@ How many PSUs (herds) need to be sampled if you want to be 95% certain of detect
 ```{r message = FALSE}
 rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.90)
 ```
-We need to sample a total of 622 herds. 
+We need to sample a total of 656 herds. 
 
 How many animals (SSUs) need to be sampled from each herd (PSU) if you want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?
 
@@ -597,7 +599,7 @@ If the 7764 individuals have all returned a negative test result (using a test w
 rsu.sep(N = 193000, n = 7764, pstar = 10 / 100000, se.u = 0.85)
 ```
 
-If all of the 7764 individuals returned a negative test we can 48% confident that the prevalence of COVID-19 in the province is less than 10 per 100,000. How many need to be tested to be 95% confident that the prevalence of COVID-19 is less than or equal to 10 cases per 100,000? We return to the sample size functions covered earlier:
+If all of the 7764 individuals returned a negative test we can only be 48% confident that the prevalence of COVID-19 in the province is less than 10 per 100,000. How many need to be tested to be 95% confident that the prevalence of COVID-19 is less than or equal to 10 cases per 100,000? Return to the sample size functions covered earlier:
 
 ```{r message = FALSE}
 rsu.sssep.rs(N = 193000, pstar = 10 / 100000, se.p = 0.95, se.u = 0.85)

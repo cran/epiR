@@ -16,7 +16,7 @@ vignette: >
 \setmainfont{Calibri Light}
 
 ```{r, echo = FALSE, message = FALSE}
-library(knitr); library(tidyverse); library(flextable); library(officer)
+library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
@@ -28,6 +28,8 @@ Exposures can be harmful, beneficial or both harmful and beneficial (e.g., if an
 In this vignette we outline describe how `epiR` can be used to compute the various measures of association used in epidemiology notably the risk ratio, odds ratio, attributable risk in the exposed, attributable fraction in the exposed, attributable risk in the population and attributable fraction in the population. Examples are provided to demonstrate how the package can be used to deal with exposure-outcome data presented in various formats.  
 
 This vignette has been written assuming the reader routinely formats their 2 $\times$ 2 table data with the outcome status as columns and exposure status as rows. If this is not the case the argument `outcome = "as.columns"` (the default) can be changed to `outcome = "as.rows"`.
+
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the measures of association functions in `epiR` using a smart phone.
 
 **Measures of association strength**
 
@@ -93,7 +95,9 @@ The incidence risk estimates shown in Table 2 can be presented graphically in th
 
 The incidence risk ratio provides an estimate of how many times more likely exposed individuals are to experience the outcome of interest, compared with non-exposed individuals. 
 
-If the incidence risk ratio equals 1, then the risk of the outcome in both the exposed and non-exposed groups are equal. If the incidence risk ratio is greater than 1, then exposure increases the outcome risk with greater departures from 1 indicative of a stronger effect. If the incidence risk ratio is less than 1, exposure reduces the outcome risk and exposure is said to be protective. 
+If the incidence risk ratio equals 1, then the risk of the outcome in both the exposed and non-exposed groups are equal. If the incidence risk ratio is greater than 1, then exposure increases the outcome risk with greater departures from 1 indicative of a stronger effect. If the incidence risk ratio is less than 1, exposure reduces the outcome risk and exposure is said to be protective.
+
+Tip: The glossary in the EpiTools app contains an animated version of Figure 1.
 
 ***The odds ratio --- cohort studies***
 
@@ -196,7 +200,7 @@ The population attributable fraction (also known as the aetiologic fraction) is 
 
 ![The attributable fraction in the population](population_attributable_fraction.png)
 
-On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome, and (2) the exposure of interest is something amenable to intervention.
+On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome; and (2) the exposure of interest is something amenable to intervention.
 
 **Theory to practice: Calculating measures of association using R**
 
@@ -233,7 +237,7 @@ epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 1
 
 ***Data frame with one row per observation***
 
-Here we provide examples where you have exposure status and outcome status listed for each member of your study population. There are two options for contingency table preparation in this situation: (1) using base R's table function; or (2) using the `tidyverse` package.
+Here we provide examples where you have exposure status and outcome status listed for each member of your study population. There are two options for contingency table preparation in this situation: (1) using base R's table function; or (2) using the `tidyverse` group of packages.
 
 For this example we use the low infant birth weight data presented by @hosmer_lemeshow:2000 and available in the `MASS` package in R. The `birthwt` data frame has 189 rows and 10 columns.  The data were collected at Baystate Medical Center, Springfield, Massachusetts USA during 1986. 
 
@@ -294,10 +298,10 @@ dat.epi02$massoc.detail$OR.strata.score
 
 **Two by two table preparation using `tidyverse`**
 
-The `tidyverse` package can also be used to prepare data in the required format:
+The `dplyr` and `tidyr` packages (available within the `tidyverse` group of packages) can also be used to prepare your data in the required format:
 
 ```{r, message = FALSE}
-library(tidyverse)
+library(dplyr); library(tidyr)
 
 dat.df03 <- birthwt; head(dat.df03)
 

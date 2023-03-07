@@ -92,7 +92,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
 ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
-  geom_density(aes(y = ..density.. * (nrow(dat.df) * 7)), colour = "red") +
+  geom_density(aes(y = after_stat(density) * (nrow(dat.df) * 7)), colour = "red") +
   scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +

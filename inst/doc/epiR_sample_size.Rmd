@@ -30,27 +30,44 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the sample size functions in `epiR` using a smart phone.
+
 ### Prevalence estimation
 
 A review of sample size calculations in (veterinary) epidemiological research is provided by @stevenson:2021.
 
-The expected seroprevalence of brucellosis in a population of cattle is thought to be in the order of 15%. How many cattle need to be sampled and tested to be 95% certain that our seroprevalence estimate is within 20% of the true population value. That is, from 15 - (0.20 $\times$ 0.15) to 15 + (0.20 $\times$ 0.15 = 0.03) i.e. from 12% to 18%. Assume the test you will use has perfect sensitivity and specificity. This formula requires the population size to be specified so we set N to a large number, 1,000,000:
+The expected seroprevalence of brucellosis in a population of cattle is thought to be in the order of 15%. How many cattle need to be sampled and tested to be 95% certain that our seroprevalence estimate is within 20% of the true population value. That is, from 15 - (0.20 $\times$ 0.15) to 15 + (0.20 $\times$ 0.15 = 0.03) i.e., from 12% to 18%. Assume the test you will use has perfect sensitivity and specificity. The population size is unknown so we set `N = NA`:
 
 ```{r message = FALSE}
 library(epiR)
-epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
+epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 ```
-A total of 545 cows are required to meet the requirements of the study.
+A total of 545 cows need to be sampled to meet the requirements of the study. Let's say we have a reasonable estimate of the size of the cattle population at risk, 4000. Re-run `epi.sssimpleestb`, specifying `N`:
+
+```{r message = FALSE}
+epi.sssimpleestb(N = 4000, Py = 0.15, epsilon = 0.20, error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
+```
+If the size of the population at risk is 4000, 480 cows need to be sampled to meet the requirements of the study. When a value for `N` is provided in `epi.sssimpleestb` the function automatically applies a finite correction factor. In this example if we assumed an infinite (i.e., very large) population size the required sample size was 545. When the population size was (only) 4000, the required sample size reduced to 480.
 
 ### Prospective cohort study
 
-A prospective cohort study of dry food diets and feline lower urinary tract disease (FLUTD) in mature male cats is planned. A sample of cats will be selected at random from the population of cats in a given area and owners who agree to participate in the study will be asked to complete a questionnaire at the time of enrollment. Cats enrolled into the study will be followed for at least 5 years to identify incident cases of FLUTD. The investigators would like to be 0.80 certain of being able to detect when the risk ratio of FLUTD is 1.4 for cats habitually fed a dry food diet, using a 0.05 significance test. Previous evidence suggests that the incidence risk of FLUTD in cats not on a dry food (i.e. 'other') diet is around 50 per 1000. Assuming equal numbers of cats on dry food and other diets are sampled, how many cats should be sampled to meet the requirements of the study?
+A prospective cohort study of dry food diets and feline lower urinary tract disease (FLUTD) in mature male cats is planned. A sample of cats will be selected at random from the population of cats in a given area and owners who agree to participate in the study will be asked to complete a questionnaire at the time of enrollment. Cats enrolled into the study will be followed for at least 5 years to identify incident cases of FLUTD. The investigators would like to be 0.80 certain of being able to detect when the risk ratio of FLUTD is 1.4 for cats habitually fed a dry food diet, using a 0.05 significance test. Previous evidence suggests that the incidence risk of FLUTD in cats not on a dry food (i.e., 'other') diet is around 50 per 1000. Assuming equal numbers of cats on dry food and other diets are sampled, how many cats should be sampled to meet the requirements of the study?
 
 ```{r message = FALSE}
 epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = NA, power = 0.80, r = 1, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$n.total
 ```
 A total of 2080 subjects are required (1040 exposed and 1040 unexposed).
+
+Important to remember that you can use the `epi.sscohortt` (and other sample size functions in `epiR`) to return the study power if a value for `n` is provided. Continuing the example above, imagine that only 1500 cats were enrolled into the study. What is the expected study power? Here we set `n = 1500` and `power = NA` in `epi.sscohortt`:
+
+```{r message = FALSE}
+epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = 1500, power = NA, r = 1, 
+   design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$power
+```
+
+If only 1500 cats are enrolled into the study the expected study power is 0.66.
+
 
 ### Case-control study
 
@@ -65,7 +82,7 @@ If the true odds for squamous cell carcinoma in exposed subjects relative to une
 
 ### Non-inferiority trial
 
-Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e. delta = 0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?
+Suppose a pharmaceutical company would like to conduct a clinical trial to compare the efficacy of two antimicrobial agents when administered orally to patients with skin infections. Assume the true mean cure rate of the treatment is 0.85 and the true mean cure rate of the control is 0.65. We consider a difference of less than 0.10 in cure rate to be of no clinical importance (i.e., delta = 0.10). Assuming a one-sided test size of 5% and a power of 80% how many subjects should be included in the trial?
 
 ```{r message = FALSE}
 epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, 
@@ -75,7 +92,7 @@ A total of 50 subjects need to be enrolled in the trial, 25 in the treatment gro
 
 ### One-stage cluster sampling
 
-An aid project has distributed cook stoves in a single province in a resource-poor country. At the end of three years, the donors would like to know what proportion of households are still using their donated stove. A cross-sectional study is planned where villages in a province will be sampled and all households (approximately 75 per village) will be visited to determine if the donated stove is still in use. A pilot study of the prevalence of stove usage in five villages showed that 0.46 of householders were still using their stove and the intracluster correlation coefficient (ICC) for stove use within villages is in the order of 0.20. If the donor wanted to be 95% confident that the survey estimate of stove usage was within 10% of the true population value, how many villages (clusters) need to be sampled?
+An aid project has distributed cook stoves in a single province in a resource-poor country. At the end of three years, the donors would like to know what proportion of households are still using their donated stove. A cross-sectional study is planned where villages in a province will be sampled and all households (approximately 75 per village) will be visited to determine if the donated stove is still in use. A pilot study of the prevalence of stove usage in five villages showed that 0.46 of householders were still using their stove and the intracluster correlation coefficient (ICC) for stove use within villages is in the order of 0.20. If the donor wanted to be 95% confident that the survey estimate of stove usage was within 10% of the true population value, how many villages (primary sampling units) need to be sampled?
 
 ```{r message = FALSE}
 epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, conf.level = 0.95)$n.psu
@@ -84,7 +101,7 @@ A total of 96 villages need to be sampled to meet the requirements of the study.
 
 ### One-stage cluster sampling (continued)
 
-Continuing the example above, we are now told that the number of households per village varies. The average number of households per village is 75 with a 0.025 quartile of 40 households and a 0.975 quartile of 180. Assuming the number of households per village follows a normal distribution the expected standard deviation of the number of households per village is in the order of (180 - 40) $\div$ 4 = 35. How many villages need to be sampled?
+Continuing the example above, we are now told that the number of households per village varies. The average number of households per village is 75 with a 0.025 quartile of 40 households and a 0.975 quartile of 180. Assuming the number of households per village follows a normal distribution the expected standard deviation of the number of households per village is in the order of (180 - 40) $\div$ 4 = 35. How many villages (primary sampling units) need to be sampled?
 
 ```{r message = FALSE}
 epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, conf.level = 0.95)$n.psu
@@ -93,37 +110,39 @@ A total of 115 villages need to be sampled to meet the requirements of the study
 
 ### Two-stage cluster sampling
 
-This example is adapted from @bennett_et_al:1991. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we intend to sample 20 individuals per cluster. How many clusters should be sampled to meet the requirements of the study?
+This example is adapted from @bennett_et_al:1991. We intend to conduct a cross-sectional study to determine the prevalence of disease X in a given country. This is a hierarchical data set with individuals (secondary sampling units) clustered within villages (primary sampling units). The expected prevalence of disease is thought to be around 20%. Previous studies report an intracluster correlation coefficient for this disease to be 0.02. Suppose that we want to be 95% certain that our estimate of the prevalence of disease is within 5% of the true population value and that we'll sample 20 individuals per village. How many villages should be sampled to meet the requirements of the study? Assume that you don't know the total number of villages in the country, so set `N = NA` in `epi.simpleestb`:
 
 ```{r message = FALSE}
 # From first principles:
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.20, epsilon = 0.05 / 0.20, 
+n.crude <- epi.sssimpleestb(N = NA, Py = 0.20, epsilon = 0.05 / 0.20, 
    error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 n.crude
 
-# A total of 246 subjects need to be enrolled into the study. Calculate the design effect:
+# A total of 246 individuals (SSUs) need to be enrolled into the study. Calculate the design effect:
 rho <- 0.02; b <- 20
 D <- rho * (b - 1) + 1; D
 # The design effect is 1.38. Our crude sample size estimate needs to be increased by a factor of 1.38.
 
 n.adj <- ceiling(n.crude * D)
 n.adj
-# After accounting for lack of independence in the data a total of 340 subjects need to be enrolled into the study. How many clusters are required?
+# After accounting for lack of independence in the data a total of 340 individuals (SSUs) need to be enrolled into the study. 
 
+# How many villages (PSUs) are required?
 ceiling(n.adj / b)
+# A total of 17 villages need to be sampled to meet the requirements of the study.
 
 # Do all of the above using epi.ssclus2estb:
 epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = "relative", 
    rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 ```
-A total of 17 clusters need to be sampled to meet the specifications of this study. Function `epi.ssclus2estb` returns a warning message that the number of clusters is less than 25.
+A total of 17 villages need to be sampled to meet the requirements of this study. From each sampled village 20 individuals are sampled which means that at total of 17 $\times$ 20 = 340 individuals are required. Function `epi.ssclus2estb` returns a warning message that the number of clusters is less than 25.
 
 ### Two-stage cluster sampling (continued)
 
-Continuing the brucellosis prevalence example (above) being seropositive to brucellosis is likely to cluster within herds. @otte_gumm:1997 cite the intracluster correlation coefficient for Brucella abortus in cattle to be in the order of 0.09. Adjust your sample size of 545 cows to account for lack of independence in the data, i.e. clustering at the herd level. Assume that b = 10 animals will be sampled per herd:
+Continuing the brucellosis prevalence example (above) being seropositive to brucellosis is likely to cluster within herds. @otte_gumm:1997 cite the intracluster correlation coefficient for Brucella abortus in cattle to be in the order of 0.09. Adjust your sample size of 545 cows to account for lack of independence in the data, i.e., clustering at the herd level. Assume that `b` = 10 animals will be sampled per herd:
 
 ```{r message = FALSE}
-n.crude <- epi.sssimpleestb(N = 1E+06, Py = 0.15, epsilon = 0.20,
+n.crude <- epi.sssimpleestb(N = NA, Py = 0.15, epsilon = 0.20,
    error = "relative", se = 1, sp = 1, nfractional = FALSE, conf.level = 0.95)
 n.crude
 
@@ -137,6 +156,6 @@ n.adj
 epi.ssclus2estb(b = 10, Py = 0.15, epsilon = 0.20, error = "relative", 
    rho = 0.09, nfractional = FALSE, conf.level = 0.95)
 ```
-After accounting for clustering at the herd level we estimate that a total of (545 $\times$ 1.81) = 986 cattle need to be sampled to meet the requirements of the survey. If 10 cows are sampled per herd this means that a total of (987 $\div$ 10) = 99 herds are required. 
+After accounting for clustering at the herd level we estimate that a total of (545 $\times$ 1.81) = 986 cattle need to be sampled to meet the requirements of the study. If 10 cows are sampled per herd this means that a total of (986 $\div$ 10) = 99 herds are required. 
 
 ### References

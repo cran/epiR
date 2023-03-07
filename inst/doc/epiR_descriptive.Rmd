@@ -32,13 +32,15 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 Epidemiology is the study of the frequency, distribution and determinants of health-related states in populations and the application of such knowledge to control health problems [@cdc:2006]. 
 
-This vignette provides instruction on the way R and `epiR` can be used for descriptive epidemiological analyses, that is, to describe how the frequency of disease varies by individual, place and time.  
+This vignette provides instruction on the way R and `epiR` can be used for descriptive epidemiological analyses, that is, to describe how the frequency of disease varies by individual, place and time.
+
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the descriptive epidemiology functions in `epiR` using a smart phone.
 
 ## Individual
 
 Descriptions of disease frequency involves reporting either the **prevalence** or **incidence** of disease.
 
-Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a specific disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and these notes will follow this convention.
+Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a specific disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and this vignette will follow this convention.
 
 Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time, (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e., the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period). 
 
@@ -170,7 +172,7 @@ You may want to superimpose a smoothed line to better appreciate trend. Do this 
 ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
-  geom_density(aes(y = ..density.. * (nrow(dat.df) * 7)), colour = "red") +
+  geom_density(aes(y = after_stat(density) * (nrow(dat.df) * 7)), colour = "red") +
   scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +

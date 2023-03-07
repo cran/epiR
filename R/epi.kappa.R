@@ -1,8 +1,15 @@
 "epi.kappa" <- function(dat, method = "fleiss", alternative = c("two.sided", "less", "greater"), conf.level = 0.95){
+
+  is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
+    abs(x - round(x)) < tol
+  }
+     
+  if (sum(is.wholenumber(dat)) != nrow(dat) * ncol(dat)) 
+    stop("Error: epi.kappa requires whole numbers in each cell of the input table dat")
    
   if (nrow(dat) != ncol(dat)) 
-    stop("Error: epi.kappa dat requires a table with equal numbers of rows and columns")
-    
+    stop("Error: epi.kappa requires input table dat to have equal numbers of rows and columns")
+
   N. <- 1 - ((1 - conf.level) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   lower <- "lower"

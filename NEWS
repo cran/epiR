@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.58
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.kappa returns an error if any of the cell frequencies in the input data table are not integers.
+    [Suggested by Morgane Pommier]
+    
+
 CHANGES IN epiR VERSION 2.0.57
 SIGNIFICANT USER-VISIBLE CHANGES
 
