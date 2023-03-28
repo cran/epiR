@@ -332,7 +332,7 @@
   
   # Added 160609
   Al <- (qbinom(1 - N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
-  u <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
+  Au <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
   cOe.p <- sa / sb
   cOe.l <- Al / (1 - Al)
   cOe.u <- Au / (1 - Au)
