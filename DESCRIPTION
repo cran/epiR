@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.59
-Date: 2023-03-28
+Version: 2.0.60
+Date: 2023-04-05
 Title: Tools for the Analysis of Epidemiological Data
 Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
@@ -8,15 +8,15 @@ Description: Tools for the analysis of epidemiological and surveillance data. Co
 Depends: R (>= 3.0.0), survival
 Imports: BiasedUrn, pander, methods, sf, lubridate, zoo, flextable,
         officer
-Suggests: MASS (>= 3.1-20), knitr, rmarkdown, RColorBrewer, ggplot2,
-        plyr, rgdal, scales, spData, spatstat, foreign, maptools,
-        rgeos, mapproj, dplyr, tidyr
+Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
+        rmarkdown, plyr, RColorBrewer, rgeos, scales, sp, spatstat,
+        spData, tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2023-03-28 05:49:53 UTC; marks1
+Packaged: 2023-04-05 03:16:12 UTC; marks1
 URL:
         https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2023-03-28 07:20:02 UTC
+Date/Publication: 2023-04-05 12:13:18 UTC

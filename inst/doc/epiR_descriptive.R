@@ -37,7 +37,7 @@ dat.df <- data.frame(dprob = dprob)
 
 ggplot(data = dat.df, aes(x = dprob)) +
   theme_bw() +
-  geom_histogram(binwidth = 0.01, colour = "gray", fill = "dark blue", size = 0.1) +
+  geom_histogram(binwidth = 0.01, colour = "gray", fill = "dark blue", linewidth = 0.1) +
   scale_x_continuous(limits = c(0,1), name = "Prevalence") +
   scale_y_continuous(limits = c(0,10), name = "Number of draws")
 
@@ -84,7 +84,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
   scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## ----epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2004. Superimposed on this plot is a smoothed estimate of case density."----
@@ -95,7 +95,7 @@ ggplot(data = dat.df, aes(x = odate)) +
   geom_density(aes(y = after_stat(density) * (nrow(dat.df) * 7)), colour = "red") +
   scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
@@ -105,7 +105,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex)
 
@@ -115,7 +115,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", size = 0.1) +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex) +
   geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2004", format = "%d/%m/%Y"))), 
@@ -127,7 +127,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   geom_histogram(binwidth = 7, colour = "gray", size = 0.1) +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2004", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
@@ -140,7 +140,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   geom_histogram(binwidth = 7, colour = "gray", size = 0.1, position = "dodge") +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 2), limits = c(0,20), name = "Number of cases") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2004", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
@@ -191,7 +191,7 @@ dat.df$rncas <- rollmean(x = dat.df$ncas, k = 5, fill = NA)
 ggplot() +
   theme_bw() +
   geom_histogram(data = dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", size = 0.1) +
-  geom_line(data = dat.df, mapping = aes(x = edate, y = dat.df$rncas), colour = "red") + 
+  geom_line(data = dat.df, mapping = aes(x = edate, y = rncas), colour = "red") + 
   scale_x_date(breaks = date_breaks("2 weeks"), labels = date_format("%b %Y"), 
      name = "Date") +
   scale_y_continuous(limits = c(0,125), name = "Number of cases") +
@@ -199,7 +199,7 @@ ggplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## ----message = FALSE, warning = FALSE-----------------------------------------
-library(sf); library(spData); library(rgdal); library(plyr); library(RColorBrewer); library(spatstat)
+library(sf); library(spData); library(plyr); library(RColorBrewer); library(sp); library(spatstat)
 
 ncsids.sf <- st_read(dsn = system.file("shapes/sids.shp", package = "spData")[1])
 ncsids.sf <- ncsids.sf[,c("BIR74","SID74")]
@@ -215,18 +215,17 @@ ggplot() +
    labs(fill = "SIDS 1974")
 
 ## ----message = FALSE----------------------------------------------------------
-data(epi.incin); incin.df <- epi.incin
-incin.df$status <- factor(incin.df$status, levels = c(0,1), labels = c("Neg", "Pos"))
-names(incin.df)[3] <- "Status"
+data(chorley)
+chorley.df <- data.frame(xcoord = chorley$x * 1000, ycoord = chorley$y * 1000, status = chorley$marks)
+chorley.df$status <- factor(chorley.df$status, levels = c("lung","larynx"), labels = c("Lung","Larynx"))
 
-incin.sf <- st_as_sf(incin.df, coords = c("xcoord","ycoord"), remove = FALSE)
-st_crs(incin.sf) <- 27700
+chorley.sf <- st_as_sf(chorley.df, coords = c("xcoord","ycoord"), remove = FALSE)
+st_crs(chorley.sf) <- 27700
 
-coppull.ow <- convexhull.xy(x = incin.df[,1], y = incin.df[,2])
-coppull.ow <- dilation(coppull.ow, r = 1000)
+coppull.ow <- chorley$window
 
 ## -----------------------------------------------------------------------------
-coords <- matrix(c(coppull.ow$bdry[[1]]$x, coppull.ow$bdry[[1]]$y), ncol = 2, byrow = FALSE)
+coords <- matrix(c(coppull.ow$bdry[[1]]$x * 1000, coppull.ow$bdry[[1]]$y * 1000), ncol = 2, byrow = FALSE)
 pol <- Polygon(coords, hole = FALSE)
 pol <- Polygons(list(pol),1)
 pol <- SpatialPolygons(list(pol))
@@ -243,14 +242,14 @@ mformat <- function(){
 
 ## ----spatial02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial02}Point map showing the place of residence of individuals diagnosed with laryngeal cancer (Pos) and lung cancer (Neg), Copull Lancashire, UK, 1972 to 1980."----
 ggplot() +
-   theme_bw() +
-   geom_sf(data = incin.sf, aes(colour = Status, shape = Status)) +
-   geom_sf(data = coppull.sf, fill = "transparent", colour = "black") +
-   coord_sf(datum = st_crs(coppull.sf)) +
-   scale_colour_manual(values = c("grey","red")) +
-   scale_shape_manual(values = c(1,16)) +
-   scale_x_continuous(name = "Easting (km)", labels = mformat()) +
-   scale_y_continuous(name = "Northing (km)", labels = mformat()) +
-    theme(legend.position = c(0.10, 0.15))
+  theme_bw() +
+  geom_sf(data = chorley.sf, aes(colour = status, shape = status)) +
+  geom_sf(data = coppull.sf, fill = "transparent", colour = "black") +
+  coord_sf(datum = st_crs(coppull.sf)) +
+  scale_colour_manual(name = "Type", values = c("grey","red")) +
+  scale_shape_manual(name = "Type", values = c(1,16)) +
+  scale_x_continuous(name = "Easting (km)", labels = mformat()) +
+  scale_y_continuous(name = "Northing (km)", labels = mformat()) +
+  theme(legend.position = c(0.10, 0.12))
 
 

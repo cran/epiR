@@ -1,8 +1,17 @@
+CHANGES IN epiR VERSION 2.0.60
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Simplified the point mapping code in the Descriptive Epidemiology vignette.
+    [Suggested by Mark Stevenson]
+    o Removed dependence on package rgdal. 
+    [Suggested by Roger Bivand]
+    
+
 CHANGES IN epiR VERSION 2.0.59
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o New function epi.realrisk. A function to return absolute risks from odds, incidence risk and hazard ratios.
-    [Inpired by David Spiegelhalter at the Winston Centre for Risk and Evidence Communication, The University of Cambridge]
+    [Inpired by David Spiegelhalter at the Winton Centre for Risk and Evidence Communication, The University of Cambridge]
 
 
 CHANGES IN epiR VERSION 2.0.58

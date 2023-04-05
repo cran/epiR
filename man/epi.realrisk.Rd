@@ -30,7 +30,7 @@ Horby P, Lim W, Emberson J, Mafham M, Bell J, Linsell L, Staplin N, Brightling C
 
 Parekh T, Pemmasani S, Desai R (2020). Risk of stroke with E-cigarette and combustible cigarette use in young adults. American Journal of Preventive Medicine 58, 446 - 452.
 
-The Winston Centre for Risk and Evidence Communication, The University of Cambridge. URL: \url{https://realrisk.wintoncentre.uk/}.
+The Winton Centre for Risk and Evidence Communication, The University of Cambridge. URL: \url{https://realrisk.wintoncentre.uk/}.
  
 }
 
