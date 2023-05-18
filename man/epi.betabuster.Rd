@@ -43,10 +43,13 @@ Take care when you're parameterising probability estimates that are at the extre
 
 \references{
 Christensen R, Johnson W, Branscum A, Hanson TE (2010). Bayesian Ideas and Data Analysis: An Introduction for Scientists and Statisticians. Chapman and Hall, Boca Raton. 
+
+Su C-L, Johnson W (2014) Beta Buster. Software for obtaining parameters for the Beta distribution based on expert elicitation. URL: \code{https://cadms.vetmed.ucdavis.edu/diagnostic/software}.
+
 }
 
 \author{
-Simon Firestone (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia) with acknowledgements to Wes Johnson and Chun-Lung Su for the original standalone software. 
+Simon Firestone (Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Parkville Victoria 3010, Australia) with acknowledgements to Wes Johnson and Chun-Lung Su for the original standalone software. 
 }
 
 \examples{

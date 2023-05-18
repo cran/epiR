@@ -58,14 +58,14 @@ rsu.sssep.rs(N = 1000, pstar = 0.05, se.p = 0.95, se.u = 0.90)
 ## prevalence to be 0.08. You intend to use two tests: the first has a 
 ## sensitivity and specificity of 0.90 and 0.80, respectively. The second has 
 ## a sensitivity and specificity of 0.95 and 0.85, respectively. The two tests 
-## will be interpreted in parallel. How many herds should be sampled to be 
-## 95\% certain that the disease would be detected if it is present in the 
-## study area?
+## will be interpreted in parallel. Assuming the two tests are independent, 
+## how many herds should be sampled to be 95\% certain that the disease 
+## would be detected if it is present in the study area?
 
 ## Calculate the sensitivity and specificity of the diagnostic test regime:
 
 test <- rsu.dxtest(se = c(0.90, 0.95), sp = c(0.80, 0.85), 
-   interpretation = "parallel", covar = c(0,0))
+   covar.pos = 0, covar.neg = 0, interpretation = "parallel")
    
 ## Interpretation of these tests in parallel returns a diagnostic sensitivity
 ## of 0.995 and a diagnostic specificity of 0.68.

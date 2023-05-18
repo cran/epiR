@@ -1,8 +1,8 @@
 Package: epiR
-Version: 2.0.60
-Date: 2023-04-05
+Version: 2.0.61
+Date: 2023-05-18
 Title: Tools for the Analysis of Epidemiological Data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au> and Evan Sergeant <evansergeant@gmail.com> with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
+Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au>, Evan Sergeant <evansergeant@gmail.com>, Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
@@ -13,10 +13,10 @@ Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
         spData, tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2023-04-05 03:16:12 UTC; marks1
+Packaged: 2023-05-18 05:37:38 UTC; mstev
 URL:
         https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2023-04-05 12:13:18 UTC
+Date/Publication: 2023-05-18 09:40:02 UTC

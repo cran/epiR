@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.61
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function rsu.dxtest now includes the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between all three tests).
+    [Suggested by Cathy Kneipp]
+
+
 CHANGES IN epiR VERSION 2.0.60
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -1,11 +1,14 @@
-# Assume there is covariance between the 2nd and 3rd test.
-
-rsu.dxtest <- function(se, sp, covar = c(0,0), interpretation = "series"){
+rsu.dxtest <- function(se, sp, covar.pos, covar.neg, interpretation = "series"){
 
   # Objects se, sp and covar must be of length 2 or 3:
   if(length(se) < 2 | length(se) > 3) stop('se must be a vector of length 2 or 3.')
   if(length(sp) < 2 | length(sp) > 3) stop('sp must be a vector of length 2 or 3.')
-  if(length(covar) != 2) stop('covar must be a vector of length 2.')
+  
+  if(length(se) == 2 & length(covar.pos) != 1) 
+    stop('covar.pos must be a vector of either length 1 for assessment of two diagnostic tests.')
+  
+  if(length(se) == 3 & length(covar.pos) != 4) 
+    stop('covar.pos must be a vector of either length 4 for assessment of two diagnostic tests.')
   
   # Two tests:
   if(length(se) == 2 & length(sp == 2)){
@@ -30,11 +33,11 @@ rsu.dxtest <- function(se, sp, covar = c(0,0), interpretation = "series"){
     max.covsp <- min(sp[1] * (1 - sp[2]), sp[2] * (1 - sp[1]))
     
     # Check the values of covar entered by the user and return error if outside range:
-    if(covar[1] < min.covse | covar[1] > max.covse) 
-      stop('The covariance estimate for test sensitivity is outside of the plausible range given the sensitivities of the two tests.')
+    if(covar.pos[1] < min.covse | covar.pos[1] > max.covse) 
+      stop('The covariance estimate for diagnostic test sensitivity is outside of the plausible range given the sensitivities of the two tests.')
     
-    if(covar[2] < min.covsp | covar[2] > max.covsp) 
-      stop('The covariance estimate for test specificity is outside of the plausible range given the specificities of the two tests.')
+    if(covar.neg[1] < min.covsp | covar.neg[1] > max.covsp) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the two tests.')
     
     # Series interpretation:
     if(interpretation == "series") {
@@ -46,8 +49,8 @@ rsu.dxtest <- function(se, sp, covar = c(0,0), interpretation = "series"){
       
       # Sensitivity and specificity assuming tests are dependent.
       # Equations 5.24 and 5.25 Dohoo et al. (2009) page 113:    
-      sed <- se[1] * se[2] + covar[1]
-      spd <- 1 - (1 - sp[1]) * (1 - sp[2]) - covar[2]
+      sed <- se[1] * se[2] + covar.pos[1]
+      spd <- 1 - (1 - sp[1]) * (1 - sp[2]) - covar.neg[1]
     }
     
     # Parallel interpretation:
@@ -60,13 +63,13 @@ rsu.dxtest <- function(se, sp, covar = c(0,0), interpretation = "series"){
       
       # Sensitivity and specificity assuming tests are dependent.
       # Equations 5.22 and 5.23 Dohoo et al. (2009) page 113: 
-      sed <- 1 - (1 - se[1]) * (1 - se[2]) - covar[1]
-      spd <- sp[1] * sp[2] + covar[2]
+      sed <- 1 - (1 - se[1]) * (1 - se[2]) - covar.pos[1]
+      spd <- sp[1] * sp[2] + covar.neg[1]
     }
    
   }
   
-  # Three tests. No checks on the covariance for three tests.
+  # Three tests.
   if(length(se) == 3 & length(sp == 3)){
     
     # Values of se and sp must range between 0 and 1:
@@ -89,36 +92,99 @@ rsu.dxtest <- function(se, sp, covar = c(0,0), interpretation = "series"){
     max.covsp <- min(sp[2] * (1 - sp[3]), sp[3] * (1 - sp[2]))
     
     # Check the values of covar entered by the user and return error if outside range:
-    if(covar[1] < min.covse | covar[1] > max.covse) 
-      stop('The covariance estimate for test sensitivity is outside of the plausible range given the sensitivities of the two dependent tests.')
+    if(covar.pos[1] < min.covse | covar.pos[1] > max.covse) 
+      stop('The covariance estimate for diagnostic test sensitivity is outside of the plausible range given the sensitivities of the three tests.')
     
-    if(covar[2] < min.covsp | covar[2] > max.covsp) 
-      stop('The covariance estimate for test specificity is outside of the plausible range given the specificities of the two dependent tests.')
+    if(covar.pos[2] < min.covse | covar.pos[2] > max.covse) 
+      stop('The covariance estimate for diagnostic test sensitivity is outside of the plausible range given the sensitivities of the three tests.')
+    
+    if(covar.pos[3] < min.covse | covar.pos[3] > max.covse) 
+      stop('The covariance estimate for diagnostic test sensitivity is outside of the plausible range given the sensitivities of the three tests.')
+    
+    if(covar.pos[4] < min.covse | covar.pos[4] > max.covse) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the three tests.')
     
     
+    if(covar.neg[1] < min.covsp | covar.neg[1] > max.covsp) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the three tests.')
+    
+    if(covar.neg[2] < min.covsp | covar.neg[2] > max.covsp) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the three tests.')
+    
+    if(covar.neg[3] < min.covsp | covar.neg[3] > max.covsp) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the three tests.')
+    
+    if(covar.neg[4] < min.covsp | covar.neg[4] > max.covsp) 
+      stop('The covariance estimate for diagnostic test specificity is outside of the plausible range given the specificities of the three tests.')
+
     # Series interpretation:
     if(interpretation == "series"){
       
-      # Sensitivity and specificity assuming tests are independent.
+      # Sensitivity assuming tests are INDEPENDENT:
       sei <- se[1] * se[2] * se[3]
-      spi <- 1 - (1 - sp[1]) * ((1 - sp[2]) * (1 - sp[3]))
       
-      # Sensitivity and specificity assuming tests are dependent.
-      sed <- se[1] * (se[2] * se[3] + covar[1])
-      spd <- 1 - (1 - sp[1]) * ((1 - sp[2]) * (1 - sp[3] ) + covar[2])
+      # Specificity assuming tests are INDEPENDENT:
+      spi <- 1 - ((1 - sp[1]) * (1 - sp[2]) * (1 - sp[3]))
       
+      # Name each of the covariances to make code easier to read:
+      c12.pos <-  covar.pos[1]
+      c13.pos <-  covar.pos[2]
+      c23.pos <-  covar.pos[3]
+      c123.pos <- covar.pos[4]
+      
+      c12.neg <-  covar.neg[1]
+      c13.neg <-  covar.neg[2]
+      c23.neg <-  covar.neg[3]
+      c123.neg <- covar.neg[4]
+      
+      # Sensitivity assuming tests are DEPENDENT:
+      # Jones et al. (2009) Equation 7, page 857:
+      sed <- (se[1] * se[2] * se[3]) + (se[1] * c23.pos) + (se[2] * c13.pos) + (se[3] * c12.pos) - c123.pos
+
+      # Dohoo et al. (2009) Equation 5.24, page 113:
+      # sed <- se[1] * (se[2] * se[3] + c23.pos)
+
+      
+      # Specificity assuming tests are DEPENDENT:
+      spd <- 1 - (((1 - sp[1]) * (1 - sp[2]) * (1 - sp[3])) + ((1 - sp[1]) * c23.neg) + ((1 - sp[2]) * c13.neg) + ((1 - sp[3]) * c13.neg)) + c123.neg
+      
+      # Dohoo et al. (2009) Equation 5.24, page 113:
+      # spd <- 1 - (1 - sp[1]) * ((1 - sp[2]) * (1 - sp[3]) + c23.neg)
+
     }
     
     # Parallel interpretation:
     if (interpretation == "parallel") {
       
-      # Sensitivity and specificity assuming tests are independent.
+      # Sensitivity assuming tests are INDEPENDENT:
       sei <- 1 - (1 - se[1]) * ((1 - se[2]) * (1 - se[3]))
+      
+      # Specificity assuming tests are INDEPENDENT:      
       spi <- sp[1] * sp[2] * sp[3]
       
-      # Sensitivity and specificity assuming tests are dependent.
-      sed <- 1 - (1 - se[1]) * ((1 - se[2]) * (1 - se[3]) + covar[1])
-      spd <- sp[1] * (sp[2] * sp[3] + covar[2])
+      
+      # Name each of the covariances to make code easier to read:
+      c12.pos <-  covar.pos[1]
+      c13.pos <-  covar.pos[2]
+      c23.pos <-  covar.pos[3]
+      c123.pos <- covar.pos[4]
+      
+      c12.neg <-  covar.neg[1]
+      c13.neg <-  covar.neg[2]
+      c23.neg <-  covar.neg[3]
+      c123.neg <- covar.neg[4]
+      
+      # Sensitivity assuming tests are DEPENDENT:      
+      sed <- 1 - (((1 - se[1]) * (1 - se[2]) * (1 - se[3])) + ((1 - se[1]) * c23.pos) + ((1 - se[2]) * c13.pos) + ((1 - se[3]) * c13.pos)) + c123.pos
+      
+      # Dohoo et al. (2009) Equation 5.22, page 113:
+      # sed <- 1 - (1 - se[1]) * ((1 - se[2]) * (1 - se[3]) + c23.pos)
+      
+      # Specificity assuming tests are DEPENDENT:
+      spd <- (sp[1] * sp[2] * sp[3]) + (sp[1] * c23.neg) + (sp[2] * c13.neg) + (sp[3] * c12.neg) - c123.neg
+
+      # Dohoo et al. (2009) Equation 5.23, page 113:
+      # spd <- sp[1] * (sp[2] * sp[3] + c23.neg)
 
       }
 

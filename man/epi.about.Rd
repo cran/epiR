@@ -142,6 +142,7 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
 \tabular{ll}{
     \code{\link{epi.prcc}}               \tab Compute partial rank correlation coefficients. \cr
     \code{\link{epi.psi}}                \tab Compute proportional similarity indices. \cr
+    \code{\link{epi.realrisk}}           \tab return absolute risks from odds, incidence risk and hazard ratios. \cr
   }
 }
 
@@ -246,11 +247,11 @@ Below, SSe stands for surveillance system sensitivity. That is, the average prob
 }
 
 \author{
-Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Melbourne Veterinary School, Faculty of Science, University of Melbourne, Parkville Victoria 3010, Australia.
+Mark Stevenson (\email{mark.stevenson1@unimelb.edu.au}), Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Parkville Victoria 3010, Australia.
 
 Evan Sergeant (\email{evansergeant@gmail.com}), Ausvet Pty Ltd, Level 1 34 Thynne St, Bruce ACT 2617, Australia.
 
-Simon Firestone, Melbourne Veterinary School, Faculty of Science, University of Melbourne, Parkville Victoria 3010, Australia.
+Simon Firestone, Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Parkville Victoria 3010, Australia.
 
 Telmo Nunes, UISEE/DETSA, Faculdade de Medicina Veterinaria --- UTL, Rua Prof. Cid dos Santos, 1300 - 477 Lisboa Portugal.
 
