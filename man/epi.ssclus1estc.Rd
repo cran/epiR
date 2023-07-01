@@ -11,14 +11,13 @@ Sample size to estimate a continuous outcome using one-stage cluster sampling.
 }
 
 \usage{
-epi.ssclus1estc(N.psu = NA, b, N, xbar, xsigma, epsilon, error = "relative", 
+epi.ssclus1estc(N.psu = NA, b, xbar, xsigma, epsilon, error = "relative", 
    rho, nfractional = FALSE, conf.level = 0.95)
 }
 
 \arguments{
   \item{N.psu}{scalar integer, the total number of primary sampling units eligible for inclusion in the study. If \code{N = NA} the eligible primary sampling unit population size is assumed to be infinite.}
   \item{b}{scalar integer or vector of length two, the number of individual listing units in each cluster to be sampled. See details, below.}
-  \item{N}{scalar integer, representing the total number of individual listing units in the population.}
   \item{xbar}{scalar number, the expected mean of the continuous variable to be estimated.}
   \item{xsigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
@@ -63,7 +62,7 @@ Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laborat
 ## services of a nurse in this retirement village housing complexes to 
 ## be 0.10. How many housing complexes (clusters) should be sampled?
 
-epi.ssclus1estc(N.psu = NA, b = 25, N = 5 * 25, xbar = 34, xsigma = 5.5, 
+epi.ssclus1estc(N.psu = NA, b = 25, xbar = 34, xsigma = 5.5, 
    epsilon = 0.10, error = "relative", rho = 0.10, nfractional = FALSE, 
    conf.level = 0.95)
 

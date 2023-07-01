@@ -51,7 +51,7 @@ n.crude
 # A total of 246 individuals (SSUs) need to be enrolled into the study. Calculate the design effect:
 rho <- 0.02; b <- 20
 D <- rho * (b - 1) + 1; D
-# The design effect is 1.38. Our crude sample size estimate needs to be increased by a factor of 1.38.
+# The design effect is 1.38 so our crude sample size estimate needs to be increased by a factor of 1.38.
 
 n.adj <- ceiling(n.crude * D)
 n.adj

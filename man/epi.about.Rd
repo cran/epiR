@@ -13,7 +13,7 @@ epi.about()
 }
 
 \details{
-More information about the \code{epiR} package can be found at \url{https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne} and  \url{https://www.ausvet.com.au/}.
+More information about the \code{epiR} package can be found at \code{https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne} and  \code{https://www.ausvet.com.au/}.
 }
 
 \section{FUNCTIONS AND DATASETS}{
@@ -258,6 +258,9 @@ Telmo Nunes, UISEE/DETSA, Faculdade de Medicina Veterinaria --- UTL, Rua Prof. C
 Javier Sanchez, Atlantic Veterinary College, University of Prince Edward Island, Charlottetown Prince Edward Island, C1A 4P3, Canada.
 
 Ron Thornton, Ministry for Primary Industries New Zealand, PO Box 2526 Wellington, New Zealand.
+
+With contributions from: Cord Heuer, Jonathon Marshall, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Yoshida Kazuki, Geoff Jones, Sarah Pirikahu, Ryan Kyle, Johann Popp, Methew Jay, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
+
 }
 
 \keyword{univar}

@@ -1,8 +1,30 @@
 Package: epiR
-Version: 2.0.61
-Date: 2023-05-18
+Version: 2.0.62
+Date: 2023-07-01
 Title: Tools for the Analysis of Epidemiological Data
-Author: Mark Stevenson <mark.stevenson1@unimelb.edu.au>, Evan Sergeant <evansergeant@gmail.com>, Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay, Charles Reynard, Allison Cheung, Nagendra Singanallur, Aniko Szabo and Ahmad Rabiee.
+Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
+   person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
+   person(given = "Cord", family = "Heuer", role = "ctb"),
+   person(given = "Telmo", family = "Nunes", role = "ctb"),
+   person(given = "Cord", family = "Heuer", role = "ctb"),
+   person(given = "Jonathon", family = "Marshall", role = "ctb"),
+   person(given = "Javier", family = "Sanchez", role = "ctb"),
+   person(given = "Ron", family = "Thornton", role = "ctb"),
+   person(given = "Jeno", family = "Reiczigel", role = "ctb"),
+   person(given = "Jim", family = "Robison-Cox", role = "ctb"),
+   person(given = "Paola", family = "Sebastiani", role = "ctb"),
+   person(given = "Peter", family = "Solymos", role = "ctb"),
+   person(given = "Kazuki", family = "Yoshida", role = "ctb"),
+   person(given = "Geoff", family = "Jones", role = "ctb"),
+   person(given = "Sarah", family = "Pirikahu", role = "ctb"),
+   person(given = "Simon", family = "Firestone", role = "ctb"),
+   person(given = "Ryan", family = "Kyle", role = "ctb"),
+   person(given = "Johann", family = "Popp", role = "ctb"),
+   person(given = "Mathew", family = "Jay", role = "ctb"),
+   person(given = "Allison", family = "Cheung", role = "ctb"),
+   person(given = "Nagendra", family = "Singanallur", role = "ctb"),
+   person(given = "Aniko", family = "Szabo", role = "ctb"),
+   person(given = "Ahmad", "family = Rabiee", role = "ctb"))
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
@@ -13,10 +35,33 @@ Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
         spData, tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2023-05-18 05:37:38 UTC; mstev
+Packaged: 2023-07-01 03:21:54 UTC; mstev
 URL:
         https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 RoxygenNote: 7.1.0
 NeedsCompilation: no
+Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
+  Evan Sergeant [aut],
+  Cord Heuer [ctb],
+  Telmo Nunes [ctb],
+  Cord Heuer [ctb],
+  Jonathon Marshall [ctb],
+  Javier Sanchez [ctb],
+  Ron Thornton [ctb],
+  Jeno Reiczigel [ctb],
+  Jim Robison-Cox [ctb],
+  Paola Sebastiani [ctb],
+  Peter Solymos [ctb],
+  Kazuki Yoshida [ctb],
+  Geoff Jones [ctb],
+  Sarah Pirikahu [ctb],
+  Simon Firestone [ctb],
+  Ryan Kyle [ctb],
+  Johann Popp [ctb],
+  Mathew Jay [ctb],
+  Allison Cheung [ctb],
+  Nagendra Singanallur [ctb],
+  Aniko Szabo [ctb],
+  Ahmad family = Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2023-05-18 09:40:02 UTC
+Date/Publication: 2023-07-01 07:20:17 UTC

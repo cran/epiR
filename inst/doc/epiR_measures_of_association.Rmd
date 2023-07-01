@@ -23,13 +23,13 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 A common task in epidemiology is to quantify the strength of association between exposures ('risk factors') and disease outcomes. In this context the term 'exposure' is taken to mean a variable whose association with the outcome is to be estimated. 
 
-Exposures can be harmful, beneficial or both harmful and beneficial (e.g., if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term 'outcome' is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions [@porta:2014]. In human and animal health an 'outcome-positive' individual is an individual who has experienced a given disease of interest. 
+Exposures can be harmful, beneficial or both harmful and beneficial (e.g., if an immunisable disease is circulating, exposure to immunising agents helps most recipients but may harm those who experience adverse reactions). The term 'outcome' is used to describe all the possible results that may arise from exposure to a causal factor or from preventive or therapeutic interventions [@porta:2014]. In human and animal health an 'outcome-positive' individual is usually an individual who has experienced a given disease of interest. 
 
 In this vignette we outline describe how `epiR` can be used to compute the various measures of association used in epidemiology notably the risk ratio, odds ratio, attributable risk in the exposed, attributable fraction in the exposed, attributable risk in the population and attributable fraction in the population. Examples are provided to demonstrate how the package can be used to deal with exposure-outcome data presented in various formats.  
 
 This vignette has been written assuming the reader routinely formats their 2 $\times$ 2 table data with the outcome status as columns and exposure status as rows. If this is not the case the argument `outcome = "as.columns"` (the default) can be changed to `outcome = "as.rows"`.
 
-The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the measures of association functions in `epiR` using a smart phone.
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the measures of association functions in `epiR` using a smart phone.
 
 **Measures of association strength**
 
@@ -217,7 +217,7 @@ dat.v01 <- c(13,2163,5,3349); dat.v01
 matrix(dat.v01, nrow = 2, byrow = TRUE)
 ```
 
-Calculate the prevalence ratio, odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function `epi.2by2`. Note that we use the term prevalence ratio (instead of incidence risk ratio) here because we're dealing with data from a cross-sectional study --- the frequency of disease is expressed as a prevalence, not an incidence. 
+Calculate the prevalence ratio, odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function `epi.2by2`. Note that we use the term prevalence risk ratio and prevalence odds ratio (instead of incidence risk ratio and incidence odds ratio) because we're dealing with data from a cross-sectional study --- the frequency of disease is expressed as a prevalence, not an incidence. 
 
 ```{r, message = FALSE}
 library(epiR)
@@ -226,7 +226,7 @@ epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 1
    interpret = FALSE, outcome = "as.columns")
 ```
 
-The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats. In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were  attributable to DCF (95% CI 4% to 78%).
+The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats. In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were attributable to DCF (95% CI 4% to 78%).
 
 Need a hand getting the correct wording to explain each of the listed measures of association and measures of effect? Set `interpret = TRUE` in `epi.2by2`:
 
@@ -251,7 +251,7 @@ dat.df02 <- birthwt; head(dat.df02)
 ```
 Each row of this data set represents data for one mother. We're interested in the association between `smoke` (the mother's smoking status during pregnancy) and `low` (delivery of a baby less than 2.5 kg bodyweight). 
 
-Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the wrong format:
+Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the incorrect format:
 
 ```{r, message = FALSE}
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
@@ -422,7 +422,7 @@ dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count",
 dat.epi05
 ```
 
-The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are not significantly different the Mantel-Haenszel adjusted odds ratio provides an appropriate summary of the association between smoking and low birth weight.
+The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are not statistically significantly different the Mantel-Haenszel adjusted odds ratio provides an appropriate summary of the association between smoking and low birth weight.
 
 After accounting for the confounding effect of race, the odds of having a low birth weight baby for smokers was 3.09 (95% CI 1.49 to 6.39) times that of non-smokers.
 

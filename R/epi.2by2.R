@@ -1506,13 +1506,13 @@
   ## Cohort count single strata:
     
   # RR interpretation:
-  cohort.count.ss.rr = paste("The outcome risk among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome risk among the unexposed.", sep = "")
+  cohort.count.ss.rr = paste("The outcome incidence risk among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome incidence risk among the unexposed.", sep = "")
   
   # OR interpretation:
-  cohort.count.ss.or = paste("The outcome odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2),") times ", directn.sor, " than the outcome odds among the unexposed.", sep = "")
+  cohort.count.ss.or = paste("The outcome incidence odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2),") times ", directn.sor, " than the outcome incidence odds among the unexposed.", sep = "")
   
   # AR interpretation:
-  cohort.count.ss.ar = paste("Exposure changed outcome risk in the exposed by ", round(res$ARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.strata.wald[2], digits = 2)," to ", round(res$ARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ss.ar = paste("Exposure changed the outcome incidence risk in the exposed by ", round(res$ARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.strata.wald[2], digits = 2)," to ", round(res$ARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # NNT and NNH --- from Altman (1998):
   nnss <- NA
@@ -1535,7 +1535,7 @@
   cohort.count.ss.af = paste(round(res$AFRisk.strata.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRisk.strata.wald[2] * 100, digits = 1), "% to ", round(res$AFRisk.strata.wald[3] * 100, digits = 1), "%).", sep = "")
   
   # PAR interpretation:
-  cohort.count.ss.par = paste("Exposure changed outcome risk in the population by ", round(res$PARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARisk.strata.wald[2], digits = 2)," to ", round(res$PARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ss.par = paste("Exposure changed the outcome incidence risk in the population by ", round(res$PARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARisk.strata.wald[2], digits = 2)," to ", round(res$PARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # PAF interpretation:
   cohort.count.ss.paf = paste(round(res$PAFRisk.strata.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRisk.strata.wald[2] * 100, digits = 1),"% to ", round(res$PAFRisk.strata.wald[3] * 100, digits = 1), "%).", sep = "")
@@ -1545,22 +1545,22 @@
   ## Cohort count multiple strata:
   
   # Crude RR interpretation:
-  cohort.count.ms.crr = paste("If we don't account for confounding the outcome risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.crr, " than the outcome risk among the unexposed.", sep = "")
+  cohort.count.ms.crr = paste("If we don't account for confounding the outcome incidence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.crr, " than the outcome incidence risk among the unexposed.", sep = "")
   
   # M-H RR interpretation:
-  cohort.count.ms.mrr = paste("After accounting for confounding the outcome risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mrr, " than the outcome risk among the unexposed.", sep = "")
+  cohort.count.ms.mrr = paste("After accounting for confounding the outcome incidence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mrr, " than the outcome incidence risk among the unexposed.", sep = "")
   
   # Crude OR interpretation:
-  cohort.count.ms.cor = paste("If we don't account for confounding the outcome odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor,  " than the outcome odds among the unexposed. ", sep = "")
+  cohort.count.ms.cor = paste("If we don't account for confounding the outcome incidence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor,  " than the outcome incidence odds among the unexposed. ", sep = "")
   
   # M-H OR interpretation:
-  cohort.count.ms.mor = paste("After accounting for confounding the outcome odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the outcome odds among the unexposed.", sep = "")
+  cohort.count.ms.mor = paste("After accounting for confounding the outcome incidence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the outcome incidence odds among the unexposed.", sep = "")
   
   # Crude AR interpretation:
-  cohort.count.ms.car = paste("If we don't account for confounding exposure changed outcome risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ms.car = paste("If we don't account for confounding exposure changed outcome incidence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # M-H AR interpretation:
-  cohort.count.ms.mar = paste("After accounting for confounding exposure changed outcome risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ms.mar = paste("After accounting for confounding exposure changed outcome incidence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
 
   # NNTB - NNTH interpretation - multiple strata, crude:
   nnmsc <- NA
@@ -1603,16 +1603,16 @@
   ## Cohort time single strata:
   
   # RR interpretation:
-  cohort.time.ss.rr = paste("The outcome rate among the exposed was ", round(res$IRR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.strata.wald[2], digits = 2)," to ", round(res$IRR.strata.wald[3], digits = 2), ") times ", directn.sirr, " than the outcome rate among the unexposed.", sep = "")
+  cohort.time.ss.rr = paste("The outcome incidence rate among the exposed was ", round(res$IRR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.strata.wald[2], digits = 2)," to ", round(res$IRR.strata.wald[3], digits = 2), ") times ", directn.sirr, " than the outcome incidence rate among the unexposed.", sep = "")
   
   # AR interpretation:
-  cohort.time.ss.ar = paste("Exposure changed the outcome rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cohort.time.ss.ar = paste("Exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   # AF interpretation:
   cohort.time.ss.af = paste(round(res$AFRate.crude.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRate.crude.wald[2] * 100, digits = 1), "% to ", round(res$AFRate.crude.wald[3] * 100, digits = 1), "%).", sep = "")
   
   # PAR interpretation:
-  cohort.time.ss.par = paste("Exposure changed the outcome rate in the population by ", round(res$PARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.crude.wald[2], digits = 2)," to ", round(res$PARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cohort.time.ss.par = paste("Exposure changed the outcome incidence rate in the population by ", round(res$PARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.crude.wald[2], digits = 2)," to ", round(res$PARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   # PAF interpretation:
   cohort.time.ss.paf = paste(round(res$PAFRate.crude.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRate.crude.wald[2] * 100, digits = 1),"% to ", round(res$PAFRate.crude.wald[3] * 100, digits = 1), "%).", sep = "")
@@ -1622,16 +1622,16 @@
   ## Cohort time multiple strata:
   
   # Crude RR interpretation:
-  cohort.time.ms.crr = paste("If we don't account for confounding the outcome rate among the exposed was ", round(res$IRR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.cirr, "    than the outcome rate among the unexposed. ", sep = "")
+  cohort.time.ms.crr = paste("If we don't account for confounding the outcome incidence rate among the exposed was ", round(res$IRR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.cirr, "    than the outcome rate among the unexposed. ", sep = "")
   
   # M-H RR interpretation:
-  cohort.time.ms.mrr = paste("After accounting for confounding the outcome rate among the exposed was ", round(res$IRR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mirr, " than the outcome rate among the unexposed.", sep = "")
+  cohort.time.ms.mrr = paste("After accounting for confounding the outcome incidence rate among the exposed was ", round(res$IRR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mirr, " than the outcome rate among the unexposed.", sep = "")
   
   # Crude AR interpretation:
-  cohort.time.ms.car = paste("If we don't account for confounding exposure changed the outcome rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ". ", sep = "")
+  cohort.time.ms.car = paste("If we don't account for confounding exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ". ", sep = "")
   
   # M-H AR interpretation:
-  cohort.time.ms.mar = paste("After accounting for confounding exposure changed the outcome rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cohort.time.ms.mar = paste("After accounting for confounding exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   
   # -----------------------------------------------------------------------
@@ -1651,10 +1651,10 @@
   ## Case control multiple strata:
   
   # Crude OR interpretation:
-  case.control.ms.cor = paste("If we don't account for confounding exposure odds among cases was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor, " than the exposure odds among controls.", sep = "")
+  case.control.ms.cor = paste("If we don't account for confounding the exposure odds among cases was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor, " than the exposure odds among controls.", sep = "")
   
   # M-H OR interpretation:
-  case.control.ms.mor = paste("After accounting for confounding exposure odds among cases was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the exposure odds among controls.", sep = "")
+  case.control.ms.mor = paste("After accounting for confounding the exposure odds among cases was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the exposure odds among controls.", sep = "")
   
   # AF interpretation:
   case.control.ms.caf = paste(round(res$AFest.crude.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFest.crude.wald[2] * 100, digits = 1), "% to ", round(res$AFest.crude.wald[3] * 100, digits = 1), "%).", sep = "")
@@ -1667,13 +1667,13 @@
   ## Cross sectional single strata:
   
   # RR interpretation:
-  cross.sectional.ss.rr = paste("The outcome prevalence among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome prevalence among the unexposed.", sep = "")
+  cross.sectional.ss.rr = paste("The outcome prevalence risk among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome prevalence risk among the unexposed.", sep = "")
   
   # OR interpretation:
-  cross.sectional.ss.or = paste("The outcome odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome odds among the unexposed.", sep = "")
+  cross.sectional.ss.or = paste("The outcome prevalence odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2), ") times ", directn.srr, " than the outcome prevalence odds among the unexposed.", sep = "")
   
   # AR interpretation:
-  cross.sectional.ss.ar = paste("Exposure changed the outcome prevalence in the exposed by ", round(res$ARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.strata.wald[2], digits = 2)," to ", round(res$ARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ss.ar = paste("Exposure changed the outcome prevalence risk in the exposed by ", round(res$ARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.strata.wald[2], digits = 2)," to ", round(res$ARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # NNT and NNH --- from Altman (1998):
   nnss <- NA
@@ -1696,7 +1696,7 @@
   cross.sectional.ss.af = paste(round(res$AFRate.strata.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRate.strata.wald[2] * 100, digits = 1), "% to ", round(res$AFRate.strata.wald[3] * 100, digits = 1), "%).", sep = "")
   
   # PAR interpretation:
-  cross.sectional.ss.par = paste("Exposure changed the outcome prevalence in the population by ", round(res$PARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.strata.wald[2], digits = 2)," to ", round(res$PARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ss.par = paste("Exposure changed the outcome prevalence risk in the population by ", round(res$PARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.strata.wald[2], digits = 2)," to ", round(res$PARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # PAF interpretation:
   cross.sectional.ss.paf = paste(round(res$PAFRate.strata.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRate.strata.wald[2] * 100, digits = 1),"% to ", round(res$PAFRate.strata.wald[3] * 100, digits = 1), "%).", sep = "")
@@ -1706,22 +1706,22 @@
   ## Cross sectional multiple strata:       
   
   # Crude RR interpretation:
-  cross.sectional.ms.crr = paste("If we don't account for confounding the outcome prevalence among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.crr, " than the outcome prevalence among the unexposed.", sep = "")
+  cross.sectional.ms.crr = paste("If we don't account for confounding the outcome prevalence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times ", directn.crr, " than the outcome prevalence risk among the unexposed.", sep = "")
   
   # M-H RR interpretation:
-  cross.sectional.ms.mrr = paste("After accounting for confounding outcome prevalence among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mrr, " than the outcome prevalence among the unexposed.", sep = "")
+  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times ", directn.mrr, " than the outcome prevalence among the unexposed.", sep = "")
   
   # Crude OR interpretation:
-  cross.sectional.ms.cor = paste("If we don't account for confounding the outcome odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor, " than the outcome prevalence among the unexposed.", sep = "")
+  cross.sectional.ms.cor = paste("If we don't account for confounding the outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times ", directn.cor, " than the outcome prevalence odds among the unexposed.", sep = "")
   
   # M-H OR interpretation:
-  cross.sectional.ms.mor = paste("After accounting for confounding the outcome odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the outcome odds among the unexposed.", sep = "")
+  cross.sectional.ms.mor = paste("After accounting for confounding the outcome prevalence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times ", directn.mor, " than the outcome prevalence odds among the unexposed.", sep = "")
   
   # Crude AR interpretation:
-  cross.sectional.ms.car = paste("If we don't account for confounding exposure changed the outcome prevalence in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cross.sectional.ms.car = paste("If we don't account for confounding exposure changed the outcome prevalence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   # M-H AR interpretation:
-  cross.sectional.ms.mar = paste("After accounting for confounding exposure changed the outcome prevalence in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ms.mar = paste("After accounting for confounding exposure changed the outcome prevalence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # NNTB - NNTH - multiple strata, crude:
   nnmsc <- NA
@@ -1849,7 +1849,7 @@ interp.txt <- list(
       chi2.correction    = res$chi2.correction)
     
     massoc.summary <- data.frame(
-       var = c("Inc risk ratio", "Odds ratio", "Attrib risk *", "Attrib fraction in exposed (%)", "Attrib risk in population *", "Attrib fraction in population (%)"), 
+       var = c("Inc risk ratio", "Inc odds ratio", "Attrib inc risk *", "Attrib fraction in exposed (%)", "Attrib inc risk in population *", "Attrib fraction in population (%)"), 
        
        est = as.numeric(c(res$RR.strata.wald[1], res$OR.strata.wald[1], res$ARisk.strata.wald[1], res$AFRisk.strata.wald[1] * 100, res$PARisk.strata.wald[1], res$PAFRisk.strata.wald[1] * 100)), 
        
@@ -1859,11 +1859,11 @@ interp.txt <- list(
     
     massoc.interp <- data.frame(
       var = c("Inc risk ratio", 
-              "Odds ratio", 
-              "Attrib risk *", 
+              "Inc odds ratio", 
+              "Attrib inc risk *", 
               "NNTB NNTH", 
               "Attrib fraction in exposed (%)", 
-              "Attrib risk in population *", 
+              "Attrib inc risk in population *", 
               "Attrib fraction in population (%)"),
       
       text = c(interp.txt$cohort.count.ss.rr, 
@@ -1983,7 +1983,7 @@ interp.txt <- list(
       bOR.homog          = res$bOR.homog)
 
     massoc.summary <- data.frame(
-      var = c("Inc risk ratio (crude)", "Inc risk ratio (M-H)", "Inc risk ratio (crude:M-H)", "Odds ratio (crude)", "Odds ratio (M-H)", "Odds ratio (crude:M-H)", "Attrib risk (crude) *", "Attrib risk (M-H) *", "Attrib risk (crude:M-H)"), 
+      var = c("Inc risk ratio (crude)", "Inc risk ratio (M-H)", "Inc risk ratio (crude:M-H)", "Inc odds ratio (crude)", "Inc odds ratio (M-H)", "Inc odds ratio (crude:M-H)", "Attrib inc risk (crude) *", "Attrib inc risk (M-H) *", "Attrib inc risk (crude:M-H)"), 
       
       est = as.numeric(c(res$RR.crude.wald[1], res$RR.mh.wald[1], res$RR.crude.wald[1] / res$RR.mh.wald[1], res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$ARisk.crude.wald[1], res$ARisk.mh.wald[1], res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1])),
 
@@ -1995,12 +1995,12 @@ interp.txt <- list(
       var = c("Inc risk ratio (crude)", 
               "Inc risk ratio (M-H)", 
               "Inc risk ratio (crude:M-H)", 
-              "Odds ratio (crude)", 
-              "Odds ratio (M-H)", 
-              "Odds ratio (crude:M-H)", 
-              "Attrib risk (crude) *", 
-              "Attrib risk (M-H) *", 
-              "Attrib risk (crude:M-H)",
+              "Inc odds ratio (crude)", 
+              "Inc odds ratio (M-H)", 
+              "Inc odds ratio (crude:M-H)", 
+              "Attrib inc risk (crude) *", 
+              "Attrib inc risk (M-H) *", 
+              "Attrib inc risk (crude:M-H)",
               "NNTB NNTH (crude)",
               "NNTB NNTH (M-H)"), 
       
@@ -2074,7 +2074,7 @@ interp.txt <- list(
       chi2.correction    = res$chi2.correction)
     
     massoc.summary <- data.frame(
-       var = c("Inc rate ratio", "Attrib rate *", "Attrib rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"), 
+       var = c("Inc rate ratio", "Attrib inc rate *", "Attrib inc rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"), 
        
        est = as.numeric(c(res$IRR.strata.wald[1], res$ARate.strata.wald[1], res$PARate.strata.wald[1], res$AFRate.strata.wald[1] * 100, res$PAFRate.strata.wald[1] * 100)), 
        
@@ -2083,7 +2083,7 @@ interp.txt <- list(
        upper = as.numeric(c(res$IRR.strata.wald[3], res$ARate.strata.wald[3], res$PARate.strata.wald[3], res$AFRate.strata.wald[3] * 100, res$PAFRate.strata.wald[3] * 100)))
     
     massoc.interp <- data.frame(
-      var = c("Inc rate ratio", "Attrib rate *", "Attrib rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"),
+      var = c("Inc rate ratio", "Attrib inc rate *", "Attrib inc rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"),
       
       text = c(interp.txt$cohort.time.ss.rr, interp.txt$cohort.time.ss.ar, interp.txt$cohort.time.ss.af, interp.txt$cohort.time.ss.par, interp.txt$cohort.time.ss.paf))
     
@@ -2160,7 +2160,7 @@ interp.txt <- list(
       chi2.mh            = res$chi2.mh)
     
     massoc.summary <- data.frame(
-      var = c("Inc rate ratio (crude)", "Inc rate ratio (M-H)", "Inc rate ratio (crude:M-H)", "Attrib rate (crude) *", "Attrib rate (M-H) *", "Attrib rate (crude:M-H)"), 
+      var = c("Inc rate ratio (crude)", "Inc rate ratio (M-H)", "Inc rate ratio (crude:M-H)", "Attrib inc rate (crude) *", "Attrib inc rate (M-H) *", "Attrib inc rate (crude:M-H)"), 
       
       est = as.numeric(c(res$IRR.crude.wald[1], res$IRR.mh.wald[1], res$IRR.crude.wald[1] / res$IRR.mh.wald[1], res$ARate.crude.wald[1], res$ARate.mh.wald[1], res$ARate.crude.wald[1] / res$ARate.mh.wald[1])), 
       
@@ -2169,7 +2169,7 @@ interp.txt <- list(
       upper = as.numeric(c(res$IRR.crude.wald[3], res$IRR.mh.wald[3], NA, res$ARate.crude.wald[3], res$ARate.mh.wald[3], NA)))
     
     massoc.interp <- data.frame(
-      var = c("Inc rate ratio (crude)", "Inc rate ratio (M-H)", "Inc rate ratio (crude:M-H)", "Attrib rate (crude) *", "Attrib rate (M-H) *", "Attrib rate (crude:M-H)"), 
+      var = c("Inc rate ratio (crude)", "Inc rate ratio (M-H)", "Inc rate ratio (crude:M-H)", "Attrib inc rate (crude) *", "Attrib inc rate (M-H) *", "Attrib inc rate (crude:M-H)"), 
       
       text = c(interp.txt$cohort.time.ms.crr, interp.txt$cohort.time.ms.mrr, NA, interp.txt$cohort.time.ms.car, interp.txt$cohort.time.ms.mar, NA))
     
@@ -2230,7 +2230,7 @@ interp.txt <- list(
       chi2.correction    = res$chi2.correction)
     
     massoc.summary <- data.frame(
-      var = c("Odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
+      var = c("Exposure odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
       
       est = as.numeric(c(res$OR.strata.wald[1], res$AFest.strata.wald[1] * 100, res$PAFest.strata.wald[1] * 100)), 
       
@@ -2239,7 +2239,7 @@ interp.txt <- list(
       upper = as.numeric(c(res$OR.strata.wald[3], res$AFest.strata.wald[3] * 100, res$PAFest.strata.wald[3] * 100)))
     
     massoc.interp <- data.frame(
-      var = c("Odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
+      var = c("Exposures odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
       
       text = c(interp.txt$case.control.ss.or, interp.txt$case.control.ss.af, interp.txt$case.control.ss.paf))
     
@@ -2319,7 +2319,7 @@ interp.txt <- list(
       OR.homog.brday      = res$bOR.homog)
     
     massoc.summary <- data.frame(
-      var = c("Odds ratio (crude)", "Odds ratio (M-H)", "Odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
+      var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
       
       est = as.numeric(c(res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$AFest.crude.wald[1], res$PAFest.crude.wald[1])), 
       
@@ -2328,7 +2328,7 @@ interp.txt <- list(
       upper = as.numeric(c(res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$AFest.crude.wald[3], res$PAFest.crude.wald[3])))
     
     massoc.interp <- data.frame(
-      var = c("Odds ratio (crude)", "Odds ratio (M-H)", "Odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
+      var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
       
       text = c(interp.txt$case.control.ms.cor, interp.txt$case.control.ms.mor, NA, interp.txt$case.control.ms.caf, interp.txt$case.control.ms.cpaf))
     
@@ -2350,7 +2350,7 @@ interp.txt <- list(
               format(round(cOpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cOpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds *")
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2404,7 +2404,7 @@ interp.txt <- list(
       chi2.correction     = res$chi2.correction)
     
     massoc.summary <- data.frame(
-      var = c("Prevalence ratio", "Odds ratio", "Attrib prevalence *", "Attrib fraction in exposed (%)", "Attrib prevalence in population *", "Attrib fraction in population (%)"), 
+      var = c("Prev risk ratio", "Prev odds ratio", "Attrib prev *", "Attrib fraction in exposed (%)", "Attrib prev in population *", "Attrib fraction in population (%)"), 
       
       est = as.numeric(c(res$RR.strata.wald[1], res$OR.strata.wald[1], res$ARisk.strata.wald[1], res$AFRisk.strata.wald[1] * 100, res$PARisk.strata.wald[1], res$PAFRisk.strata.wald[1] * 100)), 
       
@@ -2413,12 +2413,12 @@ interp.txt <- list(
       upper = as.numeric(c(res$RR.strata.wald[3], res$OR.strata.wald[3], res$ARisk.strata.wald[3], res$AFRisk.strata.wald[3] * 100, res$PARisk.strata.wald[3], res$PAFRisk.strata.wald[3] * 100)))
     
     massoc.interp <- data.frame(
-      var = c("Prevalence ratio", 
-              "Odds ratio", 
-              "Attrib prevalence *", 
+      var = c("Prev risk ratio", 
+              "Prev odds ratio", 
+              "Attrib prev *", 
               "NNTB NNTH", 
               "Attrib fraction in exposed (%)", 
-              "Attrib prevalence in population *", 
+              "Attrib prev in population *", 
               "Attrib fraction in population (%)"),
       
       text = c(interp.txt$cross.sectional.ss.rr, 
@@ -2447,7 +2447,7 @@ interp.txt <- list(
               format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2537,7 +2537,7 @@ interp.txt <- list(
       OR.homog.brday      = res$bOR.homog)
     
     massoc.summary <- data.frame(
-      var = c("Prevalence ratio (crude)", "Prevalence ratio (M-H)", "Prevalence ratio (crude:M-H)", "Odds ratio (crude)", "Odds ratio (M-H)", "Odds ratio (crude:M-H)", "Attributable prevalence (crude) *", "Attributable prevalence (M-H) *", "Attributable prevalence (crude:M-H)"),  
+      var = c("Prev risk ratio (crude)", "Prev risk ratio (M-H)", "Prev risk ratio (crude:M-H)", "Prev odds ratio (crude)", "Prev odds ratio (M-H)", "Prev odds ratio (crude:M-H)", "Attributable prev (crude) *", "Attributable prev (M-H) *", "Attributable prev (crude:M-H)"),  
       
       est = as.numeric(c(res$RR.crude.wald[1], res$RR.mh.wald[1], res$RR.crude.wald[1] / res$RR.mh.wald[1], res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$ARisk.crude.wald[1], res$ARisk.mh.wald[1], res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1])),
       
@@ -2546,15 +2546,15 @@ interp.txt <- list(
       upper = as.numeric(c(res$RR.crude.wald[3], res$RR.mh.wald[3], NA, res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$ARisk.crude.wald[3], res$ARisk.mh.wald[3], NA)))
     
     massoc.interp <- data.frame(
-      var = c("Inc risk ratio (crude)", 
-              "Inc risk ratio (M-H)", 
-              "Inc risk ratio (crude:M-H)", 
-              "Odds ratio (crude)", 
-              "Odds ratio (M-H)", 
-              "Odds ratio (crude:M-H)", 
-              "Attrib risk (crude) *", 
-              "Attrib risk (M-H) *", 
-              "Attrib risk (crude:M-H)",
+      var = c("Prev risk ratio (crude)", 
+              "Prev risk ratio (M-H)", 
+              "Prev risk ratio (crude:M-H)", 
+              "Prev odds ratio (crude)", 
+              "Prev odds ratio (M-H)", 
+              "Prev odds ratio (crude:M-H)", 
+              "Attrib prev (crude) *", 
+              "Attrib prev (M-H) *", 
+              "Attrib prev (crude:M-H)",
               "NNTB NNTH (crude)",
               "NNTB NNTH (M-H)"), 
       
@@ -2588,7 +2588,7 @@ interp.txt <- list(
               format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prevalence *")
+      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2633,7 +2633,7 @@ print.epi.2by2 <- function(x, ...) {
     
     if(x$digits == 2){
       tirr  <- "\nInc risk ratio                                 %.2f (%.2f, %.2f)"
-      tor   <- "\nOdds ratio                                     %.2f (%.2f, %.2f)"
+      tor   <- "\nInc odds ratio                                 %.2f (%.2f, %.2f)"
       tar   <- "\nAttrib risk in the exposed *                   %.2f (%.2f, %.2f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)"
       tpar  <- "\nAttrib risk in the population *                %.2f (%.2f, %.2f)"
@@ -2642,7 +2642,7 @@ print.epi.2by2 <- function(x, ...) {
     
     else if(x$digits == 3){
       tirr  <- "\nInc risk ratio                                 %.3f (%.3f, %.3f)"
-      tor   <- "\nOdds ratio                                     %.3f (%.3f, %.3f)"
+      tor   <- "\nInc odds ratio                                 %.3f (%.3f, %.3f)"
       tar   <- "\nAttrib risk in the exposed *                   %.3f (%.3f, %.3f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.3f (%.3f, %.3f)"
       tpar  <- "\nAttrib risk in the population *                %.3f (%.3f, %.3f)"
@@ -2651,7 +2651,7 @@ print.epi.2by2 <- function(x, ...) {
     
     else if(x$digits == 4){
       tirr  <- "\nInc risk ratio                                 %.4f (%.4f, %.4f)"
-      tor   <- "\nOdds ratio                                     %.4f (%.4f, %.4f)"
+      tor   <- "\nInc odds ratio                                 %.4f (%.4f, %.4f)"
       tar   <- "\nAttrib risk in the exposed *                   %.4f (%.4f, %.4f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.4f (%.4f, %.4f)"
       tpar  <- "\nAttrib risk in the population *                %.4f (%.4f, %.4f)"
@@ -2751,9 +2751,9 @@ print.epi.2by2 <- function(x, ...) {
         tirrm   <- "\nInc risk ratio (M-H)                           %.2f (%.2f, %.2f)"
         tirrcm  <- "\nInc risk ratio (crude:M-H)                     %.2f"
         
-        torc    <- "\nOdds ratio (crude)                             %.2f (%.2f, %.2f)"
-        torm    <- "\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)"
-        torcm   <- "\nOdds ratio (crude:M-H)                         %.2f"
+        torc    <- "\nInc odds ratio (crude)                         %.2f (%.2f, %.2f)"
+        torm    <- "\nInc odds ratio (M-H)                           %.2f (%.2f, %.2f)"
+        torcm   <- "\nInc odds ratio (crude:M-H)                     %.2f"
         
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.2f (%.2f, %.2f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.2f (%.2f, %.2f)"
@@ -2765,9 +2765,9 @@ print.epi.2by2 <- function(x, ...) {
         tirrm   <- "\nInc risk ratio (M-H)                           %.3f (%.3f, %.3f)"
         tirrcm  <- "\nInc risk ratio (crude:M-H)                     %.3f"
         
-        torc    <- "\nOdds ratio (crude)                             %.3f (%.3f, %.3f)"
-        torm    <- "\nOdds ratio (M-H)                               %.3f (%.3f, %.3f)"
-        torcm   <- "\nOdds ratio (crude:M-H)                         %.3f"
+        torc    <- "\nInc Odds ratio (crude)                         %.3f (%.3f, %.3f)"
+        torm    <- "\nInc Odds ratio (M-H)                           %.3f (%.3f, %.3f)"
+        torcm   <- "\nInc Odds ratio (crude:M-H)                     %.3f"
         
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.3f (%.3f, %.3f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.3f (%.3f, %.3f)"
@@ -2779,9 +2779,9 @@ print.epi.2by2 <- function(x, ...) {
         tirrm   <- "\nInc risk ratio (M-H)                           %.4f (%.4f, %.4f)"
         tirrcm  <- "\nInc risk ratio (crude:M-H)                     %.4f"
         
-        torc    <- "\nOdds ratio (crude)                             %.4f (%.4f, %.4f)"
-        torm    <- "\nOdds ratio (M-H)                               %.4f (%.4f, %.4f)"
-        torcm   <- "\nOdds ratio (crude:M-H)                         %.4f"
+        torc    <- "\nInc odds ratio (crude)                         %.4f (%.4f, %.4f)"
+        torm    <- "\nInc odds ratio (M-H)                           %.4f (%.4f, %.4f)"
+        torcm   <- "\nInc odds ratio (crude:M-H)                     %.4f"
         
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.4f (%.4f, %.4f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.4f (%.4f, %.4f)"
@@ -3043,19 +3043,19 @@ print.epi.2by2 <- function(x, ...) {
   if(x$method == "case.control" & x$n.strata == 1){
     
     if(x$digits == 2){
-      tor   <- "\nOdds ratio                                     %.2f (%.2f, %.2f)"
+      tor   <- "\nExposure odds ratio                            %.2f (%.2f, %.2f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
-      tor   <- "\nOdds ratio                                     %.3f (%.3f, %.3f)"
+      tor   <- "\nExposure odds ratio                            %.3f (%.3f, %.3f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.3f (%.3f, %.3f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
-      tor   <- "\nOdds ratio                                     %.4f (%.4f, %.4f)"
+      tor   <- "\nExposure ratio                                 %.4f (%.4f, %.4f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.4f (%.4f, %.4f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.4f (%.4f, %.4f)"
     }
@@ -3120,27 +3120,27 @@ print.epi.2by2 <- function(x, ...) {
   if(x$method == "case.control" & x$n.strata > 1){
     
     if(x$digits == 2){
-      torc    <- "\nOdds ratio (crude)                             %.2f (%.2f, %.2f)"
-      torm    <- "\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.2f"
+      torc    <- "\nExposure odds ratio (crude)                    %.2f (%.2f, %.2f)"
+      torm    <- "\nExposure odds ratio (M-H)                      %.2f (%.2f, %.2f)"
+      torcm   <- "\nExposure odds ratio (crude:M-H)                %.2f"
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
-      torc    <- "\nOdds ratio (crude)                             %.3f (%.3f, %.3f)"
-      torm    <- "\nOdds ratio (M-H)                               %.3f (%.3f, %.3f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.3f"
+      torc    <- "\nExposure odds ratio (crude)                    %.3f (%.3f, %.3f)"
+      torm    <- "\nExposure odds ratio (M-H)                      %.3f (%.3f, %.3f)"
+      torcm   <- "\nExposure odds ratio (crude:M-H)                %.3f"
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.3f (%.3f, %.3f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
-      torc    <- "\nOdds ratio (crude)                             %.4f (%.4f, %.4f)"
-      torm    <- "\nOdds ratio (M-H)                               %.4f (%.4f, %.4f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.4f"
+      torc    <- "\nExposure odds ratio (crude)                    %.4f (%.4f, %.4f)"
+      torm    <- "\nExposure odds ratio (M-H)                      %.4f (%.4f, %.4f)"
+      torcm   <- "\nExposure odds ratio (crude:M-H)                %.4f"
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.4f (%.4f, %.4f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.4f (%.4f, %.4f)"
@@ -3214,29 +3214,29 @@ print.epi.2by2 <- function(x, ...) {
   if(x$method == "cross.sectional" & x$n.strata == 1){
     
     if(x$digits == 2){
-      tpr   <- "\nPrevalence ratio                               %.2f (%.2f, %.2f)"
-      tor   <- "\nOdds ratio                                     %.2f (%.2f, %.2f)"
-      tap   <- "\nAttrib prevalence in the exposed *             %.2f (%.2f, %.2f)"
+      tpr   <- "\nPrev risk ratio                                %.2f (%.2f, %.2f)"
+      tor   <- "\nPrev odds ratio                                %.2f (%.2f, %.2f)"
+      tap   <- "\nAttrib prev in the exposed *                   %.2f (%.2f, %.2f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)"
-      tpap  <- "\nAttrib prevalence in the population *          %.2f (%.2f, %.2f)"
+      tpap  <- "\nAttrib prev in the population *                %.2f (%.2f, %.2f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
-      tpr   <- "\nPrevalence ratio                               %.3f (%.3f, %.3f)"
-      tor   <- "\nOdds ratio                                     %.3f (%.3f, %.3f)"
-      tap   <- "\nAttrib prevalence in the exposed *             %.3f (%.3f, %.3f)"
+      tpr   <- "\nPrev risk ratio                                %.3f (%.3f, %.3f)"
+      tor   <- "\nPrev odds ratio                                %.3f (%.3f, %.3f)"
+      tap   <- "\nAttrib prev in the exposed *                   %.3f (%.3f, %.3f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.3f (%.3f, %.3f)"
-      tpap  <- "\nAttrib prevalence in the population *          %.3f (%.3f, %.3f)"
+      tpap  <- "\nAttrib prev in the population *                %.3f (%.3f, %.3f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
-      tpr   <- "\nPrevalence ratio                               %.4f (%.4f, %.4f)"
-      tor   <- "\nOdds ratio                                     %.4f (%.4f, %.4f)"
-      tap   <- "\nAttrib prevalence in the exposed *             %.4f (%.4f, %.4f)"
+      tpr   <- "\nPrev risk ratio                                %.4f (%.4f, %.4f)"
+      tor   <- "\nPrev odds ratio                                %.4f (%.4f, %.4f)"
+      tap   <- "\nAttrib prev in the exposed *                   %.4f (%.4f, %.4f)"
       taf   <- "\nAttrib fraction in the exposed (%%)            %.4f (%.4f, %.4f)"
-      tpap  <- "\nAttrib prevalence in the population *          %.4f (%.4f, %.4f)"
+      tpap  <- "\nAttrib prev in the population *                %.4f (%.4f, %.4f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.4f (%.4f, %.4f)"
     }
     
@@ -3322,45 +3322,45 @@ print.epi.2by2 <- function(x, ...) {
   if(x$method == "cross.sectional" & x$n.strata > 1){
     
     if(x$digits == 2){
-      tprc    <- "\nPrevalence ratio (crude)                       %.2f (%.2f, %.2f)"
-      tprm    <- "\nPrevalence ratio (M-H)                         %.2f (%.2f, %.2f)"
-      tprcm  <-  "\nInc risk ratio (crude:M-H)                     %.2f"
+      tprc    <- "\nPrev risk ratio (crude)                        %.2f (%.2f, %.2f)"
+      tprm    <- "\nPrev risk ratio (M-H)                          %.2f (%.2f, %.2f)"
+      tprcm  <-  "\nPrev risk ratio (crude:M-H)                    %.2f"
       
-      torc    <- "\nOdds ratio (crude)                             %.2f (%.2f, %.2f)"
-      torm    <- "\nOdds ratio (M-H)                               %.2f (%.2f, %.2f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.2f"
+      torc    <- "\nPrev odds ratio (crude)                        %.2f (%.2f, %.2f)"
+      torm    <- "\nPrev odds ratio (M-H)                          %.2f (%.2f, %.2f)"
+      torcm   <- "\nPrev odds ratio (crude:M-H)                    %.2f"
       
-      tapc    <- "\nAtributable prevalence in the exposed (crude) *%.2f (%.2f, %.2f)"
-      tapm    <- "\nAtributable prevalence in the exposed (M-H) *  %.2f (%.2f, %.2f)"
-      tapcm   <- "\nAtributable prevalence (crude:M-H)             %.2f"
+      tapc    <- "\nAttrib prev in the exposed (crude) *           %.2f (%.2f, %.2f)"
+      tapm    <- "\nAttrib prev in the exposed (M-H) *             %.2f (%.2f, %.2f)"
+      tapcm   <- "\nAttrib prev (crude:M-H)                        %.2f"
     }
     
     else if(x$digits == 3){
-      tprc    <- "\nPrevalence ratio (crude)                       %.3f (%.3f, %.3f)"
-      tprm    <- "\nPrevalence ratio (M-H)                         %.3f (%.3f, %.3f)"
-      tprcm  <- "\nInc risk ratio (crude:M-H)                      %.3f"
+      tprc    <- "\nPrev risk ratio (crude)                        %.3f (%.3f, %.3f)"
+      tprm    <- "\nPrev risk ratio (M-H)                          %.3f (%.3f, %.3f)"
+      tprcm   <- "\nPrev risk ratio (crude:M-H)                    %.3f"
       
-      torc    <- "\nOdds ratio (crude)                             %.3f (%.3f, %.3f)"
-      torm    <- "\nOdds ratio (M-H)                               %.3f (%.3f, %.3f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.3f"
+      torc    <- "\nPrev odds ratio (crude)                        %.3f (%.3f, %.3f)"
+      torm    <- "\nPrev odds ratio (M-H)                          %.3f (%.3f, %.3f)"
+      torcm   <- "\nPrev odds ratio (crude:M-H)                    %.3f"
       
-      tapc    <- "\nAtributable prevalence in the exposed (crude) *%.3f (%.3f, %.3f)"
-      tapm    <- "\nAtributable prevalence in the exposed (M-H) *  %.3f (%.3f, %.3f)"
-      tapcm   <- "\nAtributable prevalence (crude:M-H)             %.3f"
+      tapc    <- "\nAttrib prev in the exposed (crude) *           %.3f (%.3f, %.3f)"
+      tapm    <- "\nAttrib prev in the exposed (M-H) *             %.3f (%.3f, %.3f)"
+      tapcm   <- "\nAttrib prev (crude:M-H)                        %.3f"
     }
     
     else if(x$digits == 4){
-      tprc    <- "\nPrevalence ratio (crude)                       %.4f (%.4f, %.4f)"
-      tprm    <- "\nPrevalence ratio (M-H)                         %.4f (%.4f, %.4f)"
-      tprcm  <- "\nInc risk ratio (crude:M-H)                      %.4f"
+      tprc    <- "\nPrev risk ratio (crude)                        %.4f (%.4f, %.4f)"
+      tprm    <- "\nPrev risk ratio (M-H)                          %.4f (%.4f, %.4f)"
+      tprcm   <- "\nPrev risk ratio (crude:M-H)                    %.4f"
       
-      torc    <- "\nOdds ratio (crude)                             %.4f (%.4f, %.4f)"
-      torm    <- "\nOdds ratio (M-H)                               %.4f (%.4f, %.4f)"
-      torcm   <- "\nOdds ratio (crude:M-H)                         %.4f"
+      torc    <- "\nPrev odds ratio (crude)                        %.4f (%.4f, %.4f)"
+      torm    <- "\nPrev odds ratio (M-H)                          %.4f (%.4f, %.4f)"
+      torcm   <- "\nPrev odds ratio (crude:M-H)                    %.4f"
       
-      tapc    <- "\nAtributable prevalence in the exposed (crude) *%.4f (%.4f, %.4f)"
-      tapm    <- "\nAtributable prevalence in the exposed (M-H) *  %.4f (%.4f, %.4f)"
-      tapcm   <- "\nAtributable prevalence (crude:M-H)             %.4f"
+      tapc    <- "\nAttrib prev in the exposed (crude) *           %.4f (%.4f, %.4f)"
+      tapm    <- "\nAttrib prev in the exposed (M-H) *             %.4f (%.4f, %.4f)"
+      tapcm   <- "\nAttrib prev (crude:M-H)                        %.4f"
     }
 
     print(x$tab)
@@ -3455,7 +3455,6 @@ print.epi.2by2 <- function(x, ...) {
     }
   }
 }
-
 
 ## Summary method for object of class epi.2by2:
 summary.epi.2by2 <- function(object, ...) {

@@ -1,7 +1,18 @@
+CHANGES IN epiR VERSION 2.0.62
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Output 'Odds ratio' changed to 'Incidence odds ratio' when method == cohort.count. Output 'Odds ratio' changed to 'Prevalence odds ratio' when method == cross.sectional. 
+    [Suggested by Annette O'Connor and Victoria Brookes]
+    o Code edited to make calculations consistent for functions epi.ssclus2estc, epi.ssclus1estc and epi.sssimpleestc. 
+    [Suggested by Mark Stevenson]
+    o Example 3 for rsu.dxtests shows how to calculate diagnostic sensitivity and specificity when you have three dependent tests that are interpreted in parallel.
+    [Suggested by Cathy Kneipp]
+
+
 CHANGES IN epiR VERSION 2.0.61
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Function rsu.dxtest now includes the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between all three tests).
+    o Function rsu.dxtest modified to include the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between all three tests).
     [Suggested by Cathy Kneipp]
 
 

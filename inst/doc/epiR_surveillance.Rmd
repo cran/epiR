@@ -36,7 +36,7 @@ The Terrestrial Animal Health Code of the World Organisation of Animal Health [@
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
 
-The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides easy access to many of the surveillance functions in `epiR` using a smart phone.
+The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the surveillance functions in `epiR` using a smart phone.
 
 ## Definitions
 
@@ -62,9 +62,9 @@ The first thing to consider when you're designing or assessing a surveillance pr
 
 Once you have the method of sampling defined we move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how you might assess the surveillance system once it has been designed and implemented.
 
-In terms of design, once you've specified the sampling method you need to determine how many surveillance system units will be sampled (usually, to achieve a sufficient surveillance system sensitivity). 
+In terms of design, firstly specify the sampling method to be used and then determine how many surveillance system units will be sampled (usually, to achieve a sufficient surveillance system sensitivity). 
 
-Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: if the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: 
+Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: If the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: 
 
 1. What is the surveillance system sensitivity? or 
 
@@ -72,7 +72,7 @@ Once samples have been collected and tested or if you are making an assessment o
 
 3. What is the surveillance system's negative predictive value? 
 
-The remainder of this vignette follows this general structure. For each sampling method (representative, risk-based, census and passive) we provide notes and examples on the use of `epiR` for sample size estimation, estimation of surveillance system sensitivity and estimation of the probability of disease freedom. While 'estimation of the probability of disease freedom' is the name assigned to the last group of analyses a more correct label would be 'estimation of the probability that the prevalence of disease is less than a specified design prevalence' (i.e., the negative predictive value of the surveillance system). Be aware that we can only truly demonstrate disease freedom if every member of the population at risk is assessed using a test with perfect diagnostic sensitivity and perfect diagnostic specificity. 
+The remainder of this vignette follows the structure outlined above. For each sampling method (representative, risk-based, census and passive) we provide notes and examples on the use of `epiR` for sample size estimation, estimation of surveillance system sensitivity and estimation of the probability of disease freedom. While 'estimation of the probability of disease freedom' is the name assigned to the last group of analyses a more correct label would be 'estimation of the probability that the prevalence of disease is less than a specified design prevalence' (i.e., the negative predictive value of the surveillance system). Be aware that we can only truly demonstrate disease freedom if every member of the population at risk is assessed using a test with perfect diagnostic sensitivity and perfect diagnostic specificity. 
 
 ## Representative sampling
 
@@ -174,7 +174,7 @@ With two stage cluster sampling herds (clusters, PSUs) are sampled first and the
 
 *EXAMPLE 3*
 
-For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is thought to be relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the population level is 0.95. 
+For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is expected to be relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the population level is 0.95. 
 
 How many PSUs (herds) need to be sampled if you want to be 95% certain of detecting at least one infected herd if that the between-herd prevalence of disease is greater than or equal to 0.005?
 

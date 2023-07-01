@@ -152,34 +152,59 @@ rsu.dxtest(se = c(0.784,0.926), sp = c(0.951,0.979), covar.pos = 0.035,
 
 ## EXAMPLE 3:
 ## Three diagnostic tests for Brucella suis in dogs are available: the Rose
-## Bengal test (RBT), complement fixation (CFT) and an ELISA. The diagnostic
-## sensitivities of the three tests are 0.910, 0.907 and 0.930, respectively.
-## The diagnostic specificities of the three tests are 0.955, 0.934, and 0.927, 
-## respectively. The covariance between the CFT and ELISA test results 
-## for disease positive and disease negative groups are 0.063 and 0.042,
-## respectively. What is the expected sensitivity and specificity if all three 
-## tests are run on an individual and interpreted in parallel? Note that the 
-## covariance estimates listed account for dependence between CFT (test 2)
-## and the ELISA (test 3).  
+## Bengal test (RBT), complement fixation (CFT) and an c-ELISA. The diagnostic
+## sensitivities of the three tests are 0.869, 0.873 and 0.897, respectively.
+## The diagnostic specificities of the three tests are 0.895, 0.905, and 0.915, 
+## respectively.
 
-rsu.dxtest(se = c(0.910,0.907,0.930), sp = c(0.955,0.934,0.927), 
-   covar.pos = c(0,0,0.063,0), covar.neg = c(0,0,0.042,0), 
-   interpretation = "parallel")
+## For disease positive groups the covariance between test results are 
+## as follows:
+
+## RBT - CFT: 0.071
+## RBT - c-ELISA: 0.018
+## CFT - c-ELISA: 0.015
+## RBT - CFT - c-ELISA: -0.001
+
+covp012 <- 0.071
+covp013 <- 0.018
+covp023 <- 0.015
+covp123 <- -0.001
+covp <- c(covp012,covp013,covp023,covp123)
+
+## For disease negative groups the covariance between test results are 
+## as follows:
+
+## RBT - CFT: 0.076
+## RBT - c-ELISA: 0.062
+## CFT - c-ELISA: 0.062
+## RBT - CFT - c-ELISA: 0.049
+
+covn012 <- 0.076
+covn013 <- 0.062
+covn023 <- 0.062
+covn123 <- 0.049
+covn <- c(covn012,covn013,covn023,covn123)
+
+## What is the expected diagnostic sensitivity and specificity if all three 
+## tests are run on an individual and interpreted in parallel?
+
+rsu.dxtest(se = c(0.869,0.873,0.897), sp = c(0.895,0.905,0.915), 
+   covar.pos = covp, covar.neg = covn, interpretation = "parallel")
 
 ## Interpreting the test results in parallel and accounting for depdendence 
-## in the CFT and ELISA results returns a diagnostic sensitivity of 
-## 0.994 and a diagnostic specificity of 0.867.
+## between the three tests returns a diagnostic sensitivity of 
+## 0.991 and a diagnostic specificity of 0.873. If we didn't account for test
+## dependence our estimate of diagnostic specificity would be 0.741.
 
 ## What is the expected sensitivity and specificity if all three 
 ## tests are run on an individual and interpreted in series?
 
-rsu.dxtest(se = c(0.910,0.907,0.930), sp = c(0.955,0.934,0.927), 
-   covar.pos = c(0,0,0.063,0), covar.neg = c(0,0,0.042,0), 
-   interpretation = "series")
+rsu.dxtest(se = c(0.869,0.873,0.897), sp = c(0.895,0.905,0.915), 
+   covar.pos = covp, covar.neg = covn, interpretation = "series")
    
 ## Interpreting the test results in series and accounting for depdendence 
-## in the CFT and ELISA results returns a diagnostic sensitivity of 
-## 0.825 and a diagnostic specificity of 0.998.
+## between the three tests returns a diagnostic sensitivity of 
+## 0.774 and a diagnostic specificity of 1.000.
 
 }
 \keyword{methods}

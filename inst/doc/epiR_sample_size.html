@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Stevenson" />
 
-<meta name="date" content="2023-05-18" />
+<meta name="date" content="2023-07-01" />
 
 <title>Sample Size Calculations Using epiR</title>
 
@@ -401,13 +401,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Sample Size Calculations Using epiR</h1>
 <h4 class="author">Mark Stevenson</h4>
-<h4 class="date">2023-05-18</h4>
+<h4 class="date">2023-07-01</h4>
 
 
 
 <p>The EpiTools app for <a href="https://apps.apple.com/vn/app/epi-tools/id1611139482">iPhone</a>
 and <a href="https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools">Android</a>
-devices provides easy access to many of the sample size functions in
+devices provides access to many of the sample size functions in
 <code>epiR</code> using a smart phone.</p>
 <div id="prevalence-estimation" class="section level3">
 <h3>Prevalence estimation</h3>
@@ -457,12 +457,13 @@ sampled to meet the requirements of the study?</p>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2080</span></span></code></pre></div>
 <p>A total of 2080 subjects are required (1040 exposed and 1040
 unexposed).</p>
-<p>Important to remember that you can use the <code>epi.sscohortt</code>
-(and other sample size functions in <code>epiR</code>) to return the
-study power if a value for <code>n</code> is provided. Continuing the
-example above, imagine that only 1500 cats were enrolled into the study.
-What is the expected study power? Here we set <code>n = 1500</code> and
-<code>power = NA</code> in <code>epi.sscohortt</code>:</p>
+<p>It’s important to remember that you can use the
+<code>epi.sscohortt</code> (and other sample size functions in
+<code>epiR</code>) to return the study power if a value for
+<code>n</code> is provided. Continuing the example above, imagine that
+only 1500 cats were enrolled into the study. What is the expected study
+power? Here we set <code>n = 1500</code> and <code>power = NA</code> in
+<code>epi.sscohortt</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">epi.sscohortt</span>(<span class="at">irexp1 =</span> <span class="dv">70</span><span class="sc">/</span><span class="dv">1000</span>, <span class="at">irexp0 =</span> <span class="dv">50</span><span class="sc">/</span><span class="dv">1000</span>, <span class="at">FT =</span> <span class="dv">5</span>, <span class="at">n =</span> <span class="dv">1500</span>, <span class="at">power =</span> <span class="cn">NA</span>, <span class="at">r =</span> <span class="dv">1</span>, </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">design =</span> <span class="dv">1</span>, <span class="at">sided.test =</span> <span class="dv">2</span>, <span class="at">nfractional =</span> <span class="cn">FALSE</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)<span class="sc">$</span>power</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.6629312</span></span></code></pre></div>
@@ -488,7 +489,7 @@ pigmentation around the eyes.</p>
 relative to unexposed subjects is 2.0, we will need to enroll 141 cases
 and 141 controls (282 cattle in total) to reject the null hypothesis
 that the odds ratio equals one with probability (power) 0.80. The Type I
-error probability associated with this test of this null hypothesis is
+error probability associated with the test of this null hypothesis is
 0.05.</p>
 </div>
 <div id="non-inferiority-trial" class="section level3">
@@ -499,8 +500,8 @@ administered orally to patients with skin infections. Assume the true
 mean cure rate of the treatment is 0.85 and the true mean cure rate of
 the control is 0.65. We consider a difference of less than 0.10 in cure
 rate to be of no clinical importance (i.e., delta = 0.10). Assuming a
-one-sided test size of 5% and a power of 80% how many subjects should be
-included in the trial?</p>
+one-sided test size of 5% and a power of 80%, how many subjects should
+be included in the trial?</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">epi.ssninfb</span>(<span class="at">treat =</span> <span class="fl">0.85</span>, <span class="at">control =</span> <span class="fl">0.65</span>, <span class="at">delta =</span> <span class="fl">0.10</span>, <span class="at">n =</span> <span class="cn">NA</span>, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">r =</span> <span class="dv">1</span>, <span class="at">power =</span> <span class="fl">0.80</span>, <span class="at">nfractional =</span> <span class="cn">FALSE</span>, <span class="at">alpha =</span> <span class="fl">0.05</span>)<span class="sc">$</span>n.total</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
@@ -513,14 +514,15 @@ treatment group and 25 in the control group.</p>
 resource-poor country. At the end of three years, the donors would like
 to know what proportion of households are still using their donated
 stove. A cross-sectional study is planned where villages in a province
-will be sampled and all households (approximately 75 per village) will
-be visited to determine if the donated stove is still in use. A pilot
-study of the prevalence of stove usage in five villages showed that 0.46
-of householders were still using their stove and the intracluster
-correlation coefficient (ICC) for stove use within villages is in the
-order of 0.20. If the donor wanted to be 95% confident that the survey
-estimate of stove usage was within 10% of the true population value, how
-many villages (primary sampling units) need to be sampled?</p>
+will be sampled and then all households (approximately 75 per village)
+will be visited to determine if their donated stove is still in use. A
+pilot study of the prevalence of stove usage in five villages showed
+that 0.46 of householders were still using their stove and the
+intracluster correlation coefficient (ICC) for stove use within villages
+is in the order of 0.20. If the donor wanted to be 95% confident that
+the survey estimate of stove usage was within 10% of the true population
+value, how many villages (primary sampling units) need to be
+sampled?</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">epi.ssclus1estb</span>(<span class="at">b =</span> <span class="dv">75</span>, <span class="at">Py =</span> <span class="fl">0.46</span>, <span class="at">epsilon =</span> <span class="fl">0.10</span>, <span class="at">error =</span> <span class="st">&quot;relative&quot;</span>, <span class="at">rho =</span> <span class="fl">0.20</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)<span class="sc">$</span>n.psu</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 96</span></span></code></pre></div>
 <p>A total of 96 villages need to be sampled to meet the requirements of
@@ -565,7 +567,7 @@ so set <code>N = NA</code> in <code>epi.simpleestb</code>:</p>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fl">0.02</span>; b <span class="ot">&lt;-</span> <span class="dv">20</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> rho <span class="sc">*</span> (b <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span>; D</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1.38</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The design effect is 1.38. Our crude sample size estimate needs to be increased by a factor of 1.38.</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The design effect is 1.38 so our crude sample size estimate needs to be increased by a factor of 1.38.</span></span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>n.adj <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n.crude <span class="sc">*</span> D)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>n.adj</span>
@@ -598,8 +600,9 @@ so set <code>N = NA</code> in <code>epi.simpleestb</code>:</p>
 this study. From each sampled village 20 individuals are sampled which
 means that at total of 17 <span class="math inline">\(\times\)</span> 20
 = 340 individuals are required. Function <code>epi.ssclus2estb</code>
-returns a warning message that the number of clusters is less than
-25.</p>
+returns a warning message, reminding you that at least 25 primary
+sampling units are recommended for two-stage cluster sampling
+designs.</p>
 </div>
 <div id="two-stage-cluster-sampling-continued" class="section level3">
 <h3>Two-stage cluster sampling (continued)</h3>
