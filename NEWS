@@ -1,3 +1,14 @@
+CHANGES IN epiR VERSION 2.0.63
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Bug in rsu.sssep.rb2st1rf and rsu.sssep.rb2st2rf corrected. 
+    [Spotted by Damian Collins]
+    o Documentation update for function epi.sscc.
+    [Suggested by Silvia Jakubski]
+    o Bug in variance calculation for Mantel-Haenszel odds ratio in epi.mh corrected.
+    [Spotted by Remy Dumas]
+    
+
 CHANGES IN epiR VERSION 2.0.62
 SIGNIFICANT USER-VISIBLE CHANGES
 

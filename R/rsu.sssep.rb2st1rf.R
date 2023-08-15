@@ -1,7 +1,7 @@
 rsu.sssep.rb2st1rf <- function(rr, ppr, spr, pstar.c, se.c, pstar.u, se.u, se.p) {
   
   n.u <- zn.binom(se.p = se.c, pstar = pstar.u, se.u = se.u)
-  n <- rsu.sssep.rbsrg(pstar = pstar.c, rr = rr, ppr = ppr, spr = spr, se.p = se.c, se.u = se.p)
+  n <- rsu.sssep.rbsrg(pstar = pstar.c, rr = rr, ppr = ppr, spr = spr, se.p = se.p, se.u = se.c)
 
   t.clusters <- n$total
   n.clusters.per.strata <- n$n

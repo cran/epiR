@@ -51,7 +51,7 @@ rsu.sssep.rbsrg(pstar = 0.10, rr = c(5,3,1), ppr = c(0.10,0.10,0.80),
    spr = c(0.50,0.30,0.20), se.p = 0.95, se.u = 0.90)
 
 ## A total of 14 units needs to be sampled to meet the requirements of the 
-## study: 7 from the high risk area, 5 from the medium risk area and 2 from 
+## study: 7 from the high risk area, 4 from the medium risk area and 3 from 
 ## the low risk area.   
 }
 \keyword{methods}

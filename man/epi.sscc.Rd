@@ -45,6 +45,9 @@ The methodology described in Woodward (2014), pp. 295 - 329 uses the proportion 
 When no estimate of \code{phi.coef} is available, investigators may prefer to perform their power calculations under the assumption that \code{phi.coef} equals, say, 0.2 rather than make the questionable independence assumption required by most other methods.
 
 A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+
+Power calculations used in this function are based on the uncorrected chi-square (as opposed to Fisher's exact) test.
+
 }
 
 \value{

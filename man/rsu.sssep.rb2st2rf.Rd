@@ -67,14 +67,14 @@ A list comprised of two elements:
 
 rsu.sssep.rb2st2rf(
    rr.c = c(5,3,1), ppr.c = c(0.1,0.2,0.7), spr.c = c(0.4,0.4,0.2),
-   pstar.c = 0.02, se.c = 0.50, 
+   pstar.c = 0.02, se.c = 0.95, 
    rr.u = c(4,1), ppr.u = c(0.1, 0.9), spr.u = c(1,0),
-   pstar.u = 0.10, se.u = 0.90,
+   pstar.u = 0.10, se.u = 0.90, 
    se.p = 0.95)
 
 ## A total of 82 clusters needs to be sampled: 33 from the high risk area, 
 ## 33 from the medium risk area and 16 from the low risk area. A total of 
-## 9 units should be sampled from each cluster.
+## 10 surveillance units should be sampled from each cluster.
 }
 \keyword{methods}
 
