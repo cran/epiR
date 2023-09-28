@@ -1,4 +1,4 @@
-epi.ssxsectn <- function(N = NA, pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
+epi.ssxsectn <- function(N = NA, pdexp1, pdexp0, pexp = NA, n, power, r = 1, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95){
   
   alpha.new <- (1 - conf.level) / sided.test
   z.alpha <- qnorm(1 - alpha.new, mean = 0, sd = 1)

@@ -1,3 +1,17 @@
+CHANGES IN epiR VERSION 2.0.65
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Tidy up documentation of sample size functions.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.64
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Functions epi.ssequb and epi.ssequc modified to allow sample size and power to be be calculated for equivalence and equality trials.
+    [Suggested by Hasanthi Abeykoon]
+    
+
 CHANGES IN epiR VERSION 2.0.63
 SIGNIFICANT USER-VISIBLE CHANGES
 

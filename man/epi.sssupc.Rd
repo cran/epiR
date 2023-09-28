@@ -11,18 +11,18 @@ Sample size for a parallel superiority trial, continuous outcome.
 }
 
 \usage{
-epi.sssupc(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE, 
+epi.sssupc(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE, 
    alpha)
 }
 
 \arguments{
   \item{treat}{the expected mean of the outcome of interest in the treatment group.}
   \item{control}{the expected mean of the outcome of interest in the control group.}
-  \item{sd}{the expected population standard deviation of the outcome of interest.}
+  \item{sigma}{the expected population standard deviation of the outcome of interest.}
   \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{nfractional}{logical, return fractional sample size.}  
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -78,8 +78,8 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## the HDL concentration in the treatment group is 20 units and the 
 ## HDL concentration in the control group is 20 units.
 
-epi.sssupc(treat = 20, control = 20, sd = 10, delta = 5, n = NA, 
-   r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)
+epi.sssupc(treat = 20, control = 20, sigma = 10, delta = 5, n = NA, 
+   power = 0.80, r = 1, nfractional = FALSE, alpha = 0.05)
 
 ## A total of 100 subjects need to be enrolled in the trial, 50 in the 
 ## treatment group and 50 in the control group.

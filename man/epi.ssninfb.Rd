@@ -11,7 +11,7 @@ Sample size for a non-inferiority trial, binary outcome.
 }
 
 \usage{
-epi.ssninfb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
+epi.ssninfb(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha)
 }
 
 \arguments{
@@ -19,8 +19,8 @@ epi.ssninfb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
   \item{control}{the expected proportion of successes in the control group.}
   \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For a non-inferiority trial the value entered for \code{delta} must be greater than or equal to zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -87,8 +87,8 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## Assuming a one-sided test size of 5\% and a power of 80\% how many 
 ## subjects should be included in the trial?
 
-epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, r = 1, 
-   power = 0.80, nfractional = FALSE, alpha = 0.05)
+epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, power = 0.80, 
+   r = 1, nfractional = FALSE, alpha = 0.05)
 
 ## A total of 50 subjects need to be enrolled in the trial, 25 in the 
 ## treatment group and 25 in the control group.
@@ -98,8 +98,8 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA, r = 1,
 ## Suppose only 40 subjects were enrolled in the trial, 20 in the treatment
 ## group and 20 in the control group. What is the estimated study power?
 
-epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 40, r = 1,
-   power = NA, nfractional = FALSE, alpha = 0.05)
+epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 40, power = NA, 
+   r = 1, nfractional = FALSE, alpha = 0.05)
 
 ## With only 40 subjects the estimated study power is 0.73.
 
@@ -113,8 +113,8 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = 40, r = 1,
 ## Assuming a one-sided test size of 5\% and a power of 30\% how many 
 ## subjects should be included in the trial?
 
-n <- epi.ssninfb(treat = 0.4, control = 0.4, delta = 0.10, n = NA,  r = 1, 
-   power = 0.3, nfractional = TRUE, alpha = 0.05)$n.total
+n <- epi.ssninfb(treat = 0.4, control = 0.4, delta = 0.10, n = NA, power = 0.3, 
+   r = 1, nfractional = TRUE, alpha = 0.05)$n.total
 n
 
 ## A total of 120 subjects need to be enrolled in the trial, 60 in the 
@@ -122,8 +122,8 @@ n
 
 ## Re-run the function using n = 120 to confirm that power equals 0.30:
 
-epi.ssninfb(treat = 0.4, control = 0.4, delta = 0.10, n = n, r = 1, 
-   power = NA, nfractional = TRUE, alpha = 0.05)$power
+epi.ssninfb(treat = 0.4, control = 0.4, delta = 0.10, n = n, power = NA, 
+   r = 1, nfractional = TRUE, alpha = 0.05)$power
 
 ## With 120 subjects the estimated study power is 0.30.
 }

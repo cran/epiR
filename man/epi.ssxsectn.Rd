@@ -11,7 +11,7 @@ Sample size, power or minimum detectable prevalence ratio or odds ratio for a cr
 }
 
 \usage{
-epi.ssxsectn(N = NA, pdexp1, pdexp0, pexp = NA, n = NA, power = 0.80, r = 1, 
+epi.ssxsectn(N = NA, pdexp1, pdexp0, pexp = NA, n, power, r = 1, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 

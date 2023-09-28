@@ -11,7 +11,7 @@ Sample size for a parallel superiority trial, binary outcome.
 }
 
 \usage{
-epi.sssupb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
+epi.sssupb(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha)
 }
 
 \arguments{
@@ -19,8 +19,8 @@ epi.sssupb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
   \item{control}{the expected proportion of successes in the control group.}
   \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -76,7 +76,7 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## margin is 5\%.
 
 epi.sssupb(treat = 0.85, control = 0.65, delta = 0.05, n = NA, 
-   r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)
+   power = 0.80, r = 1, nfractional = FALSE, alpha = 0.05)
 
 ## A total of 196 subjects need to be enrolled in the trial, 98 in the 
 ## treatment group and 98 in the control group.

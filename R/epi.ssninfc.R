@@ -1,4 +1,4 @@
-epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE, alpha){
+epi.ssninfc <- function(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE, alpha){
 
   # Stop if a negative value for delta entered:
   if (delta < 0){
@@ -22,7 +22,7 @@ epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, nfractional 
       stop("Target power is not reachable. Check the exact specification of the hypotheses.")
     }
     
-    n.control <- (1 + 1 / r) * (sd * (z.alpha + z.beta) / (treat - control - ndelta))^2
+    n.control <- (1 + 1 / r) * (sigma * (z.alpha + z.beta) / (treat - control - ndelta))^2
     n.treat <- n.control * r
     
     if(nfractional == TRUE){
@@ -59,7 +59,7 @@ epi.ssninfc <- function(treat, control, sd, delta, n, r = 1, power, nfractional 
       n.total <- n.treat + n.control
     }    
     
-    z <- (treat - control - ndelta) / (sd * sqrt((1 + 1 / r) / n.control))
+    z <- (treat - control - ndelta) / (sigma * sqrt((1 + 1 / r) / n.control))
 
     # Aniko Szabo 230821 - use only one tail:
     power <- pnorm(z - z.alpha, mean = 0, sd = 1)

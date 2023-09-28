@@ -122,8 +122,8 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
     \code{\link{epi.sscompc}}            \tab Sample size, power and detectable risk ratio when comparing continuous outcomes. \cr
     \code{\link{epi.sscomps}}            \tab Sample size, power and detectable hazard when comparing time to event. \cr
                                          \tab  \cr  
-    \code{\link{epi.ssequb}}             \tab Sample size for a parallel equivalence trial, binary outcome. \cr
-    \code{\link{epi.ssequc}}             \tab Sample size for a parallel equivalence trial, continuous outcome. \cr
+    \code{\link{epi.ssequb}}             \tab Sample size for a parallel equivalence or equality trial, binary outcome. \cr
+    \code{\link{epi.ssequc}}             \tab Sample size for a parallel equivalence or equality trial, continuous outcome. \cr
                                          \tab  \cr  
     \code{\link{epi.sssupb}}             \tab Sample size for a parallel superiority trial, binary outcome. \cr
     \code{\link{epi.sssupc}}             \tab Sample size for a parallel superiority trial, continuous outcome. \cr

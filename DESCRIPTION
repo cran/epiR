@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.63
-Date: 2023-08-15
+Version: 2.0.65
+Date: 2023-09-28
 Title: Tools for the Analysis of Epidemiological Data
 Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
    person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
@@ -17,14 +17,14 @@ Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre")
    person(given = "Kazuki", family = "Yoshida", role = "ctb"),
    person(given = "Geoff", family = "Jones", role = "ctb"),
    person(given = "Sarah", family = "Pirikahu", role = "ctb"),
-   person(given = "Simon", family = "Firestone", role = "ctb"),
+   person(given = "Simon", family = "Firestone", role = "aut"),
    person(given = "Ryan", family = "Kyle", role = "ctb"),
    person(given = "Johann", family = "Popp", role = "ctb"),
    person(given = "Mathew", family = "Jay", role = "ctb"),
    person(given = "Allison", family = "Cheung", role = "ctb"),
    person(given = "Nagendra", family = "Singanallur", role = "ctb"),
    person(given = "Aniko", family = "Szabo", role = "ctb"),
-   person(given = "Ahmad", "family = Rabiee", role = "ctb"))
+   person(given = "Ahmad", family = "Rabiee", role = "ctb"))
 Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
@@ -35,7 +35,7 @@ Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
         spData, tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2023-08-15 04:15:40 UTC; mstev
+Packaged: 2023-09-28 04:27:51 UTC; marks1
 URL:
         https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 RoxygenNote: 7.1.0
@@ -55,13 +55,13 @@ Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
   Kazuki Yoshida [ctb],
   Geoff Jones [ctb],
   Sarah Pirikahu [ctb],
-  Simon Firestone [ctb],
+  Simon Firestone [aut],
   Ryan Kyle [ctb],
   Johann Popp [ctb],
   Mathew Jay [ctb],
   Allison Cheung [ctb],
   Nagendra Singanallur [ctb],
   Aniko Szabo [ctb],
-  Ahmad family = Rabiee [ctb]
+  Ahmad Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2023-08-15 09:20:05 UTC
+Date/Publication: 2023-09-28 09:10:02 UTC

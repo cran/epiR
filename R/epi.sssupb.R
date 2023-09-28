@@ -1,4 +1,4 @@
-epi.sssupb <- function(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha){
+epi.sssupb <- function(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha){
 
   # Stop if a negative value for delta entered:
   if (delta < 0){

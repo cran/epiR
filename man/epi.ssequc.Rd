@@ -3,26 +3,27 @@
 \alias{epi.ssequc}
 
 \title{
-Sample size for a parallel equivalence trial, continuous outcome
+Sample size for a parallel equivalence or equality trial, continuous outcome
 }
 
 \description{
-Sample size for a parallel equivalence trial, continuous outcome. 
+Sample size for a parallel equivalence or equality trial, continuous outcome. 
 }
 
 \usage{
-epi.ssequc(treat, control, sd, delta, n, r = 1, power, nfractional = FALSE, 
-   alpha)
+epi.ssequc(treat, control, sigma, delta, n, power, r = 1, type = "equivalence", 
+   nfractional = FALSE, alpha)
 }
 
 \arguments{
   \item{treat}{the expected mean of the outcome of interest in the treatment group.}
   \item{control}{the expected mean of the outcome of interest in the control group.}
-  \item{sd}{the expected population standard deviation of the outcome of interest.}
+  \item{sigma}{the expected population standard deviation of the outcome of interest.}
   \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For an equivalence trial the value entered for \code{delta} must be greater than zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
+  \item{type}{a character string indicating the type of analysis to be run. Options are \code{equality} and \code{equivalence}. If \code{type = equality} is selected argument \code{delta} is ignored.}
   \item{nfractional}{logical, return fractional sample size.}  
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -53,9 +54,17 @@ Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}.
 
-For an equivalence trial the null hypothesis is:
+In an equality trial we test the hypothesis that the means of two (treatment, control) groups are different. For an equality trial the null hypothesis is:
+
+\eqn{H_{0}: |N_{s} - N_{n}| = 0} 
+ 
+and the alternative hypothesis is:
+
+\eqn{H_{1}: |N_{s} - N_{n}| \neq 0}
+
+In an equivalence trial we test the hypothesis that the means of two (treatment, control) groups are not too different, where clinical criteria are used to define 'not too different' (\code{delta}). For an equivalence trial the null hypothesis is:
 
 \eqn{H_{0}: |N_{s} - N_{n}| \ge \delta} 
  
@@ -63,7 +72,7 @@ The alternative hypothesis is:
 
 \eqn{H_{1}: |N_{s} - N_{n}| < \delta}
 
-An equivalence trial is used if want to prove that two treatments produce the same clinical outcomes. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
+An equality trial is used when you want to confirm that the numeric value of the outcome for treatment and control groups differ. An equivalence trial is used when you want to prove that the clinical outcome for treatment and control groups are the same. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
 
 Note that when:
 
@@ -86,8 +95,9 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## are needed to be enrolled in the trial? Assume 80\% power and 
 ## 95\% significance.
 
-epi.ssequc(treat = 94, control = 96, sd = 8, delta = 5, n = NA, 
-   r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)
+epi.ssequc(treat = 94, control = 96, sigma = 8, delta = 5, n = NA, 
+   power = 0.80, r = 1, type = "equivalence", nfractional = FALSE, 
+   alpha = 0.05)
 
 ## A total of 244 subjects need to be enrolled in the trial, 122 in the 
 ## treatment group and 122 in the control group.
@@ -106,8 +116,9 @@ epi.ssequc(treat = 94, control = 96, sd = 8, delta = 5, n = NA,
 ## of LDL is 10 units and the LDL concentration in the treatment group is 20 
 ## units and the LDL concentration in the control group is 21 units.
 
-epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = NA, 
-   r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)
+epi.ssequc(treat = 20, control = 21, sigma = 10, delta = 5, n = NA, 
+   power = 0.80, r = 1, type = "equivalence", nfractional = FALSE, 
+   alpha = 0.05)
 
 ## A total of 216 subjects need to be enrolled in the trial, 108 in the 
 ## treatment group and 108 in the control group.
@@ -117,10 +128,31 @@ epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = NA,
 ## Suppose only 150 subjects were enrolled in the trial, 75 in the treatment
 ## group and 75 in the control group. What is the estimated study power?
 
-epi.ssequc(treat = 20, control = 21, sd = 10, delta = 5, n = 150, 
-   r = 1, power = NA, nfractional = FALSE, alpha = 0.05)
+epi.ssequc(treat = 20, control = 21, sigma = 10, delta = 5, n = 150, 
+   power = NA, r = 1, type = "equivalence", nfractional = FALSE, 
+   alpha = 0.05)
 
 ## With only 150 subjects enrolled the estimated study power is 0.58.
+
+
+## EXAMPLE 3:
+## A study is to be carried out to determine if the daily weight gain of calves 
+## (in kilograms) on two diets differ. The null hypothesis is that there is 
+## no difference in daily weight gain. The alternative hypothesis is that 
+## daily weight gains for the two groups differ. How many calves need to 
+## be enrolled into a study to detect a statistically significant difference
+## in daily weight gain for the two groups? Assume daily weight gain for the 
+## treatment group is 0.70 kg per day and daily weight gain for the control
+## group is 0.65 kg per day and the standard deviation of daily weight gain in
+## calves of this age is 0.06. Assume power of 0.80 and alpha of 0.05.
+
+epi.ssequc(treat = 0.70, control = 0.65, sigma = 0.06, delta = NA, n = NA, 
+   power = 0.80, r = 1, type = "equality", nfractional = FALSE, 
+   alpha = 0.05)
+
+## A total of 48 calves need to be enrolled into the study: 24 in the treatment
+## group and 24 in the control group.
+
 }
 
 \keyword{univar}

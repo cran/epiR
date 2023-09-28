@@ -11,7 +11,7 @@ Sample size, power and minimum detectable difference when comparing continuous o
 }
 
 \usage{
-epi.sscompc(N = NA, treat, control, n, sigma, power, r = 1, design = 1,
+epi.sscompc(N = NA, treat, control, sigma, n, power, r = 1, design = 1,
    sided.test = 2, nfractional = FALSE, conf.level = 0.95)
 }
 
@@ -19,8 +19,8 @@ epi.sscompc(N = NA, treat, control, n, sigma, power, r = 1, design = 1,
   \item{N}{scalar integer, the total number of individuals eligible for inclusion in the study. If \code{N = NA} the number of individuals eligible for inclusion is assumed to be infinite.}
   \item{treat}{the expected value for the treatment group (see below).}
   \item{control}{the expected value for the control group (see below).}
-  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment and control group).}
   \item{sigma}{the expected standard deviation of the variable of interest for both treatment and control groups.}
+  \item{n}{scalar, defining the total number of subjects in the study (i.e., the number in the treatment and control group).}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{design}{scalar, the estimated design effect.}
@@ -71,7 +71,7 @@ See the documentation for \code{\link{epi.sscohortc}} for an example using the \
 ## at detecting a difference of 0.5 mmol/L. The standard deviation of serum 
 ## cholesterol in humans is assumed to be 1.4 mmol/L. 
 
-epi.sscompc(N = NA, treat = 5.0, control = 4.5, n = NA, sigma = 1.4, 
+epi.sscompc(N = NA, treat = 5.0, control = 4.5, sigma = 1.4, n = NA,  
    power = 0.95, r = 1, design = 1, sided.test = 1, nfractional = FALSE, 
    conf.level = 0.95)
 
@@ -94,7 +94,7 @@ epi.sscompc(N = NA, treat = 5.0, control = 4.5, n = NA, sigma = 1.4,
 ## women to the treatment group so as to obtain a better estimate of its effect.
 ## How many women should be enrolled in this study?
 
-epi.sscompc(N = NA, treat = 8, control = 4, n = NA, sigma = 4, power = 0.90, 
+epi.sscompc(N = NA, treat = 8, control = 4, sigma = 4, n = NA, power = 0.90, 
    r = 4, design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)
    
 ## The estimated sample size is 67. We allocate 70/5 = 14 women to the 

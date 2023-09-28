@@ -11,7 +11,7 @@ Sample size, power or minimum detectable incidence risk ratio for a cohort study
 }
 
 \usage{
-epi.sscohortc(N = NA, irexp1, irexp0, pexp = NA, n = NA, power = 0.80, r = 1, 
+epi.sscohortc(N = NA, irexp1, irexp0, pexp = NA, n, power, r = 1, 
    design = 1, sided.test = 2, finite.correction = FALSE, 
    nfractional = FALSE, conf.level = 0.95)
 }

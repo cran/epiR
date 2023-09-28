@@ -3,15 +3,16 @@
 \alias{epi.ssequb}
 
 \title{
-Sample size for a parallel equivalence trial, binary outcome
+Sample size for a parallel equivalence or equality trial, binary outcome
 }
 
 \description{
-Sample size for a parallel equivalence trial, binary outcome. 
+Sample size for a parallel equivalence or equality trial, binary outcome. 
 }
 
 \usage{
-epi.ssequb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
+epi.ssequb(treat, control, delta, n, power, r = 1, type = "equivalence", 
+   nfractional = FALSE, alpha)
 }
 
 \arguments{
@@ -19,8 +20,9 @@ epi.ssequb(treat, control, delta, n, r = 1, power, nfractional = FALSE, alpha)
   \item{control}{the expected proportion of successes in the control group.}
   \item{delta}{the equivalence limit, expressed as the absolute change in the outcome of interest that represents a clinically meaningful difference. For an equivalence trial the value entered for \code{delta} must be greater than zero.}
   \item{n}{scalar, the total number of study subjects in the trial.}
-  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
   \item{power}{scalar, the required study power.}
+  \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
+  \item{type}{a character string indicating the type of analysis to be run. Options are \code{equality} and \code{equivalence}. If \code{type = equality} is selected argument \code{delta} is ignored.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -71,7 +73,15 @@ With a non-inferiority trial the aim is not to estimate \eqn{Ps - Pn} but to jud
 
 Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. 
 
-For an equivalence trial the null hypothesis is:
+In an equality trial we test the hypothesis that the means of two (treatment, control) groups are different. For an equality trial the null hypothesis is:
+
+\eqn{H_{0}: |P_{s} - P_{n}| = 0} 
+ 
+and the alternative hypothesis is:
+
+\eqn{H_{1}: |P_{s} - P_{n}| \neq 0}
+
+In an equivalence trial we test the hypothesis that the means of two (treatment, control) groups are not too different, where clinical criteria are used to define 'not too different' (\code{delta}). For an equivalence trial the null hypothesis is:
 
 \eqn{H_{0}: |P_{s} - P_{n}| \ge \delta} 
  
@@ -79,9 +89,7 @@ The alternative hypothesis is:
 
 \eqn{H_{1}: |P_{s} - P_{n}| < \delta}
 
-An equivalence trial is used if want to prove that two treatments produce the same clinical outcomes. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.
-
-Note that when:
+An equality trial is used when you want to confirm that the numeric value of the outcome for treatment and control groups differ. An equivalence trial is used when you want to prove that the clinical outcome for treatment and control groups are the same. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero. Note that when:
 
 \deqn{sign(P_n - P_s - \delta) \neq sign(z_{1-\alpha} + z_{1-\beta})}
 
@@ -101,8 +109,8 @@ When calculating the power of a study, the argument \code{n} refers to the total
 ## power of 80\% what would be a realistic sample size if the trial were 
 ## to be repeated?
 
-epi.ssequb(treat = 0.50, control = 0.50, delta = 0.20, n = NA, r = 1, 
-   power = 0.80, nfractional = FALSE, alpha = 0.10)
+epi.ssequb(treat = 0.50, control = 0.50, delta = 0.20, n = NA, power = 0.80, 
+   r = 1, type = "equivalence", nfractional = FALSE, alpha = 0.10)
 
 ## A total of 166 subjects need to be enrolled in the trial, 83 in the 
 ## treatment group and 83 in the control group.
