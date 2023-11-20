@@ -1,5 +1,5 @@
 ---
-title: "Design and Analysis of Disease Surveillance Programs Using epiR"
+title: "<h1 style='text-align:center;'>Surveillance system assessment using <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/></h1>"
 author: "Mark Stevenson and Evan Sergeant"
 date: "`r Sys.Date()`"
 bibliography: epiR_surveillance.bib

@@ -3,11 +3,11 @@
 \alias{epi.sscomps}
 
 \title{
-Sample size, power and minimum detectable hazard when comparing time to event
+Sample size and power when comparing time to event
 }
 
 \description{
-Sample size, power and minimum detectable hazard when comparing time to event.
+Sample size and power when comparing time to event.
 }
 
 \usage{

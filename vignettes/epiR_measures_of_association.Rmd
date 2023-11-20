@@ -1,5 +1,5 @@
 ---
-title: "Measures of Association"
+title: "<h1 style='text-align:center;'>Measures of association using <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/></h1>"
 author: "Mark Stevenson"
 date: "`r Sys.Date()`"
 bibliography: epiR_measures_of_association.bib

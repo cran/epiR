@@ -3,11 +3,11 @@
 \alias{epi.sscompc}
 
 \title{
-Sample size, power and minimum detectable difference when comparing continuous outcomes
+Sample size and power when comparing continuous outcomes
 }
 
 \description{
-Sample size, power and minimum detectable difference when comparing continuous outcomes. 
+Sample size and power when comparing continuous outcomes.
 }
 
 \usage{

@@ -142,7 +142,7 @@ The naming convention for the sample size functions in \pkg{epiR} is: \code{epi.
 \tabular{ll}{
     \code{\link{epi.prcc}}               \tab Compute partial rank correlation coefficients. \cr
     \code{\link{epi.psi}}                \tab Compute proportional similarity indices. \cr
-    \code{\link{epi.realrisk}}           \tab return absolute risks from odds, incidence risk and hazard ratios. \cr
+    \code{\link{epi.realrisk}}           \tab Return absolute risks from odds, incidence risk and hazard ratios. \cr
   }
 }
 

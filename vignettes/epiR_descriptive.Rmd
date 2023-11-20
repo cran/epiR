@@ -1,5 +1,5 @@
 ---
-title: "Descriptive Epidemiology using epiR"
+title: "<h1 style='text-align:center;'>Descriptive epidemiology using <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/></h1>"
 author: "Mark Stevenson"
 date: "`r Sys.Date()`"
 bibliography: epiR_descriptive.bib
@@ -11,8 +11,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Descriptive epidemiology}
   %\usepackage[utf8]{inputenc}
-
 ---
+
 \setmainfont{Calibri Light}
 
 ```{r, echo = FALSE, message = FALSE}
@@ -30,7 +30,7 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-Epidemiology is the study of the frequency, distribution and determinants of health-related states in populations and the application of such knowledge to control health problems [@cdc:2006]. 
+Epidemiology is the study of the frequency, distribution and determinants of health-related states in populations and the application of such knowledge to control health problems [@cdc:2006].
 
 This vignette provides instruction on the use of R and `epiR` for descriptive epidemiological analyses, that is, to describe how the frequency of disease varies by individual, place and time.
 
@@ -42,7 +42,7 @@ Descriptions of disease frequency involves reporting either the **prevalence** o
 
 Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a specific disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and this vignette will follow this convention.
 
-Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time; (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e., the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period). 
+Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time; (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e., the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period).
 
 Incidence provides a measure of how frequently susceptible individuals become disease cases as they are observed over time. An incident case occurs when an individual changes from being susceptible to being diseased. The count of incident cases is the number of such events that occur in a population during a defined follow-up period. There are two ways to express incidence:
 
@@ -50,7 +50,7 @@ Incidence provides a measure of how frequently susceptible individuals become di
 
 **Incidence rate** (also known as incidence density) is the number of new cases of disease that occur per unit of individual time at risk during a defined follow-up period.
 
-In addition to reporting the point estimate of disease frequency, it is important to provide an indication of the uncertainty around that point estimate. The `epi.conf` function in the `epiR` package allows you to calculate confidence intervals for prevalence, incidence risk and incidence rates. 
+In addition to reporting the point estimate of disease frequency, it is important to provide an indication of the uncertainty around that point estimate. The `epi.conf` function in the `epiR` package allows you to calculate confidence intervals for prevalence, incidence risk and incidence rates.
 
 Let's say we're interested in the prevalence of disease X in a population comprised of 1000 individuals. Two hundred are tested and four returned a positive result. Assuming 100% test sensitivity and specificity, what is the estimated prevalence of disease X in this population?
 
@@ -62,6 +62,7 @@ tmp <- as.matrix(cbind(ncas, npop))
 epi.conf(tmp, ctype = "prevalence", method = "exact", N = 1000, design = 1, 
    conf.level = 0.95) * 100
 ```
+
 The estimated prevalence of disease X in this population is 2.0 (95% confidence interval [CI] 0.55 to 5.0) cases per 100 individuals at risk.
 
 Another example. A study was conducted by @feychting_et_al:1998 to report the frequency of cancer among the blind. A total of 136 diagnoses of cancer were made from 22,050 person-years at risk. What was the incidence rate of cancer in this population?
@@ -72,9 +73,10 @@ tmp <- as.matrix(cbind(ncas, ntar))
 epi.conf(tmp, ctype = "inc.rate", method = "exact", N = 1000, design = 1, 
    conf.level = 0.95) * 1000
 ```
+
 The incidence rate of cancer in this population was 6.2 (95% CI 5.2 to 7.3) cases per 1000 person-years at risk.
 
-Lets say we want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. For this example, we sort the disease frequency estimates from lowest to highest. Generate some data: 
+Lets say we want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. For this example, we sort the disease frequency estimates from lowest to highest. Generate some data:
 
 ```{r}
 ncas <- c(347,444,145,156,56,618,203,113,10,30,663,447,213,52,256,216,745,97,31,250,430,494,96,544,352)
@@ -82,6 +84,7 @@ npop <- c(477,515,1114,625,69,1301,309,840,68,100,1375,1290,1289,95,307,354,1393
 rname <- paste("Region ", 1:length(npop), sep = "")
 dat.df <- data.frame(rname,ncas,npop)
 ```
+
 Calculate the prevalence of disease in each region and its 95% confidence interval using `epi.conf`. The function `epi.conf` provides several options for confidence interval calculation methods for prevalence. For this example we'll use the exact method:
 
 ```{r}
@@ -91,12 +94,14 @@ tmp <- epi.conf(tmp, ctype = "prevalence", method = "exact", N = 1000, design = 
 dat.df <- cbind(dat.df, tmp)
 head(dat.df)
 ```
+
 Sort the data in order of variable `est` and assign a 1 to `n` identifier as variable `rank`:
 
 ```{r}
 dat.df <- dat.df[sort.list(dat.df$est),]
 dat.df$rank <- 1:nrow(dat.df)
 ```
+
 Create a ranked error bar plot. Because its useful to provide the region-area names on the horizontal axis we'll rotate the horizontal axis labels by 90 degrees.
 
 ```{r dfreq02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq02}Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."}
@@ -111,13 +116,13 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
 
 ## Time
 
-Epidemic curves are used to describe patterns of disease over time. Epidemic curve data are often presented in one of two formats: 
+Epidemic curves are used to describe patterns of disease over time. Epidemic curve data are often presented in one of two formats:
 
-1. One row for each individual identified as a case with an event date assigned to each.
+1.  One row for each individual identified as a case with an event date assigned to each.
 
-2. One row for every event date with an integer representing the number of cases identified on that date.
+2.  One row for every event date with an integer representing the number of cases identified on that date.
 
-In the notes that follow we provide details on how to produce an epidemic curve when you're data are in these formats. 
+In the notes that follow we provide details on how to produce an epidemic curve when you're data are in these formats.
 
 ### One row of data for each case
 
@@ -136,6 +141,7 @@ dat.df <- data.frame(sex = c(rep("Male", n.males), rep("Female", n.females)),
 # Sort the data in order of odate:
 dat.df <- dat.df[sort.list(dat.df$odate),] 
 ```
+
 Plot the epidemic curve using the `ggplot2` and `scales` packages:
 
 ```{r epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022."}
@@ -175,6 +181,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex)
 ```
+
 Let's say an event occurred on 31 October 2022. Mark this date on your epidemic curve using `geom_vline`:
 
 ```{r epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, conditioned by sex. An event that occurred on 31 October 2022 is indicated by the vertical dashed line."}
@@ -189,6 +196,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
    linetype = "dashed")
 ```
+
 Plot the total number of disease events by day, coloured according to sex:
 
 ```{r epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."}
@@ -204,6 +212,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") +
   theme(legend.position = c(0.90, 0.80))
 ```
+
 It can be difficult to appreciate differences in male and female disease counts as a function of date with the above plot format so dodge the data instead:
 
 ```{r epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."}
@@ -222,7 +231,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
 
 ### Integers representing counts of cases on each date
 
-We now provide code to deal with the situation where the data are presented with one row for every date during an outbreak and an integer representing the number of cases identified on each date. 
+We now provide code to deal with the situation where the data are presented with one row for every date during an outbreak and an integer representing the number of cases identified on each date.
 
 Actual outbreak data will be used for this example. In the code below `edate` represents the event date (i.e., the date of case detection) and `ncas` represents the number of cases identified on each `edate`.
 
@@ -238,6 +247,7 @@ dat.df <- data.frame(edate, ncas)
 dat.df$edate <- as.Date(dat.df$edate, format = "%Y-%m-%d")
 head(dat.df)
 ```
+
 Generate an epidemic curve. Note `weight = ncas` in the aesthetics argument for `ggplot2`:
 
 ```{r epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020."}
@@ -257,6 +267,7 @@ Add a line to the plot to show the cumulative number of cases detected as a func
 ```{r}
 max(cumsum(dat.df$ncas))
 ```
+
 At the end of the follow-up period the cumulative number of cases was 1834. What we need to do is to get our 0 to 1834 cumulative case numbers to 'fit' into the 0 to 125 vertical axis limits of the epidemic curve. A reasonable approach would be to: (1) divide cumulative case numbers by a number so that the maximum cumulative case number divided by our selected number roughly equals the maximum number of cases identified per day; for this example, 15 would be a good choice (1834 / 15 = 122); and (2) set `sec.axis = sec_axis(~ . * 15)` to multiply the values that appear on the primary vertical axis by 15 for the labels that appear on the secondary vertical axis:
 
 ```{r epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is a line showing cumulative case numbers."}
@@ -294,9 +305,9 @@ ggplot() +
 
 Two types of maps are often used when describing patterns of disease by place:
 
-1. Choropleth maps. Choropleth mapping involves producing a summary statistic of the outcome of interest (e.g. count of disease events, prevalence, incidence) for each component area within a study region. A map is created by 'filling' (i.e. colouring) each component area with colour, providing an indication of the magnitude of the variable of interest and how it varies geographically.
+1.  Choropleth maps. Choropleth mapping involves producing a summary statistic of the outcome of interest (e.g. count of disease events, prevalence, incidence) for each component area within a study region. A map is created by 'filling' (i.e. colouring) each component area with colour, providing an indication of the magnitude of the variable of interest and how it varies geographically.
 
-2. Point maps.
+2.  Point maps.
 
 **Choropleth maps**
 
@@ -324,7 +335,7 @@ ggplot() +
 
 **Point maps**
 
-Between 1972 and 1980 an industrial waste incinerator operated at a site about 2 kilometres southwest of the town of Coppull in Lancashire, England. Addressing community concerns that there were greater than expected numbers of laryngeal cancer cases in close proximity to the incinerator @diggle:1990 conducted a study investigating risks for laryngeal cancer, using recorded cases of lung cancer as controls. The study area is 20 km x 20 km in size and includes location of residence of patients diagnosed with each cancer type from 1974 to 1983. 
+Between 1972 and 1980 an industrial waste incinerator operated at a site about 2 kilometres southwest of the town of Coppull in Lancashire, England. Addressing community concerns that there were greater than expected numbers of laryngeal cancer cases in close proximity to the incinerator @diggle:1990 conducted a study investigating risks for laryngeal cancer, using recorded cases of lung cancer as controls. The study area is 20 km x 20 km in size and includes location of residence of patients diagnosed with each cancer type from 1974 to 1983.
 
 Load the `chorley` data set from the `spatstat` package. The point locations in this data are projected using the British National Grid coordinate reference system (EPSG code 27700). Create an observation window for the data as `coppull.ow` and a `ppp` object for plotting:
 
@@ -338,6 +349,7 @@ st_crs(chlarynxbng.sf) <- 27700
 
 chlarynxbng.ow <- chorley$window
 ```
+
 Create a simple features polygon object from `coppull.ow`. First we convert `chlarynxbng.ow` to a `SpatialPolygonsDataFrame` object:
 
 ```{r}
@@ -347,6 +359,7 @@ pol <- Polygons(list(pol),1)
 pol <- SpatialPolygons(list(pol))
 chpolbng.spdf <- SpatialPolygonsDataFrame(Sr = pol, data = data.frame(id = 1), match.ID = TRUE)
 ```
+
 Convert the `SpatialPolygonsDataFrame` to an `sf` object and set the coordinate reference system:
 
 ```{r}
@@ -374,4 +387,5 @@ ggplot() +
   scale_y_continuous(name = "Northing (km)", labels = mformat()) +
   theme(legend.position = c(0.10, 0.12))
 ```
+
 ## References

@@ -22,7 +22,7 @@ epi.realrisk(measure, measure.type, rE0)
 A data frame with four elements: \code{measure}, the numeric estimate of the measure of association (as entered by the user), \code{measure.type} the measure of association type (as entered by the user), \code{rE0} the prevalence of the outcome in the exposure negative ('baseline') group and \code{rE1} the prevalence of the outcome in the exposure positive ('comparison') group.}
 
 \details{
-For numerous worked examples and analytical details see \url{https://realrisk.wintoncentre.uk/}.    
+For numerous worked examples and analytical details visit the RealRisk web site at the Winton Centre for Risk and Evidence Communication, The University of Cambridge.    
 }
 
 \references{
@@ -30,7 +30,7 @@ Horby P, Lim W, Emberson J, Mafham M, Bell J, Linsell L, Staplin N, Brightling C
 
 Parekh T, Pemmasani S, Desai R (2020). Risk of stroke with E-cigarette and combustible cigarette use in young adults. American Journal of Preventive Medicine 58, 446 - 452.
 
-The Winton Centre for Risk and Evidence Communication, The University of Cambridge. URL: \url{https://realrisk.wintoncentre.uk/}.
+The Winton Centre for Risk and Evidence Communication, The University of Cambridge.
  
 }
 

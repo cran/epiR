@@ -3,11 +3,11 @@
 \alias{epi.sscompb}
 
 \title{
-Sample size, power and minimum detectable risk ratio when comparing binary outcomes
+Sample size and power when comparing binary outcomes
 }
 
 \description{
-Sample size, power and minimum detectable risk ratio when comparing binary outcomes. 
+Sample size and power when comparing binary outcomes. 
 }
 
 \usage{
