@@ -35,7 +35,7 @@ The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id16111394
 
 ***The incidence risk ratio***
 
-Consider a study where subjects are disease free at the start of the study and all are monitored for disease occurrence for a specified time period. At the start of the study period study subjects are classified according to exposure to a hypothesised risk factor. If both exposure and outcome are binary variables (yes or no) we can present the counts of subjects in each of the four exposure-disease categories in a 2 $\times$ 2 table.
+Consider a study where study subjects are monitored for the presence of disease over a defined follow-up period. At the start of the follow-up period study subjects are classified according to exposure to a hypothesised risk factor. If the exposure and outcome are binary variables (yes or no) we can present the counts of subjects in each of the four exposure-disease categories in a 2 $\times$ 2 table.
 
 ```{r echo = FALSE, results = 'asis'}
 twobytwo.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"))
@@ -91,7 +91,9 @@ flextable(irr.df) %>%
 
 The incidence risk estimates shown in Table 2 can be presented graphically in the format shown in Figure 1. In Figure 1 we present the calculated incidence risk in the exposed, unexposed and (exposed and unexposed) groups as a bar chart. The incidence risk ratio equals the incidence risk of the outcome in the exposed divided by the incidence risk of the outcome in the unexposed:
 
-![The incidence risk ratio.](risk_ratio.png)
+```{r risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."}
+knitr::include_graphics("risk_ratio.png")
+```
 
 The incidence risk ratio provides an estimate of how many times more likely exposed individuals are to experience the outcome of interest, compared with non-exposed individuals. 
 
@@ -166,14 +168,15 @@ Note that the numeric estimate of the odds ratio is exactly the same as that cal
 
 * In a **case-control study** we talk about the odds of exposure being $x$ times greater (or less) in **cases**, compared with controls.
 
-
 **Measures of effect in the exposed**
 
 ***The attributable risk in the exposed***
 
 The attributable risk is defined as the increase or decrease in the risk of the outcome in the exposed that is attributable to exposure (Figure 2). Attributable risk (unlike the incidence risk ratio) provides a measure of the absolute frequency of the outcome associated with exposure.
 
-![The attributable risk in the exposed.](attributable_risk.png)
+```{r attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."}
+knitr::include_graphics("attributable_risk.png")
+```
 
 A useful way of expressing attributable risk in a clinical setting is in terms of the number needed to treat, NNT. NNT equals the inverse of the attributable risk. Depending on the outcome of interest we often elect to use different labels for NNT. 
 
@@ -183,8 +186,9 @@ When dealing with an outcome that is 'desirable' (e.g., treatment success) we ca
 
 The attributable fraction in the exposed is the proportion of outcome-positive subjects in the exposed group that is due to exposure (Figure 3).
 
-![The attributable fraction in the exposed.](attributable_fraction.png)
-
+```{r attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the exposed."}
+knitr::include_graphics("attributable_fraction.png")
+```
 
 **Measures of effect in the population**
 
@@ -192,13 +196,17 @@ The attributable fraction in the exposed is the proportion of outcome-positive s
 
 The population attributable risk is the increase or decrease in incidence risk of the outcome in the study population that is attributable to exposure (Figure 4).
 
-![The attributable risk in the population](population_attributable_risk.png)
+```{r population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the population."}
+knitr::include_graphics("population_attributable_risk.png")
+```
 
 ***The attributable fraction in the population***
 
 The population attributable fraction (also known as the aetiologic fraction) is the proportion of outcome-positive subjects in the study population that is due to the exposure (Figure 5).
 
-![The attributable fraction in the population](population_attributable_fraction.png)
+```{r population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the population."}
+knitr::include_graphics("population_attributable_fraction.png")
+```
 
 On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome; and (2) the exposure of interest is something amenable to intervention.
 
@@ -228,7 +236,7 @@ epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 1
 
 The prevalence of FLUTD in DCF exposed cats was 4.01 (95% CI 1.43 to 11.23) times greater than the prevalence of FLUTD in non-DCF exposed cats. In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were attributable to DCF (95% CI 4% to 78%).
 
-Need a hand getting the correct wording to explain each of the listed measures of association and measures of effect? Set `interpret = TRUE` in `epi.2by2`:
+Need a hand to get the correct wording to explain each of the listed measures of association and measures of effect? Set `interpret = TRUE` in `epi.2by2`:
 
 ```{r, message = FALSE}
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
@@ -251,7 +259,7 @@ dat.df02 <- birthwt; head(dat.df02)
 ```
 Each row of this data set represents data for one mother. We're interested in the association between `smoke` (the mother's smoking status during pregnancy) and `low` (delivery of a baby less than 2.5 kg bodyweight). 
 
-Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the incorrect format:
+Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the incorrect format - outcome negatives are listed first in the columns of the table and exposure negatives are listed first in the rows:
 
 ```{r, message = FALSE}
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
@@ -377,7 +385,7 @@ gdat.df04
 
 Plot the point estimate of the odds ratio for each candidate risk factor and its 95% confidence interval. Annotate the plot with the reference category for each risk factor:
 
-```{r, message = FALSE}
+```{r odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."}
 library(ggplot2); library(scales)
 
 x.at <- c(0.25,0.5,1,2,4,8,16,32)
@@ -454,7 +462,8 @@ dat.epi06
 
 Plot the individual strata odds ratios and the Mantel-Haenszel summary odds ratio as an error bar plot to better understand how the Mantel-Haenszel adjusted odds ratio relates to the individual strata odds ratios:
 
-```{r, message = FALSE}
+```{r mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."}
+
 nstrata <- 1:length(unique(dat.tab06$frace))
 strata.lab <- paste("Strata ", nstrata, sep = "")
 y.at <- c(nstrata, max(nstrata) + 1)

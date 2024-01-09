@@ -1,0 +1,573 @@
+CHANGES IN epiR VERSION 2.0.67
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Updates and edits to the vignettes.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.65
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Tidy up documentation of sample size functions.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.64
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Functions epi.ssequb and epi.ssequc modified to allow sample size and power to be be calculated for equivalence and equality trials.
+    [Suggested by Hasanthi Abeykoon]
+    
+
+CHANGES IN epiR VERSION 2.0.63
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Bug in rsu.sssep.rb2st1rf and rsu.sssep.rb2st2rf corrected. 
+    [Spotted by Damian Collins]
+    o Documentation update for function epi.sscc.
+    [Suggested by Silvia Jakubski]
+    o Bug in variance calculation for Mantel-Haenszel odds ratio in epi.mh corrected.
+    [Spotted by Remy Dumas]
+    
+
+CHANGES IN epiR VERSION 2.0.62
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Output 'Odds ratio' changed to 'Incidence odds ratio' when method == cohort.count. Output 'Odds ratio' changed to 'Prevalence odds ratio' when method == cross.sectional. 
+    [Suggested by Annette O'Connor and Victoria Brookes]
+    o Code edited to make calculations consistent for functions epi.ssclus2estc, epi.ssclus1estc and epi.sssimpleestc. 
+    [Suggested by Mark Stevenson]
+    o Example 3 for rsu.dxtests shows how to calculate diagnostic sensitivity and specificity when you have three dependent tests that are interpreted in parallel.
+    [Suggested by Cathy Kneipp]
+
+
+CHANGES IN epiR VERSION 2.0.61
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function rsu.dxtest modified to include the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between all three tests).
+    [Suggested by Cathy Kneipp]
+
+
+CHANGES IN epiR VERSION 2.0.60
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Simplified the point mapping code in the Descriptive Epidemiology vignette.
+    [Suggested by Mark Stevenson]
+    o Removed dependence on package rgdal. 
+    [Suggested by Roger Bivand]
+    
+
+CHANGES IN epiR VERSION 2.0.59
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.realrisk. A function to return absolute risks from odds, incidence risk and hazard ratios.
+    [Inpired by David Spiegelhalter at the Winton Centre for Risk and Evidence Communication, The University of Cambridge]
+
+
+CHANGES IN epiR VERSION 2.0.58
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.kappa returns an error if any of the cell frequencies in the input data table are not integers.
+    [Suggested by Morgane Pommier]
+    
+
+CHANGES IN epiR VERSION 2.0.57
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Documentation updates for function epi.directadj.
+    [Suggested by Ayesha Siddiqua and Mark Stevenson]
+    o Function in epi.prcc lists variable names in the output table.
+    [Suggested by Mark Stevenson]
+    o Bug in epi.kappa where pindex, bindex and results of McNemar not returned if number of rows and columns equal to two corrected.
+    [Spotted by Shirley Regev]
+    o Bug in epi.2by2 relating to reporting of confidence intervals for incidence risk estimates for method = "cohort.count" corrected.
+    [Spotted by Mollie Wood]
+    o digits argument in epi.2by2 sets the number of digits for incidence risk, incidence rate and odds estimates in ouput summary table.
+    [Suggested by Mollie Wood]
+
+
+CHANGES IN epiR VERSION 2.0.56
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Finite population correction adjustments added to each of the sample size calculation functions.
+    [Suggested by Mark Stevenson]
+
+CHANGES IN epiR VERSION 2.0.55
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Consistent approach for crude and stratified table preparation using the tidyverse package now provided in the documentation for function epi.2by2.
+    [Suggested by Prabal Chowdhury]
+    
+
+CHANGES IN epiR VERSION 2.0.54
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Odds, incidence risks and incidence rates in print(epi.2by2) includes confidence intervals.
+    [Suggested by Prabal Chowdhury]
+    
+
+CHANGES IN epiR VERSION 2.0.53
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Number at risk and number of events listed in the output from function epi.insthaz.
+    [Suggested by Prabal Chowdhury]
+    o Inconsistency in the documentation for epi.sscompb corrected.
+    [Suggested by Jose Canevari]
+    o Function rsu.dxtest now includes the option to calculate sensitivity and specificity for series and parallel interpretation for three diagnostic tests (including the situation where there is dependence between two of the three tests).
+    [Suggested by Cathy Kneipp]
+
+
+CHANGES IN epiR VERSION 2.0.52
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Labelling inconsistency in epi.2by2 corrected.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.51
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Documentation in relation to NNTB and NNTH in epi.2by2 updated.
+    [Suggested by Margaret MacDougall]
+    o Bug in calculation of score confidence intervals for risk ratio corrected.
+    [Spotted by Ki Heun Chung]
+    
+
+CHANGES IN epiR VERSION 2.0.50
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function summary(epi.tests) now returns a data frame of diagnostic test outcome measures (instead of a list).
+    [Suggested by question asked on Stack Overflow]
+    o Numerous tidy ups to documentation.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.49
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.herdtest now calculates and reports HSe and HSp using the binomial and hypergeometric distributions.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.48
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Bug in function epi.kappa corrected.
+    [Spotted by Valeria Rolle]
+
+
+CHANGES IN epiR VERSION 2.0.47
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.prev further updated to return the expected number of test positives, true positives, false positives, test negatives, true negatives and false negatives in addition to apparent and true prevalence.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.46
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.prev updated to return the expected number of false positive test results in addition to apparent and true prevalence.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.43
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Measures of association vignette updated with code to compute measures of association for a series of candidate risk factors.
+    [Suggested by Bruno Avila]
+    
+
+CHANGES IN epiR VERSION 2.0.42
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function for epi.interaction now handles models of class geeglm (from the geepack package) and glmerMod (from lme4).
+    [Suggested by Diana Garofalo]
+
+
+CHANGES IN epiR VERSION 2.0.41
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function for epi.interaction reports RERI, APAB, S and multiplicative interaction as a list.
+    [Suggested by Mark Stevenson]
+    o Numerous tidy ups to documentation.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.40
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Error in documentation for epi.interaction corrected.
+    [Spotted by Colleen Reynolds]
+    o Function epi.kappa updated to include option to calculate Cohen's kappa.
+    [Suggested by Victoria Mussemann]
+    o Descriptive epidemiology vignette updated to include code to add the cumulative number of cases of disease as a function of time to an epidemic curve.
+    [Suggested by Ahmad Rabiee]
+
+
+CHANGES IN epiR VERSION 2.0.39
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 and epi.tests updated to include option to change the precision of measures of association using the print option.
+    [Suggested by Shikha Chugh]
+    o Function epi.tests updated to include option to calculate exact, Wilson, Agresti, Clopper-Pearson and Jeffreys confidence limits for true prevalence, apparent prevalence, diagnostic sensitivity, diagnostic specificity, positive predictive value and negative predictive value.
+    [Suggested by Shikha Chugh]
+    o Function epi.2by2 now reports variable phi.coef (phi coefficient) for each of the uncorrected chi-square tests. This value can be used as an input for function epi.sscc.
+    [Suggested by Mark Stevenson]
+    o Argument rho.cc in function epi.sscc changed to phi.coef so consistent with the literature and function epi.2by2.
+    [Suggested by Mark Stevenson]
+    o epi.sscompb methodology revised to return results consistent with Woodward (2014).
+    [Spotted by Ajith Ramayyan]
+    o Help for functions epi.sscompb, epi.sscompc, epi.ssxsectn and epi.sscohortc updated to cite the 2014 edition of Woodward (Epidemiology Study Design and Analysis). 
+    [Suggested by Ajith Ramayyan]
+    o epi.tests now returns the proportion of true outcome negative subjects that test positive (false T+ proportion for D-), the proportion of true outcome positive subjects that test negative (false T- proportion for D+), the proportion of test positive subjects that are outcome negative (false T+ proportion for T+) and the proportion of test negative subjects that are outcome positive (false T- proportion for T-). 
+    [Suggested by Ahmad Rabiee]
+    o epi.betabuster returns a warning if the shape1 parameter for the beta distribution equals max.shape1. 
+    [Suggested by Alex Hou]
+    
+
+CHANGES IN epiR VERSION 2.0.38
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.sep corrected to return results consistent with rsu.pstar. 
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.37
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 returns NA for Fisher exact test when total number of observations greater than 2E09, removing numeric overflow errors. 
+    [Suggested by Stuart Reece]
+
+
+CHANGES IN epiR VERSION 2.0.36
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Argument p1 (prevalence of exposure among cases) added to epi.sscc, allowing Fleiss correction to be applied.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.35
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.ssdxsesp to compute a sample size to estimate the sensitivity or specificity of a diagnostic test.
+    [Suggested by Anou Dreyfus]
+    o Additional example provided in the epi.2by2 documentation showing you how to construct an array suitable for a stratified contingency table analysis using count data.
+    [Suggested by Cieran Harries]
+    o Error in power calculation for epi.ssninfb and epi.ssninfc corrected.
+    [Spotted by Aniko Szabo]
+    o epi.ssninfb and epi.ssninfc now requires the user to specify the absolute value of delta (instead of assigning a negative sign to delta, which was prone to user misinterpretation).
+    [Suggested by Aniko Szabo]
+    o Documentation for epi.sssupb, epi.sssupb, epi.ssequb, epi.ssequc, epi.ssninfb and epi.ssninfc revised and improved.
+    [Suggested by Aniko Szabo]
+
+
+CHANGES IN epiR VERSION 2.0.33
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.bohning now handles missing values.
+    [Suggested by Mark Stevenson]
+    o epi.descriptives now reports level frequencies if input data is a factor.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.32
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o All sample size functions now allow user to express error in either relative or absolute terms.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.30
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 and epi.tests data entry formats simplified. Both functions now accept tables generated from tidyverse.
+    [Suggested by Mark Stevenson]
+    o Documentation for all functions reviewed. Objects consistently named.
+    [Suggested by Mark Stevenson]
+    
+
+CHANGES IN epiR VERSION 2.0.29
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 returns NAs for point estimates of incidence rate ratio when number of events equals zero.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.28
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.directadj now returns zero for the directly adjusted incidence rate estimate when the number of observations in a strata equals zero and the time at risk in the same strata equals zero.
+    [Suggested by Mark Stevenson]
+
+
+CHANGES IN epiR VERSION 2.0.26
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 now provides interpretive statements of the number needed to treat and the number needed to harm (with confidence intervals) following the approach described by Altman (1998).
+    [Suggested by Lucas Huggins]
+    o Documentation for epi.directadj updated.
+    
+    
+CHANGES IN epiR VERSION 2.0.24
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.kappa now handles n by n tables.
+    [Suggested by Anita Tolpinrud]
+    o Inconsistency in calculation of test of significance of SMRs using Byar's method corrected.
+    [Spotted by Zhou Weilong]
+
+
+CHANGES IN epiR VERSION 2.0.23
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.blcm.paras to return the number of unknown parameters to be inferred and the number of informative priors likely to be needed for an identifiable Bayesian latent class model to estimate diagnostic sensitivity and specificity in the absence of a gold standard.
+    [Contributed by Simon Firestone, Allison Cheung and Nagendra Singanallur]
+    o Inconsistency in calculation of test of significance of SMRs using Byar's method corrected.
+    [Spotted by Zhou Weilong]
+
+
+CHANGES IN epiR VERSION 2.0.21
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Major tidy up for epi.2by2. Function includes argument 'interpret' to return interpretive statements for each of the computed measures of association. epi.2by2 object now includes massoc.summary, massoc.interp and massoc.detail objects. 
+    [Suggested by Caitlin Pfeiffer and Petra Mullner] 
+    o print(epi.2by2) now returns Yates corrected chi2 test if any of the cell frequencies are less than 5.
+    [Suggested by Simon Firestone]
+
+
+CHANGES IN epiR VERSION 2.0.20
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.dxtest code modified to check that appropriate values for test covariance have been used. Error returned when inappropriate values entered. The function now returns diagnostic sensitivity and specificity assuming tests are independent as well dependent. Documentation for rsu.dxtest updated with details on how to calculate argument covar.
+    [Suggested by Barbara Moloney] 
+
+
+CHANGES IN epiR VERSION 2.0.19
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rsu.spp.rs code modified.
+    o Documentation for rsu.spp.rs, epi.psi and rsu.sssep.rs updated.
+
+
+CHANGES IN epiR VERSION 2.0.18
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Vignette on sample size calculations added.
+
+
+CHANGES IN epiR VERSION 2.0.17
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 code modified to allow it handle the Haldane-Anscombe correction (i.e. addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero).
+    [Suggested by Mark Stevenson]
+    o Error in confidence interval calculation for epi.smr where method = "byar" corrected.
+    [Spotted by Sarah Haile]
+    o Vignette for surveillance functions updated.
+    o epi.2by2 calculates maximum likelihood confidence intervals for the odds ratio when the total number of events is less than 2E09, removing numeric overflow errors. 
+    [Suggested by Stuart Reece]
+    o New function epi.psi: Proportional similarity index to compare non-parametric frequency distributions.
+    o epi.prcc now includes confidence intervals. Example provided in the documentation for epi.prcc improved.
+    o Function epi.ssdetect returns sample size estimates using the binomial and hypergeometric distribution.
+    [Suggested by Manuel Sanchez Vazquez]
+
+
+CHANGES IN epiR VERSION 2.0.1
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.ssdxtest: Sample size to validate a diagnostic test in the absence of a gold standard.
+    o Function epi.sssimpleestb modified to adjust the required sample size to account for imperfect diagnostic sensitivity and specificity.
+
+
+CHANGES IN epiR VERSION 2.0.0
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Major upgrade with amalgamation of epiR with Evan Sergeant's RSurveillance package.
+    o Function epi.insthaz now returns Kaplan-Meier survival estimates as well as instantaneous hazard.
+    o Argument nfractional added to each of the sample size functions.
+    o Inconsistency in reporting of results of epi.nomogram corrected.
+    [Spotted by Pietro Ravani]
+
+
+CHANGES IN epiR VERSION 1.0-16
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.ssxsectn updated to calculate minimum detectable odds ratio for a cross-sectional study. Function epi.sscohortc updated to calculate minimum detectable odds ratio for a cohort study.
+    [Suggested by Alex Hou] 
+
+
+CHANGES IN epiR VERSION 1.0-15
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.insthaz now handles stratified data. Examples in function documentation updated to reflect these changes.
+    o Argument rho in function epi.sscc changed to rho.cc to avoid confusion with rho used to represent the intracluster correlation coefficient.
+    [Suggested by Xiaoqing Liu] 
+    o Amibguity in documentation for epi.sscomps corrected.
+    [Spotted by Marco Barbara]
+    o Function epi.2by2 now includes Taylor series confidence intervals for the incidence risk and prevalence ratio.
+
+
+CHANGES IN epiR VERSION 1.0-14
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Long overdue vignette included. 
+
+
+CHANGES IN epiR VERSION 1.0-13
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 calculates Cornfield confidence intervals for the odds ratio when the total number of events is less than 500. This reduces computation time when cell frequencies are large.
+    [Suggested by Jeff Canar]
+    o epi.ssdetect now uses the hypergeometric distribution to calculate sample size, removing the need to apply a finite correction factor.
+    [Suggested by Manuel Sanchez Vazquez]
+    o epi.ssninfb
+    Inconsistency in function documentation.
+    [Spotted by Winston Mason]
+    Fixed. 
+
+
+CHANGES IN epiR VERSION 1.0-12
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.smr: Computes confidence intervals and tests of significance of the standardised mortality [morbidity] ratio.
+
+
+CHANGES IN epiR VERSION 1.0-11
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2
+    Inconsistency in variables returned from print(epi.2by2) and summary(epi.2by2) corrected.
+    [Spotted by Jose G Conde Santiago]
+
+
+CHANGES IN epiR VERSION 1.0-10
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.interaction
+    Function now includes option to use either product or dummy parameterisation of interaction terms. Documentation updated.
+    [Suggested by Francois M Carrier]
+    o New function epi.sscohortc: Sample size, power or minimum detectable incidence risk ratio for a cohort study using individual count data.
+    o New function epi.sscohortt: Sample size, power or minimum detectable incidence rate ratio for a cohort study using individual time data.    
+    o New function epi.ssxsectn: Sample size, power or minimum detectable preva;ence ratio for a cross-sectional study.
+
+
+CHANGES IN epiR VERSION 1.0-06
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Functions to calculate sample size. Major revision of the naming of functions to calculate sample size.
+    o New function epi.ssclus1estb: Sample size to estimate a binary outcome using one-stage cluster sampling.
+
+
+CHANGES IN epiR VERSION 1.0-04
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.conf
+    Error in incidence rate confidence interval calculation.
+    [Spotted by Kazuki Yoshida]
+    Fixed.
+    
+    o epi.detectsize
+    Inconsistency in function documentation.
+    [Spotted by Jamie Madden]
+    Fixed. 
+    
+    o epi.kappa
+    Function returns an error if the number of rows and number of columns in the data table presented for analysis does not equal two.
+    [Spotted by Maia Dolgopoloff]
+    Fixed.
+
+BUG FIXES
+
+    o epi.2by
+    Anomalies in calculation of test of homogeneity in strata odds ratios and risk ratios corrected. Argument "homogeneity" removed from function. Woolf test of homogeneity reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+    [Spotted by Antonio A Lopes]
+    Fixed.
+    
+    
+CHANGES IN epiR VERSION 1.0-01
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by
+    Argument "homogeneity" removed from epi.2by2. Mantel-Haenszel (Woolf) test of homogeneity now reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+
+BUG FIXES
+
+    o epi.2by
+    Anomalies in calculation of test of homogeneity in strata odds ratios and risk ratios corrected. Argument "homogeneity" removed from function. Woolf test of homogeneity reported by default for print(x, ...). Test statistics, degrees of freedom and p-values for Breslow Day and Woolf tests of homogeneity returned using summary(x, ...). 
+    [Spotted by Antonio A Lopes]
+    Fixed.
+
+
+CHANGES IN epiR VERSION 0.9-98
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.prev
+    Function does not truncate true prevalence estimates to values between 0 and 1. Warning issued when apparent prevalence is less than (1 - specificity). Additional references added to docuementation. 
+
+
+CHANGES IN epiR VERSION 0.9-97
+
+BUG FIXES
+
+    o epi.prev
+    Error in formatting of confidence intervals when method = "sterne" and method = "blaker". 
+    [Spotted by Salome Duerr]
+    Fixed.
+
+    o epi.noninfb
+    Study power estimation when r argument for epi.noninfb was not equal to 1 returned incorrect results. 
+    [Spotted by Aline Guttmann]
+    Fixed.
+
+    o epi.interaction
+    Error returned when model = coxph. 
+    [Spotted by Eirik Degerud]
+    Fixed.
+    
+    o epi.directadj
+    Inconsistency in documentation.
+    [Spotted by Jose G Conde Santiago]
+    Fixed.

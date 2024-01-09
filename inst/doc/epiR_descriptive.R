@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 
 # If you want to create a PDF document paste the following after line 9 above:
 #   pdf_document:
@@ -42,13 +42,33 @@ head(dat.df)
 ## -----------------------------------------------------------------------------
 dat.df <- dat.df[sort.list(dat.df$est),]
 dat.df$rank <- 1:nrow(dat.df)
+dat.df$labels <- dat.df$rname
 
 ## ----dfreq02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq02}Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."----
 ggplot(data = dat.df, aes(x = rank, y = est)) +
   theme_bw() +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
   geom_point() +
-  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$rname, name = "Region") +
+  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$labels, name = "Region") +
+  scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+## -----------------------------------------------------------------------------
+ndelete <- function(x, n){
+  id <- seq(from = 1, to = length(x), by = n)
+  rval <- rep("", times = length(x))
+  rval[id] <- x[id]
+  rval
+}
+
+dat.df$labels <- ndelete(x = dat.df$rname, n = 2)
+
+## ----dfreq03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq03}Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."----
+ggplot(data = dat.df, aes(x = rank, y = est)) +
+  theme_bw() +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
+  geom_point() +
+  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$labels, name = "Region") +
   scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 

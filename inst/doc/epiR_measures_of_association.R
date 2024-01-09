@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
@@ -52,6 +52,9 @@ flextable(irr.df) %>%
 
   set_caption("Table 2: A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
 
+## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."----
+knitr::include_graphics("risk_ratio.png")
+
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
 orcohort.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a / b","OE- = c / d", "OT = (a + c) / (b + d)"))
 
@@ -101,36 +104,48 @@ flextable(orcc.df) %>%
 
   set_caption("Table 4: A 2 x 2 table with the odds of exposure calculated for cases, controls and the total study population.")
 
+## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."----
+knitr::include_graphics("attributable_risk.png")
+
+## ----attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the exposed."----
+knitr::include_graphics("attributable_fraction.png")
+
+## ----population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the population."----
+knitr::include_graphics("population_attributable_risk.png")
+
+## ----population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the population."----
+knitr::include_graphics("population_attributable_fraction.png")
+
 ## -----------------------------------------------------------------------------
 dat.v01 <- c(13,2163,5,3349); dat.v01
 
 # View the data in the usual 2 by 2 table format:
 matrix(dat.v01, nrow = 2, byrow = TRUE)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(epiR)
 
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = FALSE, outcome = "as.columns")
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = TRUE, outcome = "as.columns")
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(MASS)
 
 # Load and view the data:
 dat.df02 <- birthwt; head(dat.df02)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 dat.tab02 <- dat.tab02[2:1,2:1]; dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 # Variables low, smoke and race as factors. Put an 'f' in front of the variable names to remind you that they're factors:
 
 dat.df02$flow <- factor(dat.df02$low, levels = c(1,0))
@@ -139,15 +154,15 @@ dat.df02$frace <- factor(dat.df02$race, levels = c(1,2,3))
 
 dat.tab02 <- table(dat.df02$fsmoke, dat.df02$flow, dnn = c("Smoke", "Low BW")); dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", conf.level = 0.95, 
    units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 names(dat.epi02$massoc.detail)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi02$massoc.detail$OR.strata.wald
 # Wald confidence intervals: 2.02 (95% CI 1.08 to 3.78)
 
@@ -155,7 +170,7 @@ dat.epi02$massoc.detail$OR.strata.score
 # Score confidence intervals: 2.02 (95% CI 1.08 to 3.77)
 
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(dplyr); library(tidyr)
 
 dat.df03 <- birthwt; head(dat.df03)
@@ -174,12 +189,12 @@ dat.tab03
 pivot_wider(dat.tab03, id_cols = c(fsmoke), 
    names_from = flow, values_from = n)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi03
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df04 <- birthwt; head(dat.df04)
 
 dat.df04$flow <- factor(dat.df04$low, levels = c(1,0))
@@ -220,7 +235,7 @@ for(i in 12:14){
 gdat.df04 <- data.frame(yat = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
 gdat.df04
 
-## ---- message = FALSE---------------------------------------------------------
+## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
 library(ggplot2); library(scales)
 
 x.at <- c(0.25,0.5,1,2,4,8,16,32)
@@ -238,7 +253,7 @@ ggplot(data = gdat.df04, aes(x = or.p, y = yat)) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(axis.title.y = element_text(vjust = 0))
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df05 <- birthwt; head(dat.df05)
 
 dat.df05$flow <- factor(dat.df05$low, levels = c(1,0))
@@ -249,12 +264,12 @@ dat.df05$frace <- factor(dat.df05$race, levels = c(1,2,3))
 dat.tab05 <- table(dat.df05$fsmoke, dat.df05$flow, dat.df05$frace, 
    dnn = c("Smoke", "Low BW", "Race")); dat.tab05
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi05
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df06 <- birthwt
 
 dat.tab06 <- dat.df06 %>%
@@ -269,12 +284,13 @@ dat.tab06
 pivot_wider(dat.tab06, id_cols = c(frace, fsmoke), 
    names_from = flow, values_from = n)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi06
 
-## ---- message = FALSE---------------------------------------------------------
+## ----mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."----
+
 nstrata <- 1:length(unique(dat.tab06$frace))
 strata.lab <- paste("Strata ", nstrata, sep = "")
 y.at <- c(nstrata, max(nstrata) + 1)

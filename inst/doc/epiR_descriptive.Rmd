@@ -38,19 +38,19 @@ The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id16111394
 
 ## Individual
 
-Descriptions of disease frequency involves reporting either the **prevalence** or **incidence** of disease.
+Disease frequency can be reported in terms of either **prevalence** or **incidence**.
 
-Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a specific disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and this vignette will follow this convention.
+Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a given disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and this vignette will follow this convention.
 
 Two types of prevalence are reported in the literature: (1) **point prevalence** equals the proportion of a population in a diseased state at a single point in time; (2) **period prevalence** equals the proportion of a population with a given disease or condition over a specific period of time (i.e., the number of existing cases at the start of a follow-up period plus the number of incident cases that occur during the follow-up period).
 
-Incidence provides a measure of how frequently susceptible individuals become disease cases as they are observed over time. An incident case occurs when an individual changes from being susceptible to being diseased. The count of incident cases is the number of such events that occur in a population during a defined follow-up period. There are two ways to express incidence:
+Incidence provides a measure of how frequently susceptible individuals become disease cases as they are observed over time. An incident case occurs when an individual changes from being susceptible to being diseased. The count of incident cases is the number of such events that occur in a population over a defined follow-up period. There are two ways to express incidence:
 
-**Incidence risk** (also known as cumulative incidence) is the proportion of initially susceptible individuals in a population who become new cases during a defined follow-up period.
+**Incidence risk** (also known as cumulative incidence) is the proportion of initially susceptible individuals in a population that become new cases over a defined follow-up period.
 
-**Incidence rate** (also known as incidence density) is the number of new cases of disease that occur per unit of individual time at risk during a defined follow-up period.
+**Incidence rate** (also known as incidence density) is the number of new cases of disease that occur per unit of individual time at risk over a defined follow-up period.
 
-In addition to reporting the point estimate of disease frequency, it is important to provide an indication of the uncertainty around that point estimate. The `epi.conf` function in the `epiR` package allows you to calculate confidence intervals for prevalence, incidence risk and incidence rates.
+In addition to reporting the point estimate of disease frequency, it is important to provide an indication of the uncertainty around that point estimate. The `epi.conf` function in the `epiR` package allows you to calculate confidence intervals for prevalence, incidence risks and incidence rates.
 
 Let's say we're interested in the prevalence of disease X in a population comprised of 1000 individuals. Two hundred are tested and four returned a positive result. Assuming 100% test sensitivity and specificity, what is the estimated prevalence of disease X in this population?
 
@@ -76,7 +76,7 @@ epi.conf(tmp, ctype = "inc.rate", method = "exact", N = 1000, design = 1,
 
 The incidence rate of cancer in this population was 6.2 (95% CI 5.2 to 7.3) cases per 1000 person-years at risk.
 
-Lets say we want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. For this example, we sort the disease frequency estimates from lowest to highest. Generate some data:
+Lets say we want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. With a ranked error bar plot the disease frequency estimates are plotted from lowest to highest. Generate some data:
 
 ```{r}
 ncas <- c(347,444,145,156,56,618,203,113,10,30,663,447,213,52,256,216,745,97,31,250,430,494,96,544,352)
@@ -85,7 +85,7 @@ rname <- paste("Region ", 1:length(npop), sep = "")
 dat.df <- data.frame(rname,ncas,npop)
 ```
 
-Calculate the prevalence of disease in each region and its 95% confidence interval using `epi.conf`. The function `epi.conf` provides several options for confidence interval calculation methods for prevalence. For this example we'll use the exact method:
+Calculate the prevalence of disease in each region and its 95% confidence interval. The function `epi.conf` provides several options for confidence interval calculation methods for prevalence. For this example we'll use the exact method:
 
 ```{r}
 tmp <- as.matrix(cbind(dat.df$ncas, dat.df$npop))
@@ -95,21 +95,45 @@ dat.df <- cbind(dat.df, tmp)
 head(dat.df)
 ```
 
-Sort the data in order of variable `est` and assign a 1 to `n` identifier as variable `rank`:
+Sort the data in order of variable `est`, assign a 1 to `n` identifier as variable `rank` and make a copy of `dat.df$rname`:
 
 ```{r}
 dat.df <- dat.df[sort.list(dat.df$est),]
 dat.df$rank <- 1:nrow(dat.df)
+dat.df$labels <- dat.df$rname
 ```
 
-Create a ranked error bar plot. Because its useful to provide the region-area names on the horizontal axis we'll rotate the horizontal axis labels by 90 degrees.
+Create a ranked error bar plot. Because its useful to provide the region-area names on the horizontal axis rotate the horizontal axis labels by 90 degrees.
 
 ```{r dfreq02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq02}Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."}
 ggplot(data = dat.df, aes(x = rank, y = est)) +
   theme_bw() +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
   geom_point() +
-  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$rname, name = "Region") +
+  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$labels, name = "Region") +
+  scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+If you have a large number of regions the horizontal axis labels can become crowded and difficult to read. Use the `ndelete` function to drop every `n`th region name.
+
+```{r}
+ndelete <- function(x, n){
+  id <- seq(from = 1, to = length(x), by = n)
+  rval <- rep("", times = length(x))
+  rval[id] <- x[id]
+  rval
+}
+
+dat.df$labels <- ndelete(x = dat.df$rname, n = 2)
+```
+Re-draw the ranked error bar plot:
+
+```{r dfreq03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq03}Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."}
+ggplot(data = dat.df, aes(x = rank, y = est)) +
+  theme_bw() +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
+  geom_point() +
+  scale_x_continuous(limits = c(0,25), breaks = dat.df$rank, labels = dat.df$labels, name = "Region") +
   scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
@@ -118,9 +142,9 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
 
 Epidemic curves are used to describe patterns of disease over time. Epidemic curve data are often presented in one of two formats:
 
-1.  One row for each individual identified as a case with an event date assigned to each.
+1. One row for each individual identified as a case with an event date assigned to each.
 
-2.  One row for every event date with an integer representing the number of cases identified on that date.
+2. One row for every event date with an integer representing the number of cases identified on that date.
 
 In the notes that follow we provide details on how to produce an epidemic curve when you're data are in these formats.
 
