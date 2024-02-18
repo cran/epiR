@@ -47,7 +47,8 @@ epi.interaction <- function(model, coef, param = c("product", "dummy"), conf.lev
    }
    
    if(theta1 < 0 | theta2 < 0)
-     warning("At least one of the two regression coefficients is less than zero (i.e., OR < 1). Estimates of RERI and AP will be invalid. Estimate of SI valid.")
+     # Email from Edgar Brizuela 160224: The interpretation of the synergy index becomes difficult in settings in which one or both of the exposures is preventive rather than causative so that the denominator of S is negative (Knol et al., 2011). This issue does not arise with RERI RR because the denominator of RERI RR is never negative. The issue can be resolved with the synergy index S by recoding the exposures so that neither is preventive in the absence of the other (Knol et al., 2011)
+     warning("At least one of the two regression coefficients is less than zero (i.e., OR < 1). Estimate of SI will be invalid. Estimates of RERI and AP valid.")
       
    if(param == "product"){
      

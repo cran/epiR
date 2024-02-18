@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.68
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Documentation error in epi.interaction corrected.
+    [Spotted by Edgar Ortiz Brizuela]
+    
+
 CHANGES IN epiR VERSION 2.0.67
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -22,9 +22,9 @@ epi.interaction(model, coef, param = c("product", "dummy"), conf.level = 0.95)
 \details{
 Interaction on an additive scale means that the combined effect of two exposures is greater (or less) than the sum of the individual effects of two exposures. Interaction on a multiplicative scale means that the combined effect of the two exposures is greater (or less) than the product of the individual effects of the two exposures.
 
-This function calculates three indices to assess the presence of additive interaction, as defined by Rothman (1998): (1) the relative excess risk due to interaction (RERI, sometimes called the interaction contrast ratio), (2) the proportion of disease among those with both exposures that is attributable to their interaction (AP[AB]), and (3) the synergy index (S). In addition 
+This function calculates three indices to assess the presence of additive interaction, as defined by Rothman (1998): (1) the relative excess risk due to interaction (RERI, sometimes called the interaction contrast ratio), (2) the proportion of disease among those with both exposures that is attributable to their interaction (AP[AB]), and (3) the synergy index (S).
 
-If at least one of the two exposures are preventive (i.e., ORs of less than one) then estimates of RERI and AP are invalid (the SI remains unaffected). In this situation the function issues an appropriate warning. Exposures need to be recoded so the stratum with the lowest outcome risk becomes the new reference category when the two exposures are considered together.
+If at least one of the two exposures are preventive (i.e., ORs of less than one) then the estimate of SI will be invalid (RERI and AP remain unaffected). In this situation the function issues an appropriate warning. To estimate SI the exposures need to be recoded so the stratum with the lowest outcome risk becomes the new reference category when the two exposures are considered together.
 
 A RERI of zero means no additive interaction. A RERI of greater than one means positive interaction or more than additivity. A RERI of less than one means negative interaction or less than additivity. RERI ranges from zero to infinity.
 
