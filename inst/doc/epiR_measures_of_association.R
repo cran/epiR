@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
@@ -122,30 +122,30 @@ dat.v01 <- c(13,2163,5,3349); dat.v01
 # View the data in the usual 2 by 2 table format:
 matrix(dat.v01, nrow = 2, byrow = TRUE)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(epiR)
 
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = FALSE, outcome = "as.columns")
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
    interpret = TRUE, outcome = "as.columns")
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(MASS)
 
 # Load and view the data:
 dat.df02 <- birthwt; head(dat.df02)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
 dat.tab02 <- dat.tab02[2:1,2:1]; dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 # Variables low, smoke and race as factors. Put an 'f' in front of the variable names to remind you that they're factors:
 
 dat.df02$flow <- factor(dat.df02$low, levels = c(1,0))
@@ -154,15 +154,15 @@ dat.df02$frace <- factor(dat.df02$race, levels = c(1,2,3))
 
 dat.tab02 <- table(dat.df02$fsmoke, dat.df02$flow, dnn = c("Smoke", "Low BW")); dat.tab02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", conf.level = 0.95, 
    units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi02
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 names(dat.epi02$massoc.detail)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi02$massoc.detail$OR.strata.wald
 # Wald confidence intervals: 2.02 (95% CI 1.08 to 3.78)
 
@@ -170,7 +170,7 @@ dat.epi02$massoc.detail$OR.strata.score
 # Score confidence intervals: 2.02 (95% CI 1.08 to 3.77)
 
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(dplyr); library(tidyr)
 
 dat.df03 <- birthwt; head(dat.df03)
@@ -189,12 +189,12 @@ dat.tab03
 pivot_wider(dat.tab03, id_cols = c(fsmoke), 
    names_from = flow, values_from = n)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi03
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df04 <- birthwt; head(dat.df04)
 
 dat.df04$flow <- factor(dat.df04$low, levels = c(1,0))
@@ -253,7 +253,7 @@ ggplot(data = gdat.df04, aes(x = or.p, y = yat)) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(axis.title.y = element_text(vjust = 0))
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df05 <- birthwt; head(dat.df05)
 
 dat.df05$flow <- factor(dat.df05$low, levels = c(1,0))
@@ -264,12 +264,12 @@ dat.df05$frace <- factor(dat.df05$race, levels = c(1,2,3))
 dat.tab05 <- table(dat.df05$fsmoke, dat.df05$flow, dat.df05$frace, 
    dnn = c("Smoke", "Low BW", "Race")); dat.tab05
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi05
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.df06 <- birthwt
 
 dat.tab06 <- dat.df06 %>%
@@ -284,7 +284,7 @@ dat.tab06
 pivot_wider(dat.tab06, id_cols = c(frace, fsmoke), 
    names_from = flow, values_from = n)
 
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count", 
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi06
