@@ -1498,7 +1498,7 @@
   
   
   # OR interpretation:
-  directn.sor <- ifelse(res$OR.strata.wald[1] < 1, "less", "greater")
+  directn.sor <- ifelse(res$OR.strata.wald[1] < 1, "decreased", "increased")
   cohort.count.ss.or = paste("The outcome incidence odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2),") times the outcome incidence odds among the unexposed: exposure ", directn.sor, " the outcome incidence odds among the exposed.", sep = "")
   
   
@@ -1544,7 +1544,7 @@
   
   # Crude RR interpretation:
   directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.crr = paste("If we don't account for confounding the outcome incidence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence risk among the unexposed: exposure ", directn.crr, " the outcome incidence risk among the exposed.", sep = "")
+  cohort.count.ms.crr = paste("The crude outcome incidence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence risk among the unexposed: exposure ", directn.crr, " the outcome incidence risk among the exposed.", sep = "")
   
   
   # M-H RR interpretation:
@@ -1554,7 +1554,7 @@
 
   # Crude OR interpretation:
   directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.cor = paste("If we don't account for confounding the outcome incidence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome incidence odds among the unexposed: exposure ", directn.cor,  " the outcome incidence odds among the unexposed. ", sep = "")
+  cohort.count.ms.cor = paste("The crude outcome incidence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome incidence odds among the unexposed: exposure ", directn.cor,  " the outcome incidence odds among the unexposed. ", sep = "")
 
 
   # M-H OR interpretation:
@@ -1563,16 +1563,16 @@
   
   
   # Crude AR interpretation:
-  cohort.count.ms.car = paste("If we don't account for confounding exposure changed outcome incidence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ms.car = paste("Exposure changed the crude outcome incidence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   
   # M-H AR interpretation:
-  cohort.count.ms.mar = paste("After accounting for confounding exposure changed outcome incidence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cohort.count.ms.mar = paste("After accounting for confounding exposure changed the outcome incidence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
 
   
   # NNTB - NNTH interpretation - multiple strata, crude:
   directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.cnnt <- paste("Exposure ", directn.crr, " the outcome incidence risk in the exposed. The number needed to treat (expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
+  cohort.count.ms.cnnt <- paste("Exposure ", directn.crr, " the crude outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
   
   # nnmsc <- NA
   # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] > 0 & res$NNT.crude.wald[3] > 0, 1, nnmsc))
@@ -1592,7 +1592,7 @@
 
   # NNTB - NNTH interpretation - multiple strata, M-H adjusted:
   directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.mnnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
+  cohort.count.ms.mnnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
   
   # nnmsm <- NA
   # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] > 0 & res$NNT.mh.wald[3] > 0, 1, nnmsc))
@@ -1641,8 +1641,7 @@
   
   # Crude RR interpretation:
   directn.cirr <- ifelse(res$IRR.crude.wald[1] < 1, "decreased", "increased")
-  
-  cohort.time.ms.crr = paste("If we don't account for confounding the outcome incidence rate among the exposed was ", round(res$IRR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence rate among the unexposed: exposure ", directn.cirr, " the outcome incidence rate among the exposed.", sep = "")
+  cohort.time.ms.crr = paste("The crude outcome incidence rate among the exposed was ", round(res$IRR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence rate among the unexposed: exposure ", directn.cirr, " the outcome incidence rate among the exposed.", sep = "")
   
 
   # M-H RR interpretation:
@@ -1651,7 +1650,7 @@
 
 
   # Crude AR interpretation:
-  cohort.time.ms.car = paste("If we don't account for confounding exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ". ", sep = "")
+  cohort.time.ms.car = paste("Exposure changed the crude outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ". ", sep = "")
   
   # M-H AR interpretation:
   cohort.time.ms.mar = paste("After accounting for confounding exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
@@ -1678,7 +1677,7 @@
   
   # Crude OR interpretation:
   directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "less", "greater")
-  case.control.ms.cor = paste("If we don't account for confounding the exposure odds among cases was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the exposure odds among controls: the odds of the outcome among cases was ", directn.cor, " than the odds of the outcome among controls.", sep = "")
+  case.control.ms.cor = paste("The crude exposure odds among cases was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the exposure odds among controls: the odds of the outcome among cases was ", directn.cor, " than the odds of the outcome among controls.", sep = "")
 
   
   # M-H OR interpretation:
@@ -1712,7 +1711,7 @@
   
   # NNT and NNH --- from Altman (1998):
   directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ss.nnt <- paste("Exposure ", directn.srr, " the outcome incidence risk in the exposed. The number needed to treat ( expose) to ", substr(x = directn.srr, start = 1, nchar(directn.srr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
+  cross.sectional.ss.nnt <- paste("Exposure ", directn.srr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.srr, start = 1, nchar(directn.srr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
   
   # nnss <- NA
   # nnss <- as.numeric(ifelse(res$NNT.strata.wald[2] > 0 & res$NNT.strata.wald[3] > 0, 1, nnss))
@@ -1748,26 +1747,26 @@
   
   # Crude RR interpretation:
   directn.crr <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.crr = paste("If we don't account for confounding the outcome prevalence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure", directn.crr, " outcome prevalence risk among the exposed.", sep = "")
+  cross.sectional.ms.crr = paste("The crude outcome prevalence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure", directn.crr, " the outcome prevalence risk among the exposed.", sep = "")
   
   
   # M-H RR interpretation:
   directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.mrr, " outcome prevalence risk among the exposed.", sep = "")
+  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.mrr, " the outcome prevalence risk among the exposed.", sep = "")
   
   
   # Crude OR interpretation:
   directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.cor = paste("If we don't account for confounding the outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.cor, " outcome prevalence odds among the exposed.", sep = "")
+  cross.sectional.ms.cor = paste("The crude outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.cor, " the outcome prevalence odds among the exposed.", sep = "")
   
   
   # M-H OR interpretation:
   directn.mor <- ifelse(res$OR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.mor = paste("After accounting for confounding the outcome prevalence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.mor, " outcome prevalence odds among the exposed.", sep = "")
+  cross.sectional.ms.mor = paste("After accounting for confounding the outcome prevalence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.mor, " the outcome prevalence odds among the exposed.", sep = "")
   
   
   # Crude AR interpretation:
-  cross.sectional.ms.car = paste("If we don't account for confounding exposure changed the outcome prevalence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cross.sectional.ms.car = paste("Exposure changed the crude outcome prevalence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   
   # M-H AR interpretation:
@@ -1776,7 +1775,7 @@
   
   # NNTB - NNTH - multiple strata, crude:
   directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.nnt <- paste("Exposure ", directn.crr, " the outcome incidence risk in the exposed. The number needed to treat (expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
+  cross.sectional.ms.nnt <- paste("Exposure ", directn.crr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
   
   # nnmsc <- NA
   # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] > 0 & res$NNT.crude.wald[3] > 0, 1, nnmsc))
@@ -1797,7 +1796,7 @@
 
   # NNTB - NNTH - multiple strata, Mantel-Haenszel:
   directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.nnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
+  cross.sectional.ms.nnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
   
   # nnmsm <- NA
   # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] > 0 & res$NNT.mh.wald[3] > 0, 1, nnmsc))

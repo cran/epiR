@@ -204,22 +204,26 @@ Zhang J, Yu KF (1998). What's the relative risk? A method for correcting the odd
 }
 
 \author{
-Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia), Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA), Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA) and Simon Firestone (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
+Mark Stevenson (Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Australia), Cord Heuer (EpiCentre, IVABS, Massey University, Palmerston North, New Zealand), Jim Robison-Cox (Department of Math Sciences, Montana State University, Montana, USA), Kazuki Yoshida (Brigham and Women's Hospital, Boston Massachusetts, USA) and Simon Firestone (Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Australia). Thanks to Ian Dohoo for numerous helpful suggestions to improve the documentation for this function. 
 }
 
-\note{Measures of association include the prevalence ratio, the incidence risk ratio, the incidence rate ratio and the odds ratio. The incidence risk ratio is the ratio of the incidence risk of disease in the exposed group to the incidence risk of disease in the unexposed group. The odds ratio (also known as the cross-product ratio) is an estimate of the incidence risk ratio. When the incidence of an outcome in the study population is low (say, less than 5\%) the odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
+\note{For cohort studies where the outcome of interest is expressed as an incidence risk, measures of association include the incidence risk ratio and the incidence odds ratio. When the incidence of the outcome in the study population is low (less than 5\%) the incidence odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the incidence odds ratio will overestimate the incidence risk ratio when it is greater than than 1 or understimate the incidence risk ratio when it is less than 1.
+      
+For cohort studies where outcome of interest is expressed as an incidence rate, the incidence rate ratio is used as a measure of association. For case-control studies the exposure odds ratio is used as a measure of association.
 
-Measures of effect in the exposed include the attributable risk (or prevalence) and the attributable fraction. The attributable risk is the risk of disease in the exposed group minus the risk of disease in the unexposed group. The attributable risk provides a measure of the absolute increase or decrease in risk associated with exposure. The attributable fraction is the proportion of study outcomes in the exposed group that is attributable to exposure. 
+For cross-sectional studies where the outcome of interest is expressed as a prevalence, measures of association include the prevalence risk ratio and the prevalence odds ratio. When the prevalence of the outcome in the study population is low (less than 5\%) the prevalence odds ratio will provide a reliable estimate of the incidence risk ratio. The more frequent the outcome becomes, the more the prevalence odds ratio will overestimate the prevalence risk ratio when it is greater than than 1 or understimate the prevalence risk ratio when it is less than 1.
 
-The number needed to treat (NNT) equals the inverse of the attributable risk. Depending on the outcome of interest we use different labels for NNT. When dealing with an outcome that is desirable (e.g., treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is undesirable (e.g., death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
+Measures of effect in the exposed include the attributable risk (for cohort studies where the outcome of interest is expressed as an incidence risk), attributable rate (for cohort studies where the outcome of interest is expressed as an incidence rate) and prevalence risk (for cross-sectional studies where the  outcome of interest is expressed as a prevalence risk). The attributable risk is the incidence risk of the outcome in the exposed minus the incidence risk of the outcome in the unexposed. The attributable risk provides a measure of the absolute increase or decrease in outcome risk that is associated with exposure. The attributable fraction is the proportion of study outcomes in the exposed group that is attributable to exposure. 
 
-Measures of effect in the population include the population attributable risk (or prevalence) and the population attributable fraction (also known as the aetiologic fraction). The population attributable risk is the risk of the study outcome in the population that may be attributed to exposure. The population attributable fraction is the proportion of the study outcomes in the population that is attributable to exposure.
+The number needed to treat (NNT) is the inverse of the attributable risk. Depending on the outcome of interest we use different labels for NNT. When dealing with an outcome that is desirable (e.g., treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is undesirable (e.g., death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
 
-Point estimates and confidence intervals for the prevalence ratio and incidence risk ratio are calculated using Wald (Wald 1943) and score methods (Miettinen and Nurminen 1985). Point estimates and confidence intervals for the incidence rate ratio are calculated using the exact method described by Kirkwood and Sterne (2003) and Juul (2004). Point estimates and confidence intervals the odds ratio are calculated using Wald (Wald 1943), score (Miettinen and Nurminen 1985) and maximum likelihood methods (Fleiss et al. 2003). Point estimates and confidence intervals for the population attributable risk are calculated using formulae provided by Lash et al (2021) and Pirikahu (2014). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk are calculated using formulae provided by Klingenberg (2014).
+Measures of effect in the population include the attributable risk in the population (for cohort studies where the outcome of interest is expressed as an incidence risk) and the attributable prevalence in the population (for cross-sectional studies where the outcome of interest is expressed as a prevalence risk). The population attributable risk provides a measure of the absolute increase or decrease in outcome risk in the population that is associated with exposure. The population attributable fraction is the proportion of study outcomes in the populaton that is attributable to exposure. 
+
+Point estimates and confidence intervals for the prevalence ratio and incidence risk ratio are calculated using the Wald (1943) and score methods (Miettinen and Nurminen 1985). Point estimates and confidence intervals for the incidence rate ratio are calculated using the exact method described by Kirkwood and Sterne (2003) and Juul (2004). Point estimates and confidence intervals for the odds ratio are calculated using the Wald (1943), score (Miettinen and Nurminen 1985) and maximum likelihood methods (Fleiss et al. 2003). Point estimates and confidence intervals for the population attributable risk are calculated using formulae provided by Lash et al (2021) and Pirikahu (2014). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk are calculated using formulae provided by Klingenberg (2014).
 
 Wald confidence intervals are provided in the summary table simply because they are widely used and would be familiar to most users. 
 
-The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not significant.
+The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not statistically significant.
 
 The Mantel-Haenszel (Woolf) test of homogeneity of the odds ratio are based on Jewell (2004, p 152 - 158). Thanks to Jim Robison-Cox for sharing his implementation of these functions.
 }
@@ -291,9 +295,9 @@ dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2,
 print(dat.epi02)
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
-## significant (chi square test statistic 2.800; df 2; p-value = 0.25). 
-## We accept the null hypothesis and conclude that the odds ratios for 
-## each strata of race are the same. 
+## statistically significant (chi square test statistic 2.800; df 2; 
+## p-value = 0.25). We accept the null hypothesis and conclude that the 
+## odds ratios for each strata of race are the same. 
 
 ## After accounting for the confounding effect of race, the odds of 
 ## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
@@ -309,15 +313,16 @@ dat.epi02$massoc.detail$ARisk.mh.wald
 ## How many mothers need to stop smoking to avoid one low birth weight baby? 
 dat.epi02$massoc.interp$text[dat.epi02$massoc.interp$var == 
    "NNTB NNTH (crude)"]
-
-## If we don't account for confounding the number of mothers that need to 
-## stop smoking to avoid one low birth weight baby (NNTB) is 
-## 7 (95\% CI 3 to 62).
+   
+## Exposure (smoking) increased the crude outcome incidence risk in the exposed. 
+## The number needed to treat (i.e., expose) to increase the outcome 
+## frequency by one was 7 (95% CI 3 to 62).
 
 dat.epi02$massoc.interp$text[dat.epi02$massoc.interp$var == "NNTB NNTH (M-H)"]
-## After accounting for the confounding effect of race the number of mothers
-## that need to stop smoking to avoid one low birth weight baby (NNTB) is 
-## 5 (95\% CI 2 to 71).
+
+## After adjusting for confounding exposure (smoking) increased the outcome 
+## incidence risk in the exposed. The number needed to treat (i.e., expose) 
+## to increase the outcome frequency by one was 5 (95% CI 2 to 71).
 
 ## Now turn dat.tab02 into a data frame where the frequencies of individuals in 
 ## each exposure-outcome category are provided. Often your data will be 
@@ -334,22 +339,23 @@ dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2,
    conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 print(dat.epi02)
 
-## The Mantel-Haenszel adjusted odds ratio is 3.09 (95\% CI 1.49 to 6.39). The 
-## ratio of the crude odds ratio to the Mantel-Haensel adjusted odds ratio is
-## 0.66.
+## The Mantel-Haenszel adjusted incidence odds ratio is 3.09 (95\% CI 1.49 to 
+## 6.39). The ratio of the crude incidene odds ratio to the Mantel-Haensel 
+## adjusted incidence odds ratio is 0.66.
 
 ## What are the Cornfield confidence limits, the maximum likelihood 
-## confidence limits and the score confidence limits for the crude odds ratio?
+## confidence limits and the score confidence limits for the crude 
+## incidence odds ratio?
 dat.epi02$massoc.detail$OR.crude.cfield
 dat.epi02$massoc.detail$OR.crude.mle
 dat.epi02$massoc.detail$OR.crude.score
 
 ## Cornfield: 2.02 (95\% CI 1.07 to 3.79)
 ## Maximum likelihood: 2.01 (1.03 to 3.96)
-# Score: 2.02 (95\% CI 1.08 to 3.77)
+## Score: 2.02 (95\% CI 1.08 to 3.77)
 
-## Plot the individual strata-level odds ratios and compare them with the 
-## Mantel-Haenszel adjusted odds ratio.
+## Plot the individual strata-level incidence odds ratios and compare them 
+## with the Mantel-Haenszel adjusted incidence odds ratio.
 
 \dontrun{
 library(ggplot2); library(scales)
@@ -369,6 +375,7 @@ or.u <- c(dat.epi02$massoc.detail$OR.mh$upper,
 dat.df02 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 
 ggplot(data = dat.df02, aes(x = or.p, y = y.at)) +
+   theme_bw() +
    geom_point() + 
    geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
    labs(x = "Odds ratio", y = "Strata") + 
@@ -405,9 +412,9 @@ dat.epi03 <- epi.2by2(dat = dat.df03, method = "cohort.count", digits = 2,
 dat.epi03
 }
 
-## The odds of having a low birth weight child for smokers was 2.02 
-## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
-## weight child for non-smokers.
+## The incidence odds of having a low birth weight child for smokers was 2.02 
+## (95\% CI 1.08 to 3.78) times greater than the incidence odds of having a 
+## low birth weight child for non-smokers.
 
 ## Stratify by race:
 \dontrun{
@@ -433,11 +440,11 @@ dat.epi04
 }
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
-## significant (chi square test statistic 2.800; df 2; p-value = 0.25). 
-## We accept the null hypothesis and conclude that the odds ratios for 
-## each strata of race are the same. 
+## statistically significant (chi square test statistic 2.800; df 2; 
+## p-value = 0.25). We accept the null hypothesis and conclude that the 
+## incidence odds ratios for each strata of race are the same. 
 
-## After accounting for the confounding effect of race, the odds of 
+## After accounting for the confounding effect of race, the incidence odds of 
 ## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
 
@@ -523,13 +530,14 @@ print(dat.tab06)
 epi.2by2(dat = dat.tab06, method = "cohort.count", digits = 2, 
    conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
 
-## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
-## significant (chi square test statistic 5.276; df 7; p-value = 0.63). 
-## We accept the null hypothesis and conclude that the odds ratios for each 
-## strata of herd are the same. 
+## The Mantel-Haenszel test of homogeneity of the strata incidence odds ratios 
+## is not statistically significant (chi square test statistic 5.276; df 7; 
+## p-value = 0.63). We accept the null hypothesis and conclude that the 
+## incidence odds ratios for each strata of herd are the same. 
 
 ## After adjusting for the effect of herd, compared to untreated cows, treatment
-## increased the odds of recovery by a factor of 5.97 (95\% CI 2.72 to 13.13).
+## increased the incidence odds of recovery by a factor of 5.97 
+## (95\% CI 2.72 to 13.13).
  }
 }
 

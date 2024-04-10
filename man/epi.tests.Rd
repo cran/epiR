@@ -99,7 +99,7 @@ Wilson EB (1927) Probable inference, the law of succession, and statistical infe
 }
 
 \author{
-Mark Stevenson (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Australia). Charles Reynard (School of Medical Sciences, The University of Manchester, United Kingdom).
+Mark Stevenson (Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Australia). Charles Reynard (School of Medical Sciences, The University of Manchester, United Kingdom).
 }
 
 \note{

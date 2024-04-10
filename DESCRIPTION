@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.70
-Date: 2024-03-11
+Version: 2.0.73
+Date: 2024-04-10
 Title: Tools for the Analysis of Epidemiological Data
 Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
    person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
@@ -17,7 +17,7 @@ Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre")
    person(given = "Kazuki", family = "Yoshida", role = "ctb"),
    person(given = "Geoff", family = "Jones", role = "ctb"),
    person(given = "Sarah", family = "Pirikahu", role = "ctb"),
-   person(given = "Simon", family = "Firestone", role = "aut"),
+   person(given = "Simon", family = "Firestone", role = "ctb"),
    person(given = "Ryan", family = "Kyle", role = "ctb"),
    person(given = "Johann", family = "Popp", role = "ctb"),
    person(given = "Mathew", family = "Jay", role = "ctb"),
@@ -35,7 +35,7 @@ Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
         tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2024-03-11 09:48:37 UTC; mstev
+Packaged: 2024-04-09 23:17:46 UTC; marks1
 URL:
         https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
 RoxygenNote: 7.1.0
@@ -55,7 +55,7 @@ Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
   Kazuki Yoshida [ctb],
   Geoff Jones [ctb],
   Sarah Pirikahu [ctb],
-  Simon Firestone [aut],
+  Simon Firestone [ctb],
   Ryan Kyle [ctb],
   Johann Popp [ctb],
   Mathew Jay [ctb],
@@ -64,4 +64,4 @@ Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
   Aniko Szabo [ctb],
   Ahmad Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2024-03-11 15:00:05 UTC
+Date/Publication: 2024-04-10 02:40:02 UTC
