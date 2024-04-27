@@ -57,14 +57,15 @@ dat.df01 <- data.frame(rank = c(crude.r, crude.r),
 \dontrun{
 library(ggplot2)
 
-ggplot(dat = dat.df01, aes(x = rank, y = est, colour = Method)) + 
-   geom_point() +
-   scale_x_continuous(name = "District rank", 
-      breaks = seq(from = 0, to = 60, by = 10), 
-      labels = seq(from = 0, to = 60, by = 10), 
-      limits = c(0,60)) +
+ggplot(dat = dat.df01, aes(x = rank, y = est, colour = Method)) +
+  theme_bw() +
+  geom_point() +
+  scale_x_continuous(name = "District rank", 
+     breaks = seq(from = 0, to = 60, by = 10), 
+     labels = seq(from = 0, to = 60, by = 10), 
+     limits = c(0,60)) +
   scale_y_continuous(limits = c(0,30), name = "Lip cancer incidence rates 
-      (cases per 100,000 person years)") 
+     (cases per 100,000 person years)") 
 }
 }
 

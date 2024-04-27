@@ -105,15 +105,16 @@ rval.lm01 <- data.frame(alpha, beta)
 \dontrun{
 library(ggplot2)
 
-ggplot(data = dat.df01, aes(x = method1, y = method2)) + 
-   geom_point() +
-   geom_abline(intercept = 0, slope = 1) +
-   geom_abline(data = rval.lm01, aes(intercept = alpha, slope = beta), 
-      linetype = "dashed") +
-   scale_x_continuous(limits = c(0,3), name = "Method 1") +
-   scale_y_continuous(limits = c(0,3), name = "Method 2") +
-   geom_text(data = rval.lab01, x = 0.5, y = 2.95, label = rval.lab01$lab) + 
-   coord_fixed(ratio = 1 / 1)
+ggplot(data = dat.df01, aes(x = method1, y = method2)) +
+  theme_bw() +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_abline(data = rval.lm01, aes(intercept = alpha, slope = beta), 
+     linetype = "dashed") +
+  scale_x_continuous(limits = c(0,3), name = "Method 1") +
+  scale_y_continuous(limits = c(0,3), name = "Method 2") +
+  geom_text(data = rval.lab01, x = 0.5, y = 2.95, label = rval.lab01$lab) + 
+  coord_fixed(ratio = 1 / 1)
 
 ## In this plot the dashed line represents the line of perfect concordance. 
 ## The solid line represents the reduced major axis.  
@@ -136,7 +137,8 @@ rval.df02 <- data.frame(mean = rval.ccc02$blalt[,1],
 \dontrun{
 library(ggplot2)
 
-ggplot(data = rval.ccc02$blalt, aes(x = mean, y = delta)) + 
+ggplot(data = rval.ccc02$blalt, aes(x = mean, y = delta)) +
+  theme_bw() + 
   geom_point() +
   geom_hline(data = rval.ccc02$sblalt, aes(yintercept = lower), linetype = 2) +
   geom_hline(data = rval.ccc02$sblalt, aes(yintercept = upper), linetype = 2) +
@@ -165,7 +167,8 @@ rval.ccc03 <- epi.ccc(x, y, ci = "z-transform",
 \dontrun{
 library(ggplot2)
 
-ggplot(data = rval.ccc03$blalt, aes(x = mean, y = delta)) + 
+ggplot(data = rval.ccc03$blalt, aes(x = mean, y = delta)) +
+  theme_bw() + 
   geom_point() +
   geom_hline(data = rval.ccc03$sblalt, aes(yintercept = lower), linetype = 2) +
   geom_hline(data = rval.ccc03$sblalt, aes(yintercept = upper), linetype = 2) +
@@ -202,9 +205,10 @@ Xbar.upp <- (+2 * Xbar * (10^a - 1)) / (10^a + 1)
 limits <- data.frame(mean = Xbar, lower = Xbar.low, upper = Xbar.upp)
 
 \dontrun{
-library(ggplot2)
+library(ggplot2)ggplot(
 
-ggplot(data = rval.ccc03$blalt, aes(x = mean, y = delta)) + 
+data = rval.ccc03$blalt, aes(x = mean, y = delta)) +
+  theme_bw() +
   geom_point() +
   geom_line(data = limits, aes(x = mean, y = lower), linetype = 2) +
   geom_line(data = limits, aes(x = mean, y = upper), linetype = 2) +

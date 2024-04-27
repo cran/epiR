@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 
 # If you want to create a PDF document paste the following after line 9 above:
 #   pdf_document:

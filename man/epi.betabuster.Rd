@@ -9,14 +9,14 @@ A function to return shape1 and shape2 parameters for a beta distribution, based
 }
 
 \usage{
-epi.betabuster(mode, conf, greaterthan, x, conf.level = 0.95, max.shape1 = 100, 
+epi.betabuster(mode, conf, imsure, x, conf.level = 0.95, max.shape1 = 100, 
    step = 0.001)
 }
 
 \arguments{
   \item{mode}{scalar, the mode of the variable of interest. Must be a number between 0 and 1.}
   \item{conf}{level of confidence (expressed on a 0 to 1 scale) that the true value of the variable of interest is greater or less than argument \code{x}.}
-  \item{greaterthan}{logical, if \code{TRUE} you are making the statement that you are \code{conf} confident that the true value of the variable of interest is greater than \code{x}. If \code{FALSE} you are making the statement that you are \code{conf} confident that the true value of the variable of interest is less than \code{x}.}
+  \item{imsure}{a character string, if \code{"greater than"} you are making the statement that you are \code{conf} confident that the true value of the variable of interest is greater than \code{x}. If \code{"less than"} you are making the statement that you are \code{conf} confident that the true value of the variable of interest is less than \code{x}.}
   \item{x}{scalar, value of the variable of interest (see above).}
   \item{conf.level}{magnitude of the returned confidence interval for the estimated beta distribution. Must be a single number between 0 and 1.}
   \item{max.shape1}{scalar, maximum value of the shape1 parameter for the beta distribution.}
@@ -32,7 +32,8 @@ A list containing the following:
   \item{median}{the median of the estimated beta distribution.}
   \item{lower}{the lower bound of the confidence interval of the estimated beta distribution.}
   \item{upper}{the upper bound of the confidence interval of the estimated beta distribution.}
-  \item{variance}{the variance of the estimated beta distribution.}  
+  \item{variance}{the variance of the estimated beta distribution.} 
+  \item{exp}{a statement of the arguments used for this instance of the function.} 
 }
 
 \details{
@@ -60,7 +61,7 @@ Simon Firestone (Melbourne Veterinary School, Faculty of Science, The University
 ## 0.75, what are the shape1 and shape2 parameters for a beta distribution
 ## satisfying these constraints? 
 
-rval.beta01 <- epi.betabuster(mode = 0.90, conf = 0.80, greaterthan = TRUE, 
+rval.beta01 <- epi.betabuster(mode = 0.90, conf = 0.80, imsure = "greater than", 
    x = 0.75, conf.level = 0.95, max.shape1 = 100, step = 0.001)
 rval.beta01$shape1; rval.beta01$shape2
 
@@ -84,9 +85,10 @@ dat.df01 <- data.frame(x = seq(from = 0, to = 1, by = 0.001),
 library(ggplot2)
 
 ggplot(data = dat.df01, aes(x = x, y = y)) +
-   geom_line() + 
-   scale_x_continuous(name = "Test sensitivity") +
-   scale_y_continuous(name = "Density")
+  theme_bw() +
+  geom_line() + 
+  scale_x_continuous(name = "Test sensitivity") +
+  scale_y_continuous(name = "Density")
 }
 
 
@@ -96,15 +98,15 @@ ggplot(data = dat.df01, aes(x = x, y = y)) +
 ## greater than 0.99. What are the shape1 and shape2 parameters for a beta 
 ## distribution satisfying these constraints?
 
-epi.betabuster(mode = 1.00, conf = 0.975, greaterthan = TRUE, x = 0.99, 
+epi.betabuster(mode = 1.00, conf = 0.975, imsure = "greater than", x = 0.99, 
    conf.level = 0.95, max.shape1 = 100, step = 0.001)
 
 ## The shape1 and shape2 parameters for the beta distribution that satisfy the
 ## constraints listed above are 100 and 1, respectively. epi.betabuster 
-## issues a warning that the value of shape1 equals max.shape1. We increase
+## issues a warning that the value of shape1 equals max.shape1. Increase
 ## max.shape1 to 500:
 
-epi.betabuster(mode = 1.00, conf = 0.975, greaterthan = TRUE, x = 0.99, 
+epi.betabuster(mode = 1.00, conf = 0.975, imsure = "greater than", x = 0.99, 
    conf.level = 0.95, max.shape1 = 500, step = 0.001)
 
 ## The shape1 and shape2 parameters for the beta distribution that satisfy the

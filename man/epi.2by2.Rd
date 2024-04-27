@@ -375,16 +375,16 @@ or.u <- c(dat.epi02$massoc.detail$OR.mh$upper,
 dat.df02 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 
 ggplot(data = dat.df02, aes(x = or.p, y = y.at)) +
-   theme_bw() +
-   geom_point() + 
-   geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
-   labs(x = "Odds ratio", y = "Strata") + 
-   scale_x_continuous(trans = log2_trans(), breaks = x.at, 
-      limits = c(0.25,32)) + 
-   scale_y_continuous(breaks = y.at, labels = y.lab) + 
-   geom_vline(xintercept = 1, lwd = 1) + 
-   coord_fixed(ratio = 0.75 / 1) + 
-   theme(axis.title.y = element_text(vjust = 0))
+  theme_bw() +
+  geom_point() + 
+  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
+  labs(x = "Odds ratio", y = "Strata") + 
+  scale_x_continuous(trans = log2_trans(), breaks = x.at, 
+     limits = c(0.25,32)) + 
+  scale_y_continuous(breaks = y.at, labels = y.lab) + 
+  geom_vline(xintercept = 1, lwd = 1) + 
+  coord_fixed(ratio = 0.75 / 1) + 
+  theme(axis.title.y = element_text(vjust = 0))
 }
 
 

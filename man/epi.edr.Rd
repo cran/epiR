@@ -77,13 +77,13 @@ library(ggplot2); library(scales)
 ## Frequency histogram of the number of incident FMD positive farms as a
 ## function of date:
 ggplot() +
-   theme_bw() +
-   geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
-      binwidth = 1, fill = "#008080", alpha = 0.45) +
-   scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
-   scale_y_continuous(limits = c(0,15), 
-      name = "Number of events") + 
-   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme_bw() +
+  geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
+     binwidth = 1, fill = "#008080", alpha = 0.45) +
+  scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
+  scale_y_continuous(limits = c(0,15), 
+     name = "Number of events") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
 ## EDR line plot (and its 95\% confidence interval) as a function of 
@@ -100,18 +100,18 @@ dat.df01$ledr.975[dat.df01$ledr.975^2 < 0.03125 |
    dat.df01$ledr.975^2 > 32] <- NA
 
 ggplot() +
-   theme_bw() +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.500), 
-      col = "black", linewidth = 1) +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.025), 
-      col = "black", linetype = "dashed", linewidth = 0.5) +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.975), 
-      col = "black", linetype = "dashed", linewidth = 0.5) +
-   scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
-   scale_y_continuous(name = "Estimated dissemination ratio (EDR)",
-      breaks = ybreaks, labels = ylabels, limits = range(ybreaks)) + 
-   geom_hline(yintercept = 0, col = "red", linetype = "dashed") +
-   theme(axis.text.x = element_text(angle = 90, hjust = 1))  
+  theme_bw() +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.500), 
+     col = "black", linewidth = 1) +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.025), 
+     col = "black", linetype = "dashed", linewidth = 0.5) +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.975), 
+     col = "black", linetype = "dashed", linewidth = 0.5) +
+  scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
+  scale_y_continuous(name = "Estimated dissemination ratio (EDR)",
+     breaks = ybreaks, labels = ylabels, limits = range(ybreaks)) + 
+  geom_hline(yintercept = 0, col = "red", linetype = "dashed") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  
 
 
 ## EDR line plot (and its 95\% confidence interval) as a function of 
@@ -123,23 +123,23 @@ ybreaks <- -5:5 + shift
 ylabels <- 2^(-5:5)
 
 ggplot() +
-   theme_bw() +
-   geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
-      binwidth = 1, fill = "#008080", alpha = 0.45) +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.500 + shift), 
-      col = "black", linewidth = 1) +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.025 + shift), 
+  theme_bw() +
+  geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
+     binwidth = 1, fill = "#008080", alpha = 0.45) +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.500 + shift), 
+     col = "black", linewidth = 1) +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.025 + shift), 
+     col = "black", linetype = "dashed", linewidth = 0.5) +
+  geom_line(data = dat.df01, aes(x = edate, y = ledr.975 + shift), 
       col = "black", linetype = "dashed", linewidth = 0.5) +
-   geom_line(data = dat.df01, aes(x = edate, y = ledr.975 + shift), 
-      col = "black", linetype = "dashed", linewidth = 0.5) +
-   scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
-   scale_y_continuous(limits = c(0,ymax), 
-      name = "Estimated dissemination ratio (EDR)",
-      sec.axis = sec_axis(trans = ~ ., name = "Number of events"),
-      breaks = ybreaks, labels = ylabels) + 
-   geom_hline(yintercept = shift, col = "red", linetype = "dashed") +
-   theme(axis.text.x = element_text(angle = 90, hjust = 1), 
-      panel.grid.minor = element_blank())
+  scale_x_date(breaks = date_breaks("7 days"), name = "Date") +
+  scale_y_continuous(limits = c(0,ymax), 
+     name= "Estimated dissemination ratio (EDR)",
+     sec.axis = sec_axis(trans = ~ ., name = "Number of events"),
+     breaks = ybreaks, labels = ylabels) + 
+  geom_hline(yintercept = shift, col = "red", linetype = "dashed") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+     panel.grid.minor = element_blank())
  }
 }
 

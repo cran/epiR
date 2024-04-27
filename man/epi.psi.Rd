@@ -79,6 +79,7 @@ gdat.df01$state <- factor(gdat.df01$state, levels = dat.df01$state)
 
 ## Bar chart of relative frequencies by state faceted by population:
 ggplot(data = gdat.df01, aes(x = state, y = pfreq)) +
+  theme_bw() +
   geom_bar(stat = "identity", position = position_dodge(), color = "grey") + 
   facet_grid(~ pop) +
   scale_x_discrete(name = "State") +
