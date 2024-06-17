@@ -27,7 +27,7 @@ For details on how to use \pkg{epiR} for routine epidemiological work start R, t
 }
 
 \section{CONTENTS:}{
-The functions in \pkg{epiR} can be categorised into two main groups: tools for epidemioliological analysis and tools for the analysis of surveillance data. A summary of the package functions is as follows:
+The functions in \pkg{epiR} can be categorised into two main groups: tools for epidemiological analysis and tools for the analysis of surveillance data. A summary of the package functions is as follows:
 }
 
 \section{I. EPIDEMIOLOGY}{

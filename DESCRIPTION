@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.74
-Date: 2024-04-27
+Version: 2.0.75
+Date: 2024-06-17
 Title: Tools for the Analysis of Epidemiological Data
 Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
    person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
@@ -31,13 +31,11 @@ Depends: R (>= 3.0.0), survival
 Imports: BiasedUrn, pander, methods, sf, lubridate, zoo, flextable,
         officer
 Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, mapproj,
-        rmarkdown, plyr, RColorBrewer, scales, sp, spatstat, spData,
-        tidyr
+        rmarkdown, plyr, RColorBrewer, scales, sp, spData (>= 2.3.0),
+        spatstat, tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
-Packaged: 2024-04-27 07:41:14 UTC; mstev
-URL:
-        https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne
+Packaged: 2024-06-17 07:30:29 UTC; marks1
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
@@ -64,4 +62,4 @@ Author: Mark Stevenson [aut, cre] (<https://orcid.org/0000-0003-1890-9784>),
   Aniko Szabo [ctb],
   Ahmad Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2024-04-27 12:30:02 UTC
+Date/Publication: 2024-06-17 08:50:02 UTC

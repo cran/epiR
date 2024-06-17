@@ -335,23 +335,22 @@ Two types of maps are often used when describing patterns of disease by place:
 
 **Choropleth maps**
 
-For illustration we make a choropleth map of sudden infant death syndrome (SIDS) babies in North Carolina counties for 1974 using the `nc.sids` data provided with the `spData` package. In the code that follows `nc` refers to North Carolina, `sids` refers to sudden infant death syndrome and `ll` refers to the projection of the `sf` object (latitude, longitude). The object name suffix `.sf` tells you that this is a spatial features object.
+For illustration we make a choropleth map of the percentage of individuals aged greater than 65 years in an area of New York, USA. These data are taken from the data sets supporting @waller_gotway:2004. In the code that follows `ny` refers to New York, `age65` refers to individuals aged greater than 65 years and `utm` refers to the spatial projection of the `sf` object (Universal Transverse Mercator). The object name suffix `.sf` tells you that this is a spatial features object.
 
 ```{r message = FALSE, warning = FALSE}
 library(sf); library(spData); library(plyr); library(RColorBrewer); library(sp); library(spatstat)
 
-ncsidsll.sf <- st_read(dsn = system.file("shapes/sids.shp", package = "spData")[1])
-ncsidsll.sf <- ncsidsll.sf[,c("BIR74","SID74")]
-head(ncsidsll.sf)
+nyage65utm.sf <- st_read(dsn = system.file("shapes/NY8_bna_utm18.gpkg", package = "spData")[1])
+head(nyage65utm.sf)
 ```
 
-The `ncsidsll.sf` simple features object lists for each county in the North Carolina USA the number SIDS deaths for 1974. Plot a choropleth map of the counties of the North Carolina showing SIDS counts for 1974:
+The `nyage65utm.sf` simple features object lists for each census tract the percentage of individuals aged greater than 65 years:
 
-```{r spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Map of North Carolina, USA showing the number of sudden infant death syndrome cases, by county for 1974."}
+```{r spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Map of an area of New York, USA showing for each census tract the percentage of individuals aged greater than 65 years."}
 ggplot() + 
    theme_bw() +
-   geom_sf(data = ncsidsll.sf, aes(fill = SID74), colour = "dark grey") + 
-   scale_fill_gradientn(limits = c(0,60), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
+   geom_sf(data = nyage65utm.sf, aes(fill = PCTAGE65P), colour = "dark grey") + 
+   scale_fill_gradientn(limits = c(0,0.5), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
    scale_x_continuous(name = "Longitude") +
    scale_y_continuous(name = "Latitude") +
    labs(fill = "SIDS 1974")

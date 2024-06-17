@@ -208,15 +208,14 @@ ggplot() +
 ## ----message = FALSE, warning = FALSE-----------------------------------------
 library(sf); library(spData); library(plyr); library(RColorBrewer); library(sp); library(spatstat)
 
-ncsidsll.sf <- st_read(dsn = system.file("shapes/sids.shp", package = "spData")[1])
-ncsidsll.sf <- ncsidsll.sf[,c("BIR74","SID74")]
-head(ncsidsll.sf)
+nyage65utm.sf <- st_read(dsn = system.file("shapes/NY8_bna_utm18.gpkg", package = "spData")[1])
+head(nyage65utm.sf)
 
-## ----spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Map of North Carolina, USA showing the number of sudden infant death syndrome cases, by county for 1974."----
+## ----spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Map of an area of New York, USA showing for each census tract the percentage of individuals aged greater than 65 years."----
 ggplot() + 
    theme_bw() +
-   geom_sf(data = ncsidsll.sf, aes(fill = SID74), colour = "dark grey") + 
-   scale_fill_gradientn(limits = c(0,60), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
+   geom_sf(data = nyage65utm.sf, aes(fill = PCTAGE65P), colour = "dark grey") + 
+   scale_fill_gradientn(limits = c(0,0.5), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
    scale_x_continuous(name = "Longitude") +
    scale_y_continuous(name = "Latitude") +
    labs(fill = "SIDS 1974")
