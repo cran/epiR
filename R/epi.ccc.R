@@ -38,8 +38,13 @@ epi.ccc = function(x, y, ci = "z-transform", conf.level = 0.95, rep.measure = FA
   # The following taken from the Stata code for function "concord" (changed 290408):
   C.b <- p / r
   
-  # Variance, test, and CI for asymptotic normal approximation (per Lin [March 2000] Biometrics 56:325-5):
+  # Variance, test, and CI for asymptotic normal approximation (per Lin [March 2000] Biometrics 56: 324 - 325) as explained in Stata Technical Bulletin STB-43, May 1998 page 37:
+  
+  # varp <- ((1 / (k - 2)) * (((1 - r^2) * p^2 * (1 - p^2)) / r^2) + ((4 * p^3 * (1 - p) * u^2) / r) - ((2 * p^4 * u^4) / r^2))
+  # sep <- sqrt(varp)
+  
   sep <- sqrt(((1 - ((r)^2)) * (p)^2 * (1 - ((p)^2)) / (r)^2 + (2 * (p)^3 * (1 - p) * (u)^2 / r) - 0.5 * (p)^4 * (u)^4 / (r)^2 ) / (k - 2))
+  
   ll <- p - (zv * sep)
   ul <- p + (zv * sep)
   

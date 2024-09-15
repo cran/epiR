@@ -124,13 +124,25 @@
     dat <- as.table(matrix(dat, nrow = 2, byrow = TRUE))
   }
   
-  ## If outcome is assigned by column, leave the data as is:
-  if(outcome == "as.columns"){
+  ## If outcome == "as.columns", leave the data as is:
+  if(length(dim(dat)) == 2 & outcome == "as.columns"){
     dat <- dat}
   
-  ## If outcome is assigned by row, transpose it:
-  if(outcome == "as.rows"){
+  ## If outcome == "as.rows", transpose it:
+  if(length(dim(dat)) == 2 & outcome == "as.rows"){
     dat <- t(dat)}
+  
+  ## Stratified data:
+  if(length(dim(dat)) == 3 & outcome == "as.rows"){
+    
+    for(i in 1:dim(dat)[3]){
+      # Transpose each table:
+      dat[,,i] <- t((dat)[,,i])
+    }
+    
+    # And fix up dimension names:
+    names(dimnames(dat))[1:3] <- names(dimnames(dat))[c(2,1,3)]
+  }  
   
   ## Make a copy of the original data. These values used when sums of cells across all strata are greater than zero but some strata contain zero cell frequencies:
   if(length(dim(dat)) == 2){

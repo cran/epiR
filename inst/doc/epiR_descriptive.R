@@ -74,7 +74,7 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
 
 ## -----------------------------------------------------------------------------
 n.males <- 100; n.females <- 50
-odate <- seq(from = as.Date("2022-07-26"), to = as.Date("2022-12-13"), by = 1)
+odate <- seq(from = as.Date("2024-07-26"), to = as.Date("2024-12-13"), by = 1)
 prob <- c(1:100, 41:1); prob <- prob / sum(prob)
 modate <- sample(x = odate, size = n.males, replace = TRUE, p = prob)
 fodate <- sample(x = odate, size = n.females, replace = TRUE)
@@ -85,7 +85,7 @@ dat.df <- data.frame(sex = c(rep("Male", n.males), rep("Female", n.females)),
 # Sort the data in order of odate:
 dat.df <- dat.df[sort.list(dat.df$odate),] 
 
-## ----epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022."----
+## ----epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -94,7 +94,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## ----epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022. Superimposed on this plot is a smoothed estimate of case density."----
+## ----epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024. Superimposed on this plot is a smoothed estimate of case density."----
 
 ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
@@ -106,7 +106,7 @@ ggplot(data = dat.df, aes(x = odate)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
-## ----epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, conditioned by sex."----
+## ----epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -116,7 +116,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex)
 
-## ----epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, conditioned by sex. An event that occurred on 31 October 2022 is indicated by the vertical dashed line."----
+## ----epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex. An event that occurred on 31 October 2024 is indicated by the vertical dashed line."----
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -125,10 +125,10 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex) +
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed")
 
-## ----epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."----
+## ----epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1) +
@@ -136,12 +136,12 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") +
   theme(legend.position = c(0.90, 0.80))
 
-## ----epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."----
+## ----epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."----
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1, position = "dodge") +
@@ -149,13 +149,13 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") + 
   theme(legend.position = c(0.90, 0.80))
 
 ## -----------------------------------------------------------------------------
-edate <- seq(from = as.Date("2020-02-24"), to = as.Date("2020-07-20"), by = 1)
+edate <- seq(from = as.Date("2024-02-24"), to = as.Date("2024-07-20"), by = 1)
 ncas <- c(1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,2,
    0,0,1,0,1,1,2,3,2,5,10,15,5,7,17,37,31,34,42,46,73,58,67,57,54,104,77,52,
    90,59,64,61,21,26,25,32,24,14,11,23,6,8,9,4,5,7,14,14,1,5,1,1,5,3,3,1,3,3,
@@ -166,7 +166,7 @@ dat.df <- data.frame(edate, ncas)
 dat.df$edate <- as.Date(dat.df$edate, format = "%Y-%m-%d")
 head(dat.df)
 
-## ----epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020."----
+## ----epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024."----
 ggplot() +
   theme_bw() +
   geom_histogram(dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", linewidth = 0.1) +
@@ -178,7 +178,7 @@ ggplot() +
 ## -----------------------------------------------------------------------------
 max(cumsum(dat.df$ncas))
 
-## ----epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is a line showing cumulative case numbers."----
+## ----epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is a line showing cumulative case numbers."----
 
 ggplot() +
   theme_bw() +
@@ -191,7 +191,7 @@ ggplot() +
   guides(fill = "none") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## ----epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is the 5-day rolling mean number of cases per day."----
+## ----epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is the 5-day rolling mean number of cases per day."----
 
 dat.df$rncas <- rollmean(x = dat.df$ncas, k = 5, fill = NA)
 

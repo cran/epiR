@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.76
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Error in data preparation for function epi.2by2 where outcome = "as.rows" with multiple strata corrected. 
+    [Spotted by Jose G Conde Santiago]
+
+
 CHANGES IN epiR VERSION 2.0.75
 SIGNIFICANT USER-VISIBLE CHANGES
 

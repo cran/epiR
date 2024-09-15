@@ -30,15 +30,16 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-Epidemiology is the study of the frequency, distribution and determinants of health-related states in populations and the application of such knowledge to control health problems [@cdc:2006].
+Epidemiology is the study of the occurrence and distribution of health-related events, states, and processes in specified populations, including the study of the determinants influencing such processes, and the application of this knowledge to control relevant
+health problems [@cdc:2006;@porta:2014].
 
 This vignette provides instruction on the use of R and `epiR` for descriptive epidemiological analyses, that is, to describe how the frequency of disease varies by individual, place and time.
 
-The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the descriptive epidemiology functions in `epiR` using a smart phone.
+The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the descriptive and analytical functions in `epiR` using a smart phone.
 
 ## Individual
 
-Disease frequency can be reported in terms of either **prevalence** or **incidence**.
+The frequency of disease can be reported in terms of either **prevalence** or **incidence**.
 
 Some definitions. Strictly speaking, 'prevalence' equals the number of cases of a given disease or attribute that exists in a population at a specified point in time. Prevalence risk is the proportion of a population that has a given disease or attribute at a specified point in time. Many authors use the term 'prevalence' when they really mean prevalence risk, and this vignette will follow this convention.
 
@@ -52,7 +53,7 @@ Incidence provides a measure of how frequently susceptible individuals become di
 
 In addition to reporting the point estimate of disease frequency, it is important to provide an indication of the uncertainty around that point estimate. The `epi.conf` function in the `epiR` package allows you to calculate confidence intervals for prevalence, incidence risks and incidence rates.
 
-Let's say we're interested in the prevalence of disease X in a population comprised of 1000 individuals. Two hundred are tested and four returned a positive result. Assuming 100% test sensitivity and specificity, what is the estimated prevalence of disease X in this population?
+Let's say we're interested in the prevalence of disease X in a population comprised of 1000 individuals. Two hundred are tested and four returned a positive result. Assuming 100% diagnostic test sensitivity and specificity, what is the estimated prevalence of disease X in this population?
 
 ```{r message = FALSE}
 library(epiR); library(ggplot2); library(scales); library(zoo)
@@ -76,7 +77,7 @@ epi.conf(tmp, ctype = "inc.rate", method = "exact", N = 1000, design = 1,
 
 The incidence rate of cancer in this population was 6.2 (95% CI 5.2 to 7.3) cases per 1000 person-years at risk.
 
-Lets say we want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. With a ranked error bar plot the disease frequency estimates are plotted from lowest to highest. Generate some data:
+We now want to compare the frequency of disease across several populations. An effective way to do this is to use a ranked error bar plot. With a ranked error bar plot the points represent the point estimate of the measure of disease frequency and the error bars indicate the 95% confidence interval around each estimate. With a ranked error bar plot the disease frequency estimates are plotted from lowest to highest. Generate some data:
 
 ```{r}
 ncas <- c(347,444,145,156,56,618,203,113,10,30,663,447,213,52,256,216,745,97,31,250,430,494,96,544,352)
@@ -154,7 +155,7 @@ Generate some data, with one row for every individual identified as a case:
 
 ```{r}
 n.males <- 100; n.females <- 50
-odate <- seq(from = as.Date("2022-07-26"), to = as.Date("2022-12-13"), by = 1)
+odate <- seq(from = as.Date("2024-07-26"), to = as.Date("2024-12-13"), by = 1)
 prob <- c(1:100, 41:1); prob <- prob / sum(prob)
 modate <- sample(x = odate, size = n.males, replace = TRUE, p = prob)
 fodate <- sample(x = odate, size = n.females, replace = TRUE)
@@ -168,7 +169,7 @@ dat.df <- dat.df[sort.list(dat.df$odate),]
 
 Plot the epidemic curve using the `ggplot2` and `scales` packages:
 
-```{r epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022."}
+```{r epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024."}
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -180,7 +181,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
 
 You may want to superimpose a smoothed line to better appreciate trend. Do this using the `geom_density` function in `ggplot2`:
 
-```{r epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022. Superimposed on this plot is a smoothed estimate of case density."}
+```{r epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024. Superimposed on this plot is a smoothed estimate of case density."}
 
 ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
@@ -195,7 +196,7 @@ ggplot(data = dat.df, aes(x = odate)) +
 
 Produce a separate epidemic curve for males and females using the `facet_grid` option in `ggplot2`:
 
-```{r epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, conditioned by sex."}
+```{r epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex."}
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -206,9 +207,9 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   facet_grid( ~ sex)
 ```
 
-Let's say an event occurred on 31 October 2022. Mark this date on your epidemic curve using `geom_vline`:
+Let's say an event occurred on 31 October 2024. Mark this date on your epidemic curve using `geom_vline`:
 
-```{r epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, conditioned by sex. An event that occurred on 31 October 2022 is indicated by the vertical dashed line."}
+```{r epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex. An event that occurred on 31 October 2024 is indicated by the vertical dashed line."}
 ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -217,13 +218,13 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex) +
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed")
 ```
 
 Plot the total number of disease events by day, coloured according to sex:
 
-```{r epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."}
+```{r epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1) +
@@ -231,7 +232,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") +
   theme(legend.position = c(0.90, 0.80))
@@ -239,7 +240,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
 
 It can be difficult to appreciate differences in male and female disease counts as a function of date with the above plot format so dodge the data instead:
 
-```{r epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2022, grouped by sex."}
+```{r epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
 ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1, position = "dodge") +
@@ -247,7 +248,7 @@ ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2022", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") + 
   theme(legend.position = c(0.90, 0.80))
@@ -260,7 +261,7 @@ We now provide code to deal with the situation where the data are presented with
 Actual outbreak data will be used for this example. In the code below `edate` represents the event date (i.e., the date of case detection) and `ncas` represents the number of cases identified on each `edate`.
 
 ```{r}
-edate <- seq(from = as.Date("2020-02-24"), to = as.Date("2020-07-20"), by = 1)
+edate <- seq(from = as.Date("2024-02-24"), to = as.Date("2024-07-20"), by = 1)
 ncas <- c(1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,2,
    0,0,1,0,1,1,2,3,2,5,10,15,5,7,17,37,31,34,42,46,73,58,67,57,54,104,77,52,
    90,59,64,61,21,26,25,32,24,14,11,23,6,8,9,4,5,7,14,14,1,5,1,1,5,3,3,1,3,3,
@@ -274,7 +275,7 @@ head(dat.df)
 
 Generate an epidemic curve. Note `weight = ncas` in the aesthetics argument for `ggplot2`:
 
-```{r epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020."}
+```{r epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024."}
 ggplot() +
   theme_bw() +
   geom_histogram(dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", linewidth = 0.1) +
@@ -284,7 +285,7 @@ ggplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-This plot has features of a common point source epidemic for the period April 2020 to May 2020. After May 2020 the plot shows feature of a propagated epidemic pattern.
+This plot has features of a common point source epidemic for the period April 2024 to May 2024. After May 2024 the plot shows feature of a propagated epidemic pattern.
 
 Add a line to the plot to show the cumulative number of cases detected as a function of calendar date. The coding here requires some thought. First question: What was the cumulative number of cases at the end of the follow-up period? Use the `cumsum` (cumulative sum) function in base R:
 
@@ -294,7 +295,7 @@ max(cumsum(dat.df$ncas))
 
 At the end of the follow-up period the cumulative number of cases was 1834. What we need to do is to get our 0 to 1834 cumulative case numbers to 'fit' into the 0 to 125 vertical axis limits of the epidemic curve. A reasonable approach would be to: (1) divide cumulative case numbers by a number so that the maximum cumulative case number divided by our selected number roughly equals the maximum number of cases identified per day; for this example, 15 would be a good choice (1834 / 15 = 122); and (2) set `sec.axis = sec_axis(~ . * 15)` to multiply the values that appear on the primary vertical axis by 15 for the labels that appear on the secondary vertical axis:
 
-```{r epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is a line showing cumulative case numbers."}
+```{r epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is a line showing cumulative case numbers."}
 
 ggplot() +
   theme_bw() +
@@ -310,7 +311,7 @@ ggplot() +
 
 Finally, we might want to superimpose a line representing the rolling average of case numbers. Calculate the 5-day rolling mean use the `rollmean` function in the contributed `zoo` package:
 
-```{r epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2020 to 20 July 2020. Superimposed on this plot is the 5-day rolling mean number of cases per day."}
+```{r epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is the 5-day rolling mean number of cases per day."}
 
 dat.df$rncas <- rollmean(x = dat.df$ncas, k = 5, fill = NA)
 

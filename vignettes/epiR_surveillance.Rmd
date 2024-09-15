@@ -30,13 +30,13 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-Surveillance is the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
+Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
 
 The Terrestrial Animal Health Code of the World Organisation of Animal Health [@oie:2022] defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging; (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens; (3) demonstration of disease freedom for trading partners; and (4) identification of hazards or risk factors for disease outbreaks.
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
 
-The EpiTools app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the surveillance functions in `epiR` using a smart phone.
+The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the surveillance functions in `epiR` using a smart phone.
 
 ## Definitions
 
@@ -58,13 +58,13 @@ A design prevalence is not related to any actual prevalence of disease in the po
 
 ## An approach for thinking about surveillance design and assessment
 
-The first thing to consider when you're designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen sampling will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
+The first thing to consider when you're designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen the sampling method will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
 
-Once you have the method of sampling defined we move on to think about the different tasks that need to be done in terms of design of the actual surveillance system and finally, how you might assess the surveillance system once it has been designed and implemented.
+Once you have the method of sampling defined think about how the surveillance system will be designed and how you might assess the surveillance system once it has been designed and implemented.
 
-In terms of design, firstly specify the sampling method to be used and then determine how many surveillance system units will be sampled (usually, to achieve a sufficient surveillance system sensitivity). 
+In terms of design, firstly specify the sampling method to be used and then determine how many surveillance system units will be sampled (usually, to achieve a pre-specified surveillance system sensitivity). 
 
-Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: If the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in another three other ways: 
+Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: If the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in three ways: 
 
 1. What is the surveillance system sensitivity? or 
 
@@ -80,7 +80,7 @@ The remainder of this vignette follows the structure outlined above. For each sa
 
 The sample size functions for surveillance representative sampling in `epiR` fall into two classes: sampling to achieve a defined probability of disease freedom and sampling to achieve a defined surveillance system sensitivity.
 
-The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as being **primary sampling units** (PSUs) and animals and individuals as being **secondary sampling units** (SSUs).  
+The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as **primary sampling units** (PSUs) and animals and individuals as **secondary sampling units** (SSUs).  
 
 ```{r ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
@@ -114,8 +114,10 @@ flextable(tab1.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
+  set_caption("Functions to estimate sample size using representative population sampling data.")
 ```
 
 *EXAMPLE 1*
@@ -227,8 +229,10 @@ flextable(tab2.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
 ```
 
 *EXAMPLE 4*
@@ -303,8 +307,10 @@ flextable(tab3.df) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
+  set_caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
 ```
 
 *EXAMPLE 7*
@@ -379,8 +385,10 @@ flextable(tab4.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
+  set_caption("Functions to estimate sample size using risk based sampling data.")
 ```
 
 *EXAMPLE 8*
@@ -475,15 +483,17 @@ flextable(tab4.df) %>%
   fontsize(i = 1, size = 8, part = "footer") %>%
   
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
 ```
 
 *EXAMPLE 11*
 
-You have been asked to provide an assessment of a surveillance program for Actinobacillus hyopneumoniae in pigs. It is known that there are high risk and low risk areas for A. hypopneumoniae in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.
+You have been asked to provide an assessment of a surveillance program for *Actinobacillus hyopneumoniae* in pigs. It is known that there are high risk and low risk areas for *A. hypopneumoniae* in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.
 
-The risk of A. hypopneumoniae is dependent on age, with adult pigs around five times more likely to be A. hypopneumoniae positive compared with younger (grower) pigs. Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested. The ELISA for A. hypopneumoniae in pigs has a diagnostic sensitivity of 0.95.
+The risk of *A. hypopneumoniae* is dependent on age, with adult pigs around five times more likely to be *A. hypopneumoniae* positive compared with younger (grower) pigs. Pigs from 20 herds have been sampled: 5 from the low-risk area and 15 from the high-risk area. All of the tested pigs were adults: no grower pigs were tested. The ELISA for *A. hypopneumoniae* in pigs has a diagnostic sensitivity of 0.95.
 
 What is the surveillance system sensitivity if we assume a design prevalence of 1 per 100 at the cluster (herd) level and 5 per 100 at the surveillance system unit (pig) level?
 

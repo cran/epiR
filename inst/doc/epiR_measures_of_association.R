@@ -8,7 +8,7 @@ twobytwo.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c"
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
-  h1 = c("", "Dis +", "Dis -", "Total"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome +", "Outcome -", "Total"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -17,7 +17,7 @@ flextable(twobytwo.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 2.00) %>%
+  width(j = 4, width = 3.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -25,14 +25,14 @@ flextable(twobytwo.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("Table 1: A 2 x 2 contingency table.")
+  set_caption("A 2 x 2 contingency table.")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
 irr.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a / (a + b)","RE- = c / (c + d)", "RT = (a + c) / (a + b + c + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
-  h1 = c("", "Dis +", "Dis -", "Total", "Risk"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome +", "Outcome -", "Total", "Risk"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -50,17 +50,17 @@ flextable(irr.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("Table 2: A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
+  set_caption("A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
 
 ## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."----
 knitr::include_graphics("risk_ratio.png")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcohort.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a / b","OE- = c / d", "OT = (a + c) / (b + d)"))
+orcohort.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a / b","OE- = c / d", "OT = (a + c) / (b + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
-  h1 = c("", "Dis +", "Dis -", "Total", "Odds"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome +", "Outcome -", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -78,14 +78,14 @@ flextable(orcohort.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("Table 3: A 2 x 2 table with the odds of disease calculated for the exposed, the unexposed and the total study population.")
+  set_caption("A 2 x 2 table with the outcome odds calculated for the exposed, unexposed and the total study population.")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcc.df <- data.frame("exp" = c("Exp +","Exp -","Odds"), "dpos" = c("a","c","OD+ = a / c"), "dneg" = c("b","d","OD- = b / d"), "total" = c("a + b","c + d","OT = (a + b) / (c + d)"))
+orcc.df <- data.frame("exp" = c("Outcome + (case)","Outcome - (control)","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OD+ = a / b","OD- = c / d", "OT = (a + c) / (b + d)"))
 
 # Create a header key data frame:
-hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
-  h1 = c("", "Case", "Control", "Total"), stringsAsFactors = FALSE)
+hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
+  h1 = c("", "Exp +", "Exp -", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -95,6 +95,7 @@ flextable(orcc.df) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
   width(j = 4, width = 2.00) %>%
+  width(j = 5, width = 3.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -102,7 +103,7 @@ flextable(orcc.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("Table 4: A 2 x 2 table with the odds of exposure calculated for cases, controls and the total study population.")
+  set_caption("A 2 x 2 table with the exposure odds calculated for cases, controls and the total study population.")
 
 ## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."----
 knitr::include_graphics("attributable_risk.png")
@@ -164,10 +165,10 @@ names(dat.epi02$massoc.detail)
 
 ## ----message = FALSE----------------------------------------------------------
 dat.epi02$massoc.detail$OR.strata.wald
-# Wald confidence intervals: 2.02 (95% CI 1.08 to 3.78)
+# Wald confidence intervals: 2.0 (95% CI 1.1 to 3.8)
 
 dat.epi02$massoc.detail$OR.strata.score
-# Score confidence intervals: 2.02 (95% CI 1.08 to 3.77)
+# Score confidence intervals: 2.0 (95% CI 1.1 to 3.8)
 
 
 ## ----message = FALSE----------------------------------------------------------

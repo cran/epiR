@@ -44,8 +44,10 @@ flextable(tab1.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
+  set_caption("Functions to estimate sample size using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
@@ -105,8 +107,10 @@ flextable(tab2.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sep.rs(N = NA, n = 300, pstar = 0.01, se.u = 0.95)
@@ -158,8 +162,10 @@ flextable(tab3.df) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
+  set_caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(ggplot2); library(lubridate); library(scales)
@@ -218,8 +224,10 @@ flextable(tab4.df) %>%
   align(align = "left", part = "all") %>%
   
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
+  set_caption("Functions to estimate sample size using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 # Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
@@ -278,8 +286,10 @@ flextable(tab4.df) %>%
   fontsize(i = 1, size = 8, part = "footer") %>%
   
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  
+  fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 # There are 1784 herds in the study area:
