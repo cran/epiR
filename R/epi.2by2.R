@@ -1710,7 +1710,7 @@
   
   # RR interpretation:
   directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ss.rr = paste("The outcome prevalence risk among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure ", directn.srr, " outcome prevalence risk among the exposed.", sep = "")
+  cross.sectional.ss.rr = paste("The outcome prevalence among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure ", directn.srr, " outcome prevalence among the exposed.", sep = "")
   
 
   # OR interpretation:
@@ -1719,7 +1719,7 @@
   
 
   # AR interpretation:
-  cross.sectional.ss.ar = paste("Exposure changed the outcome prevalence risk in the exposed by ", round(res$ARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.strata.wald[2], digits = 2)," to ", round(res$ARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ss.ar = paste("Exposure changed the outcome prevalence in the exposed by ", round(res$ARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.strata.wald[2], digits = 2)," to ", round(res$ARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   # NNT and NNH --- from Altman (1998):
   directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
@@ -1747,7 +1747,7 @@
   
   
   # PAR interpretation:
-  cross.sectional.ss.par = paste("Exposure changed the outcome prevalence risk in the population by ", round(res$PARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.strata.wald[2], digits = 2)," to ", round(res$PARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ss.par = paste("Exposure changed the outcome prevalence in the population by ", round(res$PARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.strata.wald[2], digits = 2)," to ", round(res$PARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   
   # PAF interpretation:
@@ -1759,17 +1759,17 @@
   
   # Crude RR interpretation:
   directn.crr <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.crr = paste("The crude outcome prevalence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure", directn.crr, " the outcome prevalence risk among the exposed.", sep = "")
+  cross.sectional.ms.crr = paste("The crude outcome prevalence among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure", directn.crr, " the outcome prevalence among the exposed.", sep = "")
   
   
   # M-H RR interpretation:
   directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.mrr, " the outcome prevalence risk among the exposed.", sep = "")
+  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure ", directn.mrr, " the outcome prevalence among the exposed.", sep = "")
   
   
   # Crude OR interpretation:
   directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.cor = paste("The crude outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome prevalence risk among the unexposed: exposure ", directn.cor, " the outcome prevalence odds among the exposed.", sep = "")
+  cross.sectional.ms.cor = paste("The crude outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.cor, " the outcome prevalence odds among the exposed.", sep = "")
   
   
   # M-H OR interpretation:
@@ -1778,11 +1778,11 @@
   
   
   # Crude AR interpretation:
-  cross.sectional.ms.car = paste("Exposure changed the crude outcome prevalence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  cross.sectional.ms.car = paste("Exposure changed the crude outcome prevalence in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
   
   
   # M-H AR interpretation:
-  cross.sectional.ms.mar = paste("After accounting for confounding exposure changed the outcome prevalence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  cross.sectional.ms.mar = paste("After accounting for confounding exposure changed the outcome prevalence in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
   
   
   # NNTB - NNTH - multiple strata, crude:

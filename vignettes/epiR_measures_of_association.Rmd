@@ -31,8 +31,6 @@ This vignette has been written assuming the reader routinely formats their 2 $\t
 
 The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the measures of association functions in `epiR` using a smart phone.
 
-Use the [interactive 2 by 2 table](https://shiny.vet.unimelb.edu.au/epi/2x2/) page to develop an intuitive understanding of the calculation methods for the incidence risk ratio, odds ratio, attributable risk, attributable fraction, population attributable risk and population attributable fraction.
-
 **Measures of association strength**
 
 ***The incidence risk ratio***
@@ -101,7 +99,7 @@ The outcome incidence risk ratio provides an estimate of how many times more lik
 
 If the outcome incidence risk ratio equals 1, then the risk of the outcome in both the exposed and non-exposed groups are the same. If the outcome incidence risk ratio is greater than 1, then exposure increases the outcome incidence risk with greater departures from 1 indicative of a stronger association If the outcome incidence risk ratio is less than 1, exposure reduces the outcome incidence risk and exposure is said to be protective.
 
-Tip: The [interactive 2 by 2 table](https://shiny.vet.unimelb.edu.au/epi/2x2/) page and the glossary in the EpiToolbox app contains an animated version of Figure 1.
+Tip: The glossary in the EpiToolbox app contains an animated version of Figure 1.
 
 ***The odds ratio --- cohort studies***
 
