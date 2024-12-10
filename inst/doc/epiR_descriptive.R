@@ -218,7 +218,7 @@ ggplot() +
    scale_fill_gradientn(limits = c(0,0.5), colours = brewer.pal(n = 5, "Reds"), guide = "colourbar") +
    scale_x_continuous(name = "Longitude") +
    scale_y_continuous(name = "Latitude") +
-   labs(fill = "SIDS 1974")
+   labs(fill = "Age >65 years")
 
 ## ----message = FALSE----------------------------------------------------------
 data(chorley)

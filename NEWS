@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.78
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.insthaz edited to remove instantaneous hazard estimates when there are now event. Documentation improved in relation to plotting smoothed instantaneous estimates. 
+    [Suggested by Rutu Galea]
+
+
 CHANGES IN epiR VERSION 2.0.77
 SIGNIFICANT USER-VISIBLE CHANGES
 
