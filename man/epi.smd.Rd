@@ -55,12 +55,12 @@ The standardised mean difference method is used when trials assess the same outc
 ## so standardisation is required before they can be compared.
 
 names <- c("Audini", "Morse", "Lehman")
-mean.trt <- c(41.4, 0.95, -4.10)
-mean.ctrl <- c(42.3, 0.89, -3.80)
-sd.trt <- c(14, 0.76, 0.83)
-sd.ctrl <- c(12.4, 0.65, 0.87)
-n.trt <- c(30, 37, 67)
-n.ctrl <- c(28, 35, 58)
+mean.trt <- c(41.4,0.95,-4.10)
+mean.ctrl <- c(42.3,0.89,-3.80)
+sd.trt <- c(14,0.76,0.83)
+sd.ctrl <- c(12.4,0.65,0.87)
+n.trt <- c(30,37,67)
+n.ctrl <- c(28,35,58)
 
 epi.smd(mean.trt, sd.trt, n.trt, mean.ctrl, sd.ctrl, n.ctrl, 
    names, method = "cohens", conf.level = 0.95)

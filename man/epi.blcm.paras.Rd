@@ -28,7 +28,7 @@ A list containing the following:
 }
 
 \author{
-Simon Firestone and Allison Cheung (Faculty of Veterinary and Agricultural Sciences, The University of Melbourne, Parkville Victoria, Australia), Nagendra Singanallur (Australian Centre for Disease Preparedness, Newcomb Victoria, Australia).
+Simon Firestone and Allison Cheung (Melbourne Veterinary School, Faculty of Science, The University of Melbourne, Parkville Victoria, Australia), Nagendra Singanallur (Australian Centre for Disease Preparedness, Newcomb Victoria, Australia).
 }
 
 \note{

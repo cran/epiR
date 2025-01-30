@@ -1,3 +1,23 @@
+CHANGES IN epiR VERSION 2.0.80
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Correction to Mantel-Haenszel chi2 test in epi.2by2.
+    [Spotted by Yannick Vandendijk]
+
+
+CHANGES IN epiR VERSION 2.0.79
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Example added to epi.smr.
+    [Suggested by Bernard Phiri]
+
+    o A frequently asked questions section has been added to the documentation for epi.about().
+    [Suggested by Mark Stevenson]
+
+    o New function epi.fpos calculates the number of true positives, false positives, true negatives and false negatives given the number of individuals tested, the design prevalence and diagnostic test sensitivity and specificity. 
+    [Suggested by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.78
 SIGNIFICANT USER-VISIBLE CHANGES
 

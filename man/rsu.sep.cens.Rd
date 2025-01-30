@@ -43,7 +43,7 @@ rsu.sep.cens(d = 5, se.u = 0.80)
 ## assuming a design prevalence in each population of 0.01 and use of a test
 ## with a diagnostic sensitivity of 0.92. 
 
-rsu.sep.cens(d = ceiling(0.01 * c(10, 50, 100, 250, 500)), se.u = 0.92)
+rsu.sep.cens(d = ceiling(0.01 * c(10,50,100,250,500)), se.u = 0.92)
 
 ## For the populations comprised of 100 animals or less the surveillance 
 ## system sensitivity is 0.92. For the populations comprised of greater than

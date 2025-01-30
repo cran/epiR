@@ -30,16 +30,16 @@ Ugarte MD, Ibanez B, Militino AF (2006). Modelling risks in disease mapping. Sta
 
 \examples{
 ## EXAMPLE 1:
+## Lip cancer in Scotland, 1975 to 1980:
 data(epi.SClip)
 obs <- epi.SClip$cases
 pop <- epi.SClip$population
+
+## Calculate the expected number of lip cancer cases per district:
 exp <- (sum(obs) / sum(pop)) * pop
 
+## Bohning's test:
 epi.bohning(obs, exp, alpha = 0.05)
-
-## Bohning's test was used to determine if there was statistically significant
-## overdispersion in lip cancer cases across 56 Scottish districts for the 
-## period 1975 to 1980. 
 
 ## The test statistic was 53.33. The associated P value was <0.01. We reject 
 ## the null hypothesis of no over dispersion and accept the null hypothesis

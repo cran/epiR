@@ -38,7 +38,7 @@ Dohoo I, Martin W, Stryhn H (2003). Veterinary Epidemiologic Research. AVC Inc, 
 }
 
 \author{
-Ron Thornton, MAF New Zealand, PO Box 2526 Wellington, New Zealand.
+Ron Thornton, MPI New Zealand, PO Box 2526 Wellington, New Zealand.
 }
 
 \examples{

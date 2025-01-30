@@ -2,11 +2,11 @@
 
 \alias{epi.smr}
 
-\title{Confidence intervals and tests of significance of the standardised mortality [morbidity] ratio
+\title{Confidence intervals and tests of statistical significance of the standardised mortality [morbidity] ratio
 }
 
 \description{
-Computes confidence intervals and tests of significance of the standardised mortality [morbidity] ratio.
+Computes confidence intervals and tests of statistical significance of the standardised mortality [morbidity] ratio.
 }
 
 \usage{
@@ -52,6 +52,8 @@ A data frame listing:
 Only 90\%, 95\% and 99\% confidence limits are computed using the Ury and Wiggins method. If \code{conf.level} does not equal 0.90, 0.95 or 0.99 \code{NAs} are returned for the lower and upper bound of the SMR confidence interval.
 
 Only 95\% confidence limits are computed using Vandenbroucke's method. If \code{conf.level} does not equal 0.95 \code{NAs} are returned for the lower and upper bound of the SMR confidence interval.
+
+To calculate SMRs and their confidence intervals for a series of study areas (instead of one) see the \code{\link{epi.conf}} function using \code{ctype = "smr"}. To calculate the expected number of events see Example 1 in \code{\link{epi.bohning}}.
 }
 
 \references{

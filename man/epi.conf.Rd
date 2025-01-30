@@ -24,7 +24,7 @@ epi.conf(dat, ctype = "mean.single", method, N, design = 1,
 }
 
 \details{
-Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{odds} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Method \code{ratio} requires a two-column matrix; the first column specifies the numerator, the second column specifies the denominator. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of positives, the second column specifies the total number tested. 
+Method mean.single requires a vector as input. Method \code{mean.unpaired} requires a two-column data frame; the first column defining the groups must be a factor. Method \code{mean.paired} requires a two-column data frame; one column for each group. Method \code{prop.single} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Methods \code{prop.unpaired} and \code{prop.paired} require a four-column matrix; columns 1 and 2 specify the number of positives and negatives for the first group, columns 3 and 4 specify the number of positives and negatives for the second group. Method \code{prevalence} and \code{inc.risk} require a two-column matrix; the first column specifies the number of positives, the second column specifies the total number tested. Method \code{inc.rate} requires a two-column matrix; the first column specifies the number of positives, the second column specifies individual time at risk. Method \code{odds} requires a two-column matrix; the first column specifies the number of positives, the second column specifies the number of negatives. Method \code{ratio} requires a two-column matrix; the first column specifies the numerator, the second column specifies the denominator. Method \code{smr} requires a two-colum matrix; the first column specifies the total number of events, the second column specifies the population size. 
 
 The methodology implemented here follows Altman, Machin, Bryant, and Gardner (2000). Where method is \code{inc.risk} or \code{prevalence} if the numerator equals zero the lower bound of the confidence interval estimate is set to zero. Where method is \code{smr} the method of Dobson et al. (1991) is used. A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 
@@ -147,8 +147,8 @@ round(epi.conf(dat = dat.m04, ctype = "prop.single"), digits = 3)
 ## adverse effects. Out of 29 patients receiving a placebo, none experienced
 ## adverse effects.
 
-grp1 <- matrix(cbind(5, 51), ncol = 2)
-grp2 <- matrix(cbind(0, 29), ncol = 2)
+grp1 <- matrix(cbind(5,51), ncol = 2)
+grp2 <- matrix(cbind(0,29), ncol = 2)
 dat.m05 <- as.matrix(cbind(grp1, grp2))
 round(epi.conf(dat = dat.m05, ctype = "prop.unpaired"), digits = 3)
 
@@ -176,7 +176,7 @@ round(epi.conf(dat = dat.m05, ctype = "prop.unpaired"), digits = 3)
 ##  Total       | 14            | 27          | 41
 ## ---------------------------------------------------------
 
-dat.m06 <- as.matrix(cbind(14, 5, 0, 22))
+dat.m06 <- as.matrix(cbind(14,5,0,22))
 round(epi.conf(dat = dat.m06, ctype = "prop.paired", conf.level = 0.95), 
    digits = 3)
 
@@ -204,7 +204,7 @@ epi.conf(dat = dat.m07, ctype = "prevalence", method = "exact", N = 1000,
 ## below. What are the the standardised morbidity ratios of disease for each
 ## area and their 95\% confidence intervals?
 
-obs <- c(5, 10, 12, 18); pop <- c(234, 189, 432, 812)
+obs <- c(5,10,12,18); pop <- c(234,189,432,812)
 dat.m08 <- as.matrix(cbind(obs, pop))
 round(epi.conf(dat = dat.m08, ctype = "smr"), digits = 2)
 

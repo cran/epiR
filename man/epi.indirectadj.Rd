@@ -67,9 +67,9 @@ Thanks to Dr. Telmo Nunes (UISEE/DETSA, Faculdade de Medicina Veterinaria - UTL,
 ## the total population is 0.060 (6 cases per 100 herds at risk):
 
 obs.m01 <- matrix(data = c(58,130), nrow = 2, byrow = TRUE,
-   dimnames = list(c("A", "B"), ""))
+   dimnames = list(c("A","B"), ""))
 pop.m01 <- matrix(data = c(1000,2000), nrow = 2, byrow = TRUE,
-   dimnames = list(c("A", "B"), ""))
+   dimnames = list(c("A","B"), ""))
 std.m01 <- 0.060
 
 epi.indirectadj(obs = obs.m01, pop = pop.m01, std = std.m01, units = 100,
@@ -82,11 +82,11 @@ epi.indirectadj(obs = obs.m01, pop = pop.m01, std = std.m01, units = 100,
 ## population are 0.025, 0.085, and 0.060 cases per herd, respectively:
 
 obs.m02 <- matrix(data = c(58,130), nrow = 2, byrow = TRUE,
-   dimnames = list(c("A", "B"), ""))
+   dimnames = list(c("A","B"), ""))
 pop.m02 <- matrix(data = c(550,450,500,1500), nrow = 2, byrow = TRUE,
-   dimnames = list(c("A", "B"), c("Beef", "Dairy")))
+   dimnames = list(c("A","B"), c("Beef","Dairy")))
 std.m02 <- matrix(data = c(0.025,0.085,0.060), nrow = 1, byrow = TRUE,
-   dimnames = list("", c("Beef", "Dairy", "Total")))
+   dimnames = list("", c("Beef","Dairy","Total")))
 
 epi.indirectadj(obs = obs.m02, pop = pop.m02, std = std.m02, units = 100,
    conf.level = 0.95)

@@ -48,8 +48,8 @@ Javier Sanchez (Atlantic Veterinary College, University of Prince Edward Island,
 ## on farms is in the order of 0.50, with the probability of usage increasing
 ## as herds get larger. How many dairies should be sampled?
 
-strata.n <- c(1500, 2500, 4000)
-strata.Py <- c(0.50, 0.60, 0.70)
+strata.n <- c(1500,2500,4000)
+strata.Py <- c(0.50,0.60,0.70)
 epi.ssstrataestb(strata.n, strata.Py, epsilon = 0.20, error = "relative",
    nfractional = FALSE, conf.level = 0.95)
 

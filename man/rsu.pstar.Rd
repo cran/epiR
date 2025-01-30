@@ -55,7 +55,7 @@ rsu.pstar(N = NA, n = 280, se.p = 0.95, se.u = 0.98)
 ## of 0.98. If all 30 unit tests return a negative result, what is the expected 
 ## design prevalence for each herd? 
 
-round(rsu.pstar(N = c(100, 500, 1000, 5000), n = 30, 
+round(rsu.pstar(N = c(100,500,1000,5000), n = 30, 
    se.p = 0.95, se.u = 0.98), digits = 3)
 
 ## The expected herd level design prevalence ranges from 0.086 (for a 100 

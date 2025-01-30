@@ -16,6 +16,28 @@ epi.about()
 More information about the \code{epiR} package can be found at \code{https://mvs.unimelb.edu.au/research/groups/veterinary-epidemiology-melbourne} and  \code{https://www.ausvet.com.au/}.
 }
 
+\section{FREQUENTLY ASKED QUESTIONS}{
+
+I have some diagnostic test results. How do I work out the expected number of true positive and false positive results? See \code{\link{epi.fpos}}: Compute the number of true positives, false positives, true negatives and false negatives given the number of individuals tested, the design prevalence and diagnostic test sensitivity and specificity.
+
+How do I work out a sample size to estimate the prevalence of disease? If simple random sampling has been used see \code{\link{epi.sssimpleestb}}. If two-stage cluster design sampling has been used see \code{\link{epi.ssclus2estb}}.
+
+How do I work out diagnostic test sensitivity and specificity from a set of test results? See \code{\link{epi.tests}}.
+
+How do I work out the true prevalence of disease based on results from an imperfect diagnostic test? See \code{\link{epi.prev}}.
+
+How do I calculate an odds ratio and incidence risk ratio on the basis of data presented in a 2 times 2 table? See \code{\link{epi.2by2}}.
+
+How do I calculate a confidence interval for an incidence risk estimate? See \code{\link{epi.conf}}.
+
+I've collected samples from a population and have tested them --- all returning a negative result. What is the maximum prevalence of disease in this population if disease is actually present? See \code{\link{rsu.pstar}}.
+
+I've collected samples from a population and have tested them --- all returning a negative result. What is the probability that the prevalence of disease is less than or equal to a specified design prevalence? See \code{\link{rsu.sep}}.
+
+How do I calculate the standardised mortality ratio for a single study area? See the \code{\link{epi.smr}} function. Example 1 in \code{\link{epi.bohning}} shows you how to calculate an expected value. To calculate SMRs and their confidence intervals for a series of study areas (instead of one) see the \code{\link{epi.conf}} function using \code{ctype = "smr"}.
+
+}
+
 \section{FUNCTIONS AND DATASETS}{
 
 The following is a summary of the main functions and datasets in the \pkg{epiR} package. An alphabetical list of all functions and datasets is available by typing \code{library(help = epiR)}.
@@ -43,12 +65,14 @@ The functions in \pkg{epiR} can be categorised into two main groups: tools for e
 \subsection{2. Measures of health and measures of association}{
 
 \tabular{ll}{
+    \code{\link{epi.2by2}}              \tab Measures of association from data presented in a 2 by 2 table. \cr
     \code{\link{epi.directadj}}         \tab Directly adjusted incidence rate estimates. \cr
     \code{\link{epi.edr}}               \tab Compute estimated dissemination ratios from outbreak event data. \cr
     \code{\link{epi.empbayes}}          \tab Empirical Bayes estimates of observed event counts. \cr
     \code{\link{epi.indirectadj}}       \tab Indirectly adjusted incidence risk estimates. \cr
     \code{\link{epi.insthaz}}           \tab Instantaneous hazard estimates based on Kaplan-Meier survival estimates. \cr
-    \code{\link{epi.2by2}}              \tab Measures of association from data presented in a 2 by 2 table. \cr
+    \code{\link{epi.smr}}               \tab Confidence intervals and tests of statistical significance of the standardised mortality [morbidity] ratio. \cr    
+    
   }
 }
 
@@ -56,6 +80,8 @@ The functions in \pkg{epiR} can be categorised into two main groups: tools for e
 
 \tabular{ll}{
     \code{\link{epi.betabuster}}         \tab An R version of Wes Johnson and Chun-Lung Su's Betabuster. \cr
+    \code{\link{epi.blcm.paras}}         \tab Number of parameters to be inferred and number of informative priors for a BLCA. \cr
+    \code{\link{epi.fpos}}               \tab Calculate the expected number of false positive and false negative test results. \cr
     \code{\link{epi.herdtest}}           \tab Estimate the characteristics of diagnostic tests applied at the herd (group) level. \cr
     \code{\link{epi.nomogram}}           \tab Compute the post-test probability of disease given characteristics of a diagnostic test. \cr
     \code{\link{epi.pooled}}             \tab Estimate herd test characteristics when samples are pooled. \cr
