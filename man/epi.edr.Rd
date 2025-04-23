@@ -67,22 +67,23 @@ dat.df01$sedr.025 <- lowess(dat.df01$edate, dat.df01$edr.025, f = 0.10)$y
 dat.df01$sedr.975 <- lowess(dat.df01$edate, dat.df01$edr.975, f = 0.10)$y
 
 
+## Not run: 
 \dontrun{
 library(ggplot2); library(scales)
 
 ## Frequency histogram of the number of incident FMD positive farms as a
 ## function of date:
 ggplot() +
-  theme_bw() +
-  geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
-     binwidth = 1, fill = "#008080", alpha = 0.45) +
-  scale_x_date(breaks = date_breaks("7 days"), 
-     name = "Date of onset of signs") +
-  scale_y_continuous(limits = c(0,20), name = "Number of events") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+   theme_bw() +
+   geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
+      binwidth = 1, fill = "#008080", alpha = 0.45) +
+   scale_x_date(breaks = date_breaks("7 days"), 
+      name = "Date of onset of signs") +
+   scale_y_continuous(limits = c(0,20), name = "Number of events") + 
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
-## EDR line plot (and its 95\% confidence interval) as a function of 
+## EDR line plot (and its 95% confidence interval) as a function of 
 ## date. Set primary axis breaks and labels:
 x <- 2^(-5:5)
 y <- seq(from = 0, to = 20, length = length(x))
@@ -91,13 +92,13 @@ pybreaks <- y; pylabels <- x
 ggplot() +
    theme_bw() +
    geom_line(data = dat.df01, aes(x = edate, 
-      y = 10 + (2 * log2(edr.500))), col = "black", size = 1) +
+      y = 10 + (2 * log2(edr.500))), col = "black", linewidth = 1) +
    geom_line(data = dat.df01, aes(x = edate, 
       y = 10 + (2 * log2(edr.025))), col = "black", 
-      linetype = "dashed", size = 0.5) +
+      linetype = "dashed", linewidth = 0.5) +
    geom_line(data = dat.df01, aes(x = edate, 
       y = 10 + (2 * log2(edr.975))), col = "black", 
-      linetype = "dashed", size = 0.5) +
+      linetype = "dashed", linewidth = 0.5) +
    scale_x_date(breaks = date_breaks("7 days"), 
       name = "Date of onset of signs") +
    scale_y_continuous(breaks = pybreaks, labels = pylabels, 
@@ -107,7 +108,7 @@ ggplot() +
    theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
-## EDR line plot (and its 95\% confidence interval) as a function of 
+## EDR line plot (and its 95% confidence interval) as a function of 
 ## date superimposed on the epidemic curve:
 
 ## Set the EDR values to appear on secondary vertical axis:
@@ -125,7 +126,7 @@ pybreaks <- seq(from = 0, to = 20, by = 5)
 pylabels <- pybreaks
 
 ## Breaks and values for secondary y axis:
-sybreaks <- 10 + (2 * log2(x))
+sybreaks <- coefficients(dat.lm01)[1] + (coefficients(dat.lm01)[2] * log2(x))
 sylabels <- x
 
 ggplot() +
@@ -133,22 +134,21 @@ ggplot() +
    geom_histogram(data = dat.df01, aes(x = edate, weight = ncas), 
       binwidth = 1, fill = "#008080", alpha = 0.45) +
    geom_line(data = dat.df01, aes(x = edate, 
-      y = 10 + (2 * log2(edr.500))), col = "black", size = 1) +
+      y = 10 + (2 * log2(edr.500))), col = "black", linewidth = 1) +
    geom_line(data = dat.df01, aes(x = edate, 
-      y = 10 + (2 * log2(edr.025))), col = "black", size = 0.5, 
+      y = 10 + (2 * log2(edr.025))), col = "black", linewidth = 0.5, 
       linetype = "dashed") +
    geom_line(data = dat.df01, aes(x = edate, 
-      y = 10 + (2 * log2(edr.975))), col = "black", size = 0.5,
+      y = 10 + (2 * log2(edr.975))), col = "black", linewidth = 0.5,
       linetype = "dashed") +
    scale_x_date(breaks = date_breaks("1 month"), 
-      labels = date_format("%b %y"), name = "Date of onset of signs") +
+      labels = date_format("\%b \%y"), name = "Date of onset of signs") +
    scale_y_continuous(breaks = pybreaks, labels = pylabels, limits = c(0,20), 
       name = "Number of FMD cases",
       sec.axis = sec_axis(breaks = sybreaks, labels = sylabels, 
-      trans = ~ ., name = "Estimated dissemination ratio (EDR)")) +
-  coord_cartesian(xlim = range(dat.df01$edate), ylim = c(0,20)) +
-  geom_hline(yintercept = 10, col = "red", linetype = "dashed")
-  
+      transform = ~ ., name = "Estimated dissemination ratio (EDR)")) +
+   coord_cartesian(xlim = range(dat.df01$edate), ylim = c(0,20)) +
+   geom_hline(yintercept = 10, col = "red", linetype = "dashed")  
  }
 }
 

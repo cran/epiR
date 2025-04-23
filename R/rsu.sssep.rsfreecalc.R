@@ -7,7 +7,7 @@ rsu.sssep.rsfreecalc <- function(N, pstar, mse.p = 0.95, msp.p = 0.95, se.u, sp.
   N1 <- min(N, max.ss)
   brks <- c(50, 100, 1000, 5000, 10000, Inf)
   # brks <- c(50, 100, 1000, 5000, 10000, 50000, Inf)
-  steps <- c(5, 10, 50, 100, 200)
+  steps <- c(5, 10, 50, 100, 200, 500)
   step <- steps[which(N1 < brks)[1]]
   ss <- seq(from = 0, to = N1, by = step)
   ss[1] <- 1
@@ -25,6 +25,9 @@ rsu.sssep.rsfreecalc <- function(N, pstar, mse.p = 0.95, msp.p = 0.95, se.u, sp.
     
     if(method == "hypergeometric"){
       P1[s] <- 1 - rsu.sep.rsfreecalc(N = N, n = ss[s], c = cp[s], pstar = pstar, se.u = se.u, sp.u = sp.u) 
+      
+      # P1[s] <- ifelse(is.na(P1[s]), Inf, P1[s])
+      
     } else{
       P1[s] <- 1 - zsep.binom.imperfect(n = ss[s], c = cp[s], se = se.u, sp = sp.u, pstar = pstar)
     }

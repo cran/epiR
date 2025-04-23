@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.82
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Coverage of candidate sample size range for function rsu.sssep.rsfreecalc in improved.
+    [Spotted by Karyn Froud]
+    
+
 CHANGES IN epiR VERSION 2.0.81
 SIGNIFICANT USER-VISIBLE CHANGES
 
