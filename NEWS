@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.83
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Error message returned if conf.level argument for epi.2by2 is not greater than zero and less than one.
+    [Suggested by Erica Griechisch]
+    
+
 CHANGES IN epiR VERSION 2.0.82
 SIGNIFICANT USER-VISIBLE CHANGES
 

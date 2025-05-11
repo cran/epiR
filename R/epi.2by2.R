@@ -3,6 +3,9 @@
   # Stop if invalid number of digits:
   if(digits != 2 & digits != 3 & digits != 4) stop("Argument 'digits' for this function must take the value of 2, 3 or 4.")
   
+  # Stop if invalid number of digits:
+  if(conf.level <= 0 | conf.level >= 1) stop("Argument 'conf.level' for this function must be greater than 0 and less than 1.")
+  
   ## Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293.
   
   ## Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
