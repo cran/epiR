@@ -1,4 +1,4 @@
-"epi.2by2" <- function(dat, method = "cohort.count", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns"){
+"epi.2by2" <- function(dat, method = "cohort.count", elab = NA, olab = NA, digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns"){
   
   # Stop if invalid number of digits:
   if(digits != 2 & digits != 3 & digits != 4) stop("Argument 'digits' for this function must take the value of 2, 3 or 4.")
@@ -6,6 +6,13 @@
   # Stop if invalid number of digits:
   if(conf.level <= 0 | conf.level >= 1) stop("Argument 'conf.level' for this function must be greater than 0 and less than 1.")
   
+  # elab and olab truncated to 8 characters:
+  elab <- ifelse(is.na(elab), "Exposure", elab)
+  olab <- ifelse(is.na(olab), "Outcome", olab)
+  
+  elab <- ifelse(nchar(elab) > 8, substr(x = elab, start = 1, stop = 8), elab)
+  olab <- ifelse(nchar(olab) > 8, substr(x = olab, start = 1, stop = 8), olab)
+
   ## Elwoood JM (1992). Causal Relationships in Medicine - A Practical System for Critical Appraisal. Oxford Medical Publications, London, p 266 - 293.
   
   ## Rothman KJ (2002). Epidemiology An Introduction. Oxford University Press, London, p 130 - 143.
@@ -280,9 +287,7 @@
   
   # American Journal of Epidemiology 100: 165 - 167.
   
-  # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
-  
-  # Added 160609.
+  # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69). Added 160609.
   Al <- (qbinom(1 - N., size = a + b, prob = (a / (a + b)))) / (a + b)
   Au <- (qbinom(N., size = a + b, prob = (a / (a + b)))) / (a + b)
   Oe.p <- (a / b)
@@ -343,9 +348,7 @@
   
   # American Journal of Epidemiology 100: 165 - 167.
   
-  # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69).
-  
-  # Added 160609
+  # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69). Added 160609:
   Al <- (qbinom(1 - N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
   Au <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
   cOe.p <- sa / sb
@@ -606,7 +609,6 @@
   mOR.p <- c(); mOR.l <- c(); mOR.u <- c()
   
   # If numbers too large error returned 'x' has entries too large to be integer.
-  
   if(sum(total) < 2E09){
     if(length(dim(dat)) == 3){
       for(i in 1:dim(dat)[3]){
@@ -1344,6 +1346,7 @@
   ## Results are entered into a list:
   res <- list(
     
+    # --------------------------------------------------------------------------
     ## Strata incidence risk ratio:
     RR.strata.wald = data.frame(est = wRR.p, lower = wRR.l, upper = wRR.u),
     RR.strata.taylor = data.frame(est = tRR.p, lower = tRR.l, upper = tRR.u),
@@ -1357,6 +1360,8 @@
     ## Mantel-Haenszel incidence risk ratio:
     RR.mh.wald = data.frame(est = sRR.p, lower = sRR.l, upper = sRR.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Strata incidence rate ratio:
     IRR.strata.wald = data.frame(est = IRR.p, lower = IRR.l, upper = IRR.u),
     
@@ -1366,6 +1371,8 @@
     ## Mantel-Haenszel incidence rate ratio:
     IRR.mh.wald = data.frame(est = sIRR.p, lower = sIRR.l, upper = sIRR.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Strata odds ratio:
     OR.strata.wald = data.frame(est = wOR.p, lower = wOR.l, upper = wOR.u),
     OR.strata.cfield = data.frame(est = cfOR.p, lower = cfOR.l, upper = cfOR.u),
@@ -1381,6 +1388,8 @@
     ## Mantel-Haenszel odds ratio:
     OR.mh.wald = data.frame(est = sOR.p, lower = sOR.l, upper = sOR.u),
 
+    
+    # --------------------------------------------------------------------------
     ## Strata attributable risk:
     ARisk.strata.wald = data.frame(est = wARisk.p, lower = wARisk.l, upper = wARisk.u),
     ARisk.strata.score = data.frame(est = scARisk.p, lower = scARisk.l, upper = scARisk.u),
@@ -1394,6 +1403,19 @@
     ARisk.mh.sato = data.frame(est = SatoARisk.p, lower = SatoARisk.l, upper = SatoARisk.u),
     ARisk.mh.green = data.frame(est = GRARisk.p, lower = GRARisk.l, upper = GRARisk.u),    
 
+    
+    # --------------------------------------------------------------------------
+    ## Strata attributable rate:
+    ARate.strata.wald = data.frame(est = ARate.p, lower = ARate.l, upper = ARate.u),
+    
+    ## Crude attributable rate:
+    ARate.crude.wald = data.frame(est = cARate.p, lower = cARate.l, upper = cARate.u),
+    
+    ## Mantel-Haenszel adjusted attributable rate:
+    ARate.mh.wald = data.frame(est = sARate.p, lower = sARate.l, upper = sARate.u),
+    
+    
+    # --------------------------------------------------------------------------
     ## Strata NNTB NNTH:
     NNT.strata.wald = data.frame(est = wNNT.p, lower = wNNT.l, upper = wNNT.u),
     NNT.strata.score = data.frame(est = scNNT.p, lower = scNNT.l, upper = scNNT.u),
@@ -1406,16 +1428,9 @@
     NNT.mh.wald = data.frame(est = sNNT.p, lower = sNNT.l, upper = sNNT.u),
     NNT.mh.sato = data.frame(est = SatoNNT.p, lower = SatoNNT.l, upper = SatoNNT.u),
     NNT.mh.green = data.frame(est = GRNNT.p, lower = GRNNT.l, upper = GRNNT.u), 
-
-    ## Strata attributable rate:
-    ARate.strata.wald = data.frame(est = ARate.p, lower = ARate.l, upper = ARate.u),
     
-    ## Crude attributable rate:
-    ARate.crude.wald = data.frame(est = cARate.p, lower = cARate.l, upper = cARate.u),
     
-    ## Mantel-Haenszel adjusted attributable rate:
-    ARate.mh.wald = data.frame(est = sARate.p, lower = sARate.l, upper = sARate.u),
-    
+    # --------------------------------------------------------------------------
     ## Strata attributable fraction for risk data:
     AFRisk.strata.wald = data.frame(est = AFRisk.p, lower = AFRisk.l, upper = AFRisk.u),
     
@@ -1425,6 +1440,8 @@
     ## Strata attributable fraction for rate data:
     AFRate.strata.wald = data.frame(est = AFRate.p, lower = AFRate.l, upper = AFRate.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Crude attributable fraction for rate data:
     AFRate.crude.wald = data.frame(est = cAFRate.p, lower = cAFRate.l, upper = cAFRate.u),
     
@@ -1433,7 +1450,9 @@
     
     ## Crude estimated attributable fraction:
     AFest.crude.wald = data.frame(est = cAFest.p, lower = cAFest.l, upper = cAFest.u),
+
     
+    # --------------------------------------------------------------------------
     ## Strata population attributable risk:
     PARisk.strata.wald = data.frame(est = wPARisk.p, lower = wPARisk.l, upper = wPARisk.u),
     PARisk.strata.piri = data.frame(est = pPARisk.p, lower = pPARisk.l, upper = pPARisk.u),
@@ -1442,6 +1461,8 @@
     PARisk.crude.wald = data.frame(est = cwPARisk.p, lower = cwPARisk.l, upper = cwPARisk.u),
     PARisk.crude.piri = data.frame(est = cpPARisk.p, lower = cpPARisk.l, upper = cpPARisk.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Strata population attributable rate:
     PARate.strata.wald = data.frame(est = PARate.p, lower = PARate.l, upper = PARate.u),
     
@@ -1451,12 +1472,16 @@
     ## Strata population attributable fraction for risk data:
     PAFRisk.strata.wald = data.frame(est = PAFRisk.p, lower = PAFRisk.l, upper = PAFRisk.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Crude population attributable fraction for risk data:
     PAFRisk.crude.wald = data.frame(est = cPAFRisk.p, lower = cPAFRisk.l, upper = cPAFRisk.u),
     
     ## Strata population attributable fraction for rate data:
     PAFRate.strata.wald = data.frame(est = PAFRate.p, lower = PAFRate.l, upper = PAFRate.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Crude population attributable fraction for rate data:
     PAFRate.crude.wald = data.frame(est = cPAFRate.p, lower = cPAFRate.l, upper = cPAFRate.u),
     
@@ -1466,6 +1491,8 @@
     ## Crude estimated population attributable fraction:
     PAFest.crude.wald = data.frame(est = cPAFest.p, lower = cPAFest.l, upper = cPAFest.u),
     
+    
+    # --------------------------------------------------------------------------
     ## Effect of confounding for risk ratio (Woodward p 172):
     RR.conf = data.frame(est = RR.conf.p, lower = RR.conf.l, upper = RR.conf.u),
     
@@ -1486,6 +1513,8 @@
     
     units.time = c(ifelse(units == 1, "Outcomes per unit of population time at risk", paste("Outcomes per ", units, " units of population time at risk", sep = "")), ifelse(units == 1, "per population time at risk", paste("per ", units, " units of population time at risk", sep = ""))),
     
+    
+    # --------------------------------------------------------------------------
     ## Chi-square tests:    
     chi2.strata.uncor = chi2.strata.uncor,
     chi2.strata.yates = chi2.strata.yates,
@@ -1505,330 +1534,533 @@
     res$wRR.homog = data.frame(test.statistic = wRR.homog,  df = n.strata - 1, p.value = wRR.homog.p)
   }  
   
-  ## Interpretation statements --- cohort count single strata:
+  
     
+  
+  # ============================================================================
+  ## Interpretation statements --- cohort count single strata:
+
+  # If elab and olab set to NA, "Exposure" and "Outcome" are the table labels:
+  texp <- ifelse(elab == "Exposure", "exposure", elab)
+  tout <- ifelse(olab == "Outcome", "the outcome", olab)
+    
+  # If an acronym is used for elab or olab, keep as capitalised otherwise to lower:
+  texp <- ifelse(grepl(pattern = "^[[:upper:]]+$", x = texp), 
+                 texp, 
+                 paste(tolower(substr(x = texp, start = 1, stop = 1)), substr(x = texp, start = 2, stop = nchar(texp)), sep = ""))
+  
+  tout <- ifelse(grepl(pattern = "^[[:upper:]]+$", x = tout), 
+                 tout, 
+                 paste(tolower(substr(x = tout, start = 1, stop = 1)), substr(x = tout, start = 2, stop = nchar(tout)), sep = ""))
+
+  
   # RR interpretation:
-  directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cohort.count.ss.rr = paste("The outcome incidence risk among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times the outcome incidence risk among the unexposed: exposure ", directn.srr, " the outcome incidence risk among the exposed.", sep = "")
+  rrest <- round(res$RR.strata.wald[1], digits = 2)
+  rrlow <- round(res$RR.strata.wald[2], digits = 2)
+  rrupp <- round(res$RR.strata.wald[3], digits = 2)
+
+  cohort.count.ss.rr <- paste("The incidence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow," to ", rrupp, ") times the incidence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
   # OR interpretation:
-  directn.sor <- ifelse(res$OR.strata.wald[1] < 1, "decreased", "increased")
-  cohort.count.ss.or = paste("The outcome incidence odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2),") times the outcome incidence odds among the unexposed: exposure ", directn.sor, " the outcome incidence odds among the exposed.", sep = "")
+  orest <- round(res$OR.strata.wald[1], digits = 2)
+  orlow <- round(res$OR.strata.wald[2], digits = 2)
+  orupp <- round(res$OR.strata.wald[3], digits = 2)
+  
+  cohort.count.ss.or <- paste("The incidence odds of ", tout, " among those that were ", texp, " positive was ", orest, " (", conf.level * 100,"% CI ", orlow," to ", orupp, ") times the incidence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
-  # AR interpretation:
-  cohort.count.ss.ar = paste("Exposure changed the outcome incidence risk in the exposed by ", round(res$ARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.strata.wald[2], digits = 2)," to ", round(res$ARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  # AR interpretation. AR reported as absolute values so lower and upper CI labels need to be changed:
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
   
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
   
-  # NNT and NNH --- from Altman (1998):
-  directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cohort.count.ss.nnt <- paste("Exposure ", directn.srr, " the outcome incidence risk in the exposed. The number needed to treat (expose) to ", substr(x = directn.srr, start = 1, nchar(directn.srr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
   
-  # nnss <- NA
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[2] > 0 & res$NNT.strata.wald[3] > 0, 1, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] < 0, 2, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[1] > 0 & res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] > 0, 3, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[1] < 0 & res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] > 0, 4, nnss))
+  cohort.count.ss.ar <- paste("Exposure to ", texp, " changed the incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ".", sep = "")
+  
 
-  # cohort.count.ss.nnt <- NA
-  # 
-  # cohort.count.ss.nnt[nnss ==  1] <- paste("The number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ss.nnt[nnss ==  2] <- paste("The number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ss.nnt[nnss ==  3] <- paste("The number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cohort.count.ss.nnt[nnss ==  4] <- paste("The number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")  
-  # 
+  # NNT and NNH interpretation --- from Altman (1998):
+  change <- ifelse(res$RR.crude.wald[1] < 1, "decrease", "increase")
   
+  # NNT reported as absolute values so lower and upper CI labels need to be changed:
+  nntest <- abs(round(res$NNT.crude.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[3], digits = 2)), abs(round(res$NNT.crude.wald[2], digits = 2))))
+  nntupp <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[2], digits = 2)), abs(round(res$NNT.crude.wald[3], digits = 2))))
+  
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
+  
+  cohort.count.ss.nnt <- paste("Exposure to ", texp, " changed the incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+  
+
   # AF interpretation:
-  cohort.count.ss.af = paste(round(res$AFRisk.strata.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRisk.strata.wald[2] * 100, digits = 1), "% to ", round(res$AFRisk.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  afest <- round(res$AFRisk.crude.wald[1] * 100, digits = 0)
+  aflow <- round(res$AFRisk.crude.wald[2] * 100, digits = 0)
+  afupp <- round(res$AFRisk.crude.wald[3] * 100, digits = 0)
+  
+  cohort.count.ss.af <- paste("Among those that were ", texp, " positive ", afest, "% (", conf.level * 100, "% CI ", aflow, "% to ", afupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
   
   # PAR interpretation:
-  cohort.count.ss.par = paste("Exposure changed the outcome incidence risk in the population by ", round(res$PARisk.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARisk.strata.wald[2], digits = 2)," to ", round(res$PARisk.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  parest <- round(res$PARisk.crude.wald[1], digits = 2)
+  parest <- ifelse(parest > 0, paste("+", parest, sep = ""), parest)
   
+  parlow <- round(res$PARisk.crude.wald[2], digits = 2)
+  parlow <- ifelse(parlow > 0, paste("+", parlow, sep = ""), parlow)
   
+  parupp <- round(res$PARisk.crude.wald[3], digits = 2)
+  parupp <- ifelse(parupp > 0, paste("+", parupp, sep = ""), parupp)
+  
+  cohort.count.ss.par <- paste("Exposure to ", texp, " changed the incidence risk of ", tout, " among those that were ", texp, " positive and ", texp, " negative by ", parest," (", conf.level * 100,"% CI ", parlow, " to ", parupp, ") ", res$units.count[2], ".", sep = "")
+  
+
   # PAF interpretation:
-  cohort.count.ss.paf = paste(round(res$PAFRisk.strata.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRisk.strata.wald[2] * 100, digits = 1),"% to ", round(res$PAFRisk.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  pafest <- round(res$PAFRisk.crude.wald[1] * 100, digits = 0)
+  paflow <- round(res$PAFRisk.crude.wald[2] * 100, digits = 0)
+  pafupp <- round(res$PAFRisk.crude.wald[3] * 100, digits = 0)
+
+  cohort.count.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
   
   # -----------------------------------------------------------------------
   ## Cohort count multiple strata:
   
   # Crude RR interpretation:
-  directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.crr = paste("The crude outcome incidence risk among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence risk among the unexposed: exposure ", directn.crr, " the outcome incidence risk among the exposed.", sep = "")
+  rrest <- round(res$RR.crude.wald[1], digits = 2)
+  rrlow <- round(res$RR.crude.wald[2], digits = 2)
+  rrupp <- round(res$RR.crude.wald[3], digits = 2)
+  
+  cohort.count.ms.crr <- paste("The crude incidence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow, " to ", rrupp, ") times the crude incidence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
   # M-H RR interpretation:
-  directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.mrr = paste("After accounting for confounding the outcome incidence risk among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome incidence risk among the unexposed: exposure ", directn.mrr, " the outcome incidence risk among the unexposed.", sep = "")
+  rrest <- round(res$RR.mh.wald[1], digits = 2)
+  rrlow <- round(res$RR.mh.wald[2], digits = 2)
+  rrupp <- round(res$RR.mh.wald[3], digits = 2)
+  
+  cohort.count.ms.mrr <- paste("The Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow, " to ", rrupp, ") times the Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
   
 
   # Crude OR interpretation:
-  directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.cor = paste("The crude outcome incidence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome incidence odds among the unexposed: exposure ", directn.cor,  " the outcome incidence odds among the unexposed. ", sep = "")
-
+  orest <- round(res$OR.crude.wald[1], digits = 2)
+  orlow <- round(res$OR.crude.wald[2], digits = 2)
+  orupp <- round(res$OR.crude.wald[3], digits = 2)
+  
+  cohort.count.ms.cor <- paste("The crude incidence odds of ", tout, " among those that were ", texp, " positive was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp, ") times the crude incidence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
+  
 
   # M-H OR interpretation:
-  directn.mor <- ifelse(res$OR.mh.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.mor = paste("After accounting for confounding the outcome incidence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times the outcome incidence odds among the unexposed: exposure ", directn.mor, " the outcome incidence odds among the unexposed.", sep = "")
+  orest <- round(res$OR.mh.wald[1], digits = 2)
+  orlow <- round(res$OR.mh.wald[2], digits = 2)
+  orupp <- round(res$OR.mh.wald[3], digits = 2)
   
+  cohort.count.ms.mor <- paste("The Mantel-Haenszel adjusted incidence odds of ", tout, " among those that were ", texp, " positive was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp,  ") times the Mantel-Haenszel adjusted incidence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
   
-  # Crude AR interpretation:
-  cohort.count.ms.car = paste("Exposure changed the crude outcome incidence risk in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
-  
-  
-  # M-H AR interpretation:
-  cohort.count.ms.mar = paste("After accounting for confounding exposure changed the outcome incidence risk in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
 
+  # Crude AR interpretation. AR reported as absolute values so lower and upper CI labels need to be changed:
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cohort.count.ms.car <- paste("Exposure to ", texp, " changed the crude incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ".", sep = "")
+  
+
+  # M-H AR interpretation:
+  arest <- round(res$ARisk.mh.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.mh.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.mh.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cohort.count.ms.mar <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ".", sep = "")
+  
   
   # NNTB - NNTH interpretation - multiple strata, crude:
-  directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.cnnt <- paste("Exposure ", directn.crr, " the crude outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
+  change <- ifelse(res$RR.crude.wald[1] < 1, "decrease", "increase")
   
-  # nnmsc <- NA
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] > 0 & res$NNT.crude.wald[3] > 0, 1, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] < 0, 2, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[1] > 0 & res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] > 0, 3, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[1] < 0 & res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] > 0, 4, nnmsc))
-  # 
-  # cohort.count.ms.cnnt <- NA
-  # 
-  # cohort.count.ms.cnnt[nnmsc ==  1] <- paste("If we don't account for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ms.cnnt[nnmsc ==  2] <- paste("If we don't account for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ms.cnnt[nnmsc ==  3] <- paste("If we don't account for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cohort.count.ms.cnnt[nnmsc ==  4] <- paste("If we don't account for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")  
+  # NNT reported as absolute values so lower and upper CI labels need to be changed:
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  nntest <- abs(round(res$NNT.crude.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[3], digits = 2)), abs(round(res$NNT.crude.wald[2], digits = 2))))
+  nntupp <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[2], digits = 2)), abs(round(res$NNT.crude.wald[3], digits = 2))))
+
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
+  
+  cohort.count.ms.cnnt <- paste("Exposure to ", texp, " changed the crude incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+
 
   # NNTB - NNTH interpretation - multiple strata, M-H adjusted:
-  directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cohort.count.ms.mnnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
+  change <- ifelse(res$RR.mh.wald[1] < 1, "decrease", "increase")
   
-  # nnmsm <- NA
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] > 0 & res$NNT.mh.wald[3] > 0, 1, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] < 0, 2, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[1] > 0 & res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] > 0, 3, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[1] < 0 & res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] > 0, 4, nnmsc))
-  # 
-  # 
-  # cohort.count.ms.mnnt <- NA
-  # 
-  # cohort.count.ms.mnnt[nnmsc ==  1] <- paste("After accounting for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ms.mnnt[nnmsc ==  2] <- paste("After accounting for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cohort.count.ms.mnnt[nnmsc ==  3] <- paste("After accounting for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cohort.count.ms.mnnt[nnmsc ==  4] <- paste("After accounting for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")  
-
+  arest <- round(res$ARisk.mh.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.mh.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.mh.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  nntest <- abs(round(res$NNT.mh.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.mh.wald[1] < 1, abs(round(res$NNT.mh.wald[3], digits = 2)), abs(round(res$NNT.mh.wald[2], digits = 2))))
+  nntupp <- as.numeric(ifelse(res$RR.mh.wald[1] < 1, abs(round(res$NNT.mh.wald[2], digits = 2)), abs(round(res$NNT.mh.wald[3], digits = 2))))
+  
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
+  
+  cohort.count.ms.mnnt <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+  
   
   # -----------------------------------------------------------------------
   ## Cohort time single strata:
   
   # RR interpretation:
-  directn.sirr <- ifelse(res$IRR.strata.wald[1] < 1, "decreased", "increased")
-  cohort.time.ss.rr = paste("The outcome incidence rate among the exposed was ", round(res$IRR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.strata.wald[2], digits = 2)," to ", round(res$IRR.strata.wald[3], digits = 2), ") times the outcome incidence rate among the unexposed: exposure ", directn.sirr, " the outcome incidence rate among the unexposed.", sep = "")
+  irrest <- round(res$IRR.crude.wald[1], digits = 2)
+  irrlow <- round(res$IRR.crude.wald[2], digits = 2)
+  irrupp <- round(res$IRR.crude.wald[3], digits = 2)
   
-
+  cohort.time.ss.rr <- paste("The incidence rate of ", tout, " among those that were ", texp, " positive was ", irrest, " (", conf.level * 100,"% CI ", irrlow, " to ", irrupp, ") times the incidence rate of ", tout, " among those that were ", texp, " negative.", sep = "")
+  
+  
   # AR interpretation:
-  cohort.time.ss.ar = paste("Exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cohort.time.ss.ar <- paste("Exposure to ", texp, " changed the incidence rate of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
   
   
   # AF interpretation:
-  cohort.time.ss.af = paste(round(res$AFRate.crude.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRate.crude.wald[2] * 100, digits = 1), "% to ", round(res$AFRate.crude.wald[3] * 100, digits = 1), "%).", sep = "")
+  afest <- round(res$AFRate.crude.wald[1] * 100, digits = 0)
+  aflow <- round(res$AFRate.crude.wald[2] * 100, digits = 0)
+  afupp <- round(res$AFRate.crude.wald[3] * 100, digits = 0)
   
+  cohort.time.ss.af <- paste("Among those that were ", texp, " positive ", afest, "% (", conf.level * 100, "% CI ", aflow, "% to ", afupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
+
   # PAR interpretation:
-  cohort.time.ss.par = paste("Exposure changed the outcome incidence rate in the population by ", round(res$PARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.crude.wald[2], digits = 2)," to ", round(res$PARate.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  parest <- round(res$PARate.crude.wald[1], digits = 2)
+  parest <- ifelse(parest > 0, paste("+", parest, sep = ""), parest)
   
+  parlow <- ifelse(res$RR.crude.wald[1] < 1, round(res$PARate.crude.wald[3], digits = 2), round(res$PARate.crude.wald[2], digits = 2))
+  parlow <- ifelse(parlow > 0, paste("+", parlow, sep = ""), parlow)
   
+  parupp <- ifelse(res$RR.crude.wald[1] < 1, round(res$PARate.crude.wald[2], digits = 2), round(res$PARate.crude.wald[3], digits = 2))
+  parupp <- ifelse(parupp > 0, paste("+", parupp, sep = ""), parupp)
+  
+  cohort.time.ss.par <- paste("Exposure to ", texp, " changed the incidence rate of ", tout, " among those that were ", texp, " positive and ", texp, " negative by ", parest," (", conf.level * 100,"% CI ", parlow, " to ", parupp, ") ", res$units.time[2], ".", sep = "")
+  
+
   # PAF interpretation:
-  cohort.time.ss.paf = paste(round(res$PAFRate.crude.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRate.crude.wald[2] * 100, digits = 1),"% to ", round(res$PAFRate.crude.wald[3] * 100, digits = 1), "%).", sep = "")
+  pafest <- round(res$PAFRate.crude.wald[1] * 100, digits = 0)
+  paflow <- round(res$PAFRate.crude.wald[2] * 100, digits = 0)
+  pafupp <- round(res$PAFRate.crude.wald[3] * 100, digits = 0)
   
-  
+  cohort.time.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
+
+
   # -----------------------------------------------------------------------
   ## Cohort time multiple strata:
   
   # Crude RR interpretation:
-  directn.cirr <- ifelse(res$IRR.crude.wald[1] < 1, "decreased", "increased")
-  cohort.time.ms.crr = paste("The crude outcome incidence rate among the exposed was ", round(res$IRR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome incidence rate among the unexposed: exposure ", directn.cirr, " the outcome incidence rate among the exposed.", sep = "")
+  irrest <- round(res$IRR.crude.wald[1], digits = 2)
+  irrlow <- round(res$IRR.crude.wald[2], digits = 2)
+  irrupp <- round(res$IRR.crude.wald[3], digits = 2)
   
-
+  cohort.time.ms.crr <- paste("The crude incidence rate of ", tout, " among those that were ", texp, " positive was ", irrest, " (", conf.level * 100,"% CI ", irrlow, " to ", irrupp, ") times the crude incidence rate of ", tout, " among those that were ", texp, " negative.", sep = "")
+  
+  
   # M-H RR interpretation:
-  directn.mirr <- ifelse(res$IRR.mh.wald[1] < 1, "decreased", "increased")
-  cohort.time.ms.mrr = paste("After accounting for confounding the outcome incidence rate among the exposed was ", round(res$IRR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$IRR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome incidence rate among the unexposed: exposure ", directn.mirr, " the outcome incidence rate among the exposed.", sep = "")
-
-
+  irrest <- round(res$IRR.mh.wald[1], digits = 2)
+  irrlow <- round(res$IRR.mh.wald[2], digits = 2)
+  irrupp <- round(res$IRR.mh.wald[3], digits = 2)
+  
+  cohort.time.ms.mrr <- paste("The Mantel-Haenszel adjusted incidence rate of ", tout, " among those that were ", texp, " positive was ", irrest, " (", conf.level * 100,"% CI ", irrlow, " to ", irrupp, ") times the Mantel-Haenszel adjusted incidence rate of ", tout, " among those that were ", texp, " negative.", sep = "")
+  
+  
   # Crude AR interpretation:
-  cohort.time.ms.car = paste("Exposure changed the crude outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARate.crude.wald[3], digits = 2),") ", res$units.time[2], ". ", sep = "")
+  arest <- round(res$ARate.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARate.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARate.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cohort.time.ms.car <- paste("Exposure to ", texp, " changed the crude incidence rate of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
+  
   
   # M-H AR interpretation:
-  cohort.time.ms.mar = paste("After accounting for confounding exposure changed the outcome incidence rate in the exposed by ", round(res$ARate.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.crude.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  arest <- round(res$ARate.mh.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
   
+  arlow <- round(res$ARate.mh.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
   
+  arupp <- round(res$ARate.mh.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cohort.time.ms.mar <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence rate of ", tout, " among those that were  ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
+  
+
   # -----------------------------------------------------------------------
-  ## Case control single strata:
+  ## Case-control single strata:
   
   # OR interpretation:
-  directn.sor <- ifelse(res$OR.strata.wald[1] < 1, "less", "greater")
-  case.control.ss.or = paste("The exposure odds among cases was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2),") times the exposure odds among controls: the odds of the outcome among cases was ", directn.sor, " than the odds of the outcome among controls.", sep = "")
-
+  orest <- round(res$OR.crude.wald[1], digits = 2)
+  orlow <- round(res$OR.crude.wald[2], digits = 2)
+  orupp <- round(res$OR.crude.wald[3], digits = 2)
+  
+  case.control.ss.or <- paste("The odds of exposure to ", texp, " among those that were ", tout, " positive (cases) was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp, ") times the odds of exposure to ", texp, " among those that were ", tout, " negative (controls).", sep = "")
+  
 
   # AF interpretation:
-  case.control.ss.af = paste(round(res$AFest.strata.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFest.strata.wald[2] * 100, digits = 1), "% to ", round(res$AFest.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  afest <- round(res$AFest.crude.wald[1] * 100, digits = 0)
+  aflow <- round(res$AFest.crude.wald[2] * 100, digits = 0)
+  afupp <- round(res$AFest.crude.wald[3] * 100, digits = 0)
+  
+  case.control.ss.af <- paste("Among those that were ", texp, " positive ", afest, "% (", conf.level * 100, "% CI ", aflow, "% to ", afupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, ".", sep = "")
   
   
   # PAF interpretation:
-  case.control.ss.paf = paste(round(res$PAFest.strata.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFest.strata.wald[2] * 100, digits = 1),"% to ", round(res$PAFest.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  pafest <- round(res$PAFest.crude.wald[1] * 100, digits = 0)
+  paflow <- round(res$PAFest.crude.wald[2] * 100, digits = 0)
+  pafupp <- round(res$PAFest.crude.wald[3] * 100, digits = 0)
+  
+  case.control.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, ".", sep = "")
   
   
   # -----------------------------------------------------------------------
-  ## Case control multiple strata:
+  ## Case-control multiple strata:
   
   # Crude OR interpretation:
-  directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "less", "greater")
-  case.control.ms.cor = paste("The crude exposure odds among cases was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the exposure odds among controls: the odds of the outcome among cases was ", directn.cor, " than the odds of the outcome among controls.", sep = "")
+  orest <- round(res$OR.crude.wald[1], digits = 2)
+  orlow <- round(res$OR.crude.wald[2], digits = 2)
+  orupp <- round(res$OR.crude.wald[3], digits = 2)
 
+  case.control.ms.cor <- paste("The crude odds of ", texp, " exposure among those that were ", tout, " positive (cases) was ", orest," (", conf.level * 100,"% CI ", orlow," to ", orupp, ") times the crude odds of ", texp, " exposure among those that were ", tout, " negative (controls).", sep = "")
+  
   
   # M-H OR interpretation:
-  directn.mor <- ifelse(res$OR.mh.wald[1] < 1, "less", "greater")
-  case.control.ms.mor = paste("After accounting for confounding the exposure odds among cases was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times the exposure odds among controls: the odds of the outcome among cases was ", directn.mor, " than the odds of the outcome among controls.", sep = "")
+  orest <- round(res$OR.mh.wald[1], digits = 2)
+  orlow <- round(res$OR.mh.wald[2], digits = 2)
+  orupp <- round(res$OR.mh.wald[3], digits = 2)
   
+  case.control.ms.mor <- paste("The Mantel-Haenszel adjusted odds of ", texp, " exposure among those that were ", tout, " positive (cases) was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp, ") times the Mantel-Haenszel adjusted odds of ", texp, " exposure among those that were ", tout, " negative (controls).", sep = "")
   
+
   # AF interpretation:
-  case.control.ms.caf = paste(round(res$AFest.crude.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFest.crude.wald[2] * 100, digits = 1), "% to ", round(res$AFest.crude.wald[3] * 100, digits = 1), "%).", sep = "")
+  afest <- round(res$AFest.crude.wald[1] * 100, digits = 0)
+  aflow <- round(res$AFest.crude.wald[2] * 100, digits = 0)
+  afupp <- round(res$AFest.crude.wald[3] * 100, digits = 0)
+  
+  case.control.ms.caf <- paste("Among those that were ", texp, " positive ", afest, "% (", conf.level * 100, "% CI ", aflow, "% to ", afupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, " (unadjusted).", sep = "")
   
   
   # PAF interpretation:
-  case.control.ms.cpaf = paste(round(res$PAFest.crude.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFest.crude.wald[2] * 100, digits = 1), "% to ", round(res$PAFest.crude.wald[3] * 100, digits = 1), "%).", sep = "")
+  pafest <- round(res$PAFest.crude.wald[1] * 100, digits = 0)
+  paflow <- round(res$PAFest.crude.wald[2] * 100, digits = 0)
+  pafupp <- round(res$PAFest.crude.wald[3] * 100, digits = 0)
   
-  
+  case.control.ms.cpaf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, " (unadjusted).", sep = "")
+
+
   # -----------------------------------------------------------------------
   ## Cross sectional single strata:
   
   # RR interpretation:
-  directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ss.rr = paste("The outcome prevalence among the exposed was ", round(res$RR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.strata.wald[2], digits = 2)," to ", round(res$RR.strata.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure ", directn.srr, " outcome prevalence among the exposed.", sep = "")
+  rrest <- round(res$RR.crude.wald[1], digits = 2)
+  rrlow <- round(res$RR.crude.wald[2], digits = 2)
+  rrupp <- round(res$RR.crude.wald[3], digits = 2)
   
-
+  cross.sectional.ss.rr <- paste("The prevalence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow, " to ", rrupp, ") times the prevalence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
+  
+  
   # OR interpretation:
-  directn.sor <- ifelse(res$OR.strata.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ss.or = paste("The outcome prevalence odds among the exposed was ", round(res$OR.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.strata.wald[2], digits = 2)," to ", round(res$OR.strata.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.sor, " outcome prevalence odds among the exposed.", sep = "")
+  orest <- round(res$OR.crude.wald[1], digits = 2)
+  orlow <- round(res$OR.crude.wald[2], digits = 2)
+  orupp <- round(res$OR.crude.wald[3], digits = 2)
+  
+  cross.sectional.ss.or <- paste("The prevalence odds of ", tout, " among those that were ", texp, " positive was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp, ") times the prevalence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
   
 
   # AR interpretation:
-  cross.sectional.ss.ar = paste("Exposure changed the outcome prevalence in the exposed by ", round(res$ARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARate.strata.wald[2], digits = 2)," to ", round(res$ARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cross.sectional.ss.ar <- paste("Exposure to ", texp, " changed the prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ".", sep = "")
+  
   
   # NNT and NNH --- from Altman (1998):
-  directn.srr <- ifelse(res$RR.strata.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ss.nnt <- paste("Exposure ", directn.srr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.srr, start = 1, nchar(directn.srr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
+  change <- ifelse(res$RR.crude.wald[1] < 1, "decrease", "increase")
   
-  # nnss <- NA
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[2] > 0 & res$NNT.strata.wald[3] > 0, 1, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] < 0, 2, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[1] > 0 & res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] > 0, 3, nnss))
-  # nnss <- as.numeric(ifelse(res$NNT.strata.wald[1] < 0 & res$NNT.strata.wald[2] < 0 & res$NNT.strata.wald[3] > 0, 4, nnss))
-  # 
-  # cross.sectional.ss.nnt <- NA
-  # 
-  # cross.sectional.ss.nnt[nnss ==  1] <- paste("The number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ss.nnt[nnss ==  2] <- paste("The number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ss.nnt[nnss ==  3] <- paste("The number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cross.sectional.ss.nnt[nnss ==  4] <- paste("The number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.strata.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.strata.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.strata.wald[3]), digits = 0),").", sep = "")
+  # NNT reported as absolute values so lower and upper CI labels need to be changed:
+  nntest <- abs(round(res$NNT.crude.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[3], digits = 2)), abs(round(res$NNT.crude.wald[2], digits = 2))))
+  nntupp <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[2], digits = 2)), abs(round(res$NNT.crude.wald[3], digits = 2))))
   
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
   
+  cross.sectional.ss.nnt <- paste("Exposure to ", texp, " changed the prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+  
+
   # AF interpretation:
-  cross.sectional.ss.af = paste(round(res$AFRate.strata.wald[1] * 100, digits = 1), "% of outcomes in the exposed were attributable to exposure (", conf.level * 100, "% CI ", round(res$AFRate.strata.wald[2] * 100, digits = 1), "% to ", round(res$AFRate.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  afest <- round(res$AFRate.crude.wald[1] * 100, digits = 0)
+  aflow <- round(res$AFRate.crude.wald[2] * 100, digits = 0)
+  afupp <- round(res$AFRate.crude.wald[3] * 100, digits = 0)
+  
+  cross.sectional.ss.af <- paste("Among those that were ", texp, " positive ", afest, "% (", conf.level * 100, "% CI ", aflow, "% to ", afupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
   
   # PAR interpretation:
-  cross.sectional.ss.par = paste("Exposure changed the outcome prevalence in the population by ", round(res$PARate.strata.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$PARate.strata.wald[2], digits = 2)," to ", round(res$PARate.strata.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  parest <- round(res$PARisk.crude.wald[1], digits = 2)
+  parest <- ifelse(parest > 0, paste("+", parest, sep = ""), parest)
+  
+  parlow <- round(res$PARisk.crude.wald[2], digits = 2)
+  parlow <- ifelse(parlow > 0, paste("+", parlow, sep = ""), parlow)
+  
+  parupp <- round(res$PARisk.crude.wald[3], digits = 2)
+  parupp <- ifelse(parupp > 0, paste("+", parupp, sep = ""), parupp)
+  
+  cross.sectional.ss.par <- paste("Exposure to ", texp, " changed the prevalence risk of ", tout, " among those that were ", texp, " positive and ", texp, " negative by ", parest," (", conf.level * 100,"% CI ", parlow, " to ", parupp, ") ", res$units.count[2], ".", sep = "")
   
   
   # PAF interpretation:
-  cross.sectional.ss.paf = paste(round(res$PAFRate.strata.wald[1] * 100, digits = 1), "% of outcomes in the population were attributable to exposure (", conf.level * 100, "% CI ", round(res$PAFRate.strata.wald[2] * 100, digits = 1),"% to ", round(res$PAFRate.strata.wald[3] * 100, digits = 1), "%).", sep = "")
+  pafest <- round(res$PAFRisk.crude.wald[1] * 100, digits = 0)
+  paflow <- round(res$PAFRisk.crude.wald[2] * 100, digits = 0)
+  pafupp <- round(res$PAFRisk.crude.wald[3] * 100, digits = 0)
   
+  cross.sectional.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
+
   # ----------------------------------------------------------------------- 
   ## Cross sectional multiple strata:       
   
   # Crude RR interpretation:
-  directn.crr <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.crr = paste("The crude outcome prevalence among the exposed was ", round(res$RR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.crude.wald[2], digits = 2)," to ", round(res$RR.crude.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure", directn.crr, " the outcome prevalence among the exposed.", sep = "")
+  rrest <- round(res$RR.crude.wald[1], digits = 2)
+  rrlow <- round(res$RR.crude.wald[2], digits = 2)
+  rrupp <- round(res$RR.crude.wald[3], digits = 2)
   
+  cross.sectional.ms.crr <- paste("The crude prevalence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow," to ", rrupp, ") times the crude prevalence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
   
+
   # M-H RR interpretation:
-  directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.mrr = paste("After accounting for confounding the outcome prevalence among the exposed was ", round(res$RR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$RR.mh.wald[2], digits = 2)," to ", round(res$RR.mh.wald[3], digits = 2), ") times the outcome prevalence among the unexposed: exposure ", directn.mrr, " the outcome prevalence among the exposed.", sep = "")
+  rrest <- round(res$RR.mh.wald[1], digits = 2)
+  rrlow <- round(res$RR.mh.wald[2], digits = 2)
+  rrupp <- round(res$RR.mh.wald[3], digits = 2)
+  
+  cross.sectional.ms.mrr <- paste("The Mantel-Haenszel adjusted prevalence risk of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow, " to ", rrupp, ") times the Mantel-Haenszel adjusted prevalence risk of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
   # Crude OR interpretation:
-  directn.cor <- ifelse(res$OR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.cor = paste("The crude outcome prevalence odds among the exposed was ", round(res$OR.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.crude.wald[2], digits = 2)," to ", round(res$OR.crude.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.cor, " the outcome prevalence odds among the exposed.", sep = "")
+  orest <- round(res$OR.crude.wald[1], digits = 2)
+  orlow <- round(res$OR.crude.wald[2], digits = 2)
+  orupp <- round(res$OR.crude.wald[3], digits = 2)
+  
+  cross.sectional.ms.cor <- paste("The crude prevalence odds of ", tout, " among those that were ", texp, " positive was ", orest, " (", conf.level * 100,"% CI ", orlow, " to ", orupp, ") times the crude prevalence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
   # M-H OR interpretation:
-  directn.mor <- ifelse(res$OR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.mor = paste("After accounting for confounding the outcome prevalence odds among the exposed was ", round(res$OR.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$OR.mh.wald[2], digits = 2)," to ", round(res$OR.mh.wald[3], digits = 2), ") times the outcome prevalence odds among the unexposed: exposure ", directn.mor, " the outcome prevalence odds among the exposed.", sep = "")
+  orest <- round(res$OR.mh.wald[1], digits = 2)
+  orlow <- round(res$OR.mh.wald[2], digits = 2)
+  orupp <- round(res$OR.mh.wald[3], digits = 2)
+  
+  cross.sectional.ms.mor <- paste("The Mantel-Haenszel adjusted prevalence odds of ", tout, " among those that were ", texp, " positive was ", rrest, " (", conf.level * 100,"% CI ", rrlow, " to ", rrupp, ") times the Mantel-Haenszel adjusted prevalence odds of ", tout, " among those that were ", texp, " negative.", sep = "")
   
   
   # Crude AR interpretation:
-  cross.sectional.ms.car = paste("Exposure changed the crude outcome prevalence in the exposed by ", round(res$ARisk.crude.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.crude.wald[2], digits = 2)," to ", round(res$ARisk.crude.wald[3], digits = 2),") ", res$units.time[2], ".", sep = "")
+  arest <- round(res$ARisk.crude.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
   
+  arlow <- round(res$ARisk.crude.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
   
+  arupp <- round(res$ARisk.crude.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cross.sectional.ms.car <- paste("Exposure to ", texp, " changed the crude prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
+  
+
   # M-H AR interpretation:
-  cross.sectional.ms.mar = paste("After accounting for confounding exposure changed the outcome prevalence in the exposed by ", round(res$ARisk.mh.wald[1], digits = 2)," (", conf.level * 100,"% CI ", round(res$ARisk.mh.wald[2], digits = 2)," to ", round(res$ARisk.mh.wald[3], digits = 2),") ", res$units.count[2], ".", sep = "")
+  arest <- round(res$RR.mh.wald[1], digits = 2)
+  arest <- ifelse(arest > 0, paste("+", arest, sep = ""), arest)
+  
+  arlow <- round(res$RR.mh.wald[2], digits = 2)
+  arlow <- ifelse(arlow > 0, paste("+", arlow, sep = ""), arlow)
+  
+  arupp <- round(res$RR.mh.wald[3], digits = 2)
+  arupp <- ifelse(arupp > 0, paste("+", arupp, sep = ""), arupp)
+  
+  cross.sectional.ms.mar <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
   
   
   # NNTB - NNTH - multiple strata, crude:
-  directn.crr <- ifelse(res$RR.crude.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.nnt <- paste("Exposure ", directn.crr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.crr, start = 1, nchar(directn.crr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
+  change <- ifelse(res$RR.crude.wald[1] < 1, "decrease", "increase")
   
-  # nnmsc <- NA
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] > 0 & res$NNT.crude.wald[3] > 0, 1, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] < 0, 2, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[1] > 0 & res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] > 0, 3, nnmsc))
-  # nnmsc <- as.numeric(ifelse(res$NNT.crude.wald[1] < 0 & res$NNT.crude.wald[2] < 0 & res$NNT.crude.wald[3] > 0, 4, nnmsc))
-  # 
-  # cross.sectional.ms.cnnt <- NA
-  # 
-  # cross.sectional.ms.cnnt[nnmsc ==  1] <- paste("If we don't account for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ms.cnnt[nnmsc ==  2] <- paste("If we don't account for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ms.cnnt[nnmsc ==  3] <- paste("If we don't account for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cross.sectional.ms.cnnt[nnmsc ==  4] <- paste("If we don't account for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.crude.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.crude.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.crude.wald[3]), digits = 0),").", sep = "")
+  # NNT reported as absolute values so lower and upper CI labels need to be changed:
+  nntest <- abs(round(res$NNT.crude.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[3], digits = 2)), abs(round(res$NNT.crude.wald[2], digits = 2))))
+  nntupp <- as.numeric(ifelse(res$RR.crude.wald[1] < 1, abs(round(res$NNT.crude.wald[2], digits = 2)), abs(round(res$NNT.crude.wald[3], digits = 2))))
   
-
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
+  
+  cross.sectional.ms.cnnt <- paste("Exposure to ", texp, " changed the crude prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+  
+  
   # NNTB - NNTH - multiple strata, Mantel-Haenszel:
-  directn.mrr <- ifelse(res$RR.mh.wald[1] < 1, "decreased", "increased")
-  cross.sectional.ms.nnt <- paste("After adjusting for confounding exposure ", directn.mrr, " the outcome incidence risk in the exposed. The number needed to treat (i.e., expose) to ", substr(x = directn.mrr, start = 1, nchar(directn.mrr) - 1), " the outcome frequency by one was ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
+  change <- ifelse(res$RR.mh.wald[1] < 1, "decrease", "increase")
   
-  # nnmsm <- NA
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] > 0 & res$NNT.mh.wald[3] > 0, 1, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] < 0, 2, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[1] > 0 & res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] > 0, 3, nnmsc))
-  # nnmsm <- as.numeric(ifelse(res$NNT.mh.wald[1] < 0 & res$NNT.mh.wald[2] < 0 & res$NNT.mh.wald[3] > 0, 4, nnmsc))
-  # 
-  # cross.sectional.ms.mnnt <- NA
-  # 
-  # cross.sectional.ms.mnnt[nnmsm ==  1] <- paste("After accounting for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ms.mnnt[nnmsm ==  2] <- paste("After accounting for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (", conf.level * 100,"% CI ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
-  # 
-  # cross.sectional.ms.mnnt[nnmsm ==  3] <- paste("After accounting for confounding the number needed to treat for one subject to benefit (NNTB) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")  
-  # 
-  # cross.sectional.ms.mnnt[nnmsm ==  4] <- paste("After accounting for confounding the number needed to treat for one subject to be harmed (NNTH) is ", round(abs(res$NNT.mh.wald[1]), digits = ), " (NNTH ", round(abs(res$NNT.mh.wald[2]), digits = 0)," to infinity to NNTB ", round(abs(res$NNT.mh.wald[3]), digits = 0),").", sep = "")
-
+  # NNT reported as absolute values so lower and upper CI labels need to be changed:
+  nntest <- abs(round(res$RR.mh.wald[1], digits = 2))
+  nntlow <- as.numeric(ifelse(res$RR.mh.wald[1] < 1, abs(round(res$RR.mh.wald[3], digits = 2)), abs(round(res$RR.mh.wald[2], digits = 0))))
+  nntupp <- as.numeric(ifelse(res$RR.mh.wald[1] < 1, abs(round(res$RR.mh.wald[2], digits = 2)), abs(round(res$RR.mh.wald[3], digits = 0))))
+  
+  nntest <- ifelse(nntest > 10, round(nntest, digits = 0), nntest)
+  nntlow <- ifelse(nntlow > 10, round(nntlow, digits = 0), nntlow)
+  nntupp <- ifelse(nntupp > 10, round(nntupp, digits = 0), nntupp)
+  
+  cross.sectional.ms.mnnt <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
+  
   
 # Compile all interpretative statements into a list:  
 interp.txt <- list(
@@ -1880,9 +2112,13 @@ interp.txt <- list(
   cross.sectional.ms.cor = cross.sectional.ms.cor, 
   cross.sectional.ms.mor = cross.sectional.ms.mor, 
   cross.sectional.ms.car = cross.sectional.ms.car, 
-  cross.sectional.ms.mar = cross.sectional.ms.mar)
+  cross.sectional.ms.mar = cross.sectional.ms.mar,
+  cross.sectional.ms.cnnt = cross.sectional.ms.cnnt,
+  cross.sectional.ms.mnnt = cross.sectional.ms.mnnt)
 
   
+  
+
   ## ===============================
   ## REPORTING
   ## ===============================    
@@ -1892,27 +2128,28 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
-      RR.strata.wald     = res$RR.strata.wald,
-      RR.strata.taylor   = res$RR.strata.taylor,
-      RR.strata.score    = res$RR.strata.score,
+      # Crude estimates labelled as strata estimates:
+      RR.strata.wald     = res$RR.crude.wald,
+      RR.strata.taylor   = res$RR.crude.taylor,
+      RR.strata.score    = res$RR.crude.score,
       
-      OR.strata.wald     = res$OR.strata.wald,
-      OR.strata.cfield   = res$OR.strata.cfield,
-      OR.strata.score    = res$OR.strata.score,
-      OR.strata.mle      = res$OR.strata.mle,
+      OR.strata.wald     = res$OR.crude.wald,
+      OR.strata.cfield   = res$OR.crude.cfield,
+      OR.strata.score    = res$OR.crude.score,
+      OR.strata.mle      = res$OR.crude.mle,
       
-      ARisk.strata.wald  = res$ARisk.strata.wald,
-      ARisk.strata.score = res$ARisk.strata.score,
+      ARisk.strata.wald  = res$ARisk.crude.wald,
+      ARisk.strata.score = res$ARisk.crude.score,
       
-      NNT.strata.wald  = res$NNT.strata.wald,
-      NNT.strata.score = res$NNT.strata.score,
+      NNT.strata.wald  = res$NNT.crude.wald,
+      NNT.strata.score = res$NNT.crude.score,
 
-      AFRisk.strata.wald = res$AFRisk.strata.wald,
+      AFRisk.strata.wald = res$AFRisk.crude.wald,
       
-      PARisk.strata.wald = res$PARisk.strata.wald,
-      PARisk.strata.piri = res$PARisk.strata.piri,
+      PARisk.strata.wald = res$PARisk.crude.wald,
+      PARisk.strata.piri = res$PARisk.crude.piri,
       
-      PAFRisk.strata.wald= res$PAFRisk.strata.wald,
+      PAFRisk.strata.wald= res$PAFRisk.crude.wald,
       
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
@@ -1922,11 +2159,11 @@ interp.txt <- list(
     massoc.summary <- data.frame(
        var = c("Inc risk ratio", "Inc odds ratio", "Attrib inc risk *", "Attrib fraction in exposed (%)", "Attrib inc risk in population *", "Attrib fraction in population (%)"), 
        
-       est = as.numeric(c(res$RR.strata.wald[1], res$OR.strata.wald[1], res$ARisk.strata.wald[1], res$AFRisk.strata.wald[1] * 100, res$PARisk.strata.wald[1], res$PAFRisk.strata.wald[1] * 100)), 
+       est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100)), 
        
-       lower = as.numeric(c(res$RR.strata.wald[2], res$OR.strata.wald[2], res$ARisk.strata.wald[2], res$AFRisk.strata.wald[2] * 100, res$PARisk.strata.wald[2], res$PAFRisk.strata.wald[2] * 100)), 
+       lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100)), 
        
-       upper = as.numeric(c(res$RR.strata.wald[3], res$OR.strata.wald[3], res$ARisk.strata.wald[3], res$AFRisk.strata.wald[3] * 100, res$PARisk.strata.wald[3], res$PAFRisk.strata.wald[3] * 100)))
+       upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100)))
     
     massoc.interp <- data.frame(
       var = c("Inc risk ratio", 
@@ -1964,8 +2201,10 @@ interp.txt <- list(
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total", "                Inc risk *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -1975,8 +2214,10 @@ interp.txt <- list(
       r2 <- c(b, d, M0)
       r3 <- c(N1, N0, N0 + N1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2027,14 +2268,14 @@ interp.txt <- list(
       NNT.mh.sato      = res$NNT.mh.sato,
       NNT.mh.green     = res$NNT.mh.green,
       
+      AFRisk.strata.wald = res$AFRisk.strata.wald,
+      AFRisk.crude.wald  = res$AFRisk.crude.wald,
+      
       PARisk.strata.wald = res$PARisk.strata.wald,
       PARisk.strata.piri = res$PARisk.strata.piri,
       PARisk.crude.wald  = res$PARisk.crude.wald,
       PARisk.crude.piri  = res$PARisk.crude.piri,
-      
-      AFRisk.strata.wald = res$AFRisk.strata.wald,
-      AFRisk.crude.wald  = res$AFRisk.crude.wald,
-      
+
       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
       PAFRisk.crude.wald = res$PAFRisk.crude.wald,
       
@@ -2105,8 +2346,10 @@ interp.txt <- list(
               format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total", "                Inc risk *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                Inc risk *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2116,8 +2359,10 @@ interp.txt <- list(
       r2 <- c(sb, sd, sM0)
       r3 <- c(sN1, sN0, sN0 + sN1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total")      
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2131,13 +2376,13 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
-      IRR.strata.wald    = res$IRR.strata.wald,
+      IRR.strata.wald    = res$IRR.crude.wald,
       
-      ARate.strata.wald  = res$ARate.strata.wald,
-      PARate.strata.wald = res$PARate.strata.wald,
+      ARate.strata.wald  = res$ARate.crude.wald,
+      AFRate.strata.wald = res$AFRate.crude.wald,
       
-      AFRate.strata.wald = res$AFRate.strata.wald,
-      PAFRate.strata.wald = res$PAFRate.strata.wald,
+      PARate.strata.wald = res$PARate.crude.wald,
+      PAFRate.strata.wald = res$PAFRate.crude.wald,
       
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
@@ -2147,11 +2392,11 @@ interp.txt <- list(
     massoc.summary <- data.frame(
        var = c("Inc rate ratio", "Attrib inc rate *", "Attrib inc rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"), 
        
-       est = as.numeric(c(res$IRR.strata.wald[1], res$ARate.strata.wald[1], res$PARate.strata.wald[1], res$AFRate.strata.wald[1] * 100, res$PAFRate.strata.wald[1] * 100)), 
+       est = as.numeric(c(res$IRR.crude.wald[1], res$ARate.crude.wald[1], res$PARate.crude.wald[1], res$AFRate.crude.wald[1] * 100, res$PAFRate.strata.wald[1] * 100)), 
        
-       lower = as.numeric(c(res$IRR.strata.wald[2], res$ARate.strata.wald[2], res$PARate.strata.wald[2], res$AFRate.strata.wald[2] * 100, res$PAFRate.strata.wald[2] * 100)), 
+       lower = as.numeric(c(res$IRR.crude.wald[2], res$ARate.crude.wald[2], res$PARate.crude.wald[2], res$AFRate.crude.wald[2] * 100, res$PAFRate.crude.wald[2] * 100)), 
        
-       upper = as.numeric(c(res$IRR.strata.wald[3], res$ARate.strata.wald[3], res$PARate.strata.wald[3], res$AFRate.strata.wald[3] * 100, res$PAFRate.strata.wald[3] * 100)))
+       upper = as.numeric(c(res$IRR.crude.wald[3], res$ARate.crude.wald[3], res$PARate.crude.wald[3], res$AFRate.crude.wald[3] * 100, res$PAFRate.crude.wald[3] * 100)))
     
     massoc.interp <- data.frame(
       var = c("Inc rate ratio", "Attrib inc rate *", "Attrib inc rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"),
@@ -2175,8 +2420,10 @@ interp.txt <- list(
               format(round(cIRatepop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRatepop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3))
-      colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), "   Time at risk",  "                Inc rate *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
 
     }
@@ -2187,8 +2434,10 @@ interp.txt <- list(
       r2 <- c(b, d, M0)
       r3 <- c(N1, N0, N0 + N1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Time at risk", "Total")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2209,13 +2458,13 @@ interp.txt <- list(
       ARate.strata.wald   = res$ARate.strata.wald,
       ARate.crude.wald    = res$ARate.crude.wald,
       ARate.mh.wald       = res$ARate.mh.wald,
-      
-      PARate.strata.wald  = res$PARate.strata.wald,
-      PARate.crude.wald   = res$PARate.crude.wald,
-      
+
       AFRate.strata.wald  = res$AFRate.strata.wald,
       AFRate.crude.wald   = res$AFRate.crude.wald,
-      
+
+      PARate.strata.wald  = res$PARate.strata.wald,
+      PARate.crude.wald   = res$PARate.crude.wald,
+            
       PAFRate.strata.wald = res$PAFRate.strata.wald,
       PAFRate.crude.wald  = res$PAFRate.crude.wald,
       
@@ -2261,8 +2510,11 @@ interp.txt <- list(
               format(round(cIRatepop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRatepop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3))
-      colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), "   Time at risk",  "                Inc rate *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Time at risk", "                Inc rate *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2272,8 +2524,11 @@ interp.txt <- list(
       r2 <- c(sb, sd)
       r3 <- c(sN1, sN0)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      
+      colnames(tab) <- c(paste("   ", elab, "+", sep = ""), paste("   ", elab, "-", sep = ""))
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }         
     
@@ -2287,13 +2542,13 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
-      OR.strata.wald      = res$OR.strata.wald,
-      OR.strata.cfield    = res$OR.strata.cfield,
-      OR.strata.score     = res$OR.strata.score,
-      OR.strata.mle       = res$OR.strata.mle,
+      OR.strata.wald      = res$OR.crude.wald,
+      OR.strata.cfield    = res$OR.crude.cfield,
+      OR.strata.score     = res$OR.crude.score,
+      OR.strata.mle       = res$OR.crude.mle,
 
-      AFest.strata.wald   = res$AFest.strata.wald,
-      PAFest.strata.wald  = res$PAFest.strata.wald,
+      AFest.strata.wald   = res$AFest.crude.wald,
+      PAFest.strata.wald  = res$PAFest.crude.wald,
       
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
@@ -2303,11 +2558,11 @@ interp.txt <- list(
     massoc.summary <- data.frame(
       var = c("Exposure odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
       
-      est = as.numeric(c(res$OR.strata.wald[1], res$AFest.strata.wald[1] * 100, res$PAFest.strata.wald[1] * 100)), 
+      est = as.numeric(c(res$OR.crude.wald[1], res$AFest.crude.wald[1] * 100, res$PAFest.crude.wald[1] * 100)), 
       
-      lower = as.numeric(c(res$OR.strata.wald[2], res$AFest.strata.wald[2] * 100, res$PAFest.strata.wald[2] * 100)), 
+      lower = as.numeric(c(res$OR.crude.wald[2], res$AFest.crude.wald[2] * 100, res$PAFest.crude.wald[2] * 100)), 
       
-      upper = as.numeric(c(res$OR.strata.wald[3], res$AFest.strata.wald[3] * 100, res$PAFest.strata.wald[3] * 100)))
+      upper = as.numeric(c(res$OR.crude.wald[3], res$AFest.crude.wald[3] * 100, res$PAFest.crude.wald[3] * 100)))
     
     massoc.interp <- data.frame(
       var = c("Exposures odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
@@ -2332,7 +2587,7 @@ interp.txt <- list(
               format(round(cOpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cOpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                      Odds")
+      colnames(tab) <- c(paste("   ", olab, "+", sep = ""), paste("   ", olab, "-", sep = ""), "     Total", "                Odds")
       rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
@@ -2343,8 +2598,10 @@ interp.txt <- list(
       r2 <- c(b, d, M0)
       r3 <- c(N1, N0, N0 + N1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2392,11 +2649,11 @@ interp.txt <- list(
     massoc.summary <- data.frame(
       var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
       
-      est = as.numeric(c(res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$AFest.crude.wald[1], res$PAFest.crude.wald[1])), 
+      est = as.numeric(c(res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$AFest.crude.wald[1] * 100, res$PAFest.crude.wald[1] * 100)), 
       
-      lower = as.numeric(c(res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$AFest.crude.wald[2], res$PAFest.crude.wald[2])), 
+      lower = as.numeric(c(res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$AFest.crude.wald[2] * 100, res$PAFest.crude.wald[2] * 100)), 
       
-      upper = as.numeric(c(res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$AFest.crude.wald[3], res$PAFest.crude.wald[3])))
+      upper = as.numeric(c(res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$AFest.crude.wald[3] * 100, res$PAFest.crude.wald[3] * 100)))
     
     massoc.interp <- data.frame(
       var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
@@ -2421,8 +2678,10 @@ interp.txt <- list(
               format(round(cOpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cOpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total", "                    Odds")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "                    Odds")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2432,8 +2691,10 @@ interp.txt <- list(
       r2 <- c(sb, sd, sM0)
       r3 <- c(sN1, sN0, sN0 + sN1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
 
@@ -2447,27 +2708,27 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
-      PR.strata.wald      = res$RR.strata.wald,
-      PR.strata.taylor    = res$RR.strata.taylor,
-      PR.strata.score     = res$RR.strata.score,
+      PR.strata.wald      = res$RR.crude.wald,
+      PR.strata.taylor    = res$RR.crude.taylor,
+      PR.strata.score     = res$RR.crude.score,
       
-      OR.strata.wald      = res$OR.strata.wald,
-      OR.strata.cfield    = res$OR.strata.cfield,
-      OR.strata.score     = res$OR.strata.score,
+      OR.strata.wald      = res$OR.crude.wald,
+      OR.strata.cfield    = res$OR.crude.cfield,
+      OR.strata.score     = res$OR.crude.score,
+      OR.strata.mle       = res$OR.crude.mle,
       
-      OR.strata.mle       = res$OR.strata.mle,
+      ARisk.strata.wald   = res$ARisk.crude.wald,
+      ARisk.strata.score  = res$ARisk.crude.score,
       
-      ARisk.strata.wald   = res$ARisk.strata.wald,
-      ARisk.strata.score  = res$ARisk.strata.score,
-      
-      NNT.strata.wald  = res$NNT.strata.wald,
-      NNT.strata.score = res$NNT.strata.score,
+      NNT.strata.wald  = res$NNT.crude.wald,
+      NNT.strata.score = res$NNT.crude.score,
 
-      PARisk.strata.wald  = res$PARisk.strata.wald,
-      PARisk.strata.piri  = res$PARisk.strata.piri,
+      AFRisk.strata.wald  = res$AFRisk.crude.wald,
       
-      AFRisk.strata.wald  = res$AFRisk.strata.wald,
-      PAFRisk.strata.wald = res$PAFRisk.strata.wald,
+      PARisk.strata.wald  = res$PARisk.crude.wald,
+      PARisk.strata.piri  = res$PARisk.crude.piri,
+      
+      PAFRisk.strata.wald = res$PAFRisk.crude.wald,
       
       chi2.strata.uncor   = res$chi2.strata.uncor,
       chi2.strata.yates   = res$chi2.strata.yates,
@@ -2477,11 +2738,11 @@ interp.txt <- list(
     massoc.summary <- data.frame(
       var = c("Prev risk ratio", "Prev odds ratio", "Attrib prev *", "Attrib fraction in exposed (%)", "Attrib prev in population *", "Attrib fraction in population (%)"), 
       
-      est = as.numeric(c(res$RR.strata.wald[1], res$OR.strata.wald[1], res$ARisk.strata.wald[1], res$AFRisk.strata.wald[1] * 100, res$PARisk.strata.wald[1], res$PAFRisk.strata.wald[1] * 100)), 
+      est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100)), 
       
-      lower = as.numeric(c(res$RR.strata.wald[2], res$OR.strata.wald[2], res$ARisk.strata.wald[2], res$AFRisk.strata.wald[2] * 100, res$PARisk.strata.wald[2], res$PAFRisk.strata.wald[2] * 100)), 
+      lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100)), 
       
-      upper = as.numeric(c(res$RR.strata.wald[3], res$OR.strata.wald[3], res$ARisk.strata.wald[3], res$AFRisk.strata.wald[3] * 100, res$PARisk.strata.wald[3], res$PAFRisk.strata.wald[3] * 100)))
+      upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100)))
     
     massoc.interp <- data.frame(
       var = c("Prev risk ratio", 
@@ -2518,8 +2779,10 @@ interp.txt <- list(
               format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total", "              Prev risk *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2529,8 +2792,10 @@ interp.txt <- list(
       r2 <- c(b, d, M0)
       r3 <- c(N1, N0, N0 + N1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2558,36 +2823,42 @@ interp.txt <- list(
       OR.strata.cfield    = res$OR.strata.cfield,
       OR.strata.score     = res$OR.strata.score,
       OR.strata.mle       = res$OR.strata.mle,
+      
       OR.crude.wald       = res$OR.crude.wald,
       OR.crude.cfield     = res$OR.crude.cfield,
       OR.crude.score      = res$OR.crude.score,
       OR.crude.mle        = res$OR.crude.mle,
+      
       OR.mh.wald          = res$OR.mh.wald,
       
       ARisk.strata.wald   = res$ARisk.strata.wald,
       ARisk.strata.score  = res$ARisk.strata.score,
+      
       ARisk.crude.wald    = res$ARisk.crude.wald,
       ARisk.crude.score   = res$ARisk.crude.score,
+      
       ARisk.mh.wald       = res$ARisk.mh.wald,
       ARisk.mh.sato       = res$ARisk.mh.sato,
       ARisk.mh.green      = res$ARisk.mh.green,
       
       NNT.strata.wald  = res$NNT.strata.wald,
       NNT.strata.score = res$NNT.strata.score,
+      
       NNT.crude.wald   = res$NNT.crude.wald,
       NNT.crude.score  = res$NNT.crude.score,
+      
       NNT.mh.wald      = res$NNT.mh.wald,
       NNT.mh.sato      = res$NNT.mh.sato,
       NNT.mh.green     = res$NNT.mh.green,
-      
+
+      AFRisk.strata.wald  = res$AFRisk.strata.wald,
+      AFRisk.crude.wald   = res$AFRisk.crude.wald,
+            
       PARisk.strata.wald  = res$PARisk.strata.wald,
       PARisk.strata.piri  = res$PARisk.strata.piri,
       PARisk.crude.wald   = res$PARisk.crude.wald,
       PARisk.crude.piri   = res$PARisk.crude.piri,
-      
-      AFRisk.strata.wald  = res$AFRisk.strata.wald,
-      AFRisk.crude.wald   = res$AFRisk.crude.wald,
-      
+
       PAFRisk.strata.wald = res$PAFRisk.strata.wald,
       PAFRisk.crude.wald  = res$PAFRisk.crude.wald,
 
@@ -2659,8 +2930,10 @@ interp.txt <- list(
               format(round(cIRiskpop.l, digits = digits), nsmall = digits), " to ", 
               format(round(cIRiskpop.u, digits = digits), nsmall = digits), ")", sep = "")) 
       tab <- data.frame(cbind(c1, c2, c3, c4))
-      colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
-      rownames(tab) <- c("Exposed +", "Exposed -", "Total")
+      colnames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total", "              Prev risk *")
+      rownames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Outcome +", "   Outcome -", "     Total", "              Prev risk *")
+      # rownames(tab) <- c("Exposed +", "Exposed -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2670,8 +2943,10 @@ interp.txt <- list(
       r2 <- c(sb, sd, sM0)
       r3 <- c(sN1, sN0, sN0 + sN1)
       tab <- as.data.frame(rbind(r1, r2, r3))
-      colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
-      rownames(tab) <- c("Outcome +", "Outcome -", "Total")
+      colnames(tab) <- c(paste(elab, "+", sep = ""), paste(elab, "-", sep = ""), "     Total")
+      rownames(tab) <- c(paste(olab, "+", sep = ""), paste(olab, "-", sep = ""), "Total")
+      # colnames(tab) <- c("   Exposed +", "   Exposed -", "     Total")
+      # rownames(tab) <- c("Outcome +", "Outcome -", "Total")
       tab <- format.data.frame(tab, digits = 3, justify = "right")
     }
     
@@ -2794,12 +3069,12 @@ print.epi.2by2 <- function(x, ...) {
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
-      cat("\n", x$massoc.interp$text[1], "\n", "\n", x$massoc.interp$text[2], "\n")
+      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], "\n")
       
       cat("\n Measures of effect in the exposed:")
       cat("\n", x$massoc.interp$text[3], x$massoc.interp$text[5], "\n")
       
-      cat("\n Number needed to treat for benefit (NNTB) and harm (NNTH):")
+      cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[4], "\n")
       
       cat("\n Measures of effect in the population:")
@@ -2934,13 +3209,12 @@ print.epi.2by2 <- function(x, ...) {
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
-      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], "\n")
-      cat("\n", x$massoc.interp$text[4], x$massoc.interp$text[5], "\n")
+      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], x$massoc.interp$text[4], x$massoc.interp$text[5], "\n")
       
       cat("\n Measures of effect in the exposed:")
       cat("\n", x$massoc.interp$text[7], x$massoc.interp$text[8], "\n")
       
-      cat("\n Number needed to treat for benefit (NNTB) and harm (NNTH):")
+      cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[10], x$massoc.interp$text[11], "\n")
     }
   }
@@ -3172,7 +3446,7 @@ print.epi.2by2 <- function(x, ...) {
     
     cat("\n", "Fisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
     cat("\n", "Wald confidence limits")
-    cat("\n", "CI: confidence interval")
+    cat("\n", "CI: confidence interval", "\n")
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3266,7 +3540,7 @@ print.epi.2by2 <- function(x, ...) {
     cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
     
     cat("\n", "Wald confidence limits")
-    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval") 
+    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval", "\n") 
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3375,12 +3649,12 @@ print.epi.2by2 <- function(x, ...) {
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
-      cat("\n", x$massoc.interp$text[1], "\n", "\n", x$massoc.interp$text[2], "\n")
+      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], "\n")
       
       cat("\n Measures of effect in the exposed:")
       cat("\n", x$massoc.interp$text[3], x$massoc.interp$text[5], "\n")
       
-      cat("\n Number needed to treat for benefit (NNTB) and harm (NNTH):")
+      cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[4], "\n")
       
       cat("\n Measures of effect in the population:")
@@ -3515,13 +3789,12 @@ print.epi.2by2 <- function(x, ...) {
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
-      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], "\n")
-      cat("\n", x$massoc.interp$text[4], x$massoc.interp$text[5], "\n")
+      cat("\n", x$massoc.interp$text[1], x$massoc.interp$text[2], x$massoc.interp$text[4], x$massoc.interp$text[5], "\n")
       
       cat("\n Measures of effect in the exposed:")
       cat("\n", x$massoc.interp$text[7], x$massoc.interp$text[8], "\n")
       
-      cat("\n Number needed to treat for benefit (NNTB) and harm (NNTH):")
+      cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[10], x$massoc.interp$text[11], "\n")
     }
   }

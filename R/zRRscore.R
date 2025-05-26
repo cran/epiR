@@ -3,15 +3,15 @@ zRRscore <- function(dat, conf.level){
   z <- qnorm(N., mean = 0, sd = 1)
   
   # See https://users.stat.ufl.edu/~aa/cda/R/two-sample/R2/index.html and function PropCIs::riskscoreci
-  # a <- as.numeric(dat[1]) 
-  # b <- as.numeric(dat[3]) 
-  # c <- as.numeric(dat[2]) 
-  # d <- as.numeric(dat[4])
-  
-  a <- as.numeric(dat[1]) 
-  b <- as.numeric(dat[2]) 
-  c <- as.numeric(dat[3]) 
+  a <- as.numeric(dat[1])
+  b <- as.numeric(dat[3])
+  c <- as.numeric(dat[2])
   d <- as.numeric(dat[4])
+  
+  # a <- as.numeric(dat[1]) 
+  # b <- as.numeric(dat[2]) 
+  # c <- as.numeric(dat[3]) 
+  # d <- as.numeric(dat[4])
   
   N1 <- a + b
   N0 <- c + d

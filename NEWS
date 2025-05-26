@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.84
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New arguments to epi.2by2 elab and olab to assign labels for exposure and outcome variable. Improved consistency in 2 by 2 table interpretation statements.
+    [Suggested by students in the University of Melbourne epidemiology classes VETS90133 and ANSC30001 of 2025]
+    
+
 CHANGES IN epiR VERSION 2.0.83
 SIGNIFICANT USER-VISIBLE CHANGES
 

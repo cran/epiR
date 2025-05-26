@@ -13,8 +13,8 @@ Computes summary measures of risk and a chi-squared test for difference in the o
 }
 
 \usage{
-epi.2by2(dat, method = "cohort.count", digits = 2, conf.level = 0.95, 
-   units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat, method = "cohort.count", elab = NA, olab = NA, digits = 2, 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 \method{print}{epi.2by2}(x, ...)
 
@@ -24,6 +24,8 @@ epi.2by2(dat, method = "cohort.count", digits = 2, conf.level = 0.95,
 \arguments{
   \item{dat}{a vector of length four, an object of class \code{table} or an object of class \code{grouped_df} from package \code{dplyr} containing the individual cell frequencies (see below).}
   \item{method}{a character string indicating the study design on which the tabular data has been based. Options are \code{cohort.count}, \code{cohort.time}, \code{case.control}, or \code{cross.sectional}. Based on the study design specified by the user, appropriate measures of association, measures of effect in the exposed and measures of effect in the population are returned by the function.}
+  \item{elab}{character string, setting the label for the exposure variable.}
+  \item{olab}{character string, setting the label for the outcome variable.}  
   \item{digits}{scalar, number of digits to be reported for \code{print} output. Must be an integer of either 2, 3 or 4.}   
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}
   \item{units}{multiplier for prevalence and incidence (risk or rate) estimates.}
@@ -230,33 +232,36 @@ The Mantel-Haenszel (Woolf) test of homogeneity of the odds ratio are based on J
 
 \examples{
 ## EXAMPLE 1:
-## A cross sectional study investigating the relationship between dry cat 
-## food (DCF) and feline urologic syndrome (FUS) was conducted (Willeberg 
-## 1977). Counts of individuals in each group were as follows:
+## A cross sectional study investigating the relationship between habitual 
+## consumption of dry food and feline lower urinary tract disease (FLUTD) was 
+## conducted (Willeberg 1977). Counts of individuals in each group were as 
+## follows:
 
-## DCF-exposed cats (cases, non-cases) 13, 2163
-## Non DCF-exposed cats (cases, non-cases) 5, 3349
+## Dry food exposed (cases, non-cases) 13, 2163
+## Dry food unexposed (cases, non-cases) 5, 3349
 
-## Outcome variable (FUS) as columns:
+## Outcome variable (FLUTD) as columns:
 dat.v01 <- c(13,2163,5,3349); dat.v01
 
-epi.2by2(dat = dat.v01, method = "cross.sectional", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food",
+   olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.columns")
 
-## Outcome variable (FUS) as rows:
+## Outcome variable (FLUTD) as rows:
 dat.v01 <- c(13,5,2163,3349); dat.v01
 
-epi.2by2(dat =  dat.v01, method = "cross.sectional", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.rows")
+epi.2by2(dat =  dat.v01, method = "cross.sectional", elab = "Dry food",
+   olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.rows")
 
-## The prevalence of FUS in DCF exposed cats was 4.01 (95\% CI 1.43 to 11.23) 
-## times greater than the prevalence of FUS in non-DCF exposed cats.
+## The prevalence of FLUTD in dry food positive cats was 4.01 (95\% CI 1.43 to 
+## 11.23) times the prevalence of FLUTD in dry food negative cats.
 
-## In DCF exposed cats, 75\% (95\% CI 30\% to 91\%) of the FUS cases were 
-## attributable to DCF.
+## In dry food positive cats, 75\% (95\% CI 30\% to 91\%) of FLUTD cases were 
+## attributable to feeding dry food.
 
-## Fifty-four percent of FUS cases in the population was attributable 
-## to DCF (95\% CI 4\% to 78\%).
+## Fifty-four percent of FLUTD cases in the population was attributable 
+## to feeding dry food (95\% CI 4\% to 78\%).
 
 
 ## EXAMPLE 2:
@@ -276,12 +281,13 @@ dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW"))
 print(dat.tab02)
 
 ## Compute the odds ratio and other measures of association:
-epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke", 
+   olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.columns")
 
 ## The odds of having a low birth weight child for smokers was 2.02 
-## (95\% CI 1.08 to 3.78) times greater than the odds of having a low birth 
-## weight child for non-smokers.
+## (95\% CI 1.08 to 3.78) times the odds of having a low birth weight child 
+## for non-smokers.
 
 ## Stratify by race:
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dat.df02$race, 
@@ -290,8 +296,9 @@ print(dat.tab02)
 
 ## Compute the crude odds ratio, the Mantel-Haenszel adjusted odds ratio 
 ## and other measures of association:
-dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2,
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke", 
+   olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.columns")
 print(dat.epi02)
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
@@ -314,15 +321,19 @@ dat.epi02$massoc.detail$ARisk.mh.wald
 dat.epi02$massoc.interp$text[dat.epi02$massoc.interp$var == 
    "NNTB NNTH (crude)"]
    
-## Exposure (smoking) increased the crude outcome incidence risk in the exposed. 
-## The number needed to treat (i.e., expose) to increase the outcome 
-## frequency by one was 7 (95% CI 3 to 62).
+## The crude incidence risk of low BW among those that were smoke positive was 
+## 15 (95\% CI 1.6 to 29) per 100 population units greater than the crude 
+## incidence risk of low BW among those that were smoke negative. The number 
+## needed to expose to smoking to increase low BW frequency by one was 7 
+## (95\% CI 3 to 62)."
 
 dat.epi02$massoc.interp$text[dat.epi02$massoc.interp$var == "NNTB NNTH (M-H)"]
 
-## After adjusting for confounding exposure (smoking) increased the outcome 
-## incidence risk in the exposed. The number needed to treat (i.e., expose) 
-## to increase the outcome frequency by one was 5 (95% CI 2 to 71).
+## The Mantel-Haenszel adjusted incidence risk of low BW among those that were 
+## smoke positive was 22 (95% CI 1.4 to 43) per 100 population units greater 
+## than the Mantel-Haenszel adjusted incidence risk of low BW among those that 
+## were smoke negative. The number needed to expose to smoke to increase low 
+## BW frequency by one was 5 (95% CI 2 to 71)."
 
 ## Now turn dat.tab02 into a data frame where the frequencies of individuals in 
 ## each exposure-outcome category are provided. Often your data will be 
@@ -335,8 +346,9 @@ dat.tab02 <- xtabs(Freq ~ Smoke + Low.BW + Race, data = dat.df02)
 print(dat.tab02)
 
 # dat02.tab can now be passed to epi.2by2:
-dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke", 
+   olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.columns")
 print(dat.epi02)
 
 ## The Mantel-Haenszel adjusted incidence odds ratio is 3.09 (95\% CI 1.49 to 
@@ -407,8 +419,9 @@ dat.df03
 ## View the data in conventional 2 by 2 table format:
 pivot_wider(dat.df03, id_cols = c(smoke), names_from = low, values_from = n)
 
-dat.epi03 <- epi.2by2(dat = dat.df03, method = "cohort.count", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi03 <- epi.2by2(dat = dat.df03, method = "cohort.count", elab = NA, 
+   olab = NA, digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, 
+   outcome = "as.columns")
 dat.epi03
 }
 
@@ -434,8 +447,9 @@ dat.df04
 pivot_wider(dat.df04, id_cols = c(race, smoke),
    names_from = low, values_from = n)
 
-dat.epi04 <- epi.2by2(dat = dat.df04, method = "cohort.count", digits = 2, 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi04 <- epi.2by2(dat = dat.df04, method = "cohort.count", elab = NA, 
+   olab = NA, digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, 
+   outcome = "as.columns")
 dat.epi04
 }
 
@@ -473,9 +487,9 @@ dat.tab04 <- sapply(1:length(unique(dat.df04$grp)), function(x)
    simplify = "array")
 dat.tab04
 
-epi.2by2(dat = dat.tab04, method = "cohort.time", digits = 2, 
-   conf.level = 0.95, units = 1000 * 365.25, interpret = FALSE, 
-   outcome = "as.columns")
+epi.2by2(dat = dat.tab04, method = "cohort.time", elab = NA, 
+   olab = NA, digits = 2, conf.level = 0.95, units = 1000 * 365.25, 
+   interpret = FALSE, outcome = "as.columns")
 
 ## The Mantel-Haenszel adjusted incidence rate ratio was 4.39 (95\% CI 4.06 
 ## to 4.75).
@@ -490,7 +504,8 @@ epi.2by2(dat = dat.tab04, method = "cohort.time", digits = 2,
 
 dat.v05 <- c(136,22050,1709,127650)
 
-dat.epi05 <- epi.2by2(dat = dat.v05, method = "cohort.time", digits = 2,
+dat.epi05 <- epi.2by2(dat = dat.v05, method = "cohort.time", 
+   elab = "Vis impaired", olab = "Cancer", digits = 2,
    conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
 summary(dat.epi05)$massoc.detail$ARate.strata.wald
 
@@ -506,9 +521,9 @@ round(summary(dat.epi05)$massoc.detail$IRR.strata.wald, digits = 2)
 
 ## EXAMPLE 6:
 ## A study has been conducted to assess the effect of a new treatment for 
-## mastitis in dairy cows. Eight herds took part in the study. The following 
-## data were obtained. The vectors ai, bi, ci and di list (for each herd) the 
-## number of cows in the E+D+, E+D-, E-D+ and E-D- groups, respectively.
+## mastitis in dairy cows. Eight herds took part in the study. The vectors ai, 
+## bi, ci and di list (for each herd) the number of cows in the E+R+, E+R-, 
+## E-R+ and E-R- groups, where `E' denotes exposure and `R' denotes recovery:
 
 \dontrun{
 hid <- 1:8
@@ -527,17 +542,19 @@ dat.df06 <- data.frame(hid, exp, out, n = c(ai,bi,ci,di))
 dat.tab06 <- xtabs(n ~ exp + out + hid, data = dat.df06)
 print(dat.tab06)
 
-epi.2by2(dat = dat.tab06, method = "cohort.count", digits = 2, 
-   conf.level = 0.95, units = 1000, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.tab06, method = "cohort.count", 
+   elab = "Treat", olab = "Recovery", digits = 2, 
+   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## The Mantel-Haenszel test of homogeneity of the strata incidence odds ratios 
 ## is not statistically significant (chi square test statistic 5.276; df 7; 
 ## p-value = 0.63). We accept the null hypothesis and conclude that the 
 ## incidence odds ratios for each strata of herd are the same. 
 
-## After adjusting for the effect of herd, compared to untreated cows, treatment
-## increased the incidence odds of recovery by a factor of 5.97 
-## (95\% CI 2.72 to 13.13).
+## The Mantel-Haenszel adjusted incidence risk of recovery among those that 
+## were treat positive was 1.94 (95% CI 1.35 to 2.78) times the Mantel-
+## Haenszel adjusted incidence risk of recovery among those that were 
+## treat negative. 
  }
 }
 

@@ -4,11 +4,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-twobytwo.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"))
+twobytwo.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
-  h1 = c("", "Outcome +", "Outcome -", "Total"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome+", "Outcome-", "Total"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -17,7 +17,7 @@ flextable(twobytwo.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 3.00) %>%
+  width(j = 4, width = 4.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -28,11 +28,11 @@ flextable(twobytwo.df) %>%
   set_caption("A 2 x 2 contingency table.")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-irr.df <- data.frame("exp" = c("","Exp +","Exp -"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a / (a + b)","RE- = c / (c + d)", "RT = (a + c) / (a + b + c + d)"))
+irr.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a \U00F7 (a + b)", "RE- = c \U00F7 (c + d)", "RT = (a + c) \U00F7 (a + b + c + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
-  h1 = c("", "Outcome +", "Outcome -", "Total", "Risk"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome+", "Outcome-", "Total", "Risk"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -42,7 +42,7 @@ flextable(irr.df) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
   width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 3.00) %>%
+  width(j = 5, width = 4.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -52,15 +52,16 @@ flextable(irr.df) %>%
 
   set_caption("A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
 
+
 ## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."----
 knitr::include_graphics("risk_ratio.png")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcohort.df <- data.frame("exp" = c("Exp +","Exp -","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a / b","OE- = c / d", "OT = (a + c) / (b + d)"))
+orcohort.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
-  h1 = c("", "Outcome +", "Outcome -", "Total", "Odds"), stringsAsFactors = FALSE)
+  h1 = c("", "Outcome+", "Outcome-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -70,7 +71,7 @@ flextable(orcohort.df) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
   width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 3.00) %>%
+  width(j = 5, width = 4.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -80,12 +81,13 @@ flextable(orcohort.df) %>%
 
   set_caption("A 2 x 2 table with the outcome odds calculated for the exposed, unexposed and the total study population.")
 
+
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcc.df <- data.frame("exp" = c("Outcome + (case)","Outcome - (control)","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OD+ = a / b","OD- = c / d", "OT = (a + c) / (b + d)"))
+orcc.df <- data.frame("exp" = c("Outcome+ (case)","Outcome- (control)","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OD+ = a \U00F7 b","OD- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
-  h1 = c("", "Exp +", "Exp -", "Total", "Odds"), stringsAsFactors = FALSE)
+  h1 = c("", "Exposure+", "Exposure-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
@@ -95,7 +97,7 @@ flextable(orcc.df) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
   width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 3.00) %>%
+  width(j = 5, width = 4.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
   
@@ -104,6 +106,7 @@ flextable(orcc.df) %>%
   align(align = "left", part = "all") %>%
 
   set_caption("A 2 x 2 table with the exposure odds calculated for cases, controls and the total study population.")
+
 
 ## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."----
 knitr::include_graphics("attributable_risk.png")
@@ -126,12 +129,10 @@ matrix(dat.v01, nrow = 2, byrow = TRUE)
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
 
-epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
-   interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## ----message = FALSE----------------------------------------------------------
-epi.2by2(dat = dat.v01, method = "cross.sectional", conf.level = 0.95, units = 100, 
-   interpret = TRUE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns")
 
 ## ----message = FALSE----------------------------------------------------------
 library(MASS)
@@ -156,8 +157,7 @@ dat.df02$frace <- factor(dat.df02$race, levels = c(1,2,3))
 dat.tab02 <- table(dat.df02$fsmoke, dat.df02$flow, dnn = c("Smoke", "Low BW")); dat.tab02
 
 ## ----message = FALSE----------------------------------------------------------
-dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", conf.level = 0.95, 
-   units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke", olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi02
 
 ## ----message = FALSE----------------------------------------------------------
@@ -191,8 +191,7 @@ pivot_wider(dat.tab03, id_cols = c(fsmoke),
    names_from = flow, values_from = n)
 
 ## ----message = FALSE----------------------------------------------------------
-dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", elab = "Smoke", olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi03
 
 ## ----message = FALSE----------------------------------------------------------
@@ -215,7 +214,7 @@ rfactor <- ref <- or.p <- or.l <- or.u <- c()
 for(i in 12:14){
   tdat.tab04 <- table(dat.df04[,i], dat.df04$flow)
   tdat.epi04 <- epi.2by2(dat = tdat.tab04, method = "cohort.count", 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+   digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
   
   trfactor <- as.character(names(dat.df04)[i]) 
   rfactor <- c(rfactor, trfactor) 
@@ -233,24 +232,24 @@ for(i in 12:14){
   or.u <- c(or.u, tor.u)
 }
 
-gdat.df04 <- data.frame(yat = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
+gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
 gdat.df04
 
 ## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
 library(ggplot2); library(scales)
 
-x.at <- c(0.25,0.5,1,2,4,8,16,32)
+xbrk <- seq(from = -2, to = 2, by = 1)
+xlab <- 2^xbrk
 
-ggplot(data = gdat.df04, aes(x = or.p, y = yat)) +
+ggplot(data = gdat.df04, aes(x = log2(or.p), y = ybrk)) +
   theme_bw() +
   geom_point() + 
-  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
-  scale_x_continuous(trans = log2_trans(), breaks = x.at, limits = c(0.25,8), 
+  geom_errorbarh(aes(xmin = log2(or.l), xmax = log2(or.u), height = 0.2)) + 
+  scale_x_continuous(breaks = xbrk, labels = xlab, limits = range(xbrk), 
    name = "Odds ratio") + 
-  scale_y_continuous(breaks = gdat.df04$yat, labels = gdat.df04$ylab, 
-   name = "Risk factor") + 
-  geom_vline(xintercept = 1, lwd = 1) + 
-  annotate("text", x = 0.25, y = gdat.df04$yat, label = gdat.df04$ref, hjust = 0, size = 3) +
+  scale_y_continuous(breaks = gdat.df04$ybrk, labels = gdat.df04$ylab, name = "Risk factor") + 
+  geom_vline(xintercept = log2(1), linetype = "dashed") + 
+  annotate("text", x = log2(0.25), y = gdat.df04$ybrk, label = gdat.df04$ref, hjust = 0, size = 3) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(axis.title.y = element_text(vjust = 0))
 
@@ -266,8 +265,9 @@ dat.tab05 <- table(dat.df05$fsmoke, dat.df05$flow, dat.df05$frace,
    dnn = c("Smoke", "Low BW", "Race")); dat.tab05
 
 ## ----message = FALSE----------------------------------------------------------
-dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", elab = "smoke",
+   olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, 
+   interpret = FALSE, outcome = "as.columns")
 dat.epi05
 
 ## ----message = FALSE----------------------------------------------------------
@@ -287,34 +287,38 @@ pivot_wider(dat.tab06, id_cols = c(frace, fsmoke),
 
 ## ----message = FALSE----------------------------------------------------------
 dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count", 
-   conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+   elab = "Smoke", olab = "Low BW", digits = 2, conf.level = 0.95, 
+   units = 100, interpret = FALSE, outcome = "as.columns")
+
 dat.epi06
 
 ## ----mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."----
 
-nstrata <- 1:length(unique(dat.tab06$frace))
-strata.lab <- paste("Strata ", nstrata, sep = "")
-y.at <- c(nstrata, max(nstrata) + 1)
-y.lab <- c("M-H", strata.lab)
-x.at <- c(0.25,0.5,1,2,4,8,16,32)
+xbrk <- seq(from = -5, to = 5, by = 1)
+xlab <- 2^xbrk
+
+nstrata <- dat.epi06$n.strata
+ybrk <- c(1:nstrata, max(nstrata) + 1)
+ylab <- c("M-H", paste("Strata ", 1:nstrata, sep = ""))
 
 or.p <- c(dat.epi06$massoc.detail$OR.mh$est, 
    dat.epi06$massoc.detail$OR.strata.cfield$est)
 or.l <- c(dat.epi06$massoc.detail$OR.mh$lower, 
-   dat.epi05$massoc.detail$OR.strata.cfield$lower)
+   dat.epi06$massoc.detail$OR.strata.cfield$lower)
 or.u <- c(dat.epi06$massoc.detail$OR.mh$upper, 
-   dat.epi05$massoc.detail$OR.strata.cfield$upper)
-gdat.df06 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
+   dat.epi06$massoc.detail$OR.strata.cfield$upper)
+gdat.df06 <- data.frame(ybrk, ylab, or.p, or.l, or.u)
 
-ggplot(data = gdat.df06, aes(x = or.p, y = y.at)) +
-  theme_bw() + 
+ggplot(data = gdat.df06, aes(x = log2(or.p), y = ybrk)) +
+  theme_bw() +
   geom_point() + 
-  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
-  labs(x = "Odds ratio", y = "Strata") + 
-  scale_x_continuous(trans = log2_trans(), breaks = x.at, 
-   limits = c(0.25,32)) + 
-  scale_y_continuous(breaks = y.at, labels = y.lab) + 
-  geom_vline(xintercept = 1, lwd = 1) + 
+  geom_errorbarh(aes(xmin = log2(or.u), xmax = log2(or.l), height = 0.2)) + 
+  scale_x_continuous(breaks = xbrk, labels = xlab, limits = range(xbrk), 
+   name = "Odds ratio") + 
+  scale_y_continuous(breaks = gdat.df06$ybrk, labels = gdat.df06$ylab, name = "Risk factor") + 
+  geom_vline(xintercept = log2(1), linetype = "dashed") + 
+  annotate("text", x = log2(0.03125), y = gdat.df06$yat, label = gdat.df06$ref, hjust = 0, size = 3) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(axis.title.y = element_text(vjust = 0))
+
 
