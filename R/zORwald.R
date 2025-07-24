@@ -9,7 +9,11 @@ zORwald <- function(dat, conf.level){
   lnwOR <- log(wOR.p)
   lnwOR.var <- 1/a + 1/b + 1/c + 1/d
   lnwOR.se <- sqrt(lnwOR.var)
-  ll <- exp(lnwOR - (z * lnwOR.se))
-  ul <- exp(lnwOR + (z * lnwOR.se))
-  c(wOR.p, ll, ul)
+  wOR.se <- exp(lnwOR.se)
+  
+  wOR.low <- exp(lnwOR - (z * lnwOR.se))
+  wOR.upp <- exp(lnwOR + (z * lnwOR.se))
+
+  c(est = wOR.p, se = wOR.se, low = wOR.low, upp = wOR.upp)
+  
 }

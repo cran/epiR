@@ -1,19 +1,26 @@
 ---
-title: "<h1 style='text-align:center;'>Surveillance system assessment using <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/></h1>"
+title: "Surveillance System Assessment using epiR"
 author: "Mark Stevenson and Evan Sergeant"
 date: "`r Sys.Date()`"
 bibliography: epiR_surveillance.bib
 link-citations: yes
 output:
+  html_document:
+    css: styles.css
   knitr:::html_vignette:
   toc: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Disease surveillance}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 
 ---
-\setmainfont{Calibri Light}
+```{=html}
+<h1 style='text-align:center;'>
+  Surveillance System Assessment using 
+  <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/>
+</h1>
+```
 
 ```{r, echo = FALSE, message = FALSE}
 
@@ -30,9 +37,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988]. 
+Surveillance is defined as the on-going systematic collection, collation and interpretation of accurate information about a defined population with respect to disease and/or infection, closely integrated with timely dissemination of that information to those responsible for control and prevention measures [@thacker_berkelman:1988;@oie:2022]. 
 
-The Terrestrial Animal Health Code of the World Organisation of Animal Health [@oie:2022] defines surveillance as the investigation of a given population or subpopulation to detect the presence of a pathogenic agent or disease; the frequency and type of surveillance will be determined by the epidemiology of the pathogenic agent or disease, and the desired outputs. Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging; (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens; (3) demonstration of disease freedom for trading partners; and (4) identification of hazards or risk factors for disease outbreaks.
+Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging; (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens; (3) demonstration of disease freedom for trading partners; and (4) identification of hazards or risk factors for disease outbreaks.
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
 
@@ -40,7 +47,7 @@ The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id161113
 
 ## Definitions
 
-**Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
+**Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence, $P^{*}$, [P star]) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
 
 A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn't need to be described using a distribution.
 
@@ -48,9 +55,13 @@ A design prevalence is not related to any actual prevalence of disease in the po
 
 *Unit-level design prevalence* refers to a design prevalence assigned at the individual unit (e.g., cow, sheep, bird) level. The unit-level prevalence of disease can be applied either within clusters (e.g., herds, flocks, villages) or across broader, unclustered populations (e.g., human populations or wildlife).
 
-**Surveillance system**. A surveillance system is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. Most surveillance systems are comprised of several activities (e.g., on-farm testing, abattoir surveillance, disease hotlines) called **surveillance system components**. Each surveillance system component assesses **surveillance system units**. Surveillance system units are the individual items that get examined within each surveillance system component. For the surveillance system components listed above (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively. 
+**Surveillance system**. A surveillance system (SS) is a set of procedures to collect, collate and interpret information about a defined population with respect to disease. 
 
-**Surveillance unit sensitivity**. Surveillance unit sensitivity is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is actually present in the population at a level equal to or greater than the specified design prevalence.
+**Surveillance system components**. Surveillance system components (SSCs) are the individual activities (e.g., on-farm testing, abattoir surveillance, disease hotlines) that make up a surveillance system. 
+
+**Surveillance units**. Surveillance units (SUs) are the individual units that get assessed within each surveillance system component. For the surveillance system components listed (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively.
+
+**Surveillance unit sensitivity**. Surveillance unit sensitivity (USe) is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is actually present in the population at a level equal to or greater than the specified design prevalence.
 
 **Surveillance component sensitivity**. Surveillance component sensitivity (CSe) is the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
 
@@ -58,7 +69,7 @@ A design prevalence is not related to any actual prevalence of disease in the po
 
 ## An approach for thinking about surveillance design and assessment
 
-The first thing to consider when you're designing or assessing a surveillance program is to consider the sampling method that will be used. If a surveillance program has been designed to detect a specific pathogen the sampling method will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
+The first thing to consider when you're designing a surveillance program is to consider the sampling method that will be used. If the aim of a surveillance program is to detect a specific pathogen the sampling method will usually be either **representative** or **risk-based**. Other options include the situation where you might observe every individual in a population (a **census**) or where you might take no active steps to collect surveillance data but instead rely on stakeholders to report their observations on a voluntary basis (**passive surveillance**).
 
 Once you have the method of sampling defined think about how the surveillance system will be designed and how you might assess the surveillance system once it has been designed and implemented.
 
@@ -66,7 +77,7 @@ In terms of design, firstly specify the sampling method to be used and then dete
 
 Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: If the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in three ways: 
 
-1. What is the surveillance system sensitivity? or 
+1. What is the surveillance system sensitivity (SSe)? or 
 
 2. What is the probability that the prevalence of disease is less than the specified design prevalence? or 
 
@@ -80,7 +91,7 @@ The remainder of this vignette follows the structure outlined above. For each sa
 
 The sample size functions for surveillance representative sampling in `epiR` fall into two classes: sampling to achieve a defined probability of disease freedom and sampling to achieve a defined surveillance system sensitivity.
 
-The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then from within each selected cluster individual surveillance units (animals, individuals) are sampled. In this situation we talk about herds and villages as **primary sampling units** (PSUs) and animals and individuals as **secondary sampling units** (SSUs).  
+The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then, from within each selected cluster, individual surveillance units (animals, individuals) are sampled. In this context we talk about herds and villages as **primary sampling units** (PSUs) and animals and individuals as **secondary sampling units** (SSUs).  
 
 ```{r ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
@@ -117,7 +128,7 @@ flextable(tab1.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate sample size using representative population sampling data.")
+  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
 ```
 
 *EXAMPLE 1*
@@ -232,7 +243,7 @@ flextable(tab2.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
 ```
 
 *EXAMPLE 4*
@@ -310,14 +321,14 @@ flextable(tab3.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
+  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
 ```
 
 *EXAMPLE 7*
 
 You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated system sensitivity of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is higher during the warmer months of the year (June to August). 
 
-Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is free of disease is 0.50.
+Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is actually free of disease is 0.50.
 
 ```{r message = FALSE}
 library(ggplot2); library(lubridate); library(scales)
@@ -345,7 +356,7 @@ ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   scale_y_continuous(limits = c(0,1), name = "Probability") +
   geom_hline(aes(yintercept = 0.95), linetype = "dashed", col = "blue") +
   guides(col = guide_legend(title = "")) +
-  theme(legend.position = c(0.8, 0.5))
+  theme(legend.position = "inside", legend.position.inside = c(0.8,0.5))
 ```
 
 ## Risk-based sampling
@@ -388,7 +399,7 @@ flextable(tab4.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate sample size using risk based sampling data.")
+  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
 ```
 
 *EXAMPLE 8*
@@ -398,7 +409,7 @@ You are working with a disease of cattle where the prevalence of disease is beli
 Within each of the three risk groups a single test with a diagnostic sensitivity of 0.95 will be used. How many herds need to be sampled if you want to achieve 95% system sensitivity for a prevalence of disease in the population of greater than or equal to 1%?
 
 ```{r message = FALSE}
-# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+# Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
 m <- rbind(1,1,1)
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
@@ -409,7 +420,7 @@ A total of 147 herds need to be sampled: 59 dairy, 59 mixed and 29 beef herds.
 Now assume that one of two tests will be used for each herd. The first test has a diagnostic sensitivity of 0.92. The second test has a diagnostic sensitivity of 0.80. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70, respectively (which means that 0.20, 0.50 and 0.30 receive the second test, respectively). Recalculate the required sample size.
 
 ```{r message = FALSE}
-# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+# Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
 m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3))
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
@@ -486,7 +497,7 @@ flextable(tab4.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
 ```
 
 *EXAMPLE 11*
@@ -568,7 +579,7 @@ The estimated surveillance system sensitivity is 0.21.
 
 *EXAMPLE 12*
 
-There are four 'steps' in a (passive) disease detection process for disease X in your country: (1) an infected animal shows clinical signs of disease; (2) a herd manager observes clinical signs in a disease animal and calls a veterinarian; (3) a veterinarian responds appropriately to the disease investigation request (taking, for example, appropriate samples for laboratory investigation); and (4) the laboratory conducts appropriate tests on the submitted samples and interprets the results of those tests correctly. The probabilities for each step in the disease detection pathway (in order) are 0.10, 0.20, 0.90 and 0.99, respectively. 
+There are four 'steps' in a (passive) disease detection process for disease X in your country: (1) an infected animal shows clinical signs of disease; (2) a herd manager observes clinical signs in a disease animal and calls a veterinarian; (3) a veterinarian responds appropriately to the disease investigation request (taking, for example, appropriate samples for laboratory investigation); and (4) the laboratory conducts appropriate tests on the submitted samples and interprets the results of those tests correctly. The probabilities for each step in the disease detection pathway (in order) are thought to be 0.10, 0.20, 0.90 and 0.99, respectively. 
 
 Assuming the probability that a unit actually has disease if it is submitted for testing is 0.98, the sensitivity of the diagnostic test used at the unit level is 0.90, the population is comprised of 1000 clusters (herds), five animals from each cluster (herd) investigated for disease are tested and the cluster-level design prevalence is 0.01, what is the sensitivity of disease detection at the cluster (herd) and population level?
 
@@ -597,7 +608,7 @@ The adjusted relative risks for the high and low risk areas are 3.6 and 0.7, res
 
 *EXAMPLE 14*
 
-The population size in a provincial area in your country is 193,000. In a given two-week period a total of 7764 individuals have been tested for COVID-19 using an approved PCR which is believed to have a diagnostic sensitivity of 0.85. All of the individuals tested have returned a negative result. What is the maximum prevalence required to provide system sensitivity of 0.95 if COVID-19 is actually present in this population (i.e. what is the back-calculated design prevalence)? Express your result as the number of COVID-19 cases per 100,000 head of population.
+The population size in a provincial area in your country is 193,000. In a given two-week period a total of 7764 individuals have been tested for COVID-19 using an approved PCR which is believed to have a diagnostic sensitivity of 0.85. All of the individuals tested have returned a negative result. What is the maximum prevalence required to provide system sensitivity of 0.95 if COVID-19 is actually present in this population (i.e., what is the back-calculated design prevalence)? Express your result as the number of COVID-19 cases per 100,000 head of population.
 
 ```{r message = FALSE}
 rsu.pstar(N = 193000, n = 7764, se.p = 0.95, se.u = 0.85) * 100000

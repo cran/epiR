@@ -13,7 +13,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(twobytwo.df) %>%
+ft <- flextable(twobytwo.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -25,10 +25,16 @@ flextable(twobytwo.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 contingency table.")
+  set_caption(caption = "A 2 × 2 contingency table.")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-irr.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a \U00F7 (a + b)", "RE- = c \U00F7 (c + d)", "RT = (a + c) \U00F7 (a + b + c + d)"))
+
+irr.df <- data.frame(
+  "exp" = c("Exposure+","Exposure-","Total"), 
+  "dpos" = c("a","c","a + c"), 
+  "dneg" = c("b","c","b + c"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  risk = c("R[D+|E+] = a \U00F7 (a + b)", "R[D+|E-] = c \U00F7 (c + d)", "R[D+|E±] = (a + c) \U00F7 (a + b + c + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
@@ -37,7 +43,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(irr.df) %>%
+ft <- flextable(irr.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -50,14 +56,35 @@ flextable(irr.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
+  set_caption("Table 1: A 2 × 2 table with incidence risks calculated for the exposure positive, the exposure negative and the entire study population.")
 
+vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
+vfixb <- c(" = a \U00F7 (a + b)"," = c \U00F7 (c + d)"," = (a + c) \U00F7 (a + b + c + d)")
 
-## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."----
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "risk", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("R", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+
+ft
+
+## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 1: The incidence risk ratio."----
 knitr::include_graphics("risk_ratio.png")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcohort.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
+orcohort.df <- data.frame(
+  "exp" = c("Exposure+","Exposure-","Total"), 
+  "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
@@ -66,7 +93,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(orcohort.df) %>%
+ft <- flextable(orcohort.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -79,20 +106,41 @@ flextable(orcohort.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with the outcome odds calculated for the exposed, unexposed and the total study population.")
+  set_caption("Table 2: A 2 × 2 table with incidence odds calculated for the exposure positive, the exposure negative and the entire study population.")
 
+vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
+vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
+
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "odds", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("O", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+ft
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-orcc.df <- data.frame("exp" = c("Outcome+ (case)","Outcome- (control)","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OD+ = a \U00F7 b","OD- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
+orcc.df <- data.frame(
+  "out" = c("Outcome+","Outcome-","Total"), 
+  "epos" = c("a","c","a + c"), 
+  "eneg" = c("b","d","b + d"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
-hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
+hkey.df <- data.frame(col_keys = c("out","epos","eneg","total","odds"),
   h1 = c("", "Exposure+", "Exposure-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(orcc.df) %>%
+ft <- flextable(orcc.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -105,19 +153,35 @@ flextable(orcc.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with the exposure odds calculated for cases, controls and the total study population.")
+  set_caption("Table 3: A 2 × 2 table with incidence odds calculated for the outcome positive, the outcome negative and the entire study population.")
 
+vfixa <- c("[E+|D+]","[E+|D-]","[E+|D±]")
+vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
 
-## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."----
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "odds", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("O", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+ft
+
+## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 2: The attributable risk in the exposed."----
 knitr::include_graphics("attributable_risk.png")
 
-## ----attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the exposed."----
+## ----attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 3: The attributable fraction in the exposed."----
 knitr::include_graphics("attributable_fraction.png")
 
-## ----population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the population."----
+## ----population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 4: The attributable risk in the population."----
 knitr::include_graphics("population_attributable_risk.png")
 
-## ----population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the population."----
+## ----population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 5: The attributable fraction in the population."----
 knitr::include_graphics("population_attributable_fraction.png")
 
 ## -----------------------------------------------------------------------------
@@ -129,10 +193,10 @@ matrix(dat.v01, nrow = 2, byrow = TRUE)
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
 
-epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cohort.count", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 
 ## ----message = FALSE----------------------------------------------------------
-epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cohort.count", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns")
 
 ## ----message = FALSE----------------------------------------------------------
 library(MASS)
@@ -235,7 +299,7 @@ for(i in 12:14){
 gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
 gdat.df04
 
-## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
+## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
 library(ggplot2); library(scales)
 
 xbrk <- seq(from = -2, to = 2, by = 1)
@@ -292,7 +356,7 @@ dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count",
 
 dat.epi06
 
-## ----mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."----
+## ----mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 7: Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."----
 
 xbrk <- seq(from = -5, to = 5, by = 1)
 xlab <- 2^xbrk

@@ -62,7 +62,6 @@ Total      \tab a+c     	\tab b+d           \cr
 -----------\tab ----------\tab ------------- \cr
    }
 
-A summary of the methods used for each of the confidence interval calculations in this function is as follows:
 }
 
 \value{
@@ -87,8 +86,10 @@ When method equals \code{cohort.count} the following measures of association, me
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
   \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
-  \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
-  \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
+  \item{\code{wald.rr}}{Wald test where the null hypothesis is that the true strata incidence risk ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence risk ratio is equal to unity.}
+  \item{\code{wald.or}}{Wald test where the null hypothesis is that the true strata incidence odds ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence odds ratio is equal to unity.}
+  \item{\code{chisq.strata}}{chi-squared test for a difference in exposed and non-exposed proportions for each strata.}
+  \item{\code{chisq.crude}}{chi-squared test for a difference in exposed and non-exposed proportions across all strata.}
   \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
   \item{\code{RR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata incidence risk ratios.}
   \item{\code{OR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata odds ratios.}  
@@ -100,6 +101,7 @@ When method equals \code{cohort.time} the following measures of association and 
   \item{\code{PARate}}{Wald confidence interval for the population attributable rate for each strata. Wald confidence intervals for the crude population attributable rate.}
   \item{\code{AFRate}}{Wald confidence interval for the attributable fraction for each strata. Wald confidence interval for the crude attributable fraction.}
   \item{\code{PAFRate}}{Wald confidence interval for the population attributable fraction for each strata. Wald confidence interval for the crude poulation attributable fraction.}
+  \item{\code{wald.irr}}{Wald test where the null hypothesis is that the true strata incidence rate ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence rate ratio is equal to unity.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
   \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
@@ -125,8 +127,14 @@ When method equals \code{cross.sectional} the following measures of association 
   \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk.}
   \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
   \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
-  \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
-  \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
+  
+  \item{\code{wald.rr}}{Wald test where the null hypothesis is that the true strata prevalence risk ratios are equal to unity. Wald test where the null hypothesis is that the true crude prevalence risk ratio is equal to unity.}
+
+  \item{\code{wald.or}}{Wald test where the null hypothesis is that the true strata prevalence odds ratios are equal to unity. Wald test where the null hypothesis is that the true crude prevalence odds ratio is equal to unity.}
+  
+  \item{\code{chisq.strata}}{chi-squared test for a difference in exposed and non-exposed proportions for each strata.}
+  \item{\code{chisq.crude}}{chi-squared test for a difference in exposed and non-exposed proportions across all strata.}
+
   \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
   \item{\code{PR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata prevalence ratios.}
   \item{\code{OR.homog}}{Mantel-Haenszel (Woolf) test of homogeneity of the individual strata odds ratios.}  

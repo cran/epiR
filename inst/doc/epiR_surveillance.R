@@ -47,7 +47,7 @@ flextable(tab1.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate sample size using representative population sampling data.")
+  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
@@ -110,7 +110,7 @@ flextable(tab2.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sep.rs(N = NA, n = 300, pstar = 0.01, se.u = 0.95)
@@ -165,7 +165,7 @@ flextable(tab3.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate the probability of disease freedom using representative population sampling data.")
+  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 library(ggplot2); library(lubridate); library(scales)
@@ -193,7 +193,7 @@ ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   scale_y_continuous(limits = c(0,1), name = "Probability") +
   geom_hline(aes(yintercept = 0.95), linetype = "dashed", col = "blue") +
   guides(col = guide_legend(title = "")) +
-  theme(legend.position = c(0.8, 0.5))
+  theme(legend.position = "inside", legend.position.inside = c(0.8,0.5))
 
 ## ----ssrb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'------
 tab4.df <- data.frame(
@@ -227,17 +227,17 @@ flextable(tab4.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate sample size using risk based sampling data.")
+  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
-# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+# Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
 m <- rbind(1,1,1)
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
    spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
-# Matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
+# Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
 m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3))
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
@@ -289,7 +289,7 @@ flextable(tab4.df) %>%
   
   fontsize(size = 9, part = "footer") %>%
 
-  set_caption("Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
 
 ## ----message = FALSE----------------------------------------------------------
 # There are 1784 herds in the study area:

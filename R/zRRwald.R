@@ -11,7 +11,7 @@ zRRwald <- function(dat, conf.level){
   lnwRR.se   <- sqrt((1 / a) - (1 / N1) + (1 / c) - (1 / N0))
   wRR.se     <- exp(lnwRR.se)
   
-  ll      <- exp(lnwRR - (z * lnwRR.se))
-  ul      <- exp(lnwRR + (z * lnwRR.se))
-  c(wRR.p, ll, ul)
+  wRR.low      <- exp(lnwRR - (z * lnwRR.se))
+  wRR.upp      <- exp(lnwRR + (z * lnwRR.se))
+  c(est = wRR.p, se = wRR.se, low = wRR.low, upp = wRR.upp)
 }

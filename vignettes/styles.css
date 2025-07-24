@@ -1,0 +1,72 @@
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: normal;
+	color: #000000;
+}
+
+ft_caption {
+  font-style: italic;
+  font-size: 18px;
+  color: #005580;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 160%;
+	font-weight: bold;
+	color: #191970;
+}
+
+h2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	color: #b8860b;
+	line-height: normal;
+	clip: rect(auto auto auto auto);
+	top: 2px;
+	bottom: 2px;
+}
+
+h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 115%;
+	font-weight: bold;
+	color: #0000A0;
+}
+
+h4
+{
+	font-family: Arial;
+	font-size: 90%;
+	margin-left: 24px;
+}
+
+h5
+{
+	width: 100%;
+	margin-left: 2%;
+	margin-right:0%;
+	font-variant: normal;
+	padding: 4px;
+	font-size : 100%;
+	font-style : normal;
+	font-weight : normal;
+	background: lightblue;
+}
+
+h6
+{
+	width: 100%;
+	margin-left: 2%;
+	margin-right:0%;
+	font-variant: normal;
+	padding: 4px;
+	font-size : 100%;
+	font-style : normal;
+	font-weight : normal;
+	color: black;
+	background : #d3d3d3;
+}

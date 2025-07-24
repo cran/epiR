@@ -1,19 +1,26 @@
 ---
-title: "<h1 style='text-align:center;'>Measures of association using <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/></h1>"
+title: "Measures of Assocation using epiR"
 author: "Mark Stevenson"
 date: "`r Sys.Date()`"
 bibliography: epiR_measures_of_association.bib
 link-citations: yes
 output:
+  html_document:
+    css: styles.css
   knitr:::html_vignette:
   toc: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Measures of association}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 
 ---
-\setmainfont{Calibri Light}
+```{=html}
+<h1 style='text-align:center;'>
+  Measures of Assocation using 
+  <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/>
+</h1>
+```
 
 ```{r, echo = FALSE, message = FALSE}
 library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
@@ -31,9 +38,9 @@ This vignette has been written assuming the reader routinely formats their 2 $\t
 
 The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the measures of association functions in `epiR` using a smart phone.
 
-**Measures of association strength**
+## Measures of association strength
 
-***The incidence risk ratio***
+### The incidence risk ratio
 
 Consider a study where study subjects are monitored for the presence of disease over a defined follow-up period. At the start of the follow-up period study subjects are classified according to exposure to a hypothesised risk factor. If the exposure and outcome are binary variables (yes or no) we can present the counts of subjects in each of the four exposure-outcome categories in a 2 $\times$ 2 table.
 
@@ -47,7 +54,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(twobytwo.df) %>%
+ft <- flextable(twobytwo.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -59,12 +66,18 @@ flextable(twobytwo.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 contingency table.")
+  set_caption(caption = "A 2 × 2 contingency table.")
 ```
-When our data are in this format we can calculate the incidence risk of the outcome in those that were exposed $R_E+$, the incidence risk in those that were not exposed $R_{E-}$ and finally the incidence risk in the total study population $R_{T}$:
+When our data are in this format we can calculate the incidence risk of the outcome in those that were exposed $R_{[D+|E+]}$, the incidence risk in those that were not exposed $R_{[D+|E-]}$ and finally, the incidence risk in both the exposed and the unexposed (i.e., the entire study population) $R_{[D+|E\pm]}$:
 
 ```{r echo = FALSE, results = 'asis'}
-irr.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"), risk = c("RE+ = a \U00F7 (a + b)", "RE- = c \U00F7 (c + d)", "RT = (a + c) \U00F7 (a + b + c + d)"))
+
+irr.df <- data.frame(
+  "exp" = c("Exposure+","Exposure-","Total"), 
+  "dpos" = c("a","c","a + c"), 
+  "dneg" = c("b","c","b + c"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  risk = c("R[D+|E+] = a \U00F7 (a + b)", "R[D+|E-] = c \U00F7 (c + d)", "R[D+|E±] = (a + c) \U00F7 (a + b + c + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
@@ -73,7 +86,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(irr.df) %>%
+ft <- flextable(irr.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -86,13 +99,30 @@ flextable(irr.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with incidence risks calculated for the exposed, the unexposed and the total study population.")
+  set_caption("Table 1: A 2 × 2 table with incidence risks calculated for the exposure positive, the exposure negative and the entire study population.")
 
+vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
+vfixb <- c(" = a \U00F7 (a + b)"," = c \U00F7 (c + d)"," = (a + c) \U00F7 (a + b + c + d)")
+
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "risk", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("R", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+
+ft
 ```
 
-In Figure 1 we present the outcome incidence risk in the exposed, unexposed and (exposed and unexposed) groups as a bar chart. The outcome incidence risk ratio equals the outcome incidence risk in the exposed divided by the outcome incidence risk in the unexposed:
+In Figure 1 we present the outcome incidence risk in the exposed, unexposed and exposed plus unexposed groups as a bar chart. The outcome incidence risk ratio equals the outcome incidence risk in the exposed divided by the outcome incidence risk in the unexposed:
 
-```{r risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The incidence risk ratio."}
+```{r risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 1: The incidence risk ratio."}
 knitr::include_graphics("risk_ratio.png")
 ```
 
@@ -102,12 +132,16 @@ If the outcome incidence risk ratio equals 1, then the risk of the outcome in bo
 
 Tip: The glossary in the EpiToolbox app contains an animated version of Figure 1.
 
-***The odds ratio --- cohort studies***
+### The odds ratio --- cohort studies
 
 In a cohort study definition of exposure status (exposure-positive, exposure-negative) comes first. Subjects are then followed over time to determine their outcome status (outcome-positive, outcome-negative). The outcome odds in the exposed and unexposed populations are calculated as follows:
 
 ```{r echo = FALSE, results = 'asis'}
-orcohort.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
+orcohort.df <- data.frame(
+  "exp" = c("Exposure+","Exposure-","Total"), 
+  "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
@@ -116,7 +150,7 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(orcohort.df) %>%
+ft <- flextable(orcohort.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -129,26 +163,47 @@ flextable(orcohort.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with the outcome odds calculated for the exposed, unexposed and the total study population.")
+  set_caption("Table 2: A 2 × 2 table with incidence odds calculated for the exposure positive, the exposure negative and the entire study population.")
 
+vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
+vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
+
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "odds", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("O", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+ft
 ```
-The outcome odds ratio for a cohort study is then the outcome odds in the exposed divided by the outcome odds in the unexposed.
+The outcome odds ratio for a cohort study is the outcome odds in the exposed divided by the outcome odds in the unexposed.
 
-***The odds ratio --- case-control studies***
+### The odds ratio --- case-control studies
 
-In a case-control study outcome status (outcome-positive, outcome-negative) is defined first. The history provided by each study subject then provides information about exposure status (exposure-positive, exposure-negative). For case-control studies, instead of talking about the outcome odds in the exposed and unexposed groups (as we did when we were working with data from a cohort study) we talk about the odds of *exposure odds* in the case (outcome-positive) and control (outcome-negative) groups. To emphasise this difference we list outcome status (case, control) as rows and exposure status (exposure-positive, exposure-negative) in our 2 $\times$ 2 table. A handy way to remember this is to think about the temporal order of events in a study. In a case-control study outcome status is defined first: exposure status is defined second. Because outcome status comes first it is listed as the first column of your 2 $\times$ 2 table.
+In a case-control study outcome status (outcome-positive, outcome-negative) is defined first. The history provided by each study subject then provides information about exposure status (exposure-positive, exposure-negative). For case-control studies, instead of talking about the outcome odds in the exposed and unexposed groups (as we did when we were working with data from a cohort study) we talk about the odds of *exposure odds* in the case (outcome-positive) and control (outcome-negative) groups. To emphasise this difference we list outcome status (case, control) as rows and exposure status (exposure-positive, exposure-negative) in our 2 $\times$ 2 table. An effective way to remember this is to think about the temporal order of events in a study. In a case-control study outcome status is defined first: exposure status is defined second. Because outcome status comes first it is listed as the first column of the 2 $\times$ 2 table.
 
 ```{r echo = FALSE, results = 'asis'}
-orcc.df <- data.frame("exp" = c("Outcome+ (case)","Outcome- (control)","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"), odds = c("OD+ = a \U00F7 b","OD- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
+orcc.df <- data.frame(
+  "out" = c("Outcome+","Outcome-","Total"), 
+  "epos" = c("a","c","a + c"), 
+  "eneg" = c("b","d","b + d"), 
+  "total" = c("a + b","c + d","a + b + c + d"), 
+  odds = c("OE+ = a \U00F7 b","OE- = c \U00F7 d", "OT = (a + c) \U00F7 (b + d)"))
 
 # Create a header key data frame:
-hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
+hkey.df <- data.frame(col_keys = c("out","epos","eneg","total","odds"),
   h1 = c("", "Exposure+", "Exposure-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
 border_h = fp_border(color = "black", width = 2)
 
-flextable(orcc.df) %>%
+ft <- flextable(orcc.df) %>%
   width(j = 1, width = 2.00) %>%
   width(j = 2, width = 2.00) %>%
   width(j = 3, width = 2.00) %>%
@@ -161,24 +216,40 @@ flextable(orcc.df) %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
 
-  set_caption("A 2 x 2 table with the exposure odds calculated for cases, controls and the total study population.")
+  set_caption("Table 3: A 2 × 2 table with incidence odds calculated for the outcome positive, the outcome negative and the entire study population.")
 
+vfixa <- c("[E+|D+]","[E+|D-]","[E+|D±]")
+vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
+
+for (i in 1:3) {
+  ft <- compose(
+    ft, 
+    j = "odds", 
+    i = i,
+    value = as_paragraph(
+      as_chunk("O", props = fp_text()),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
+      as_chunk(vfixb[i], props = fp_text())
+    )
+  )
+}
+ft
 ```
-The odds ratio for a case-control study is defined as exposure odds in the cases ($O_{D+}$) divided by the exposure odds in the controls ($O_{D-}$). 
+The odds ratio for a case-control study is defined as exposure odds in the cases $O_{[E+|D+]}$ divided by the exposure odds in the controls $O_{[E+|D-]}$. 
 
-Note that the numeric estimate of the odds ratio is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:
+Note that the numeric estimate of the odds ratio for a case-contrl study is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:
 
 * In a **cohort study** we talk about the outcome odds being $x$ times greater (or less) in **the exposed**, compared with the unexposed. 
 
 * In a **case-control study** we talk about the exposure odds being $x$ times greater (or less) in **cases**, compared with controls.
 
-**Measures of effect in the exposed**
+## Measures of effect in the exposed
 
-***The attributable risk in the exposed***
+### The attributable risk in the exposed
 
-The attributable risk is defined as the increase or decrease in the incidence risk of the outcome in the exposed that is attributable to exposure (Figure 2). Attributable risk (unlike the incidence risk ratio) provides a measure of the absolute frequency of the outcome that is associated with exposure.
+The attributable risk is defined as the increase or decrease in the incidence risk of the outcome in the exposed that is attributable to exposure (Figure 2). The attributable risk (unlike the incidence risk ratio) provides a measure of the absolute frequency of the outcome that is associated with exposure.
 
-```{r attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the exposed."}
+```{r attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 2: The attributable risk in the exposed."}
 knitr::include_graphics("attributable_risk.png")
 ```
 
@@ -186,41 +257,43 @@ A useful way of expressing attributable risk in a clinical setting is in terms o
 
 When dealing with an outcome that is 'desirable' (e.g., treatment success) we call NNT the number needed to treat for benefit, NNTB. NNTB equals the number of subjects who would have to be exposed to result in a single (desirable) outcome. When dealing with an outcome that is 'undesirable' (e.g., death) we call NNT the number needed to treat for harm, NNTH. NNTH equals the number of subjects who would have to be exposed to result in a single (undesirable) outcome.
 
-***The attributable fraction in the exposed***
+### The attributable fraction in the exposed
 
 The attributable fraction in the exposed is the proportion of outcome-positive subjects in the exposed group that is due to exposure (Figure 3).
 
-```{r attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the exposed."}
+```{r attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 3: The attributable fraction in the exposed."}
 knitr::include_graphics("attributable_fraction.png")
 ```
 
-**Measures of effect in the population**
+## Measures of effect in the population
 
-***The attributable risk in the population***
+### The attributable risk in the population
 
 The population attributable risk is the increase or decrease in incidence risk of the outcome in the study population that is attributable to exposure (Figure 4).
 
-```{r population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable risk in the population."}
+```{r population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 4: The attributable risk in the population."}
 knitr::include_graphics("population_attributable_risk.png")
 ```
 
-***The attributable fraction in the population***
+### The attributable fraction in the population
 
 The population attributable fraction (also known as the aetiologic fraction) is the proportion of outcome-positive subjects in the study population that is due to the exposure (Figure 5).
 
-```{r population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "The attributable fraction in the population."}
+```{r population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 5: The attributable fraction in the population."}
 knitr::include_graphics("population_attributable_fraction.png")
 ```
 
-On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure of interest while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. If you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome; and (2) the exposure of interest is something amenable to intervention.
+On the condition that the exposure of interest is a cause of the disease outcome, the population attributable fraction represents the proportional reduction in average disease risk over a specified period of time that would be achieved by eliminating the exposure while the distribution of other risk factors in the population remained unchanged. For this reason, PAFs are particularly useful to guide policy makers when planning public health interventions. 
 
-**Theory to practice: Calculating measures of association using R**
+In summary, if you're going to use PAFs as a means for informing policy, make sure that: (1) the exposure of interest is causally related to the outcome; and (2) the exposure of interest is something amenable to intervention.
 
-***Direct entry of 2 by 2 table contingency table cell frequencies***
+## Theory to practice: Calculating measures of association using R
+
+### Direct entry of 2 by 2 table contingency table cell frequencies
 
 Firstly, a 2 $\times$ 2 table can be created by listing the contingency table cell frequencies in vector format. Take the following example. 
 
-A cross sectional study investigating the relationship between dry cat food (DCF) and feline lower urinary tract disease (FLUTD) was conducted [@willeberg:1977]. Counts of individuals in each group were as follows. DCF-exposed cats (outcome-positive, outcome-negative) 13, 2163. Non DCF-exposed cats (outcome-positive, outcome-negative) 5, 3349. We can enter these data directly into R as a vector of length four. Check that your counts have been entered in the correct order by viewing the data as a matrix.
+A cohort study investigating the relationship between dry cat food (DCF) and presence or absence of feline lower urinary tract disease (FLUTD) was conducted [@willeberg:1977]. Counts of individuals in each group were as follows. DCF-exposed cats (outcome-positive, outcome-negative) 13, 2163. Non DCF-exposed cats (outcome-positive, outcome-negative) 5, 3349. We can enter these data directly into R as a vector of length four. Check that your counts have been entered in the correct order by viewing the data as a matrix.
 
 ```{r}
 dat.v01 <- c(13,2163,5,3349); dat.v01
@@ -229,31 +302,31 @@ dat.v01 <- c(13,2163,5,3349); dat.v01
 matrix(dat.v01, nrow = 2, byrow = TRUE)
 ```
 
-Calculate the outcome prevalence ratio, odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function `epi.2by2`. Note that we use the term prevalence risk ratio and prevalence odds ratio (instead of incidence risk ratio and incidence odds ratio) because we're dealing with data from a cross-sectional study --- the frequency of disease is expressed as a prevalence, not an incidence. 
+Calculate the outcome incidence risk ratio, incidence odds ratio, attributable prevalence in the exposed, attributable fraction in the exposed, attributable prevalence in the population and the attributable fraction in the population using function `epi.2by2`. Note that we use the terms incidence risk ratio and incidence odds ratio here because we're dealing with data from a cohort study --- following determination of dry food exposure status cats have been followed over time to determine the incidence risk of FLUTD. 
 
 ```{r, message = FALSE}
 library(epiR)
 
-epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cohort.count", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 ```
 
-The prevalence odds of FLUTD among those that were dry food positive was 4.03 (95% CI 1.43 to 11.31) times the prevalence odds of FLUTD among those that were dry food negative. 
+The incidence risk of FLUTD among those that were dry food positive was 4.0 (95% CI 1.4 to 11) times the incidence risk of FLUTD among those that were dry food negative. 
 
-In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 30% to 91%). Fifty-four percent of FLUTD cases in this cat population were attributable to DCF (95% CI 4% to 78%).
+In DCF exposed cats, 75% of FLUTD was attributable to DCF (95% CI 33% to 91%). Fifty-four percent of FLUTD cases in this cat population were attributable to DCF (95% CI 32% to 75%).
 
 Need a hand to get the correct wording to explain each of the listed measures of association and measures of effect? Set `interpret = TRUE` in `epi.2by2`:
 
 ```{r, message = FALSE}
-epi.2by2(dat = dat.v01, method = "cross.sectional", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns")
+epi.2by2(dat = dat.v01, method = "cohort.count", elab = "Dry food", olab = "FLUTD", digits = 2, conf.level = 0.95, units = 100, interpret = TRUE, outcome = "as.columns")
 ```
 
-***Data frame with one row per observation***
+### Data frame with one row per observation
 
-Here we provide examples where you have exposure status and outcome status listed for each member of your study population. There are two options for contingency table preparation in this situation: (1) using base R's table function; or (2) using the `tidyverse` group of packages.
+Here we provide examples where you have exposure status and outcome status listed for each member of your study population. There are two options for contingency table preparation in this situation: (1) using base R's table function; or (2) using functions available in the `tidyverse` group of packages.
 
 For this example we use the low infant birth weight data presented by @hosmer_lemeshow:2000 and available in the `MASS` package in R. The `birthwt` data frame has 189 rows and 10 columns. The data were collected at Baystate Medical Center, Springfield, Massachusetts USA during 1986. 
 
-**Two by two table preparation using the `table` function in base R**
+## Two by two table preparation using the `table` function in base R
 
 ```{r, message = FALSE}
 library(MASS)
@@ -261,9 +334,9 @@ library(MASS)
 # Load and view the data:
 dat.df02 <- birthwt; head(dat.df02)
 ```
-Each row of this data set represents data for one mother. We're interested in the association between `smoke` (the mother's smoking status during pregnancy) and `low` (delivery of a baby less than 2.5 kg bodyweight). 
+Each row of this data set provides details of a child born to a single mother. We're interested in the association between `smoke` (the mother's smoking status during pregnancy) and `low` (delivery of a baby less than 2.5 kg bodyweight). 
 
-Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the incorrect format - outcome negatives are listed first in the columns of the table and exposure negatives are listed first in the rows:
+Its important that the table you present to `epi.2by2` is in the correct format: Outcome positives in the first column, outcome negatives in the second column, exposure positives in the first row and exposure negatives in the second row. If we run the `table` function on the `bwt` data the output table is in the incorrect format. Outcome negatives are listed first in the columns of the table and exposure negatives are listed first in the rows:
 
 ```{r, message = FALSE}
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dnn = c("Smoke", "Low BW")); dat.tab02
@@ -285,13 +358,13 @@ dat.df02$frace <- factor(dat.df02$race, levels = c(1,2,3))
 
 dat.tab02 <- table(dat.df02$fsmoke, dat.df02$flow, dnn = c("Smoke", "Low BW")); dat.tab02
 ```
-Now compute the odds ratio for smoking and delivery of a low birth weight baby:
+With the table in the correct format we can compute the odds ratio for smoking and delivery of a low birth weight baby:
 
 ```{r, message = FALSE}
 dat.epi02 <- epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke", olab = "Low BW", digits = 2, conf.level = 0.95, units = 100, interpret = FALSE, outcome = "as.columns")
 dat.epi02
 ```
-The incidence odds of low BW among those that were smoke positive was 2.0 (95% CI 1.1 to 3.8) times the incidence odds of low BW among those that were smoke negative. All of the calculated measures of association computed by `epi.2by2` can be listed using:
+The incidence odds of low BW among those mothers that were smoke positive was 2.0 (95% CI 1.1 to 3.8) times the incidence odds of low BW among those mothers that were smoke negative. All of the calculated measures of association computed by `epi.2by2` can be listed using:
 
 ```{r, message = FALSE}
 names(dat.epi02$massoc.detail)
@@ -307,7 +380,7 @@ dat.epi02$massoc.detail$OR.strata.score
 
 ```
 
-**Two by two table preparation using `tidyverse`**
+## Two by two table preparation using `tidyverse`
 
 The `dplyr` and `tidyr` packages (available within the `tidyverse` group of packages) can also be used to prepare your data in the required format:
 
@@ -337,11 +410,11 @@ dat.epi03 <- epi.2by2(dat = dat.tab03, method = "cohort.count", elab = "Smoke", 
 dat.epi03
 ```
 
-The incidence odds of low BW among those that were smoke positive was 2.0 (95% CI 1.1 to 3.8) times the incidence odds of low BW among those that were smoke negative.
+The incidence odds of low BW among those mothers that were smoke positive was 2.0 (95% CI 1.1 to 3.8) times the incidence odds of low BW among those mothers that were smoke negative.
 
-**Measures of association for a series of candidate risk factors**
+## Measures of association for a series of candidate risk factors
 
-The code that follows provides and approach for calculating measures of association for a series of candidate risk factors, writing the results to a data frame. Here we set up a loop to calculate the odds ratio for age, smoke and race:
+The code that follows provides an approach for calculating measures of association for a series of candidate risk factors, writing the results of each analysis to a data frame. Here we set up a loop to calculate the odds ratio for age, smoke and race:
 
 ```{r, message = FALSE}
 dat.df04 <- birthwt; head(dat.df04)
@@ -385,9 +458,9 @@ gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
 gdat.df04
 ```
 
-Plot the point estimate of the odds ratio for each candidate risk factor and its 95% confidence interval. Annotate the plot with the reference category for each risk factor:
+Plot the point estimate of the odds ratio for each candidate risk factor and its 95% confidence interval. Annotate the plot with the reference category for each risk factor. Note that a log 2 scale is used for the horizontal axis:
 
-```{r odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."}
+```{r odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."}
 library(ggplot2); library(scales)
 
 xbrk <- seq(from = -2, to = 2, by = 1)
@@ -406,11 +479,11 @@ ggplot(data = gdat.df04, aes(x = log2(or.p), y = ybrk)) +
   theme(axis.title.y = element_text(vjust = 0))
 ```
 
-**Confounding**
+## Confounding
 
 We're concerned that the mother's race may confound the association between low birth weight and delivery of a low birth weight baby so we'll stratify the data by race and compute the Mantel-Haenszel adjusted odds ratio. As before, our tables can be prepared using either base R or `tidyverse`.
 
-***Stratified two by two table preparation using the table function in base R***
+### Stratified two by two table preparation using the table function in base R
 
 ```{r, message = FALSE}
 dat.df05 <- birthwt; head(dat.df05)
@@ -424,7 +497,7 @@ dat.tab05 <- table(dat.df05$fsmoke, dat.df05$flow, dat.df05$frace,
    dnn = c("Smoke", "Low BW", "Race")); dat.tab05
 ```
 
-Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race. Function `epi.2by2` automatically calculates the Mantel-Haenszel odds ratio and risk ratio when presented with stratified contingency tables.
+Compute the Mantel-Haenszel adjusted odds ratio for smoking and delivery of a low birth weight baby, adjusting for the effect of race. Function `epi.2by2` automatically returns the Mantel-Haenszel odds ratio and risk ratio when presented with stratified contingency tables.
 
 ```{r, message = FALSE}
 dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", elab = "smoke",
@@ -433,11 +506,11 @@ dat.epi05 <- epi.2by2(dat = dat.tab05, method = "cohort.count", elab = "smoke",
 dat.epi05
 ```
 
-The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant (chi square test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are not statistically significantly different the Mantel-Haenszel adjusted odds ratio provides an appropriate summary of the association between smoking and low birth weight.
+The Mantel-Haenszel test of homogeneity of the strata odds ratios is not significant ($\chi^{2}$ test statistic 2.800; df 2; p-value = 0.25). We accept the null hypothesis and conclude that the odds ratios for each strata of race are the same. Because the stratum specific odds ratios are not statistically significantly different the Mantel-Haenszel adjusted odds ratio provides an appropriate summary of the association between smoking and low birth weight.
 
 After accounting for the confounding effect of race, the odds of having a low birth weight baby for smokers was 3.1 (95% CI 1.5 to 6.4) times that of non-smokers.
 
-***Stratified two by two table preparation using tidyverse***
+### Stratified two by two table preparation using tidyverse
 
 ```{r, message = FALSE}
 dat.df06 <- birthwt
@@ -467,7 +540,7 @@ dat.epi06
 
 Plot the individual strata odds ratios and the Mantel-Haenszel summary odds ratio as an error bar plot to better understand how the Mantel-Haenszel adjusted odds ratio relates to the individual strata odds ratios:
 
-```{r mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."}
+```{r mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 7: Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."}
 
 xbrk <- seq(from = -5, to = 5, by = 1)
 xlab <- 2^xbrk

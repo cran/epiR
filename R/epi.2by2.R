@@ -382,16 +382,16 @@
     for(i in 1:dim(dat)[3]){
       .tmp <- zRRwald(dat[,,i], conf.level)
       wRR.p <- c(wRR.p, .tmp[1])
-      wRR.l <- c(wRR.l, .tmp[2])
-      wRR.u <- c(wRR.u, .tmp[3])
+      wRR.l <- c(wRR.l, .tmp[3])
+      wRR.u <- c(wRR.u, .tmp[4])
     }
   }
   
   if(length(dim(dat)) == 2){
     .tmp <- zRRwald(dat, conf.level)
     wRR.p <- .tmp[1]
-    wRR.l <- .tmp[2]
-    wRR.u <- .tmp[3]
+    wRR.l <- .tmp[3]
+    wRR.u <- .tmp[4]
   }
   
   wRR.p <- ifelse(wRR.p == 0 | is.nan(wRR.p) | is.infinite(wRR.p), NaN, wRR.p)
@@ -482,6 +482,7 @@
   ## Incidence rate ratio weights (equal to precision, the inverse of the variance of the IRR. See Woodward page 168):
   IRR.w <- 1 / (exp(lnIRR.var))
   
+  
   ## Individual strata Wald odds ratios (Rothman p 139 equation 7-6): 
   wOR.ctype   <- "Wald"
   wOR.p <- c(); wOR.l <- c(); wOR.u <- c()
@@ -490,16 +491,16 @@
     for(i in 1:dim(dat)[3]){
       .tmp <- zORwald(dat[,,i], conf.level)
       wOR.p <- c(wOR.p, .tmp[1])
-      wOR.l <- c(wOR.l, .tmp[2])
-      wOR.u <- c(wOR.u, .tmp[3])
+      wOR.l <- c(wOR.l, .tmp[3])
+      wOR.u <- c(wOR.u, .tmp[4])
     }
   }
   
   if(length(dim(dat)) == 2){
     .tmp <- zORwald(dat, conf.level)
     wOR.p <- .tmp[1]
-    wOR.l <- .tmp[2]
-    wOR.u <- .tmp[3]
+    wOR.l <- .tmp[3]
+    wOR.u <- .tmp[4]
   }
   
   wOR.p <- ifelse(wOR.p == 0 | is.nan(wOR.p) | is.infinite(wOR.p), NaN, wOR.p)
@@ -823,8 +824,8 @@
   cwRR.ctype <- "Wald"
   .tmp       <- zRRwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   cwRR.p     <- .tmp[1]
-  cwRR.l     <- .tmp[2]
-  cwRR.u     <- .tmp[3]
+  cwRR.l     <- .tmp[3]
+  cwRR.u     <- .tmp[4]
   
   # Crude incidence risk ratio - Taylor confidence limits (Hightower et al 1988):
   ctRR.ctype <- "Taylor"
@@ -855,8 +856,8 @@
   cwOR.ctype <- "Wald"
   .tmp       <- zORwald(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
   cwOR.p     <- .tmp[1]
-  cwOR.l     <- .tmp[2]
-  cwOR.u     <- .tmp[3]
+  cwOR.l     <- .tmp[3]
+  cwOR.u     <- .tmp[4]
   
   # Crude odds ratio - Cornfield confidence limits:
   # Only calculate Cornfield confidence limits if N < 500; function very slow with large numbers otherwise:
@@ -1161,6 +1162,33 @@
   ## ===========================================
   
   if(length(a) == 1){
+
+    # Wald test for individual strata odds ratios:
+    .tmp <- zORwald(dat, conf.level)
+    test.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+    
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    wald.strata.or <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    rownames(wald.strata.or) <- NULL
+    
+        
+    # Wald test for individual strata incidence risk ratios:
+    .tmp <- zRRwald(dat, conf.level)
+    test.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+      
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    wald.strata.rr <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    rownames(wald.strata.rr) <- NULL
+    
+    
+    # Wald test for individual strata incidence rate ratios --- uses lnIRR and lnIRR.se calculated earlier:
+    test.statistic <- lnIRR / lnIRR.se
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    wald.strata.irr <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    
     
     # Uncorrected chi-squared test statistic for individual strata:
     .tmp <- suppressWarnings(chisq.test(dat, correct = FALSE))
@@ -1181,17 +1209,63 @@
     # Fisher's exact test for individual strata:
     if(sum(total) < 2E09){
       .tmp <- suppressWarnings(fisher.test(x = dat, alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE)) 
-      chi2.strata.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = .tmp$p.value / 2, p.value.2s = .tmp$p.value)      
+      chi2.strata.fisher <- data.frame(test.statistic = "-", df = "-", p.value.1s = .tmp$p.value / 2, p.value.2s = .tmp$p.value)      
      }
    
     if(sum(total) >= 2E09){
-      chi2.strata.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = NA, p.value.2s = NA)      
+      chi2.strata.fisher <- data.frame(test.statistic = "-", df = "-", p.value.1s = "-", p.value.2s = "-")      
     } 
   }
   
-  # Uncorrected chi-squared test statistic for individual strata:
   if(length(a) > 1){
+
+    # Wald test for individual strata incidence odds ratios:
+    test.statistic <- p.value.1s <- p.value.2s <- c()
     
+    for(i in 1:dim(dat)[3]){
+      .tmp <- zORwald(dat[,,i], conf.level)
+      
+      ttest.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+      test.statistic <- c(test.statistic, ttest.statistic)
+      
+      tp.value.1s <- (1 - pnorm(abs(ttest.statistic)))
+      p.value.1s <- c(p.value.1s, tp.value.1s)
+      
+      tp.value.2s <- 2 * (1 - pnorm(abs(ttest.statistic)))
+      p.value.2s <- c(p.value.2s, tp.value.2s)
+    }
+    
+    wald.strata.or <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    rownames(wald.strata.or) <- NULL
+
+    
+    # Wald test for individual strata incidence risk ratios:
+    test.statistic <- p.value.1s <- p.value.2s <- c()
+    
+    for(i in 1:dim(dat)[3]){
+      .tmp <- zRRwald(dat[,,i], conf.level)
+      
+      ttest.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+      test.statistic <- c(test.statistic, ttest.statistic)
+      
+      tp.value.1s <- (1 - pnorm(abs(ttest.statistic)))
+      p.value.1s <- c(p.value.1s, tp.value.1s)
+      
+      tp.value.2s <- 2 * (1 - pnorm(abs(ttest.statistic)))
+      p.value.2s <- c(p.value.2s, tp.value.2s)
+    }
+    
+    wald.strata.rr <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    rownames(wald.strata.rr) <- NULL    
+
+    
+    # Wald test for individual strata incidence rate ratios --- uses lnIRR and lnIRR.se calculated earlier:
+    test.statistic <- lnIRR / lnIRR.se
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    wald.strata.irr <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    
+
     # Uncorrected chi-squared test statistic for individual strata:
     test.statistic <- c(); df <- c(); p.value.1s <- c(); p.value.2s <- c(); lcfreq <- c()
     phi.coef <- c()
@@ -1230,8 +1304,8 @@
     if(sum(total) < 2E09){
       for(i in 1:dim(dat)[3]){
         .tmp <- suppressWarnings(fisher.test(x = dat[,,i], alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE))
-        test.statistic <- c(test.statistic, NA)
-        df <- c(df, NA)
+        test.statistic <- c(test.statistic, "-")
+        df <- c(df, "-")
         p.value.1s <- c(p.value.1s, .tmp$p.value / 2)
         p.value.2s <- c(p.value.2s, .tmp$p.value)
       }
@@ -1239,14 +1313,42 @@
 
     if(sum(total) >= 2E09){
       for(i in 1:dim(dat)[3]){
-        test.statistic <- c(test.statistic, NA)
-        df <- c(df, NA)
-        p.value.1s <- c(p.value.1s, NA)
-        p.value.2s <- c(p.value.2s, NA)
+        test.statistic <- c(test.statistic, "-")
+        df <- c(df, "-")
+        p.value.1s <- c(p.value.1s, "-")
+        p.value.2s <- c(p.value.2s, "-")
       }
     }
         
     chi2.strata.fisher <- data.frame(test.statistic, df, p.value.1s, p.value.2s)
+
+    
+    # Wald test for crude incidence odds ratios:
+    .tmp <- zORwald(c(sa,sb,sc,sd), conf.level)
+    test.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    
+    wald.crude.or <- data.frame(test.statistic = test.statistic, p.value.1s = p.value.1s, p.value.2s = p.value.2s)
+    rownames(wald.crude.or) <- NULL
+    
+    
+    # Wald test for crude incidence risk ratios:
+    .tmp <- zRRwald(c(sa,sb,sc,sd), conf.level)
+    test.statistic <- as.numeric(log(.tmp[1]) / log(.tmp[2]))
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    
+    wald.crude.rr <- data.frame(test.statistic = test.statistic, p.value.1s = p.value.1s, p.value.2s = p.value.2s)
+    rownames(wald.crude.rr) <- NULL
+    
+    
+    # Wald test for crude incidence rate ratios --- uses celnIRR and celnIRR.se calculated earlier:
+    test.statistic <- celnIRR / celnIRR.se
+    p.value.1s <- (1 - pnorm(abs(test.statistic)))
+    p.value.2s <- 2 * (1 - pnorm(abs(test.statistic)))
+    wald.crude.irr <- data.frame(test.statistic, p.value.1s, p.value.2s)
+    
     
     # Uncorrected chi-squared test statistic across all strata:
     chi2.crude.uncor <- suppressWarnings(chisq.test(x = matrix(c(sa, sc, sb, sd), ncol = 2), correct = FALSE))
@@ -1261,7 +1363,7 @@
     
     # Fisher's exact test across all strata:
     chi2.crude.fisher <- suppressWarnings(fisher.test(x = matrix(c(sa, sc, sb, sd), ncol = 2), alternative = "two.sided", conf.int = TRUE, conf.level = conf.level, simulate.p.value = FALSE)) 
-    chi2.crude.fisher <- data.frame(test.statistic = NA, df = NA, p.value.1s = chi2.crude.fisher$p.value / 2, p.value.2s = chi2.crude.fisher$p.value)
+    chi2.crude.fisher <- data.frame(test.statistic = "-", df = "-", p.value.1s = chi2.crude.fisher$p.value / 2, p.value.2s = chi2.crude.fisher$p.value)
     
     # Mantel-Haenszel chi-squared test that combined OR = 1:
     chi2.mh <- suppressWarnings(mantelhaen.test(x = dat, alternative = "two.sided", correct = FALSE, conf.level = conf.level))
@@ -1332,8 +1434,10 @@
     bOR.homog <- sum((dat[1,1,] - Astar)^2 / Var, na.rm = TRUE)
     bOR.homog.p <- 1 - pchisq(bOR.homog, df = n.strata - 1)
 }
+  
   # Test of homogeneity of attributable risks (see Woodward p 207):
   # AR.homogeneity <- sum(AR.p - AR.s)^2 / SE.AR^2
+  
   # Test of effect:
   # AR.homogeneity.p <- 1 - pchisq(AR.homogeneity, df = n.strata - 1)
   # AR.homog <- data.frame(test.statistic = AR.homogeneity, df = n.strata - 1, p.value = AR.homogeneity.p)
@@ -1515,7 +1619,11 @@
     
     
     # --------------------------------------------------------------------------
-    ## Chi-square tests:    
+    ## Wald and chi-square tests:   
+    wald.strata.or = wald.strata.or,
+    wald.strata.rr = wald.strata.rr,
+    wald.strata.irr = wald.strata.irr,
+    
     chi2.strata.uncor = chi2.strata.uncor,
     chi2.strata.yates = chi2.strata.yates,
     chi2.strata.fisher = chi2.strata.fisher,
@@ -1523,6 +1631,14 @@
   )
   
   if(n.strata > 1){
+    res$wald.strata.or = wald.strata.or
+    res$wald.strata.rr = wald.strata.rr
+    res$wald.strata.irr = wald.strata.irr
+    
+    res$wald.crude.or = wald.crude.or
+    res$wald.crude.rr = wald.crude.rr
+    res$wald.crude.irr = wald.crude.irr
+
     res$chi2.crude.uncor = chi2.crude.uncor
     res$chi2.crude.yates = chi2.crude.yates
     res$chi2.crude.fisher = chi2.crude.fisher
@@ -2116,8 +2232,6 @@ interp.txt <- list(
   cross.sectional.ms.cnnt = cross.sectional.ms.cnnt,
   cross.sectional.ms.mnnt = cross.sectional.ms.mnnt)
 
-  
-  
 
   ## ===============================
   ## REPORTING
@@ -2141,8 +2255,8 @@ interp.txt <- list(
       ARisk.strata.wald  = res$ARisk.crude.wald,
       ARisk.strata.score = res$ARisk.crude.score,
       
-      NNT.strata.wald  = res$NNT.crude.wald,
-      NNT.strata.score = res$NNT.crude.score,
+      NNT.strata.wald    = res$NNT.crude.wald,
+      NNT.strata.score   = res$NNT.crude.score,
 
       AFRisk.strata.wald = res$AFRisk.crude.wald,
       
@@ -2150,6 +2264,9 @@ interp.txt <- list(
       PARisk.strata.piri = res$PARisk.crude.piri,
       
       PAFRisk.strata.wald= res$PAFRisk.crude.wald,
+      
+      wald.strata.rr     = res$wald.strata.rr,
+      wald.strata.or     = res$wald.strata.or,
       
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
@@ -2260,25 +2377,32 @@ interp.txt <- list(
       ARisk.mh.sato      = res$ARisk.mh.sato,
       ARisk.mh.green     = res$ARisk.mh.green,
       
-      NNT.strata.wald  = res$NNT.strata.wald,
-      NNT.strata.score = res$NNT.strata.score,
-      NNT.crude.wald   = res$NNT.crude.wald,
-      NNT.crude.score  = res$NNT.crude.score,
-      NNT.mh.wald      = res$NNT.mh.wald,
-      NNT.mh.sato      = res$NNT.mh.sato,
-      NNT.mh.green     = res$NNT.mh.green,
+      NNT.strata.wald    = res$NNT.strata.wald,
+      NNT.strata.score   = res$NNT.strata.score,
+      NNT.crude.wald     = res$NNT.crude.wald,
+      NNT.crude.score    = res$NNT.crude.score,
+      NNT.mh.wald        = res$NNT.mh.wald,
+      NNT.mh.sato        = res$NNT.mh.sato,
+      NNT.mh.green       = res$NNT.mh.green,
       
       AFRisk.strata.wald = res$AFRisk.strata.wald,
       AFRisk.crude.wald  = res$AFRisk.crude.wald,
       
       PARisk.strata.wald = res$PARisk.strata.wald,
-      PARisk.strata.piri = res$PARisk.strata.piri,
       PARisk.crude.wald  = res$PARisk.crude.wald,
+      
+      PARisk.strata.piri = res$PARisk.strata.piri,
       PARisk.crude.piri  = res$PARisk.crude.piri,
 
       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
       PAFRisk.crude.wald = res$PAFRisk.crude.wald,
+
+      wald.strata.rr     = res$wald.strata.rr,
+      wald.crude.rr      = res$wald.crude.rr,
       
+      wald.strata.or     = res$wald.strata.or,
+      wald.crude.or      = res$wald.crude.or,
+
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
       chi2.strata.fisher = res$chi2.strata.fisher,
@@ -2376,18 +2500,20 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
-      IRR.strata.wald    = res$IRR.crude.wald,
+      IRR.strata.wald     = res$IRR.crude.wald,
       
-      ARate.strata.wald  = res$ARate.crude.wald,
-      AFRate.strata.wald = res$AFRate.crude.wald,
+      ARate.strata.wald   = res$ARate.crude.wald,
+      AFRate.strata.wald  = res$AFRate.crude.wald,
       
-      PARate.strata.wald = res$PARate.crude.wald,
+      PARate.strata.wald  = res$PARate.crude.wald,
       PAFRate.strata.wald = res$PAFRate.crude.wald,
       
-      chi2.strata.uncor  = res$chi2.strata.uncor,
-      chi2.strata.yates  = res$chi2.strata.yates,
-      chi2.strata.fisher = res$chi2.strata.fisher,
-      chi2.correction    = res$chi2.correction)
+      wald.strata.irr     = res$wald.strata.irr,
+      
+      chi2.strata.uncor   = res$chi2.strata.uncor,
+      chi2.strata.yates   = res$chi2.strata.yates,
+      chi2.strata.fisher  = res$chi2.strata.fisher,
+      chi2.correction     = res$chi2.correction)
     
     massoc.summary <- data.frame(
        var = c("Inc rate ratio", "Attrib inc rate *", "Attrib inc rate in population *", "Attrib fraction in exposed (%)", "Attrib fraction in population (%)"), 
@@ -2468,16 +2594,19 @@ interp.txt <- list(
       PAFRate.strata.wald = res$PAFRate.strata.wald,
       PAFRate.crude.wald  = res$PAFRate.crude.wald,
       
-      chi2.strata.uncor  = res$chi2.strata.uncor,
-      chi2.strata.yates  = res$chi2.strata.yates,
-      chi2.strata.fisher = res$chi2.strata.fisher,
-      chi2.correction    = res$chi2.correction,
+      wald.strata.irr     = res$wald.strata.irr,
+      wald.crude.irr      = res$wald.crude.irr,
       
-      chi2.crude.uncor   = res$chi2.crude.uncor,
-      chi2.crude.yates   = res$chi2.crude.yates,
-      chi2.crude.fisher  = res$chi2.crude.fisher,
+      chi2.strata.uncor   = res$chi2.strata.uncor,
+      chi2.strata.yates   = res$chi2.strata.yates,
+      chi2.strata.fisher  = res$chi2.strata.fisher,
+      chi2.correction     = res$chi2.correction,
       
-      chi2.mh            = res$chi2.mh)
+      chi2.crude.uncor    = res$chi2.crude.uncor,
+      chi2.crude.yates    = res$chi2.crude.yates,
+      chi2.crude.fisher   = res$chi2.crude.fisher,
+      
+      chi2.mh             = res$chi2.mh)
     
     massoc.summary <- data.frame(
       var = c("Inc rate ratio (crude)", "Inc rate ratio (M-H)", "Inc rate ratio (crude:M-H)", "Attrib inc rate (crude) *", "Attrib inc rate (M-H) *", "Attrib inc rate (crude:M-H)"), 
@@ -2631,17 +2760,17 @@ interp.txt <- list(
       
       PAFest.strata.wald  = res$PAFest.strata.wald,
       PAFest.crude.wald   = res$PAFest.crude.wald,
+
+      chi2.strata.uncor   = res$chi2.strata.uncor,
+      chi2.strata.yates   = res$chi2.strata.yates,
+      chi2.strata.fisher  = res$chi2.strata.fisher,
+      chi2.correction     = res$chi2.correction,
       
-      chi2.strata.uncor  = res$chi2.strata.uncor,
-      chi2.strata.yates  = res$chi2.strata.yates,
-      chi2.strata.fisher = res$chi2.strata.fisher,
-      chi2.correction    = res$chi2.correction,
+      chi2.crude.uncor    = res$chi2.crude.uncor,
+      chi2.crude.yates    = res$chi2.crude.yates,
+      chi2.crude.fisher   = res$chi2.crude.fisher,
       
-      chi2.crude.uncor   = res$chi2.crude.uncor,
-      chi2.crude.yates   = res$chi2.crude.yates,
-      chi2.crude.fisher  = res$chi2.crude.fisher,
-      
-      chi2.mh            = res$chi2.mh,
+      chi2.mh             = res$chi2.mh,
            
       OR.homog.woolf      = res$wOR.homog,
       OR.homog.brday      = res$bOR.homog)
@@ -2729,6 +2858,9 @@ interp.txt <- list(
       PARisk.strata.piri  = res$PARisk.crude.piri,
       
       PAFRisk.strata.wald = res$PAFRisk.crude.wald,
+      
+      wald.strata.rr      = res$wald.strata.rr,
+      wald.strata.or      = res$wald.strata.or,
       
       chi2.strata.uncor   = res$chi2.strata.uncor,
       chi2.strata.yates   = res$chi2.strata.yates,
@@ -2862,6 +2994,12 @@ interp.txt <- list(
       PAFRisk.strata.wald = res$PAFRisk.strata.wald,
       PAFRisk.crude.wald  = res$PAFRisk.crude.wald,
 
+      wald.strata.rr      = res$wald.strata.rr,
+      wald.crude.rr       = res$wald.crude.rr,
+      
+      wald.strata.or      = res$wald.strata.or,
+      wald.crude.or       = res$wald.crude.or,
+      
       chi2.strata.uncor   = res$chi2.strata.uncor,
       chi2.strata.yates   = res$chi2.strata.yates,
       chi2.strata.fisher  = res$chi2.strata.fisher,
