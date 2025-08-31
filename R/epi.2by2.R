@@ -446,6 +446,31 @@
   scRR.p <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.p)
   scRR.l <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.l)
   scRR.u <- ifelse(scRR.p == 0 | is.nan(scRR.p) | is.infinite(scRR.p), NaN, scRR.u) 
+
+
+  # Individual strata incidence risk ratio - Koopman confidence limits (Koopman 1984):
+  kRR.ctype  <- "Koopman"
+  kRR.p <- c(); kRR.l <- c(); kRR.u <- c()
+  
+  if(length(dim(dat)) == 3){
+    for(i in 1:dim(dat)[3]){
+      .tmp <- zRRkoopman(dat[,,i], conf.level)
+      kRR.p <- c(kRR.p, .tmp[1])
+      kRR.l <- c(kRR.l, .tmp[2])
+      kRR.u <- c(kRR.u, .tmp[3])
+    }
+  }
+  
+  if(length(dim(dat)) == 2){
+    .tmp <- zRRkoopman(dat, conf.level)
+    kRR.p <- .tmp[1]
+    kRR.l <- .tmp[2]
+    kRR.u <- .tmp[3]
+  }
+  
+  kRR.p <- ifelse(kRR.p == 0 | is.nan(kRR.p) | is.infinite(kRR.p), NaN, kRR.p)
+  kRR.l <- ifelse(kRR.p == 0 | is.nan(kRR.p) | is.infinite(kRR.p), NaN, kRR.l)
+  kRR.u <- ifelse(kRR.p == 0 | is.nan(kRR.p) | is.infinite(kRR.p), NaN, kRR.u) 
   
   
   # Individual strata incidence rate ratio (exact confidence intervals from epibasic.xlsx http://ph.au.dk/uddannelse/software/):
@@ -728,7 +753,7 @@
   # Individual strata attributable fraction for rate data (from Hanley 2001):
   AFRate.ctype <- ""
   AFRate.p <- (IRR.p - 1) / IRR.p
-  # Bug found 031013. The following two lines of code replace those on lines 449 and 450.
+  # Bug found 031013. The following two lines of code replace those on lines 762 and 763:
   AFRate.l <- (IRR.l - 1) / IRR.l
   AFRate.u <- (IRR.u - 1) / IRR.u
   # AFRate.l <- min((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
@@ -840,6 +865,13 @@
   csRR.p     <- .tmp[1]
   csRR.l     <- .tmp[2]
   csRR.u     <- .tmp[3]
+  
+  # Crude incidence risk ratio - Koopman confidence limits:
+  ckRR.ctype <- "Koopman"
+  .tmp       <- zRRkoopman(apply(dat, MARGIN = c(1,2), FUN = sum), conf.level)
+  ckRR.p     <- .tmp[1]
+  ckRR.l     <- .tmp[2]
+  ckRR.u     <- .tmp[3]
   
   # Crude incidence rate ratio (exact confidence intervals from epibasic.xlsx http://ph.au.dk/uddannelse/software/):
   ceIRR.ctype <- "Exact"
@@ -1452,14 +1484,16 @@
     
     # --------------------------------------------------------------------------
     ## Strata incidence risk ratio:
-    RR.strata.wald = data.frame(est = wRR.p, lower = wRR.l, upper = wRR.u),
+    RR.strata.wald = data.frame(est = as.numeric(wRR.p), lower = as.numeric(wRR.l), upper = as.numeric(wRR.u)),
     RR.strata.taylor = data.frame(est = tRR.p, lower = tRR.l, upper = tRR.u),
     RR.strata.score = data.frame(est = scRR.p, lower = scRR.l, upper = scRR.u),
-    
+    RR.strata.koopman = data.frame(est = kRR.p, lower = kRR.l, upper = kRR.u),
+
     ## Crude incidence risk ratio:
-    RR.crude.wald = data.frame(est = cwRR.p, lower = cwRR.l, upper = cwRR.u),
+    RR.crude.wald = data.frame(est = as.numeric(cwRR.p), lower = as.numeric(cwRR.l), upper = as.numeric(cwRR.u)),
     RR.crude.taylor = data.frame(est = ctRR.p, lower = ctRR.l, upper = ctRR.u),
     RR.crude.score = data.frame(est = csRR.p, lower = csRR.l, upper = csRR.u),
+    RR.crude.koopman = data.frame(est = ckRR.p, lower = ckRR.l, upper = ckRR.u),
     
     ## Mantel-Haenszel incidence risk ratio:
     RR.mh.wald = data.frame(est = sRR.p, lower = sRR.l, upper = sRR.u),
@@ -1478,13 +1512,13 @@
     
     # --------------------------------------------------------------------------
     ## Strata odds ratio:
-    OR.strata.wald = data.frame(est = wOR.p, lower = wOR.l, upper = wOR.u),
+    OR.strata.wald = data.frame(est = as.numeric(wOR.p), lower = as.numeric(wOR.l), upper = as.numeric(wOR.u)),
     OR.strata.cfield = data.frame(est = cfOR.p, lower = cfOR.l, upper = cfOR.u),
     OR.strata.score = data.frame(est = scOR.p, lower = scOR.l, upper = scOR.u),
     OR.strata.mle = data.frame(est = mOR.p, lower = mOR.l, upper = mOR.u),
     
     ## Crude odds ratio:
-    OR.crude.wald = data.frame(est = cwOR.p, lower = cwOR.l, upper = cwOR.u),
+    OR.crude.wald = data.frame(est = as.numeric(cwOR.p), lower = as.numeric(cwOR.l), upper = as.numeric(cwOR.u)),
     OR.crude.cfield = data.frame(est = ccfOR.p, lower = ccfOR.l, upper = ccfOR.u),
     OR.crude.score = data.frame(est = csOR.p, lower = csOR.l, upper = csOR.u),
     OR.crude.mle = data.frame(est = cmOR.p, lower = cmOR.l, upper = cmOR.u),
@@ -1536,7 +1570,7 @@
     
     # --------------------------------------------------------------------------
     ## Strata attributable fraction for risk data:
-    AFRisk.strata.wald = data.frame(est = AFRisk.p, lower = AFRisk.l, upper = AFRisk.u),
+    AFRisk.strata.wald = data.frame(est = as.numeric(AFRisk.p), lower = as.numeric(AFRisk.l), upper = as.numeric(AFRisk.u)),
     
     ## Crude attributable fraction for risk data:
     AFRisk.crude.wald = data.frame(est = cAFRisk.p, lower = cAFRisk.l, upper = cAFRisk.u),
@@ -1650,9 +1684,7 @@
     res$wRR.homog = data.frame(test.statistic = wRR.homog,  df = n.strata - 1, p.value = wRR.homog.p)
   }  
   
-  
-    
-  
+
   # ============================================================================
   ## Interpretation statements --- cohort count single strata:
 
@@ -1743,7 +1775,7 @@
   cohort.count.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
   
-  # -----------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   ## Cohort count multiple strata:
   
   # Crude RR interpretation:
@@ -1851,8 +1883,8 @@
   cohort.count.ms.mnnt <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
   
   
-  # -----------------------------------------------------------------------
-  ## Cohort time single strata:
+  # ----------------------------------------------------------------------------
+  # Cohort time single strata:
   
   # RR interpretation:
   irrest <- round(res$IRR.crude.wald[1], digits = 2)
@@ -1904,8 +1936,8 @@
   cohort.time.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
 
 
-  # -----------------------------------------------------------------------
-  ## Cohort time multiple strata:
+  # ----------------------------------------------------------------------------
+  # Cohort time multiple strata:
   
   # Crude RR interpretation:
   irrest <- round(res$IRR.crude.wald[1], digits = 2)
@@ -1949,8 +1981,8 @@
   cohort.time.ms.mar <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence rate of ", tout, " among those that were  ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.time[2], ".", sep = "")
   
 
-  # -----------------------------------------------------------------------
-  ## Case-control single strata:
+  # ----------------------------------------------------------------------------
+  # Case-control single strata:
   
   # OR interpretation:
   orest <- round(res$OR.crude.wald[1], digits = 2)
@@ -1976,8 +2008,8 @@
   case.control.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, ".", sep = "")
   
   
-  # -----------------------------------------------------------------------
-  ## Case-control multiple strata:
+  # ----------------------------------------------------------------------------
+  # Case-control multiple strata:
   
   # Crude OR interpretation:
   orest <- round(res$OR.crude.wald[1], digits = 2)
@@ -2011,8 +2043,8 @@
   case.control.ms.cpaf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, " (unadjusted).", sep = "")
 
 
-  # -----------------------------------------------------------------------
-  ## Cross sectional single strata:
+  # ----------------------------------------------------------------------------
+  # Cross sectional single strata:
   
   # RR interpretation:
   rrest <- round(res$RR.crude.wald[1], digits = 2)
@@ -2087,8 +2119,8 @@
   cross.sectional.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
 
-  # ----------------------------------------------------------------------- 
-  ## Cross sectional multiple strata:       
+  # ---------------------------------------------------------------------------- 
+  # Cross sectional multiple strata:       
   
   # Crude RR interpretation:
   rrest <- round(res$RR.crude.wald[1], digits = 2)
@@ -2246,6 +2278,7 @@ interp.txt <- list(
       RR.strata.wald     = res$RR.crude.wald,
       RR.strata.taylor   = res$RR.crude.taylor,
       RR.strata.score    = res$RR.crude.score,
+      RR.strata.koopman  = res$RR.crude.koopman,
       
       OR.strata.wald     = res$OR.crude.wald,
       OR.strata.cfield   = res$OR.crude.cfield,
@@ -2351,10 +2384,12 @@ interp.txt <- list(
       RR.strata.wald     = res$RR.strata.wald,
       RR.strata.taylor   = res$RR.strata.taylor,
       RR.strata.score    = res$RR.strata.score,
+      RR.strata.koopman  = res$RR.strata.koopman,
       
       RR.crude.wald      = res$RR.crude.wald,
       RR.crude.taylor    = res$RR.crude.taylor,
       RR.crude.score     = res$RR.crude.score,
+      RR.crude.koopman   = res$RR.crude.koopman,
       
       RR.mh.wald         = res$RR.mh.wald,
       
@@ -2840,6 +2875,7 @@ interp.txt <- list(
       PR.strata.wald      = res$RR.crude.wald,
       PR.strata.taylor    = res$RR.crude.taylor,
       PR.strata.score     = res$RR.crude.score,
+      PR.strata.koopman   = res$RR.crude.koopman,
       
       OR.strata.wald      = res$OR.crude.wald,
       OR.strata.cfield    = res$OR.crude.cfield,
@@ -2944,10 +2980,12 @@ interp.txt <- list(
       PR.strata.wald      = res$RR.strata.wald,
       PR.strata.taylor    = res$RR.strata.taylor,
       PR.strata.score     = res$RR.strata.score,
+      PR.strata.koopman   = res$RR.strata.koopman,
       
       PR.crude.wald       = res$RR.crude.wald,
       PR.crude.taylor     = res$RR.crude.taylor,
       PR.crude.score      = res$RR.crude.score,
+      PR.crude.koopman    = res$RR.crude.koopman,
       
       PR.mh.wald          = res$RR.mh.wald,
       

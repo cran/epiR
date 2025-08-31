@@ -23,11 +23,11 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 \details{
 Kappa is a measure of agreement beyond the level of agreement expected by chance alone. The observed agreement is the proportion of samples for which both methods (or observers) agree.
 
-The bias and prevalence adjusted kappa (Byrt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments. Bias and prevalence adjusted kappa are only returned if the number of rows and columns of argument \code{dat} equal 2.
+The bias and prevalence adjusted kappa (Byrt et al. 1993) provides a measure of observed agreement, an index of the bias between observers, and an index of the differences between the overall proportion of `yes' and `no' assessments. Bias and prevalence adjusted kappa are only returned if the number of rows and columns of argument \code{dat} are equal to 2.
 
 Common interpretations for the kappa statistic are as follows: < 0.2 slight agreement, 0.2 - 0.4 fair agreement, 0.4 - 0.6 moderate agreement, 0.6 - 0.8 substantial agreement, > 0.8 almost perfect agreement (Sim and Wright, 2005).
 
-Confidence intervals for the proportion of observations where there is agreement are calculated using the exact method (Collett 1999).
+PABAK (the prevalence and bias corrected kappa statistic) is calculated using the overall proportion of observed agreement. Confidence intervals for the overall proportion of observed agreement calculated using the exact method (Collett 1999). For this reason you won't see a change in the confidence intervals for PABAK when different settings are used for argument \code{method}.
 
 The argument \code{alternative = "greater"} tests the hypothesis that kappa is greater than 0. 
 
@@ -55,7 +55,9 @@ Where the number of rows and columns of argument \code{dat} is equal to 2 a list
 \references{
 Altman DG, Machin D, Bryant TN, Gardner MJ (2000). Statistics with Confidence, second edition. British Medical Journal, London, pp. 116 - 118.
 
-Byrt T, Bishop J, Carlin JB (1993). Bias, prevalence and kappa. Journal of Clinical Epidemiology 46: 423 - 429. 
+Byrt T, Bishop J, Carlin JB (1993). Bias, prevalence and kappa. Journal of Clinical Epidemiology 46: 423 - 429.
+
+Chen G, Faris P, Hemmelgarn B, Walker R, Quan H, (2009). Measuring agreement of administrative data with chart data using prevalence unadjusted and adjusted kappa. BMC Medical Research Methodology 9: 5. DOI: 10.1186/1471-2288-9-5.
 
 Cohen J (1960). A coefficient of agreement for nominal scales. Educational and Psychological Measurement 20: 37 - 46.
 
@@ -119,6 +121,9 @@ epi.kappa(dat.m01, method = "fleiss", alternative = "greater",
 ## this sample, that there is substantial agreement between the two
 ## laboratories.
 
+## The prevalence and bias corrected kappa statistic (PABAK) is 0.89
+## (95\% CI 0.82 to 0.94).
+
 
 ## EXAMPLE 2 (from Watson and Petrie 2010, page 1170):
 ## Silva et al. (2007) compared an early pregnancy enzyme-linked immunosorbent
@@ -136,12 +141,18 @@ dat.m02 <- matrix(c(596,61,29,987), nrow = 2, byrow = TRUE)
 colnames(dat.m02) <- c("US-pos","US-neg")
 rownames(dat.m02) <- c("ELISA-pos","ELISA-neg")
 
-epi.kappa(dat.m02, method = "watson", alternative = "greater", 
+dat.kap02 <- epi.kappa(dat.m02, method = "watson", alternative = "greater", 
    conf.level = 0.95)
+dat.kap02$kappa
 
 ## The proportion of agreements after chance has been excluded is 
 ## 0.89 (95\% CI 0.86 to 0.91). We conclude that that there is substantial 
 ## agreement between the two pregnancy diagnostic methods.
+
+dat.kap02$pabak
+
+## The prevalence and bias corrected kappa statistic (PABAK) is 0.89
+## (95\% CI 0.87 to 0.91).
 
 }
 

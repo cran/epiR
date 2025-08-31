@@ -20,5 +20,5 @@ zincrisk <- function(dat, conf.level){
     upp[x2] <- rep(1, sum(x2))
   
   rval <- data.frame(est = p, lower = low, upper = upp)
-  rval
+  return(rval)
 }

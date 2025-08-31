@@ -24,7 +24,7 @@
     # Turn cell frequencies into proportions:
     ndat <- dat / n
     
-    # Overall proportion of observed agreement, pO
+    # Overall proportion of observed agreement, pO:
     tmp <- zexact(dat = as.matrix(cbind(sum(diag(dat)), sum(dat))), conf.level = conf.level)
     pO.p <- as.numeric(tmp[,1])
     pO.l <- as.numeric(tmp[,2])
@@ -151,7 +151,7 @@
   
   
   # ================================================================
-  # Population adjusted, bias corrected kappa (after Byrt et al. 1993, added 010814):
+  # Population adjusted, bias corrected kappa (PABAK, after Byrt et al. 1993, added 010814):
   
   pabak.p <- 2 * pO.p - 1
   pabak.l <- 2 * pO.l - 1   

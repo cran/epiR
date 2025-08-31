@@ -14,6 +14,6 @@ zORwald <- function(dat, conf.level){
   wOR.low <- exp(lnwOR - (z * lnwOR.se))
   wOR.upp <- exp(lnwOR + (z * lnwOR.se))
 
-  c(est = wOR.p, se = wOR.se, low = wOR.low, upp = wOR.upp)
-  
+  rval <- c(est = wOR.p, se = wOR.se, low = wOR.low, upp = wOR.upp)
+  return(rval)
 }

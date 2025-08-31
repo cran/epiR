@@ -11,5 +11,6 @@ zRRtaylor <- function(dat, conf.level){
   lnRR.se <- sqrt(((1 - (a / N1)) / a) + ((1 - (c / N0)) / c)) 
   ll      <- exp(lnRR - (z * lnRR.se))
   ul      <- exp(lnRR + (z * lnRR.se))
-  c(RR.p, ll, ul)
+  rval <- c(RR.p, ll, ul)
+  return(rval)
 }

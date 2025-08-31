@@ -10,5 +10,6 @@ zARwald <- function(dat, conf.level, units){
   wARisk.se <- (sqrt(((a * (N1 - a))/N1^3) + ((c * (N0 - c))/N0^3)))
   ll <- (wARisk.p - (z * wARisk.se))
   ul <- (wARisk.p + (z * wARisk.se))
-  c(wARisk.p * units, ll * units, ul * units)
+  rval <- c(wARisk.p * units, ll * units, ul * units)
+  return(rval)
 }

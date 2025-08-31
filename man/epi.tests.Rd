@@ -27,7 +27,20 @@ epi.tests(dat, method = "exact", digits = 2, conf.level = 0.95)
   \item{\dots}{Ignored.}
 }
 
-\details{
+\details{The required 2 by 2 table format for \code{epi.tests} is shown below. Columns list outcome (e.g., true disease) status: counts of outcome positive study units in column 1 and outcome negative study units in column 2. Rows list test status: counts of test positive study units in row 1 and counts of test negative study units in row 2. The labels \code{a}, \code{b}, \code{c} and \code{d} in the table below correspond to the order of study units counts when argument \code{dat} is a vector.
+
+\tabular{llll}{
+-----------\tab ----------\tab ---------- \tab ----------\cr 
+ 		       \tab Outcome +	\tab Outcome -  \tab Total     \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr                  
+Test +  	 \tab a		      \tab b		      \tab a+b       \cr
+Test -     \tab c		      \tab d		      \tab c+d       \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr 
+Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
+-----------\tab ----------\tab ---------- \tab ----------\cr 
+   }
+
+
 When \code{method = "exact"} exact binomial confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Collett 1999 for details).
 
 When \code{method = "wilson"} Wilson's confidence limits are calculated for test sensitivity, specificity, and positive and negative predictive value (see Rothman 2012 for details).

@@ -13,5 +13,5 @@ zagresti <- function(dat, conf.level){
   upp <- p.ac + z.conf * (p.ac * q.ac)^0.5 * n.ac^-0.5
   
   rval <- data.frame(est = p.ac, lower = low, upper = upp)
-  rval
+  return(rval)
 }

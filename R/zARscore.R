@@ -38,5 +38,6 @@ zARscore <- function(dat, conf.level, units){
       niter = 51
     }
   }
-  c(sARisk.p * units, ll * units, ul * units)
+  rval <- c(sARisk.p * units, ll * units, ul * units)
+  return(rval)
 }

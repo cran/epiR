@@ -38,5 +38,6 @@ zORcfield <- function (dat, conf.level, interval = c(1e-08, 1e+08)){
       sum(sapply(max(0, a + c - N0):a, BiasedUrn::dFNCHypergeo, N1, N0, a + c, or)) - BiasedUrn::dFNCHypergeo(a, N1, N0, a + c, or)/2 - (1 - conf.level)/2
     }, interval = interval)$root
   }
-  c(cfOR.p, ll, ul)
+  rval <- c(cfOR.p, ll, ul)
+  return(rval)
 }

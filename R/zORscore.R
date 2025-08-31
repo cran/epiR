@@ -30,5 +30,6 @@ zORscore <- function(dat, conf.level){
     theta = px / (1 - px) / (py / (1 - py)) * 1.1
     ul = zlimit(x1, n1, x2, n2, conf.level, theta, 1)      
   }
-  c(scOR.p, ll,ul)  
+  rval <- c(scOR.p, ll,ul)  
+  return(rval)
 }

@@ -22,5 +22,5 @@ zexact <- function(dat, conf.level){
     upp[a2] <- rep(1, sum(a2))
   
   rval <- data.frame(est = p, lower = low, upper = upp)
-  rval
+  return(rval)
 }

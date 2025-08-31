@@ -189,14 +189,14 @@ With two stage cluster sampling herds (clusters, PSUs) are sampled first and the
 
 For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is expected to be relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the population level is 0.95. 
 
-How many PSUs (herds) need to be sampled if you want to be 95% certain of detecting at least one infected herd if that the between-herd prevalence of disease is greater than or equal to 0.005?
+How many PSUs (herds) need to be sampled if you want to be 95% certain of detecting at least one infected herd if the between-herd prevalence of disease is greater than or equal to 0.005?
 
 ```{r message = FALSE}
 rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.90)
 ```
 We need to sample a total of 656 herds. 
 
-How many animals (SSUs) need to be sampled from each herd (PSU) if you want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?
+How many animals (SSUs) need to be sampled from each herd (PSU) if we want to be 95% certain of detecting at least one infected animal if the within-herd prevalence of disease is greater than or equal to 0.05?
 
 ```{r message = FALSE}
 rsu.sssep.rs(N = NA, pstar = 0.05, se.p = 0.95, se.u = 0.90)
@@ -326,7 +326,7 @@ flextable(tab3.df) %>%
 
 *EXAMPLE 7*
 
-You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated system sensitivity of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is higher during the warmer months of the year (June to August). 
+You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated surveillance system sensitivity (SSe) of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is greater during the warmer months of the year (June to August). 
 
 Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is actually free of disease is 0.50.
 
@@ -404,16 +404,18 @@ flextable(tab4.df) %>%
 
 *EXAMPLE 8*
 
-You are working with a disease of cattle where the prevalence of disease is believed to vary according to herd type. The risk of disease is 5 times greater in dairy herds and 3 times greater in mixed herds compared with the reference category, beef herds. The distribution of dairy, mixed and beef herds in the population of interest is 0.10, 0.10 and 0.80, respectively. Assume you intend to distribute your sampling effort 0.4, 0.4 and 0.2 across dairy, mixed and beef herds, respectively.
+You are working with a disease of cattle where the prevalence of disease is believed to vary according to herd type. The risk of disease is 5 times greater in dairy herds and 3 times greater in mixed herds compared with the reference category, beef herds. The proportion of dairy, mixed and beef herds in the population of interest is 0.10, 0.10 and 0.80, respectively. Assume you intend to distribute your sampling effort 0.4, 0.4 and 0.2 across dairy, mixed and beef herds, respectively.
 
 Within each of the three risk groups a single test with a diagnostic sensitivity of 0.95 will be used. How many herds need to be sampled if you want to achieve 95% system sensitivity for a prevalence of disease in the population of greater than or equal to 1%?
 
 ```{r message = FALSE}
 # Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
-m <- rbind(1,1,1)
+m <- rbind(1,1,1); m
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
    spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = 0.95)
+
+# The design prevalence (pstar) is 0.01. The relative risks of disease (rr) for dairy, mixed and beef herds are 5, 3, and 1, respectively. The proportions of dairy, mixed and beef herds in the population (ppr) are 0.1, 0.1 and 0.8, respectively. You intend to allocate 0.4, 0.4 and 0.2 of your sampling effort (spr) to dairy, mixed and beef herds, respectively. All herds in each of the three risk groups receive the same test so object m is a one column, three row matrix comprised of 1s.
 ```
 A total of 147 herds need to be sampled: 59 dairy, 59 mixed and 29 beef herds.
 
@@ -421,10 +423,12 @@ Now assume that one of two tests will be used for each herd. The first test has 
 
 ```{r message = FALSE}
 # Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
-m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3))
+m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3)); m
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
    spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = c(0.92,0.80))
+
+# The design prevalence (pstar) is 0.01. The relative risks of disease (rr) for dairy, mixed and beef herds are 5, 3, and 1, respectively. The proportions of dairy, mixed and beef herds in the population (ppr) are 0.1, 0.1 and 0.8, respectively. You intend to allocate 0.4, 0.4 and 0.2 of your sampling effort (spr) to dairy, mixed and beef herds, respectively. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70. The proportion of dairy, mixed and beef herds receiving the second test is (1 - 0.80), (1 - 0.50) and (1 - 0.70) i.e., 0.20, 0.50 and 0.30, respectively. Object m is a three row, two column matrix listing these probabilities. The rows of object m must sum to one.
 ```
 
 A total of 159 herds need to be sampled: 64 dairy, 64 mixed and 31 beef herds.
@@ -443,15 +447,14 @@ A total of 147 units needs to be sampled to meet the requirements of the study: 
 
 *EXAMPLE 10*
 
-A cross-sectional study is to be carried out to confirm the absence of disease using risk based sampling. Assume a design prevalence of 0.02 at the cluster (herd) level and a design prevalence of  0.10 at the surveillance unit (individual animal) level. Clusters are categorised as being either high, medium or low risk with the probability of disease for clusters in the high and medium risk area 5 and 3 times the probability of disease in the low risk area. The proportions of clusters in the high, medium and low risk area are 0.10, 0.20 and 0.70, respectively. The proportion of samples from the high, medium and low risk area will be 0.40, 0.40 and 0.20, respectively. 
+A cross-sectional study is to be carried out to confirm the absence of disease using risk based sampling. Assume a design prevalence of 0.02 at the cluster (herd) level and a design prevalence of 0.10 at the surveillance unit (individual animal) level. Clusters are categorised as being either high, medium or low risk with the probability of disease for clusters in the high and medium risk area 5 and 3 times the probability of disease in the low risk area. The proportions of clusters in the high, medium and low risk area are 0.10, 0.20 and 0.70, respectively. The proportion of samples from the high, medium and low risk area will be 0.40, 0.40 and 0.20, respectively. 
 
 Surveillance units (individual animals) are categorised as being either high or low risk with the probability of disease for units in the high risk group 4 times the probability of disease in the low risk group. The proportions of units in the high and low risk groups are 0.10 and 0.90, respectively. All of your samples will be taken from units in the high risk group. 
 
 You intend to use a test with diagnostic sensitivity of 0.95 and you'd like to take sufficient samples to be 95% certain that you've detected disease at the population level, 95% certain that you've detected disease at the cluster level and 95% at the surveillance unit level. How many clusters and how many units need to be sampled to meet the requirements of the study?
 
 ```{r message = FALSE}
-rsu.sssep.rb2st2rf(
-   rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.40,0.20),
+rsu.sssep.rb2st2rf(rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.40,0.20),
    pstar.c = 0.02,
    rr.u = c(4,1), ppr.u = c(0.1, 0.9), spr.u = c(1,0),
    pstar.u = 0.10, 

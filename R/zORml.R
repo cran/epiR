@@ -5,5 +5,6 @@ zORml <- function(dat, conf.level){
   mOR.l <- as.numeric(mOR.tmp$conf.int)[1]
   mOR.u <- as.numeric(mOR.tmp$conf.int)[2]
   
-  c(mOR.p, mOR.l, mOR.u)
+  rval <- c(mOR.p, mOR.l, mOR.u)
+  return(rval)
 }  

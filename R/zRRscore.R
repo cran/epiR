@@ -148,5 +148,6 @@ zRRscore <- function(dat, conf.level){
     }
   }  
   
-  c(scRR.p, scRR.ll, scRR.ul)
+  rval <- c(scRR.p, scRR.ll, scRR.ul)
+  return(rval)
 }

@@ -1,3 +1,16 @@
+CHANGES IN epiR VERSION 2.0.86
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.2by2 updated to include Koopman confidence intervals for prevalence and incidence risk ratios.
+    [Suggested by Carol Lee]
+    
+    o Improvements to documentation for epi.kappa.
+    [Spotted by Ahmad Rabiee]
+    
+    o Updates and edits to each of the vignettes.
+    [Suggested by Mark Stevenson]
+    
+
 CHANGES IN epiR VERSION 2.0.85
 SIGNIFICANT USER-VISIBLE CHANGES
 

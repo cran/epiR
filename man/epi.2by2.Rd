@@ -79,7 +79,7 @@ An object of class \code{epi.2by2} comprised of:
 
 When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population are returned: 
 
-  \item{\code{RR}}{Wald, Taylor and score confidence intervals for the incidence risk ratios for each strata. Wald, Taylort and score confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
+  \item{\code{RR}}{Wald, Taylor, score and Koopman confidence intervals for the incidence risk ratios for each strata. Wald, Taylor, score and Koopman confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk (risk difference) for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
   \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
@@ -120,7 +120,7 @@ When method equals \code{case.control} the following measures of association and
 
 When method equals \code{cross.sectional} the following measures of association and effect are returned: 
 
-  \item{\code{PR}}{Wald, Taylor and score confidence intervals for the prevalence ratios for each strata. Wald, Taylor and score confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
+  \item{\code{PR}}{Wald, Taylor, score and Koopman confidence intervals for the prevalence ratios for each strata. Wald, Taylor, score and Koopman confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
   \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
   \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
@@ -149,7 +149,7 @@ Variable \code{phi.coef} equals the phi coefficient (Fleiss et al. 2003, Equatio
 
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 
-Interpretive statements for NNTB and NNTH follow the approach described by Altman (1998). See the examples for details. Note that number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) estimates are not computed when \code{method = "cohort.time"} or \code{method = "case.control"} because attributable risk can't be calculated using these study designs.
+Interpretive statements for NNTB and NNTH follow the approach described by Altman (1998). See the examples for details. Note that number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) estimates are not computed when \code{method = "cohort.time"} or \code{method = "case.control"} because the attributable risk can't be calculated using these study designs.
 }
 
 \references{
@@ -184,6 +184,8 @@ Juul S (2004). Epidemiologi og evidens. Munksgaard, Copenhagen.
 Kirkwood BR, Sterne JAC (2003). Essential Medical Statistics. Blackwell Science, Malden, MA, USA.
 
 Klingenberg B (2014). A new and improved confidence interval for the Mantel-Haenszel risk difference. Statistics in Medicine 33: 2968 - 2983.
+
+Koopman PAR (1984). Confidence intervals for the ratio of two binomial proportions. Biometrics 40: 513 - 517.
 
 Lancaster H (1961) Significance tests in discrete distributions. Journal of the American Statistical Association 56: 223 - 234.
 

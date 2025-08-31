@@ -9,5 +9,5 @@ zincrate <- function(dat, conf.level){
   low <- (qchisq(p = 1 - N., df = 2 * a) / 2) / n
   upp <- (qchisq(p = N., df = 2 * (a + 1)) / 2) / n
   rval <- data.frame(est = p, lower = low, upper = upp)
-  rval
+  return(rval)
 }

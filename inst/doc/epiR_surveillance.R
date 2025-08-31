@@ -231,25 +231,28 @@ flextable(tab4.df) %>%
 
 ## ----message = FALSE----------------------------------------------------------
 # Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
-m <- rbind(1,1,1)
+m <- rbind(1,1,1); m
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
    spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = 0.95)
 
+# The design prevalence (pstar) is 0.01. The relative risks of disease (rr) for dairy, mixed and beef herds are 5, 3, and 1, respectively. The proportions of dairy, mixed and beef herds in the population (ppr) are 0.1, 0.1 and 0.8, respectively. You intend to allocate 0.4, 0.4 and 0.2 of your sampling effort (spr) to dairy, mixed and beef herds, respectively. All herds in each of the three risk groups receive the same test so object m is a one column, three row matrix comprised of 1s.
+
 ## ----message = FALSE----------------------------------------------------------
 # Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
-m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3))
+m <- rbind(c(0.8,0.2), c(0.5,0.5), c(0.7,0.3)); m
 
 rsu.sssep.rbmrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.1,0.1,0.8),
    spr = c(0.4,0.4,0.2), spr.rg = m, se.p = 0.95, se.u = c(0.92,0.80))
+
+# The design prevalence (pstar) is 0.01. The relative risks of disease (rr) for dairy, mixed and beef herds are 5, 3, and 1, respectively. The proportions of dairy, mixed and beef herds in the population (ppr) are 0.1, 0.1 and 0.8, respectively. You intend to allocate 0.4, 0.4 and 0.2 of your sampling effort (spr) to dairy, mixed and beef herds, respectively. The proportion of dairy, mixed and beef herds receiving the first test is 0.80, 0.50 and 0.70. The proportion of dairy, mixed and beef herds receiving the second test is (1 - 0.80), (1 - 0.50) and (1 - 0.70) i.e., 0.20, 0.50 and 0.30, respectively. Object m is a three row, two column matrix listing these probabilities. The rows of object m must sum to one.
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rbsrg(pstar = 0.01, rr = c(5,3,1), ppr = c(0.10,0.10,0.80), 
    spr = c(0.50,0.30,0.20), se.p = 0.95, se.u = 0.90)
 
 ## ----message = FALSE----------------------------------------------------------
-rsu.sssep.rb2st2rf(
-   rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.40,0.20),
+rsu.sssep.rb2st2rf(rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.40,0.20),
    pstar.c = 0.02,
    rr.u = c(4,1), ppr.u = c(0.1, 0.9), spr.u = c(1,0),
    pstar.u = 0.10, 

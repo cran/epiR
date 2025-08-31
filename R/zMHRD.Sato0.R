@@ -17,6 +17,7 @@ zMHRD.Sato0 <- function(dat, conf.level = 0.95, units = units) {
     Sato0ARisk.p <- delta.Mid
     Sato0ARisk.l <- Sato0ARisk.p - ME
     Sato0ARisk.u <- Sato0ARisk.p + ME
-    c(Sato0ARisk.p * units, Sato0ARisk.l * units, Sato0ARisk.u * units)
+    rval <- c(Sato0ARisk.p * units, Sato0ARisk.l * units, Sato0ARisk.u * units)
   }
+  return(rval)
 }

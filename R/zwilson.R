@@ -24,5 +24,5 @@ zwilson <- function(dat, conf.level){
   se.wil <- sqrt(design * var.wil)
 
   rval <- data.frame(est = p, se = se.wil, lower = low, upper = upp)
-  rval
+  return(rval)
 }

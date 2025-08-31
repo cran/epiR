@@ -13,5 +13,6 @@ zRRwald <- function(dat, conf.level){
   
   wRR.low      <- exp(lnwRR - (z * lnwRR.se))
   wRR.upp      <- exp(lnwRR + (z * lnwRR.se))
-  c(est = wRR.p, se = wRR.se, low = wRR.low, upp = wRR.upp)
+  rval <- c(est = wRR.p, se = wRR.se, low = wRR.low, upp = wRR.upp)
+  return(rval)
 }

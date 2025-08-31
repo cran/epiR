@@ -19,5 +19,5 @@ zfleiss <- function(dat, N, design, conf.level){
   upp <- p + (t * se.fl)
   
   rval <- data.frame(est = p, se = se.fl, lower = low, upper = upp)
-  rval
+  return(rval)
 }

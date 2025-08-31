@@ -8,5 +8,5 @@ zjeffreys <- function(dat, conf.level){
   low <- stats::qbeta((1 - conf.level) / tails, a + 0.5, n - a + 0.5)
   upp <- stats::qbeta(1 - (1 - conf.level) / tails, a + 0.5, n - a + 0.5)
   rval <- data.frame(est = p, lower = low, upper = upp)
-  rval
+  return(rval)
 }

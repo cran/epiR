@@ -8,5 +8,5 @@ zclopperpearson <- function(dat, conf.level){
   low <- stats::qbeta((1 - conf.level) / tails, a, n - a + 1)
   upp <- stats::qbeta(1 - (1 - conf.level) / tails, a + 1, n - a)
   rval <- data.frame(est = p, lower = low, upper = upp)
-  rval
+  return(rval)
 }
