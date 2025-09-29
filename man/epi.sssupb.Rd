@@ -11,7 +11,8 @@ Sample size for a parallel superiority trial, binary outcome.
 }
 
 \usage{
-epi.sssupb(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha)
+epi.sssupb(treat, control, delta, n, power, r = 1, sided.test, 
+   nfractional = FALSE, alpha = 0.05)
 }
 
 \arguments{
@@ -21,6 +22,7 @@ epi.sssupb(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha)
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
+  \item{sided.test}{scalar, use a one- or two-sided test?}
   \item{nfractional}{logical, return fractional sample size.}
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -39,26 +41,31 @@ Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Ch
 
 Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics in Medicine 23: 1921 - 1986.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
+
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Pocock SJ (1983). Clinical Trials: A Practical Approach. Wiley, New York.
 
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero. 
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}.
 
 For a superiority trial the null hypothesis is:
 
-\eqn{H_{0}: P_{s} - P_{n} = 0} 
+\eqn{H_{0}: P_{n} - P_{s} \leq \delta} 
  
-The alternative hypothesis is:
+and the alternative hypothesis is:
 
-\eqn{H_{1}: P_{s} - P_{n} != 0}
+\eqn{H_{1}: P_{n} - P_{s} > \delta}
 
-When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+If the alternative hypothesis is accepted we conclude that \eqn{P_{n}} does not equal \eqn{P_{s}}. Regulatory agencies and most clinical trial guidelines recommend two-sided tests for superiority trials.
 
-For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
-}
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+
+Refer to the documentation for \code{\link{epi.ssequb}} for a comparison of the key features of superiority, equivalence and non-inferiority trials.}
 
 \examples{
 ## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 91):
@@ -76,7 +83,7 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## margin is 5\%.
 
 epi.sssupb(treat = 0.85, control = 0.65, delta = 0.05, n = NA, 
-   power = 0.80, r = 1, nfractional = FALSE, alpha = 0.05)
+   power = 0.80, r = 1, sided.test = 1, nfractional = FALSE, alpha = 0.05)
 
 ## A total of 196 subjects need to be enrolled in the trial, 98 in the 
 ## treatment group and 98 in the control group.

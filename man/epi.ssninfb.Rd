@@ -11,7 +11,8 @@ Sample size for a non-inferiority trial, binary outcome.
 }
 
 \usage{
-epi.ssninfb(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha)
+epi.ssninfb(treat, control, delta, n, power, r = 1, nfractional = FALSE, 
+   alpha = 0.05)
 }
 
 \arguments{
@@ -45,6 +46,8 @@ Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Scott IA (2009). Non-inferiority trials: determining whether alternative treatments are good enough. Medical Journal of Australia 190: 326 - 330.
 
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
@@ -57,22 +60,24 @@ Many thanks to Aniko Szabo (Medical College of Wisconsin, Wisconsin USA) for imp
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. For a non-inferiority trial the value entered for \code{delta} must be greater than or equal to zero.
+The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial; (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer; (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer; and (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+      
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}.
 
 For a non-inferiority trial the null hypothesis is:
 
-\eqn{H_{0}: P_{s} - P_{n} \ge \delta} 
+\eqn{H_{0}: P_{n} - P_{s} \leq -\delta}
+                                 
+and the alternative hypothesis is:
+
+\eqn{H_{1}: P_{n} - P_{s} > -\delta}
  
-The alternative hypothesis is:
+If the alternative hypothesis is accepted we conclude that \eqn{P_{n}} is not inferior to \eqn{P_{s}}. For a non-inferiority trial a one-sided test is used.
 
-\eqn{H_{1}: P_{s} - P_{n} < \delta}
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
 
-The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial; (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer; (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer; and (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+Refer to the documentation for \code{\link{epi.ssequb}} for a comparison of the key features of superiority, equivalence and non-inferiority trials.}
 
-When calculating the power of a study, note that the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
-
-For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
-}
 
 \examples{
 ## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 90):

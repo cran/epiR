@@ -11,8 +11,8 @@ Sample size for a parallel superiority trial, continuous outcome.
 }
 
 \usage{
-epi.sssupc(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE, 
-   alpha)
+epi.sssupc(treat, control, sigma, delta, n, power, r = 1, sided.test, 
+   nfractional = FALSE, alpha = 0.05)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ epi.sssupc(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE,
   \item{n}{scalar, the total number of study subjects in the trial.}
   \item{power}{scalar, the required study power.}
   \item{r}{scalar, the number in the treatment group divided by the number in the control group.}
+  \item{sided.test}{scalar, use a one- or two-sided test?}
   \item{nfractional}{logical, return fractional sample size.}  
   \item{alpha}{scalar, defining the desired alpha level.}
 }
@@ -41,25 +42,31 @@ Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Ch
 
 Julious SA (2004). Sample sizes for clinical trials with normal data. Statistics in Medicine 23: 1921 - 1986.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
+
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Pocock SJ (1983). Clinical Trials: A Practical Approach. Wiley, New York.
 
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero.
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). The mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for the new treatment group is \eqn{N_{n}}.
 
 For a superiority trial the null hypothesis is:
 
-\eqn{H_{0}: N_{s} - N_{n} = 0} 
+\eqn{H_{0}: N_{n} - N_{s} \leq \delta} 
  
-The alternative hypothesis is:
+and the alternative hypothesis is:
 
-\eqn{H_{1}: N_{s} - N_{n} != 0}
+\eqn{H_{1}: N_{n} - N_{s} > \delta}
 
-When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+If the alternative hypothesis is accepted we conclude that \eqn{N_{n}} does not equal \eqn{N_{s}}. Regulatory agencies and most clinical trial guidelines recommend two-sided tests for superiority trials.
 
-For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.}
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+
+Refer to the documentation for \code{\link{epi.ssequb}} for a comparison of the key features of superiority, equivalence and non-inferiority trials.}
 
 \examples{
 ## EXAMPLE 1:
@@ -79,7 +86,7 @@ For a comparison of the key features of superiority, equivalence and non-inferio
 ## HDL concentration in the control group is 20 units.
 
 epi.sssupc(treat = 20, control = 20, sigma = 10, delta = 5, n = NA, 
-   power = 0.80, r = 1, nfractional = FALSE, alpha = 0.05)
+   power = 0.80, r = 1, sided.test = 1, nfractional = FALSE, alpha = 0.05)
 
 ## A total of 100 subjects need to be enrolled in the trial, 50 in the 
 ## treatment group and 50 in the control group.

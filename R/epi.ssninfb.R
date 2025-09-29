@@ -1,10 +1,11 @@
-epi.ssninfb <- function(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha){
+epi.ssninfb <- function(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha = 0.05){
 
    # Stop if a negative value for delta entered:
    if (delta < 0){
       stop("For a non-inferiority trial delta must be greater than or equal to zero.")
    }
    
+  # One-tailed test:
    z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
 
    if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
@@ -72,3 +73,9 @@ epi.ssninfb <- function(treat, control, delta, n, power, r = 1, nfractional = FA
    }
    rval
 }  
+
+# epi.ssninfb(treat = 0.65, control = 0.65, delta = 0.05, n = NA, power = 0.90, r = 1, nfraction = FALSE, alpha = 0.05)
+
+# n.treat = 1559, n.control = 1559, n.total = 3118
+
+# Agrees with https://www.sealedenvelope.com/power/binary-noninferior/

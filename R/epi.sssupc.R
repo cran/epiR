@@ -1,12 +1,19 @@
-epi.sssupc <- function(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE, alpha){
+epi.sssupc <- function(treat, control, sigma, delta, n, power, r = 1, sided.test, nfractional = FALSE, alpha = 0.05){
   
   # Stop if a negative value for delta entered:
   if (delta < 0){
     stop("For a superiority trial delta must be greater than or equal to zero.")
   }
   
-  z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
-
+  # Check the value of sided.test:
+  if (!(sided.test %in% c(1, 2))){
+    stop("The number of sides of the test must be either 1 or 2.")
+  }
+  
+  # One or two sided test? Regulatory agencies and most clinical trial guidelines recommend two-sided tests for superiority trials.
+  
+  z.alpha <- ifelse(sided.test == 1, qnorm(1 - alpha, mean = 0, sd = 1), qnorm(1 - alpha / 2, mean = 0, sd = 1))
+  
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
     beta <- (1 - power) 
     z.beta <- qnorm(1 - beta, mean = 0, sd = 1)
@@ -51,11 +58,8 @@ epi.sssupc <- function(treat, control, sigma, delta, n, power, r = 1, nfractiona
   rval
 }   
 
-# A superiority trial is one where you want to demonstrate that one treatment or intervention is better than another (or better than no treatment/intervention). An equivalence trial is where you want to demonstrate that a new treatment is no better or worse than an existing treatment and non-inferiority is to show that a new treatment is not worse than an existing treatment.
+# epi.sssupc(treat = 110, control = 140, sigma = 50, delta = 0, n = NA, power = 0.90, r = 1, sided.test = 2, nfractional = FALSE, alpha = 0.05)
 
-# epi.supc(treat = 5, control = 5, sigma = 20, delta = 5, n = NA, r = 1, power = 0.80, alpha = 0.05)
+# n.treat = 59, n.control = 59, n.total = 118
 
-# 264 patients are required to have a 90% chance of detecting, as significant at the 5% level, an increase in the primary outcome measure from 40 in the control group to 50 in the experimental group.
-
-# Reference: Pocock SJ. Clinical Trials: A Practical Approach. Wiley; 1983.
-# Julious SA. Sample sizes for clinical trials with Normal data. Statist. Med. 2004; 23:1921-1986.
+# Agrees with https://www.sealedenvelope.com/power/continuous-superiority/

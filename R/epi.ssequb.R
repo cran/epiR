@@ -1,10 +1,11 @@
-epi.ssequb <- function(treat, control, delta, n, power, r = 1, type = "equivalence", nfractional = FALSE, alpha){
+epi.ssequb <- function(treat, control, delta, n, power, r = 1, type = "equivalence", nfractional = FALSE, alpha = 0.05){
   
   if(type == "equality"){
     
     # Sample size:
     if (!is.na(treat) & !is.na(control) & !is.na(power) & is.na(n)){
     
+      # Two-tailed test:
       z.alpha <- qnorm(1 - alpha / 2, mean = 0, sd = 1)
       beta <- (1 - power)
       z.beta <- qnorm(1 - beta, mean = 0, sd = 1)
@@ -56,6 +57,9 @@ epi.ssequb <- function(treat, control, delta, n, power, r = 1, type = "equivalen
     rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power)
     
   }
+  
+  
+  # The equivalence case uses the two one-sided tests (TOST) approach, which is standard for equivalence trials. 
   
   if(type == "equivalence"){
 
@@ -141,14 +145,8 @@ epi.ssequb <- function(treat, control, delta, n, power, r = 1, type = "equivalen
   return(rval)
 }  
 
-# Chow S, Shao J, Wang H. 2008. Sample Size Calculations in Clinical Research. 2nd Ed. Chapman & Hall/CRC Biostatistics Series. page 89
+# epi.ssequb(treat = 0.85, control = 0.65, delta = 0, n = NA, power = 0.80, r = 1, type = "equivalence", nfraction = FALSE, alpha = 0.05)
 
-# epi.equivb(treat = 0.65, control = 0.85, delta = 0.05, n = NA, power = 0.80, r = 1, alpha = 0.05)
-# n.treat = 136, n.control = 136, n.total = 272
-# Agrees with http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equivalence
+# n.treat = 1970, n.control = 1970, n.total = 3940
 
-# epi.equivb(treat = 0.65, control = 0.85, delta = 0.05, n = NA, power = 0.80, r = 1, alpha = 0.05)
-# n.treat = 136, n.control = 136, n.total = 272
 # Agrees with https://www.sealedenvelope.com/power/binary-equivalence/
-
-# epi.equivb(treat = 0.65, control = 0.85, delta = 0.05, n = 200, power = NA, r = 1, alpha = 0.05)

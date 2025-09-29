@@ -1,4 +1,4 @@
-epi.ssequc <- function(treat, control, sigma, delta, n, power, r = 1, type = "equivalence", nfractional = FALSE, alpha){
+epi.ssequc <- function(treat, control, sigma, delta, n, power, r = 1, type = "equivalence", nfractional = FALSE, alpha = 0.05){
 
   if(type == "equality"){
     
@@ -98,12 +98,8 @@ epi.ssequc <- function(treat, control, sigma, delta, n, power, r = 1, type = "eq
   return(rval)
 }
     
-# Chow S, Shao J, Wang H. 2008. Sample Size Calculations in Clinical Research. 2nd Ed. Chapman & Hall/CRC Biostatistics Series. page 62
+# epi.ssequc(treat = 5, control = 5, sigma = 10, delta = 5, n = NA, power = 0.90, r = 1, type = "equivalence", nfractional = FALSE, alpha = 0.05)
 
-# epi.ssequc(treat = 5, control = 4, sigma = 10, delta = 5, n = NA, power = 0.80, r = 1, nfractional = FALSE, alpha = 0.05)
-# n.treat = 108, n.control = 108, n.total = 216
-# Agrees with http://powerandsamplesize.com/Calculators/Compare-2-Means/2-Sample-Equivalence
+# n.treat = 88, n.control = 88, n.total = 176
 
-# epi.ssequc(treat = 5, control = 4, sigma = 10, delta = 5, n = NA, power = 0.80, r = 2, nfractional = TRUE, alpha = 0.05)
-# n.treat = 162, n.control = 81, n.total = 243
-# Agrees with http://powerandsamplesize.com/Calculators/Compare-2-Means/2-Sample-Equivalence
+# Agrees with https://www.sealedenvelope.com/power/continuous-equivalence/

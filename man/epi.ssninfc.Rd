@@ -12,7 +12,7 @@ Sample size for a non-inferiority trial, continuous outcome.
 
 \usage{
 epi.ssninfc(treat, control, sigma, delta, n, power, r = 1, nfractional = FALSE, 
-   alpha)
+   alpha = 0.05)
 }
 
 \arguments{
@@ -47,6 +47,8 @@ Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Scott IA (2009). Non-inferiority trials: determining whether alternative treatments are good enough. Medical Journal of Australia 190: 326 - 330.
 
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
@@ -59,22 +61,23 @@ Many thanks to Aniko Szabo (Medical College of Wisconsin, Wisconsin USA) for imp
 }
 
 \note{
+The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial; (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer; (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer; and (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+
 Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}. For a non-inferiority trial the value entered for \code{delta} must be greater than or equal to zero.
 
 For a non-inferiority trial the null hypothesis is:
 
-\eqn{H_{0}: N_{s} - N_{n} \ge \delta} 
- 
-The alternative hypothesis is:
+\eqn{H_{0}: N_{n} - N_{s} \leq -\delta}
+                                 
+and the alternative hypothesis is:
 
-\eqn{H_{1}: N_{s} - N_{n} < \delta}
+\eqn{H_{1}: N_{n} - N_{s} > -\delta}
 
-The aim of a non-inferiority trial is show that a new treatment is not (much) inferior to a standard treatment. Showing non-inferiority can be of interest because: (a) it is often not ethically possible to do a placebo-controlled trial; (b) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is safer; (c) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints, but is cheaper to produce or easier to administer; and (d) the new treatment is not expected to be better than the standard treatment on primary efficacy endpoints in clinical trial, but compliance will be better outside the clinical trial and hence efficacy better outside the trial.
+If the alternative hypothesis is accepted we conclude that \eqn{N_{n}} is not inferior to \eqn{N_{s}}. For a non-inferiority trial a one-sided test is used.
 
-When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
 
-For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
-}
+Refer to the documentation for \code{\link{epi.ssequb}} for a comparison of the key features of superiority, equivalence and non-inferiority trials.}
 
 \examples{
 ## EXAMPLE 1 (from Chow S, Shao J, Wang H 2008, p. 61 - 62):

@@ -16,7 +16,7 @@ epi.prcc(dat, sided.test = 2, conf.level = 0.95)
 
 \arguments{
   \item{dat}{a data frame comprised of \code{K + 1} columns and \code{N} rows, where \code{K} represents the number of model parameters being evaluated and \code{N} represents the number of replications of the model. The last column of the data frame (i.e., column \code{K + 1}) provides the model output.}
-  \item{sided.test}{use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the partial rank correlation coefficient is greater than or less than zero. Use a one-sided test to evaluate whether or not the partial rank correlation coefficient is greater than zero.}
+  \item{sided.test}{scalar, use a one- or two-sided test? Use a two-sided test if you wish to evaluate whether or not the partial rank correlation coefficient is greater than or less than zero. Use a one-sided test to evaluate whether or not the partial rank correlation coefficient is greater than zero.}
   \item{conf.level}{magnitude of the returned confidence intervals. Must be a single number between 0 and 1.}  
 }
 

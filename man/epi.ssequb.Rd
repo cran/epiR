@@ -12,7 +12,7 @@ Sample size for a parallel equivalence or equality trial, binary outcome.
 
 \usage{
 epi.ssequb(treat, control, delta, n, power, r = 1, type = "equivalence", 
-   nfractional = FALSE, alpha)
+   nfractional = FALSE, alpha = 0.05)
 }
 
 \arguments{
@@ -37,7 +37,7 @@ A list containing the following:
 }
 
 \references{
-Bennett J, Dismukes W, Duma R, Medoff G, Sande M, Gallis H, Leonard J, Fields B, Bradshaw M, Haywood H, McGee Z, Cate T, Cobbs C, Warner J, Alling D (1979). A comparison of amphotericin B alone and combined with flucytosine in the treatment of cryptoccal meningitis. New England Journal of Medicine 301, 126 - 131. DOI: 10.1056/NEJM197907193010303.
+Bennett J, Dismukes W, Duma R, Medoff G, Sande M, Gallis H, Leonard J, Fields B, Bradshaw M, Haywood H, McGee Z, Cate T, Cobbs C, Warner J, Alling D (1979). A comparison of amphotericin B alone and combined with flucytosine in the treatment of cryptoccal meningitis. New England Journal of Medicine 301, 126 - 131. DOI: 10.1056/nejm197907193010303.
 
 Chow S, Shao J, Wang H (2008). Sample Size Calculations in Clinical Research. Chapman & Hall/CRC Biostatistics Series, pp. 91.
 
@@ -49,53 +49,59 @@ Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
 }
 
 \note{
-A summary of the key features of superiority, equivalence and non-superiority trial comparisons is shown in the following table (adapted from Campbell et al., 2018 [page 170] and Wang et al., 2017):
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}.
 
-\tabular{lllll}{
---------------- \tab ------------------------- \tab ------------------------ \tab ---------------------- \tab ---------------------- \cr
-Test for        \tab Null hypothesis           \tab Alt hypothesis           \tab Type I error           \tab Type II error          \cr
---------------- \tab ------------------------- \tab ------------------------ \tab ---------------------- \tab ---------------------- \cr
-Superiority     \tab H0:  Ps - Pn  == 0        \tab H1:  Ps - Pn  != 0       \tab 2 sided, 0.050         \tab 1 sided, 0.10 or 0.20  \cr
-Equivalence     \tab H0: |Ps - Pn| >= delta    \tab H1: |Ps - Pn| < delta    \tab 2 sided, 0.050         \tab 2 sided, 0.10 or 0.20  \cr
-Non-inferiority \tab H0:  Ps - Pn  >= delta    \tab H1:  Ps - Pn  < delta    \tab 1 sided, 0.050         \tab 1 sided, 0.10 or 0.20  \cr
---------------- \tab ------------------------- \tab ------------------------ \tab ---------------------- \tab ---------------------- \cr
-}
+For an equivalence trial the null hypothesis is:
 
-With a superiority trial the aim is to estimate \eqn{Ps - Pn} with a view to claiming a difference between groups.
+\eqn{H_{0}: P_{n} - P_{s} \leq -\delta}
 
-With an equivalence trial the aim is not to estimate \eqn{Ps - Pn} but to judge if it is within the margins defined by \code{delta}.
-
-With a non-inferiority trial the aim is not to estimate \eqn{Ps - Pn} but to judge if it is within the margins defined by \code{delta}.
-
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). A proportion of subjects in the standard treatment group experience the outcome of interest \eqn{P_{s}} and a proportion of subjects in the new treatment group experience the outcome of interest \eqn{P_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{P_{n}} and \eqn{P_{s}} as \eqn{\delta}. 
-
-In an equality trial we test the hypothesis that the means of two (treatment, control) groups are different. For an equality trial the null hypothesis is:
-
-\eqn{H_{0}: |P_{s} - P_{n}| = 0} 
- 
+\eqn{H_{0}: P_{n} - P_{s} \geq +\delta}
+                                 
 and the alternative hypothesis is:
 
-\eqn{H_{1}: |P_{s} - P_{n}| \neq 0}
+\eqn{H_{1}: P_{n} - P_{s} > -\delta}
 
-In an equivalence trial we test the hypothesis that the means of two (treatment, control) groups are not too different, where clinical criteria are used to define 'not too different' (\code{delta}). For an equivalence trial the null hypothesis is:
+\eqn{H_{1}: P_{n} - P_{s} < +\delta}
 
-\eqn{H_{0}: |P_{s} - P_{n}| \ge \delta} 
- 
-The alternative hypothesis is:
+If the alternative hypothesis is accepted we conclude that \eqn{P_{n}} is therapeutically equivalent to \eqn{P_{s}}. For an equivalence trial a two-sided test is used.
 
-\eqn{H_{1}: |P_{s} - P_{n}| < \delta}
+For an equality trial the null hypothesis is:
 
-An equality trial is used when you want to confirm that the numeric value of the outcome for treatment and control groups differ. An equivalence trial is used when you want to prove that the clinical outcome for treatment and control groups are the same. For a superiority trial the value entered for \code{delta} must be greater than or equal to zero. Note that when:
+\eqn{H_{0}: P_{n} - P_{s} = 0}
+
+and the alternative hypothesis is:
+
+\eqn{H_{1}: P_{n} - P_{s} \neq 0}
+
+If the alternative hypothesis is accepted we conclude that \eqn{P_{n}} differs from \eqn{P_{s}}. For an equality trial a two-sided test is used.
+
+Note that when:
 
 \deqn{sign(P_n - P_s - \delta) \neq sign(z_{1-\alpha} + z_{1-\beta})}
 
 there is no solution for study power. For typical values of \eqn{\alpha} and \eqn{\beta} this would occur if \eqn{P_{n} - P_{s} - \delta < 0}. That is, when the targeted alternative is within the null hypothesis. The function issues a warning if these conditions are met.
 
-When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+
+A summary of the key features of superiority, equivalence and non-superiority trial comparisons is shown in the following table (adapted from Machin et al., 2018 [page 170] and Wang et al., 2017):
+
+\tabular{llll}{
+-------------------------------- \tab -------------------------------- \tab -------------------------------- \tab -------------------------------- \cr
+Test for                         \tab Null hypothesis \tab Alternative hypothesis \tab Test \cr
+-------------------------------- \tab -------------------------------- \tab -------------------------------- \tab -------------------------------- \cr
+Superiority                      \tab \eqn{H_{0}: P_{n} - P_{s} \leq \delta} \tab \eqn{H_{1}: P_{n} - P_{s} > \delta} \tab 1-sided or 2-sided \cr
+Equivalence                      \tab \eqn{H_{0}: P_{n} - P_{s} \leq -\delta} \tab \eqn{H_{1}: P_{n} - P_{s} > -\delta} \tab Two 1-sided tests \cr
+                                 \tab \eqn{H_{0}: P_{n} - P_{s} \geq +\delta} \tab \eqn{H_{1}: P_{n} - P_{s} < +\delta} \tab \cr
+Equality                         \tab \eqn{H_{0}: P_{n} - P_{s} == 0} \tab \eqn{H_{1}: P_{n} - P_{s} \neq 0} \tab 2-sided \cr
+Non-inferiority                  \tab \eqn{H_{0}: P_{n} - P_{s} \leq -\delta} \tab \eqn{H_{1}: P_{n} - P_{s} > -\delta} \tab 1-sided \cr
+-------------------------------- \tab -------------------------------- \tab -------------------------------- \tab -------------------------------- \cr
+}
 }
 
 \examples{

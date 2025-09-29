@@ -1,12 +1,18 @@
-epi.sssupb <- function(treat, control, delta, n, power, r = 1, nfractional = FALSE, alpha){
+epi.sssupb <- function(treat, control, delta, n, power, r = 1, sided.test, nfractional = FALSE, alpha = 0.05){
 
   # Stop if a negative value for delta entered:
   if (delta < 0){
     stop("For a superiority trial delta must be greater than or equal to zero.")
   }
   
-  z.alpha <- qnorm(1 - alpha, mean = 0, sd = 1)
-     
+  # Check the value of sided.test:
+  if (!(sided.test %in% c(1, 2))){
+    stop("The number of sides of the test must be either 1 or 2.")
+  }
+  
+  # One or two sided test? Regulatory agencies and most clinical trial guidelines recommend two-sided tests for superiority trials.
+  z.alpha <- ifelse(sided.test == 1, qnorm(1 - alpha, mean = 0, sd = 1), qnorm(1 - alpha / 2, mean = 0, sd = 1))
+  
   if (!is.na(treat) & !is.na(control) & !is.na(delta) & !is.na(power) & is.na(n)) {
     beta <- 1 - power
     z.beta <- qnorm(1 - beta, mean = 0, sd = 1)
@@ -51,7 +57,9 @@ epi.sssupb <- function(treat, control, delta, n, power, r = 1, nfractional = FAL
   rval
 }  
 
-# epi.supb(treat = 0.85, control = 0.65, delta = -0.10, n = NA, r = 1, power = 0.80, alpha = 0.05)
-# 1032 patients are required to have a 90% chance of detecting, as significant at the 5% level, an increase in the primary outcome measure from 50% in the control group to 60% in the experimental group.
+# epi.sssupb(treat = 0.60, control = 0.50, delta = 0.2, n = NA, power = 0.90, r = 1, sided.test = 1, nfractional = FALSE, alpha = 0.05)
 
-# Reference: Pocock SJ. Clinical Trials: A Practical Approach. Wiley; 1983.
+# n.treat = 515, n.control = 515, n.total = 1030
+
+# Agrees with https://www.sealedenvelope.com/power/binary-superiority/
+# Agrees with https://riskcalc.org/samplesize/

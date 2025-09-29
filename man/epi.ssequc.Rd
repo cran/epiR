@@ -12,7 +12,7 @@ Sample size for a parallel equivalence or equality trial, continuous outcome.
 
 \usage{
 epi.ssequc(treat, control, sigma, delta, n, power, r = 1, type = "equivalence", 
-   nfractional = FALSE, alpha)
+   nfractional = FALSE, alpha = 0.05)
 }
 
 \arguments{
@@ -50,29 +50,37 @@ Julious SA (2009). Estimating Samples Sizes in Clinical Trials. CRC, New York.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2009). Sample Size Tables for Clinical Studies. Wiley Blackwell, New York.
 
+Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory and Epidemiology Studies. Wiley Blackwell, New York.
+
 Wang B, Wang H, Tu X, Feng C (2017). Comparisons of superiority, non-inferiority, and equivalence trials. Shanghai Archives of Psychiatry 29, 385 - 388. DOI: 10.11919/j.issn.1002-0829.217163.
 }
 
 \note{
-Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). In each group, the mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for subjects receiving the new treatment is \eqn{N_{n}}. We specify the absolute value of the maximum acceptable difference between \eqn{N_{n}} and \eqn{N_{s}} as \eqn{\delta}.
+Consider a clinical trial comparing two groups, a standard treatment (\eqn{s}) and a new treatment (\eqn{n}). The mean of the outcome of interest for subjects receiving the standard treatment is \eqn{N_{s}} and the mean of the outcome of interest for the new treatment group is \eqn{N_{n}}.
 
-In an equality trial we test the hypothesis that the means of two (treatment, control) groups are different. For an equality trial the null hypothesis is:
+For an equivalence trial the null hypothesis is:
 
-\eqn{H_{0}: |N_{s} - N_{n}| = 0} 
- 
+\eqn{H_{0}: N_{n} - N_{s} \leq -\delta}
+
+\eqn{H_{0}: N_{n} - N_{s} \geq +\delta}
+                                 
 and the alternative hypothesis is:
 
-\eqn{H_{1}: |N_{s} - N_{n}| \neq 0}
+\eqn{H_{1}: N_{n} - N_{s} > -\delta}
 
-In an equivalence trial we test the hypothesis that the means of two (treatment, control) groups are not too different, where clinical criteria are used to define 'not too different' (\code{delta}). For an equivalence trial the null hypothesis is:
+\eqn{H_{1}: N_{n} - N_{s} < +\delta}
 
-\eqn{H_{0}: |N_{s} - N_{n}| \ge \delta} 
- 
-The alternative hypothesis is:
+If the alternative hypothesis is accepted we conclude that \eqn{N_{n}} is therapeutically equivalent to \eqn{N_{s}}. For an equivalence trial a two-sided test is used.
 
-\eqn{H_{1}: |N_{s} - N_{n}| < \delta}
+For an equality trial the null hypothesis is:
 
-An equality trial is used when you want to confirm that the numeric value of the outcome for treatment and control groups differ. An equivalence trial is used when you want to prove that the clinical outcome for treatment and control groups are the same. In bioequivalence trials, a 90\% confidence interval is often used. The value of the maximum acceptable difference \eqn{\delta} is chosen so that a patient will not detect any change in effect when replacing the standard treatment with the new treatment.
+\eqn{H_{0}: N_{n} - N_{s} = 0}
+
+and the alternative hypothesis is:
+
+\eqn{H_{1}: N_{n} - N_{s} \neq 0}
+
+If the alternative hypothesis is accepted we conclude that \eqn{N_{n}} differs from \eqn{N_{s}}. For an equality trial a two-sided test is used.
 
 Note that when:
 
@@ -80,10 +88,9 @@ Note that when:
 
 there is no solution for study power. For typical values of \eqn{\alpha} and \eqn{\beta} this would occur if \eqn{P_{n} - P_{s} - \delta < 0}. That is, when the targeted alternative is within the null hypothesis. The function issues a warning if these conditions are met.
 
-When calculating the power of a study, the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
+When calculating study power the argument \code{n} refers to the total study size (that is, the number of subjects in the treatment group plus the number in the control group).
 
-For a comparison of the key features of superiority, equivalence and non-inferiority trials, refer to the documentation for \code{\link{epi.ssequb}}.
-}
+Refer to the documentation for \code{\link{epi.ssequb}} for a comparison of the key features of superiority, equivalence and non-inferiority trials.}
 
 \examples{
 ## EXAMPLE 1 (from Machin, Campbell, Tan and Tan 2009 p. 113):
