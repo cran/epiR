@@ -10,7 +10,7 @@ Compute the post-test probability of an outcome given diagnostic test sensitivit
 
 \usage{
 epi.nomogram(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA, 
-   conf = 0.95, method = "exact", verbose = FALSE, credible.int = 0.95, 
+   tconf.int = 0.95, method = "exact", verbose = FALSE, cred.int = 0.95, 
    nsim = 999)
 }
 
@@ -20,11 +20,11 @@ epi.nomogram(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
   \item{sp}{diagnostic test specificity (0 - 1). Either a vector of length one listing the point estimate of the diagnostic test specificity or a vector of length three listing (in order) the point estimate, the lower bound of the confidence interval and the upper bound of the confidence interval of the diagnostic test specificity.}
   \item{lratio.pos}{positive likelihood ratio. A vector of length one. Ignored if \code{se} and \code{sp} are not null.}
   \item{lratio.neg}{negative likelihood ratio. A vector of length one. Ignored if \code{se} and \code{sp} are not null.}
-  \item{conf}{scalar, the magnitude of the confidence interval for the listed diagnostic test performance measures (\code{se} and \code{sp}).}
+  \item{tconf.int}{scalar, the magnitude of the confidence interval for the listed diagnostic test performance measures (\code{se} and \code{sp}).}
   \item{method}{a character string indicating the method used to calculate the confidence intervals for \code{se} and \code{sp}. Options are \code{method = "exact"}, \code{method = "wilson"}, \code{method = "agresti"}, \code{method = "clopper-pearson"} and \code{method = "jeffreys"}.}
   \item{verbose}{logical, indicating whether detailed or summary results are to be returned.}
-  \item{credible.int}{magnitude of the returned credible interval for post-test probability. Must be a single number between 0 and 1.}
-  \item{nsim}{scalar, defining the number of simulations to be used for the post-test probability confidence interval calculations.}
+  \item{cred.int}{magnitude of the returned credible interval for post-test probability. Must be a single number between 0 and 1.}
+  \item{nsim}{scalar, defining the number of simulations to be used for the post-test probability credible interval calculations.}
 }
 
 \details{
@@ -67,8 +67,8 @@ Mossman D, Berger J (2001) Intervals for posttest probabilities: A comparison of
 ## What is the post-test probability that this dog is hypothyroid?
 
 epi.nomogram(pretest.ppos = 0.05, se = 0.890, sp = 0.850, 
-   lratio.pos = NA, lratio.neg = NA, conf = NA, method = "exact", 
-   verbose = FALSE, credible.int = 0.95, nsim = 999)
+   lratio.pos = NA, lratio.neg = NA, tconf.int = NA, method = "exact", 
+   verbose = FALSE, cred.int = 0.95, nsim = 999)
 
 ## Given the reference range of 19.0 to 58.0 nmol/L and a test result of 
 ## 22.0 nmol/L we declare this a negative test result.
@@ -88,7 +88,7 @@ epi.nomogram(pretest.ppos = 0.05, se = 0.890, sp = 0.850,
 
 epi.nomogram(pretest.ppos = 0.75, se = c(0.980,0.894,0.999), 
    sp = c(0.980,0.893,0.999), lratio.pos = NA, lratio.neg = NA, 
-   conf = 0.95, method = "exact", verbose = FALSE, credible.int = 0.95, 
+   tconf.int = 0.95, method = "exact", verbose = FALSE, cred.int = 0.95, 
    nsim = 999)
    
 ## If the pre-test probability of being FHL positive is 0.75 and the test 

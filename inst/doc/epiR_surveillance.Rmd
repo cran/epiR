@@ -15,13 +15,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 
 ---
-```{=html}
-<h1 style='text-align:center;'>
-  Surveillance System Assessment using 
-  <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/>
-</h1>
-```
-
 ```{r, echo = FALSE, message = FALSE}
 
 # If you want to create a PDF document paste the following after line 9 above:
@@ -47,7 +40,7 @@ The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id161113
 
 ## Definitions
 
-**Design prevalence**. The design prevalence (also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence, $P^{*}$, [P star]) is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
+**Design prevalence**. The design prevalence --- also known as the minimum detectable prevalence, maximum acceptable or permissible prevalence, and minimum expected prevalence, $P^{*}$, (P star) --- is a fixed value for prevalence used for testing the hypothesis that disease is present in a population of interest. The null hypothesis is that disease is present in the population at a prevalence equal to or greater than the design prevalence. If a sufficient number of samples are collected and all return a negative result we can reject the null hypothesis and accept the alternative hypothesis, concluding that the prevalence of disease in the population is less than the specified design prevalence. 
 
 A design prevalence is not related to any actual prevalence of disease in the population under study. It is not subject to uncertainty or variability and therefore doesn't need to be described using a distribution.
 
@@ -108,12 +101,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 1: Functions to estimate sample size using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+  
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab1.df) %>%
+ft <- flextable(tab1.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:5, j = 4, part = "body", fontname = "courier") %>%
@@ -127,8 +122,8 @@ flextable(tab1.df) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
+  set_caption(caption = caption.t)
+ft
 ```
 
 *EXAMPLE 1*
@@ -223,12 +218,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab2.df) %>%
+ft <- flextable(tab2.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:7, j = 4, part = "body", fontname = "courier") %>%
@@ -242,8 +239,8 @@ flextable(tab2.df) %>%
   footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption(caption = caption.t)
+ft
 ```
 
 *EXAMPLE 4*
@@ -299,12 +296,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab3.df) %>%
+ft <- flextable(tab3.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:2, j = 4, part = "body", fontname = "courier") %>%
@@ -320,8 +319,8 @@ flextable(tab3.df) %>%
   footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
+  set_caption(caption = caption.t)
+ft
 ```
 
 *EXAMPLE 7*
@@ -330,7 +329,7 @@ You are the epidemiologist for a land-locked country in central Asia. You have d
 
 Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is actually free of disease is 0.50.
 
-```{r message = FALSE}
+```{r message = FALSE, fig.show = "hide", }
 library(ggplot2); library(lubridate); library(scales)
 
 # Define a vector disease incursion probabilities (January to December):
@@ -359,6 +358,13 @@ ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   theme(legend.position = "inside", legend.position.inside = c(0.8,0.5))
 ```
 
+<figure style="text-align: center;">
+  <img src="prob_dis_freedom.png" alt="Probability of disease freedom" style="width: 60%;">
+  <figcaption>
+    Figure 1: Line plot showing the probability of disease freedom (red) and the probability of disease introduction (blue) as a function of calendar date.
+  </figcaption>
+</figure>
+
 ## Risk-based sampling
 
 With risk-based sampling we modify the intensity of sampling effort across the population of interest according to risk (as opposed to representative sampling where the probability that an individual unit is sampled is uniform across the population of interest). When our objective is to detect the presence of disease risk-based sampling makes intuitive sense: We concentrate our search effort on those sections of the population where we believe we're more likely to detect disease (i.e., where the risk of disease is high).
@@ -379,12 +385,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 4: Functions to estimate sample size using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab4.df) %>%
+ft <- flextable(tab4.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
@@ -398,8 +406,8 @@ flextable(tab4.df) %>%
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
+  set_caption(caption = caption.t)
+ft
 ```
 
 *EXAMPLE 8*
@@ -478,12 +486,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab4.df) %>%
+ft <- flextable(tab4.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
@@ -499,8 +509,8 @@ flextable(tab4.df) %>%
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption(caption = caption.t)
+ft
 ```
 
 *EXAMPLE 11*

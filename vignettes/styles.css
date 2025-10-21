@@ -5,12 +5,17 @@ body {
 	color: #000000;
 }
 
-ft_caption {
-  font-style: italic;
-  font-size: 18px;
-  color: #005580;
+figure {
+  margin: 1em 0;
   text-align: center;
-  margin-bottom: 10px;
+}
+
+figcaption {
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  font-weight: bold;
+  color: black;
+  margin-top: 0.5em;
 }
 
 h1 {

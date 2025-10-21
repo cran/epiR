@@ -1,7 +1,17 @@
+CHANGES IN epiR VERSION 2.0.88
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function rsu.dxtests updated to provide confidence intervals for diagnostic sensitivity and specificity when two or three tests are interpreted in series or parallel.
+    [Suggested by Mark Stevenson and colleagues from OSPRI New Zealand]
+    
+    o Several updates to the vignettes.
+    [Suggested by Jaimie Frazer]
+    
+
 CHANGES IN epiR VERSION 2.0.87
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Function epi.nomogram updated to include confidence intervals for post-test probability estimates if confidence intervals for diagnostic sensitivity and specificity or likelihood ratio positive and likelihood ratio negative are provided.
+    o Function epi.nomogram updated to include credible intervals for post-test probability estimates if confidence intervals for diagnostic sensitivity and specificity or likelihood ratio positive and likelihood ratio negative are provided.
     [Suggested by Mark Stevenson]
     
     o Documentation for function epi.sssupb corrected.

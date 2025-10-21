@@ -11,6 +11,9 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
   h1 = c("", "Outcome+", "Outcome-", "Total"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 1: A 2 × 2 contingency table.",
+    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
 ft <- flextable(twobytwo.df) %>%
@@ -24,8 +27,8 @@ ft <- flextable(twobytwo.df) %>%
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
-
-  set_caption(caption = "A 2 × 2 contingency table.")
+  set_caption(caption = caption.t)
+ft
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
 
@@ -41,6 +44,9 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
   h1 = c("", "Outcome+", "Outcome-", "Total", "Risk"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 2: A 2 × 2 contingency table with incidence risks calculated for the exposure positive, the exposure negative and the entire study population.",
+    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
 ft <- flextable(irr.df) %>%
@@ -55,8 +61,7 @@ ft <- flextable(irr.df) %>%
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
-
-  set_caption("Table 1: A 2 × 2 table with incidence risks calculated for the exposure positive, the exposure negative and the entire study population.")
+  set_caption(caption = caption.t)
 
 vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
 vfixb <- c(" = a \U00F7 (a + b)"," = c \U00F7 (c + d)"," = (a + c) \U00F7 (a + b + c + d)")
@@ -76,9 +81,6 @@ for (i in 1:3) {
 
 ft
 
-## ----risk_ratio, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 1: The incidence risk ratio."----
-knitr::include_graphics("risk_ratio.png")
-
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
 orcohort.df <- data.frame(
   "exp" = c("Exposure+","Exposure-","Total"), 
@@ -91,6 +93,9 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
   h1 = c("", "Outcome+", "Outcome-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 3: A 2 × 2 contigency table with incidence odds calculated for the exposure positive, the exposure negative and the entire study population.",
+    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
 ft <- flextable(orcohort.df) %>%
@@ -105,8 +110,7 @@ ft <- flextable(orcohort.df) %>%
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
-
-  set_caption("Table 2: A 2 × 2 table with incidence odds calculated for the exposure positive, the exposure negative and the entire study population.")
+  set_caption(caption = caption.t)
 
 vfixa <- c("[D+|E+]","[D+|E-]","[D+|E±]")
 vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
@@ -138,6 +142,9 @@ hkey.df <- data.frame(col_keys = c("out","epos","eneg","total","odds"),
   h1 = c("", "Exposure+", "Exposure-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 4: A 2 × 2 contingency table with incidence odds calculated for the outcome positive, the outcome negative and the entire study population.",
+    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
 ft <- flextable(orcc.df) %>%
@@ -152,8 +159,7 @@ ft <- flextable(orcc.df) %>%
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
   align(align = "left", part = "all") %>%
-
-  set_caption("Table 3: A 2 × 2 table with incidence odds calculated for the outcome positive, the outcome negative and the entire study population.")
+  set_caption(caption = caption.t)
 
 vfixa <- c("[E+|D+]","[E+|D-]","[E+|D±]")
 vfixb <- c(" = a \U00F7 b"," = c \U00F7 d"," = (a + c) \U00F7 (b + d)")
@@ -171,18 +177,6 @@ for (i in 1:3) {
   )
 }
 ft
-
-## ----attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 2: The attributable risk in the exposed."----
-knitr::include_graphics("attributable_risk.png")
-
-## ----attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 3: The attributable fraction in the exposed."----
-knitr::include_graphics("attributable_fraction.png")
-
-## ----population_attributable_risk, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 4: The attributable risk in the population."----
-knitr::include_graphics("population_attributable_risk.png")
-
-## ----population_attributable_fraction, echo = FALSE, fig.align = "center", out.width = "60%", fig.cap = "Figure 5: The attributable fraction in the population."----
-knitr::include_graphics("population_attributable_fraction.png")
 
 ## -----------------------------------------------------------------------------
 dat.v01 <- c(13,2163,5,3349); dat.v01
@@ -272,7 +266,7 @@ dat.df04$frace <- ifelse(dat.df04$race == 1, 0, 1)
 dat.df04$frace <- factor(dat.df04$frace, levels = c(1,0))
 
 # Empty vectors to collect results:
-rfactor <- ref <- or.p <- or.l <- or.u <- c() 
+rfactor <- ref <- or.est <- or.low <- or.upp <- c() 
 
 # The candidate risk factors are in columns 12 to 14 of data frame dat.df04:
 for(i in 12:14){
@@ -286,29 +280,29 @@ for(i in 12:14){
   tref <- as.character(paste("Reference: ", trfactor, " - ", levels(dat.df04[,i])[2], sep = ""))
   ref <- c(ref, tref)
   
-  tor.p <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[1])
-  or.p <- c(or.p, tor.p)
+  tor.est <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[1])
+  or.est <- c(or.est, tor.est)
   
-  tor.l <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[2])
-  or.l <- c(or.l, tor.l)
+  tor.low <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[2])
+  or.low <- c(or.low, tor.low)
   
-  tor.u <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[3])
-  or.u <- c(or.u, tor.u)
+  tor.upp <- as.numeric(tdat.epi04$massoc.detail$OR.strata.wald[3])
+  or.upp <- c(or.upp, tor.upp)
 }
 
-gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.p, or.l, or.u)
+gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.est, or.low, or.upp)
 gdat.df04
 
-## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
+## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.show = "hide", fig.cap = "Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
 library(ggplot2); library(scales)
 
 xbrk <- seq(from = -2, to = 2, by = 1)
 xlab <- 2^xbrk
 
-ggplot(data = gdat.df04, aes(x = log2(or.p), y = ybrk)) +
+ggplot(data = gdat.df04, aes(x = log2(or.est), y = ybrk)) +
   theme_bw() +
   geom_point() + 
-  geom_errorbarh(aes(xmin = log2(or.l), xmax = log2(or.u), height = 0.2)) + 
+  geom_errorbar(aes(xmin = log2(or.low), xmax = log2(or.upp), width = 0.2)) + 
   scale_x_continuous(breaks = xbrk, labels = xlab, limits = range(xbrk), 
    name = "Odds ratio") + 
   scale_y_continuous(breaks = gdat.df04$ybrk, labels = gdat.df04$ylab, name = "Risk factor") + 
@@ -356,7 +350,7 @@ dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count",
 
 dat.epi06
 
-## ----mantel_haenszel, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.cap = "Figure 7: Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race."----
+## ----mantel_haenszel, echo = FALSE, message = FALSE, fig.show = "hide", fig.align = "center", out.width = "80%"----
 
 xbrk <- seq(from = -5, to = 5, by = 1)
 xlab <- 2^xbrk
@@ -365,24 +359,22 @@ nstrata <- dat.epi06$n.strata
 ybrk <- c(1:nstrata, max(nstrata) + 1)
 ylab <- c("M-H", paste("Strata ", 1:nstrata, sep = ""))
 
-or.p <- c(dat.epi06$massoc.detail$OR.mh$est, 
+or.est <- c(dat.epi06$massoc.detail$OR.mh$est, 
    dat.epi06$massoc.detail$OR.strata.cfield$est)
-or.l <- c(dat.epi06$massoc.detail$OR.mh$lower, 
+or.low <- c(dat.epi06$massoc.detail$OR.mh$lower, 
    dat.epi06$massoc.detail$OR.strata.cfield$lower)
-or.u <- c(dat.epi06$massoc.detail$OR.mh$upper, 
+or.upp <- c(dat.epi06$massoc.detail$OR.mh$upper, 
    dat.epi06$massoc.detail$OR.strata.cfield$upper)
-gdat.df06 <- data.frame(ybrk, ylab, or.p, or.l, or.u)
+gdat.df06 <- data.frame(ybrk, ylab, or.est, or.low, or.upp)
 
-ggplot(data = gdat.df06, aes(x = log2(or.p), y = ybrk)) +
+ggplot(data = gdat.df06, aes(x = log2(or.est), y = ybrk)) +
   theme_bw() +
   geom_point() + 
-  geom_errorbarh(aes(xmin = log2(or.u), xmax = log2(or.l), height = 0.2)) + 
+  geom_errorbar(aes(xmin = log2(or.upp), xmax = log2(or.low), width = 0.2)) + 
   scale_x_continuous(breaks = xbrk, labels = xlab, limits = range(xbrk), 
    name = "Odds ratio") + 
   scale_y_continuous(breaks = gdat.df06$ybrk, labels = gdat.df06$ylab, name = "Risk factor") + 
   geom_vline(xintercept = log2(1), linetype = "dashed") + 
-  annotate("text", x = log2(0.03125), y = gdat.df06$yat, label = gdat.df06$ref, hjust = 0, size = 3) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(axis.title.y = element_text(vjust = 0))
-
 

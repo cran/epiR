@@ -64,19 +64,23 @@ rsu.sssep.rs(N = 1000, pstar = 0.05, se.p = 0.95, se.u = 0.90)
 
 ## Calculate the sensitivity and specificity of the diagnostic test regime:
 
-test <- rsu.dxtest(se = c(0.90, 0.95), sp = c(0.80, 0.85), 
-   covar.pos = 0, covar.neg = 0, interpretation = "parallel")
-   
-## Interpretation of these tests in parallel returns a diagnostic sensitivity
-## of 0.995 and a diagnostic specificity of 0.68.
+se <- matrix(c(0.90,0.95), ncol = 1, byrow = TRUE); se
+sp <- matrix(c(0.80,0.85), ncol = 1, byrow = TRUE); sp
+
+test <- rsu.dxtest(se = se, sp = sp, covar.pos = 0 , covar.neg = 0, 
+   tconf.int = 0.95, method = "exact", interpretation = "parallel", 
+   conf.int = 0.95, nsim = 999)
+
+## Interpretation of the two tests in parallel returns a diagnostic sensitivity
+## of 0.995 and a diagnostic specificity of 0.680.
 
 ## How many herds should be sampled?
 
-rsu.sssep.rs(N = 5000, pstar = 0.08, se.p = 0.95, se.u = test$se)
+rsu.sssep.rs(N = 5000, pstar = 0.08, se.p = 0.95, 
+   se.u = test$independent$est[1])
 
-## If you test 38 herds and all return a negative test you can state that 
-## you are 95\% confident that the disease is absent from the study area.
-## The sensitivity of this testing regime is 99\%.
+## A total of 38 herds need to be tested to be 95\% confident that the disease 
+## is absent from the study area if all return a negative test.
 
 
 ## EXAMPLE 3:

@@ -27,12 +27,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 1: Functions to estimate sample size using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+  
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab1.df) %>%
+ft <- flextable(tab1.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:5, j = 4, part = "body", fontname = "courier") %>%
@@ -46,8 +48,8 @@ flextable(tab1.df) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 1: Functions to estimate sample size using representative population sampling data.")
+  set_caption(caption = caption.t)
+ft
 
 ## ----message = FALSE----------------------------------------------------------
 library(epiR)
@@ -90,12 +92,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab2.df) %>%
+ft <- flextable(tab2.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:7, j = 4, part = "body", fontname = "courier") %>%
@@ -109,8 +113,8 @@ flextable(tab2.df) %>%
   footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.")
+  set_caption(caption = caption.t)
+ft
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sep.rs(N = NA, n = 300, pstar = 0.01, se.u = 0.95)
@@ -143,12 +147,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab3.df) %>%
+ft <- flextable(tab3.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:2, j = 4, part = "body", fontname = "courier") %>%
@@ -164,10 +170,10 @@ flextable(tab3.df) %>%
   footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
+  set_caption(caption = caption.t)
+ft
 
-  set_caption("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.")
-
-## ----message = FALSE----------------------------------------------------------
+## ----message = FALSE, fig.show = "hide"---------------------------------------
 library(ggplot2); library(lubridate); library(scales)
 
 # Define a vector disease incursion probabilities (January to December):
@@ -207,12 +213,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 4: Functions to estimate sample size using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab4.df) %>%
+ft <- flextable(tab4.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
@@ -226,8 +234,8 @@ flextable(tab4.df) %>%
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 4: Functions to estimate sample size using risk based sampling data.")
+  set_caption(caption = caption.t)
+ft
 
 ## ----message = FALSE----------------------------------------------------------
 # Generate a matrix listing the proportions of samples for each test in each risk group (the number of rows equal the number of risk groups, the number of columns equal the number of tests):
@@ -270,12 +278,14 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
+caption.t <- flextable::as_paragraph(as_chunk("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+
 border_h = fp_border(color = "black", width = 2)
 
-flextable(tab4.df) %>%
+ft <- flextable(tab4.df) %>%
   width(j = 1, width = 2.50) %>%
   width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 4.00) %>%
+  width(j = 3, width = 2.50) %>%
   width(j = 4, width = 2.00) %>%
   
   font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
@@ -291,8 +301,8 @@ flextable(tab4.df) %>%
   footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
   
   fontsize(size = 9, part = "footer") %>%
-
-  set_caption("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.")
+  set_caption(caption = caption.t)
+ft
 
 ## ----message = FALSE----------------------------------------------------------
 # There are 1784 herds in the study area:

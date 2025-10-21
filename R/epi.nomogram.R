@@ -1,4 +1,4 @@
-epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA, conf = 0.95, method = "exact", verbose = FALSE, credible.int = 0.95, nsim = 999){
+epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA, tconf.int = 0.95, method = "exact", verbose = FALSE, cred.int = 0.95, nsim = 999){
   
   # pretest.ppos = 0.10
   # se = NA;  sp = NA
@@ -6,13 +6,13 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
 
   # lratio.pos = NA; lratio.neg = NA
 
-  # conf = 0.95
+  # tconf.int = 0.95
   # method = "exact"
   # verbose = FALSE
-  # credible.int = 0.95
+  # cred.int = 0.95
   # nsim = 999
   
-  N. <- 1 - ((1 - conf) / 2)
+  N. <- 1 - ((1 - tconf.int) / 2)
   z <- qnorm(N., mean = 0, sd = 1)
   
   
@@ -79,11 +79,11 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
 
     # source("zexactn.r")
     # conf defines the confidence limits for the Se and Sp estimates (not the confidence limits for the output):
-    se.n <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$n 
-    se.a <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$a
+    se.n <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$n 
+    se.a <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$a
     
-    sp.n <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$n 
-    sp.a <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$a
+    sp.n <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$n 
+    sp.a <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$a
     
   }
   
@@ -92,11 +92,11 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
     
     # source("zwilsonn.r")
     # conf defines the confidence limits for the Se and Sp estimates (not the confidence limits for the output):
-    se.n <- zwilsonn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$n 
-    se.a <- zwilsonn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$a
+    se.n <- zwilsonn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$n 
+    se.a <- zwilsonn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$a
     
-    sp.n <- zwilsonn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$n 
-    sp.a <- zwilsonn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$a
+    sp.n <- zwilsonn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$n 
+    sp.a <- zwilsonn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$a
   }
   
   
@@ -104,11 +104,11 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
     
     # source("zagrestin.r")
     # conf defines the confidence limits for the Se and Sp estimates (not the confidence limits for the output):
-    se.n <- zagrestin(est = se[1], low = se[2], upp = se[3], conf.level = conf)$n 
-    se.a <- zagrestin(est = se[1], low = se[2], upp = se[3], conf.level = conf)$a
+    se.n <- zagrestin(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$n 
+    se.a <- zagrestin(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$a
     
-    sp.n <- zagrestin(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$n 
-    sp.a <- zagrestin(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$a
+    sp.n <- zagrestin(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$n 
+    sp.a <- zagrestin(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$a
     
   }
 
@@ -117,11 +117,11 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
     
     # source("zclopperpearsonn.r")
     # conf defines the confidence limits for the Se and Sp estimates (not the confidence limits for the output):
-    se.n <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$n 
-    se.a <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$a
+    se.n <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$n 
+    se.a <- zexactn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$a
     
-    sp.n <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$n 
-    sp.a <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$a
+    sp.n <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$n 
+    sp.a <- zexactn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$a
     
   }
   
@@ -130,11 +130,11 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
     
     # source("zjeffreysn.r")
     # conf defines the confidence limits for the Se and Sp estimates (not the confidence limits for the output):
-    se.n <- zjeffreysn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$n 
-    se.a <- zjeffreysn(est = se[1], low = se[2], upp = se[3], conf.level = conf)$a
+    se.n <- zjeffreysn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$n 
+    se.a <- zjeffreysn(est = se[1], low = se[2], upp = se[3], conf.level = tconf.int)$a
     
-    sp.n <- zjeffreysn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$n 
-    sp.a <- zjeffreysn(est = sp[1], low = sp[2], upp = sp[3], conf.level = conf)$a
+    sp.n <- zjeffreysn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$n 
+    sp.a <- zjeffreysn(est = sp[1], low = sp[2], upp = sp[3], conf.level = tconf.int)$a
     
   }
   
@@ -179,20 +179,20 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
     pretest.pneg <- data.frame(est = 1 - pretest.ppos)
     
     postest.ppos <- data.frame(est = as.numeric(quantile(postest.ppos, probs = 0.500)),
-                               low = as.numeric(quantile(postest.ppos, probs = (1 - credible.int) / 2)), 
-                               upp = as.numeric(quantile(postest.ppos, probs = (1 - (1 - credible.int) / 2))))
+                               low = as.numeric(quantile(postest.ppos, probs = (1 - cred.int) / 2)), 
+                               upp = as.numeric(quantile(postest.ppos, probs = (1 - (1 - cred.int) / 2))))
     
     postest.pneg <- data.frame(est = as.numeric(quantile(postest.pneg, probs = 0.500)),
-                               low = as.numeric(quantile(postest.pneg, probs = (1 - credible.int) / 2)), 
-                               upp = as.numeric(quantile(postest.pneg, probs = (1 - (1 - credible.int) / 2))))
+                               low = as.numeric(quantile(postest.pneg, probs = (1 - cred.int) / 2)), 
+                               upp = as.numeric(quantile(postest.pneg, probs = (1 - (1 - cred.int) / 2))))
     
     lratio.pos <- data.frame(est = as.numeric(quantile(lratio.pos, probs = 0.500)),
-                             low = as.numeric(quantile(lratio.pos, probs = (1 - credible.int) / 2)), 
-                             upp = as.numeric(quantile(lratio.pos, probs = (1 - (1 - credible.int) / 2))))
+                             low = as.numeric(quantile(lratio.pos, probs = (1 - cred.int) / 2)), 
+                             upp = as.numeric(quantile(lratio.pos, probs = (1 - (1 - cred.int) / 2))))
     
     lratio.neg <- data.frame(est = as.numeric(quantile(lratio.neg, probs = 0.500)),
-                             low = as.numeric(quantile(lratio.neg, probs = (1 - credible.int) / 2)), 
-                             upp = as.numeric(quantile(lratio.neg, probs = (1 - (1 - credible.int) / 2))))
+                             low = as.numeric(quantile(lratio.neg, probs = (1 - cred.int) / 2)), 
+                             upp = as.numeric(quantile(lratio.neg, probs = (1 - (1 - cred.int) / 2))))
     
     rval <- list(pretest.ppos = pretest.ppos, 
                  pretest.pneg = pretest.pneg, 
@@ -235,9 +235,9 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
       ifelse(x < 0.01, sprintf("%.4f", x), sprintf("%.2f", x))
     }))
     
-    cat("If the pre-test probability of being outcome positive is ", tpretest.ppos, " and the test is positive, the post-test probability of being outcome positive is ", tpostest.ppos$est, " (", credible.int * 100, "% CrI ", tpostest.ppos$low, " to ", tpostest.ppos$upp, "). \n", sep = "")
+    cat("If the pre-test probability of being outcome positive is ", tpretest.ppos, " and the test is positive, the post-test probability of being outcome positive is ", tpostest.ppos$est, " (", cred.int * 100, "% CrI ", tpostest.ppos$low, " to ", tpostest.ppos$upp, "). \n", sep = "")
     
-    cat("If the pre-test probability of being outcome positive is ", tpretest.ppos, " and the test is negative, the post-test probability of being outcome positive is ", tpostest.pneg$est, " (", credible.int * 100, "% CrI ", tpostest.pneg$low, " to ", tpostest.pneg$upp, "). \n", sep = "")
+    cat("If the pre-test probability of being outcome positive is ", tpretest.ppos, " and the test is negative, the post-test probability of being outcome positive is ", tpostest.pneg$est, " (", cred.int * 100, "% CrI ", tpostest.pneg$low, " to ", tpostest.pneg$upp, "). \n", sep = "")
     
   }  
 }

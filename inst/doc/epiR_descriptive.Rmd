@@ -1,27 +1,20 @@
 ---
 title: "Descriptive Epidemiology using epiR"
-author: "Mark Stevenson"
+author: "Mark Stevenson and Evan Sergeant"
 date: "`r Sys.Date()`"
 bibliography: epiR_descriptive.bib
 link-citations: yes
 output:
   html_document:
+    fig_caption: true
     css: styles.css
-  knitr:::html_vignette:
-  toc: true
+    toc: false
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Descriptive epidemiology}
   %\VignetteEncoding{UTF-8}
 
 ---
-```{=html}
-<h1 style='text-align:center;'>
-  Descriptive Epidemiology using 
-  <img src='../man/figures/logo.svg' style='vertical-align:middle; width:10%; margin-right:10px;'/>
-</h1>
-```
-
 ```{r, echo = FALSE, message = FALSE}
 
 # If you want to create a PDF document paste the following after line 9 above:
@@ -109,9 +102,9 @@ dat.df$rank <- 1:nrow(dat.df)
 dat.df$labels <- dat.df$rname
 ```
 
-Create a ranked error bar plot. Because its useful to provide the region-area names on the horizontal axis rotate the horizontal axis labels by 90 degrees.
+Create a ranked error bar plot, rotating the horizontal axis labels by 90 degrees.
 
-```{r dfreq01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq01}Figure 1: Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."}
+```{r dfreq01-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:dfreq01}Figure 1: Ranked error bar plot showing the number of prevalent cases of disease (and its 95% confidence interval) for every 100 population units."}
 ggplot(data = dat.df, aes(x = rank, y = est)) +
   theme_bw() +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
@@ -120,6 +113,14 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
   scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+<figure style="text-align: center;">
+  <img src="ranked_error_bar-01.png" alt="Ranked error bar plot" style="width: 60%;">
+  <figcaption>
+    Figure 1: Ranked error bar plot showing the number of prevalent cases of disease (and its 95% confidence interval) for every 100 population units.
+  </figcaption>
+</figure>
+
 If you have a large number of regions the horizontal axis labels can become crowded and difficult to read. Use the `ndelete` function to drop every `n`th region name.
 
 ```{r}
@@ -134,7 +135,7 @@ dat.df$labels <- ndelete(x = dat.df$rname, n = 2)
 ```
 Re-draw the ranked error bar plot:
 
-```{r dfreq02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:dfreq02}Figure 2: Ranked error bar plot showing the prevalence of disease (and its 95% confidence interval) for 100 population units."}
+```{r dfreq02-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:dfreq02}Figure 2: Ranked error bar plot showing the number of prevalent cases of disease (and its 95% confidence interval) for every 100 population units."}
 ggplot(data = dat.df, aes(x = rank, y = est)) +
   theme_bw() +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
@@ -143,6 +144,13 @@ ggplot(data = dat.df, aes(x = rank, y = est)) +
   scale_y_continuous(limits = c(0,100), name = "Cases per 100 individuals at risk") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+<figure style="text-align: center;">
+  <img src="ranked_error_bar-02.png" alt="Ranked error bar plot" style="width: 60%;">
+  <figcaption>
+    Figure 2: Ranked error bar plot showing the number of prevalent cases of disease (and its 95% confidence interval) for every 100 population units.
+  </figcaption>
+</figure>
 
 ## Time
 
@@ -167,6 +175,7 @@ fodate <- sample(x = odate, size = n.females, replace = TRUE)
 
 dat.df <- data.frame(sex = c(rep("Male", n.males), rep("Female", n.females)), 
    odate = c(modate, fodate))
+dat.df$odate <- as.Date(dat.df$odate, format = "%Y-%m-%d")
 
 # Sort the data in order of odate:
 dat.df <- dat.df[sort.list(dat.df$odate),] 
@@ -174,8 +183,8 @@ dat.df <- dat.df[sort.list(dat.df$odate),]
 
 Plot the epidemic curve using the `ggplot2` and `scales` packages:
 
-```{r epicurve01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve01}Figure 3: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024."}
-ggplot(data = dat.df, aes(x = as.Date(odate))) +
+```{r epicurve01-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve01}Figure 3: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024."}
+ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
   scale_x_date(breaks = date_breaks("7 days"), labels = date_format("%d %b"), 
@@ -184,10 +193,16 @@ ggplot(data = dat.df, aes(x = as.Date(odate))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+<figure style="text-align: center;">
+  <img src="epidemic_curve-01.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 3: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024.
+  </figcaption>
+</figure>
+
 You may want to superimpose a smoothed line to better appreciate trend. Do this using the `geom_density` function in `ggplot2`:
 
-```{r epicurve02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve02}Figure 4: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024. Superimposed on this plot is a smoothed estimate of case density."}
-
+```{r epicurve02-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve02}Figure 4: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024. Superimposed on this plot is a smoothed estimate of case density."}
 ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
@@ -196,68 +211,103 @@ ggplot(data = dat.df, aes(x = odate)) +
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
 ```
 
-Produce a separate epidemic curve for males and females using the `facet_grid` option in `ggplot2`:
+<figure style="text-align: center;">
+  <img src="epidemic_curve-02.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 4: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024. Superimposed on this plot is a smoothed estimate of case density.
+  </figcaption>
+</figure>
 
-```{r epicurve03-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve03}Figure 5: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex."}
-ggplot(data = dat.df, aes(x = as.Date(odate))) +
+
+Condition the epidemic curve by sex using the `facet_grid` function in `ggplot2`:
+
+```{r epicurve03-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve03}Figure 5: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex."}
+ggplot(data = dat.df, aes(x = odate)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
-  scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
-     name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  facet_grid( ~ sex)
-```
-
-Let's say an event occurred on 31 October 2024. Mark this date on your epidemic curve using `geom_vline`:
-
-```{r epicurve04-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve04}Figure 6: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex. An event that occurred on 31 October 2024 is indicated by the vertical dashed line."}
-ggplot(data = dat.df, aes(x = as.Date(odate))) +
-  theme_bw() +
-  geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
-  scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
-     name = "Date") +
-  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   facet_grid( ~ sex) +
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
+  scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
+     name = "Date") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+<figure style="text-align: center;">
+  <img src="epidemic_curve-03.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 5: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex.
+  </figcaption>
+</figure>
+
+Let's say an event occurred on 31 October 2024. Mark this date on the epidemic curve using `geom_vline`:
+
+```{r epicurve04-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve04}Figure 6: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex. An event that occurred on 31 October 2024 is indicated by the vertical dashed line."}
+ggplot(data = dat.df, aes(x = odate)) +
+  theme_bw() +
+  geom_histogram(binwidth = 7, colour = "gray", fill = "dark blue", linewidth = 0.1) +
+  facet_grid( ~ sex) +
+  scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
+     name = "Date") +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  geom_vline(aes(xintercept = as.Date("31/10/2024", format = "%d/%m/%Y")), 
    linetype = "dashed")
 ```
 
-Plot the total number of disease events by day, coloured according to sex:
+<figure style="text-align: center;">
+  <img src="epidemic_curve-04.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 6: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, conditioned by sex. An event that occurred on 31 October 2024 is indicated by the vertical dashed line.
+  </figcaption>
+</figure>
 
-```{r epicurve05-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve05}Figure 7: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
-ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
+Plot the total number of disease events by day, coloured by sex:
+
+```{r epicurve05-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve05}Figure 7: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
+ggplot(data = dat.df, aes(x = odate, group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1) +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.Date("31/10/2024", format = "%d/%m/%Y")), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") +
-  theme(legend.position = "inside", legend.position.inside = c(0.90, 0.80))
+  theme(legend.position = "bottom")
 ```
+
+<figure style="text-align: center;">
+  <img src="epidemic_curve-05.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 7: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex.
+  </figcaption>
+</figure>
 
 It can be difficult to appreciate differences in male and female disease counts as a function of date with the above plot format so dodge the data instead:
 
-```{r epicurve06-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve06}Figure 8: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
-ggplot(data = dat.df, aes(x = as.Date(odate), group = sex, fill = sex)) +
+```{r epicurve06-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve06}Figure 8: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex."}
+ggplot(data = dat.df, aes(x = odate, group = sex, fill = sex)) +
   theme_bw() +
   geom_histogram(binwidth = 7, colour = "gray", linewidth = 0.1, position = "dodge") +
   scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b"), 
      name = "Date") +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5), limits = c(0,30), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  geom_vline(aes(xintercept = as.numeric(as.Date("31/10/2024", format = "%d/%m/%Y"))), 
+  geom_vline(aes(xintercept = as.Date("31/10/2024", format = "%d/%m/%Y")), 
    linetype = "dashed") + 
   scale_fill_manual(values = c("#d46a6a", "#738ca6"), name = "Sex") + 
-  theme(legend.position = "inside", legend.position.inside = c(0.90, 0.80))
+  theme(legend.position = "bottom")
 ```
+
+<figure style="text-align: center;">
+  <img src="epidemic_curve-06.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 8: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 26 July to 13 December 2024, grouped by sex.
+  </figcaption>
+</figure>
 
 ### Integers representing counts of cases on each date
 
@@ -280,7 +330,7 @@ head(dat.df)
 
 Generate an epidemic curve. Note `weight = ncas` in the aesthetics argument for `ggplot2`:
 
-```{r epicurve07-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve07}Figure 9: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024."}
+```{r epicurve07-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve07}Figure 9: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024."}
 ggplot() +
   theme_bw() +
   geom_histogram(dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", linewidth = 0.1) +
@@ -289,6 +339,13 @@ ggplot() +
   scale_y_continuous(limits = c(0,125), name = "Number of cases") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+<figure style="text-align: center;">
+  <img src="epidemic_curve-07.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 9: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024.
+  </figcaption>
+</figure>
 
 This plot has features of a common point source epidemic for the period April 2024 to May 2024. After May 2024 the plot shows feature of a propagated epidemic pattern.
 
@@ -300,8 +357,7 @@ max(cumsum(dat.df$ncas))
 
 At the end of the follow-up period the cumulative number of cases was 1834. What we need to do is to get our 0 to 1834 cumulative case numbers to 'fit' into the 0 to 125 vertical axis limits of the epidemic curve. A reasonable approach would be to: (1) divide cumulative case numbers by a number so that the maximum cumulative case number divided by our selected number roughly equals the maximum number of cases identified per day; for this example, 15 would be a good choice (1834 / 15 = 122); and (2) set `sec.axis = sec_axis(~ . * 15)` to multiply the values that appear on the primary vertical axis by 15 for the labels that appear on the secondary vertical axis:
 
-```{r epicurve08-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve08}Figure 10: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is a line showing cumulative case numbers."}
-
+```{r epicurve08-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve08}Figure 10: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is a line showing cumulative case numbers."}
 ggplot() +
   theme_bw() +
   geom_histogram(data = dat.df, mapping = aes(x = edate, weight = ncas), binwidth = 1, fill = "#738ca6", colour = "grey", linewidth = 0.1) +
@@ -314,10 +370,16 @@ ggplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+<figure style="text-align: center;">
+  <img src="epidemic_curve-08.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 10: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is a line showing cumulative case numbers.
+  </figcaption>
+</figure>
+
 Finally, we might want to superimpose a line representing the rolling average of case numbers. Calculate the 5-day rolling mean use the `rollmean` function in the contributed `zoo` package:
 
-```{r epicurve09-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:epicurve09}Figure 11: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is the 5-day rolling mean number of cases per day."}
-
+```{r epicurve09-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:epicurve09}Figure 11: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is the 5-day rolling mean number of cases per day."}
 dat.df$rncas <- rollmean(x = dat.df$ncas, k = 5, fill = NA)
 
 ggplot() +
@@ -330,6 +392,13 @@ ggplot() +
   guides(fill = "none") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+<figure style="text-align: center;">
+  <img src="epidemic_curve-09.png" alt="Epidemic curve" style="width: 60%;">
+  <figcaption>
+    Figure 11: Frequency histogram showing counts of incident cases of disease as a function of calendar date, 24 February 2024 to 20 July 2024. Superimposed on this plot is the 5-day rolling mean number of cases per day.
+  </figcaption>
+</figure>
 
 ## Place
 
@@ -351,7 +420,7 @@ nyage65utm.sf <- st_read(dsn = system.file("shapes/NY8_bna_utm18.gpkg", package 
 
 The `nyage65utm.sf` simple features object lists for each census tract the percentage of individuals aged greater than 65 years. Here we make a choropleth map and position the legend at the bottom of the plot and control the width of the legend using `legend.key.width` in the `theme` argument:
 
-```{r spatial01-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial01}Figure 12: Map of an area of New York, USA showing for each census tract the percentage of individuals aged greater than 65 years."}
+```{r spatial01-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:spatial01}Figure 12: Map of an area of New York, USA showing for each census tract the percentage of individuals aged greater than 65 years."}
 ggplot() + 
    theme_bw() +
    geom_sf(data = nyage65utm.sf, aes(fill = PCTAGE65P), colour = "dark grey") + 
@@ -360,8 +429,14 @@ ggplot() +
    scale_y_continuous(name = "Latitude") +
    labs(fill = "Age >65 years") +
    theme(legend.position = "bottom", legend.key.width = unit(1.0, "cm"))
-
 ```
+
+<figure style="text-align: center;">
+  <img src="map-01.png" alt="Choropleth map" style="width: 60%;">
+  <figcaption>
+    Figure 12: Map of an area of New York, USA showing for each census tract the percentage of individuals aged greater than 65 years.
+  </figcaption>
+</figure>
 
 **Point maps**
 
@@ -390,7 +465,7 @@ pol <- SpatialPolygons(list(pol))
 chpolbng.spdf <- SpatialPolygonsDataFrame(Sr = pol, data = data.frame(id = 1), match.ID = TRUE)
 ```
 
-Convert the `SpatialPolygonsDataFrame` to an `sf` object and set the coordinate reference system:
+Convert the `SpatialPolygonsDataFrame` to an `sf` object and set the coordinate reference system to the British National Grid, EPSG 27700:
 
 ```{r}
 chpolbng.sf <- as(chpolbng.spdf, "sf")
@@ -405,7 +480,7 @@ mformat <- function(){
 }
 ```
 
-```{r spatial02-fig, warnings = FALSE, echo = TRUE, fig.cap="\\label{fig:spatial02}Figure 13: Point map showing the place of residence of individuals diagnosed with laryngeal cancer (Pos) and lung cancer (Neg), Copull Lancashire, UK, 1972 to 1980."}
+```{r spatial02-fig, warnings = FALSE, echo = TRUE, fig.show = "hide", fig.cap="\\label{fig:spatial02}Figure 13: Point map showing the place of residence of individuals diagnosed with laryngeal cancer and lung cancer, Copull Lancashire, UK, 1972 to 1980."}
 ggplot() +
   theme_bw() +
   geom_sf(data = chlarynxbng.sf, aes(colour = status, shape = status)) +
@@ -415,7 +490,14 @@ ggplot() +
   scale_shape_manual(name = "Type", values = c(1,16)) +
   scale_x_continuous(name = "Easting (km)", labels = mformat()) +
   scale_y_continuous(name = "Northing (km)", labels = mformat()) +
-  theme(legend.position = "inside", legend.position.inside = c(0.10, 0.12))
+  theme(legend.position = "bottom")
 ```
+
+<figure style="text-align: center;">
+  <img src="map-02.png" alt="Point map" style="width: 60%;">
+  <figcaption>
+    Figure 13: Point map showing the place of residence of individuals diagnosed with laryngeal cancer and lung cancer, Copull Lancashire, UK, 1972 to 1980.
+  </figcaption>
+</figure>
 
 ## References
