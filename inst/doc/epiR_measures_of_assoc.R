@@ -1,10 +1,14 @@
 ## ----echo = FALSE, message = FALSE--------------------------------------------
+
+# Use tinytex (instead of MiKTex) to generate PDFs. See -Tools -Global options -Sweave. Use tinytex.
+# tinytex::install_tinytex()
+
 library(dplyr); library(flextable); library(knitr); library(officer);  library(tidyr)
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-twobytwo.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","c","b + c"), "total" = c("a + b","c + d","a + b + c + d"))
+twobytwo.df <- data.frame("exp" = c("Exposure+","Exposure-","Total"), "dpos" = c("a","c","a + c"), "dneg" = c("b","d","b + d"), "total" = c("a + b","c + d","a + b + c + d"))
 
 # Create a header key data frame:
 hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
@@ -12,17 +16,18 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total"),
 
 # Create table:
 caption.t <- flextable::as_paragraph(as_chunk("Table 1: A 2 × 2 contingency table.",
-    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+    props = fp_text(font.size = 9, font.family = "Arial", bold = FALSE)))
 
-border_h = fp_border(color = "black", width = 2)
+border_h = fp_border(color = "black", width = 1)
 
 ft <- flextable(twobytwo.df) %>%
-  width(j = 1, width = 2.00) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 4.00) %>%
+  width(j = 1, width = 1.00) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 1.00) %>%
+  width(j = 4, width = 1.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  fontsize(size = 9, part = "all") %>%
   
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
@@ -31,11 +36,10 @@ ft <- flextable(twobytwo.df) %>%
 ft
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
-
 irr.df <- data.frame(
   "exp" = c("Exposure+","Exposure-","Total"), 
   "dpos" = c("a","c","a + c"), 
-  "dneg" = c("b","c","b + c"), 
+  "dneg" = c("b","d","b + d"), 
   "total" = c("a + b","c + d","a + b + c + d"), 
   risk = c("R[D+|E+] = a \U00F7 (a + b)", "R[D+|E-] = c \U00F7 (c + d)", "R[D+|E±] = (a + c) \U00F7 (a + b + c + d)"))
 
@@ -44,19 +48,20 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","risk"),
   h1 = c("", "Outcome+", "Outcome-", "Total", "Risk"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 2: A 2 × 2 contingency table with incidence risks calculated for the exposure positive, the exposure negative and the entire study population.",
-    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- flextable::as_paragraph(as_chunk("Table 2: A 2 × 2 contingency table with outcome risks calculated for the exposure positive, the exposure negative and the entire study population.",
+    props = fp_text(font.size = 9, font.family = "Arial", bold = FALSE)))
 
-border_h = fp_border(color = "black", width = 2)
+border_h = fp_border(color = "black", width = 1)
 
 ft <- flextable(irr.df) %>%
-  width(j = 1, width = 2.00) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 4.00) %>%
+  width(j = 1, width = 1.00) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 1.00) %>%
+  width(j = 4, width = 1.00) %>%
+  width(j = 5, width = 2.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  fontsize(size = 9, part = "all") %>%
   
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
@@ -72,14 +77,17 @@ for (i in 1:3) {
     j = "risk", 
     i = i,
     value = as_paragraph(
-      as_chunk("R", props = fp_text()),
-      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
-      as_chunk(vfixb[i], props = fp_text())
+      as_chunk("R", props = fp_text(font.size = 9)),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript", font.size = 9)),
+      as_chunk(vfixb[i], props = fp_text(font.size = 9))
     )
   )
 }
 
 ft
+
+## ----massoc01, echo = FALSE, out.width = "70%", fig.cap = "\\label{fig:massoc01}Figure 1: The incidence risk ratio.", out.width = "80%", fig.align = "center"----
+knitr::include_graphics("figures/risk_ratio.png")
 
 ## ----echo = FALSE, results = 'asis'-------------------------------------------
 orcohort.df <- data.frame(
@@ -93,19 +101,20 @@ hkey.df <- data.frame(col_keys = c("exp","dpos","dneg","total","odds"),
   h1 = c("", "Outcome+", "Outcome-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 3: A 2 × 2 contigency table with incidence odds calculated for the exposure positive, the exposure negative and the entire study population.",
-    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- flextable::as_paragraph(as_chunk("Table 3: A 2 × 2 contigency table with outcome odds calculated for the exposure positive, the exposure negative and the entire study population.",
+    props = fp_text(font.size = 9, font.family = "Arial", bold = FALSE)))
 
-border_h = fp_border(color = "black", width = 2)
+border_h = fp_border(color = "black", width = 1)
 
 ft <- flextable(orcohort.df) %>%
-  width(j = 1, width = 2.00) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 4.00) %>%
+  width(j = 1, width = 1.00) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 1.00) %>%
+  width(j = 4, width = 1.00) %>%
+  width(j = 5, width = 2.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  fontsize(size = 9, part = "all") %>%
   
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
@@ -121,9 +130,9 @@ for (i in 1:3) {
     j = "odds", 
     i = i,
     value = as_paragraph(
-      as_chunk("O", props = fp_text()),
-      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
-      as_chunk(vfixb[i], props = fp_text())
+      as_chunk("O", props = fp_text(font.size = 9)),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript", font.size = 9)),
+      as_chunk(vfixb[i], props = fp_text(font.size = 9))
     )
   )
 }
@@ -142,19 +151,20 @@ hkey.df <- data.frame(col_keys = c("out","epos","eneg","total","odds"),
   h1 = c("", "Exposure+", "Exposure-", "Total", "Odds"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 4: A 2 × 2 contingency table with incidence odds calculated for the outcome positive, the outcome negative and the entire study population.",
-    props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- flextable::as_paragraph(as_chunk("Table 4: A 2 × 2 contingency table with exposure odds calculated for the outcome positive, the outcome negative and the entire study population.",
+    props = fp_text(font.size = 9, font.family = "Arial", bold = FALSE)))
 
-border_h = fp_border(color = "black", width = 2)
+border_h = fp_border(color = "black", width = 1)
 
 ft <- flextable(orcc.df) %>%
-  width(j = 1, width = 2.00) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.00) %>%
-  width(j = 4, width = 2.00) %>%
-  width(j = 5, width = 4.00) %>%
+  width(j = 1, width = 1.00) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 1.00) %>%
+  width(j = 4, width = 1.00) %>%
+  width(j = 5, width = 2.00) %>%
   
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
+  fontsize(size = 9, part = "all") %>%
   
   bg(bg = "grey80", part = "header") %>%
   hline_top(border = border_h, part = "all" ) %>%
@@ -170,13 +180,25 @@ for (i in 1:3) {
     j = "odds", 
     i = i,
     value = as_paragraph(
-      as_chunk("O", props = fp_text()),
-      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript")),
-      as_chunk(vfixb[i], props = fp_text())
+      as_chunk("O", props = fp_text(font.size = 9)),
+      as_chunk(vfixa[i], props = fp_text(vertical.align = "subscript", font.size = 9)),
+      as_chunk(vfixb[i], props = fp_text(font.size = 9))
     )
   )
 }
 ft
+
+## ----massoc02, echo = FALSE, out.width = "70%", fig.cap = "\\label{fig:massoc02}Figure 2: The attributable risk in the exposed.", out.width = "80%", fig.align = "center"----
+knitr::include_graphics("figures/attributable_risk.png")
+
+## ----massoc03, echo = FALSE, out.width = "70%", fig.cap = "\\label{fig:massoc03}Figure 3: The attributable fraction in the exposed.", out.width = "80%", fig.align = "center"----
+knitr::include_graphics("figures/attributable_fraction.png")
+
+## ----massoc04, echo = FALSE, out.width = "70%", fig.cap = "\\label{fig:massoc04}Figure 4: The attributable risk in the population.", out.width = "80%", fig.align = "center"----
+knitr::include_graphics("figures/population_attributable_risk.png")
+
+## ----massoc05, echo = FALSE, out.width = "70%", fig.cap = "\\label{fig:massoc05}Figure 5: The attributable fraction in the population.", out.width = "80%", fig.align = "center"----
+knitr::include_graphics("figures/population_attributable_fraction.png")
 
 ## -----------------------------------------------------------------------------
 dat.v01 <- c(13,2163,5,3349); dat.v01
@@ -228,7 +250,6 @@ dat.epi02$massoc.detail$OR.strata.wald
 dat.epi02$massoc.detail$OR.strata.score
 # Score confidence intervals: 2.0 (95% CI 1.1 to 3.8)
 
-
 ## ----message = FALSE----------------------------------------------------------
 library(dplyr); library(tidyr)
 
@@ -256,7 +277,6 @@ dat.epi03
 dat.df04 <- birthwt; head(dat.df04)
 
 dat.df04$flow <- factor(dat.df04$low, levels = c(1,0))
-
 dat.df04$fage <- ifelse(dat.df04$age > 23, 0,1)
 dat.df04$fage <- factor(dat.df04$fage, levels = c(1,0))
 dat.df04$fsmoke <- factor(dat.df04$smoke, levels = c(1,0))
@@ -293,7 +313,7 @@ for(i in 12:14){
 gdat.df04 <- data.frame(ybrk = 1:3, ylab = rfactor, ref, or.est, or.low, or.upp)
 gdat.df04
 
-## ----odds_ratios, echo = TRUE, message = FALSE, fig.align = "center", out.width = "80%", fig.show = "hide", fig.cap = "Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race."----
+## ----massoc06, warning = FALSE, echo = TRUE, fig.cap = "\\label{fig:massoc06}Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race.", out.width = "80%", fig.align = "center"----
 library(ggplot2); library(scales)
 
 xbrk <- seq(from = -2, to = 2, by = 1)
@@ -309,13 +329,13 @@ ggplot(data = gdat.df04, aes(x = log2(or.est), y = ybrk)) +
   geom_vline(xintercept = log2(1), linetype = "dashed") + 
   annotate("text", x = log2(0.25), y = gdat.df04$ybrk, label = gdat.df04$ref, hjust = 0, size = 3) +
   coord_fixed(ratio = 0.75 / 1) + 
+  theme(plot.margin = unit(c(0,0,0,0), "mm")) +
   theme(axis.title.y = element_text(vjust = 0))
 
 ## ----message = FALSE----------------------------------------------------------
 dat.df05 <- birthwt; head(dat.df05)
 
 dat.df05$flow <- factor(dat.df05$low, levels = c(1,0))
-
 dat.df05$fsmoke <- factor(dat.df05$smoke, levels = c(1,0))
 dat.df05$frace <- factor(dat.df05$race, levels = c(1,2,3))
 
@@ -350,8 +370,7 @@ dat.epi06 <- epi.2by2(dat = dat.tab06, method = "cohort.count",
 
 dat.epi06
 
-## ----mantel_haenszel, echo = FALSE, message = FALSE, fig.show = "hide", fig.align = "center", out.width = "80%"----
-
+## ----massoc07, warning = FALSE, echo = TRUE, fig.cap = "\\label{fig:massoc07}Figure 7: Risk factors for low birth weight babies. Error bar plot showing the odds of having a low birth weight baby for smokers of maternal race categories 1, 2 and 3 and the Mantel-Haenszel odds of having a low birth weight baby for smokers, adjusted for maternal race.", out.width = "80%", fig.align = "center"----
 xbrk <- seq(from = -5, to = 5, by = 1)
 xlab <- 2^xbrk
 
@@ -375,6 +394,7 @@ ggplot(data = gdat.df06, aes(x = log2(or.est), y = ybrk)) +
    name = "Odds ratio") + 
   scale_y_continuous(breaks = gdat.df06$ybrk, labels = gdat.df06$ylab, name = "Risk factor") + 
   geom_vline(xintercept = log2(1), linetype = "dashed") + 
-  coord_fixed(ratio = 0.75 / 1) + 
+  coord_fixed(ratio = 0.75 / 1) +
+  theme(plot.margin = unit(c(0,0,0,0), "mm")) +
   theme(axis.title.y = element_text(vjust = 0))
 

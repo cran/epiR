@@ -5,12 +5,12 @@ zRRkoopman <- function(dat, conf.level){
   x2 <- qchisq(p = conf.level, df = 1)
   tol <- .Machine$double.eps^0.25
   
-  a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
+  # a <- dat[1]; b <- dat[3]; c <- dat[2]; d <- dat[4]
   
-  # a <- as.numeric(dat[1])
-  # b <- as.numeric(dat[2])
-  # c <- as.numeric(dat[3])
-  # d <- as.numeric(dat[4])
+  a <- as.numeric(dat[1])
+  b <- as.numeric(dat[2])
+  c <- as.numeric(dat[3])
+  d <- as.numeric(dat[4])
   
   x <- a
   m <- a + b

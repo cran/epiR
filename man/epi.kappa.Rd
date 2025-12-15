@@ -15,7 +15,7 @@ epi.kappa(dat, method = "fleiss", alternative = c("two.sided", "less",
 
 \arguments{
   \item{dat}{an object of class matrix comprised of \code{n} rows and \code{n} columns listing the individual cell frequencies (as integers).}
-  \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{watson}, \code{altman} or \code{cohen}.}
+  \item{method}{a character string indicating the method to use. Options are \code{fleiss}, \code{fleiss.everitt}, \code{watson}, \code{altman} or \code{cohen}.}
   \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{two.sided}, \code{greater} or \code{less}.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
@@ -29,8 +29,9 @@ Common interpretations for the kappa statistic are as follows: < 0.2 slight agre
 
 PABAK (the prevalence and bias corrected kappa statistic) is calculated using the overall proportion of observed agreement. Confidence intervals for the overall proportion of observed agreement calculated using the exact method (Collett 1999). For this reason you won't see a change in the confidence intervals for PABAK when different settings are used for argument \code{method}.
 
-The argument \code{alternative = "greater"} tests the hypothesis that kappa is greater than 0. 
+The argument \code{alternative = "greater"} tests the hypothesis that kappa is greater than 0.
 
+Method \code{fleiss.everitt} provides confidence intervals that are appropriate when kappa is far from zero, based on Fleiss et al. (1969), formula 8.
 }
 
 \value{
@@ -66,6 +67,8 @@ Collett D (1999). Modelling Binary Data. Chapman & Hall/CRC, Boca Raton Florida,
 Dohoo I, Martin W, Stryhn H (2010). Veterinary Epidemiologic Research, second edition. AVC Inc, Charlottetown, Prince Edward Island, Canada, pp. 98 - 99.
 
 Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions, third edition. John Wiley & Sons, London, 598 - 626.
+
+Fleiss JL, Cohen J, Everitt BS (1969). Large sample standard errors of kappa and weighted kappa. Psychological Bulletin, 72: 323 - 327.
 
 Rothman KJ (2012). Epidemiology An Introduction. Oxford University Press, London, pp. 164 - 175.
 
@@ -110,8 +113,9 @@ dat.m01 <- matrix(c(19,10,6,256), nrow = 2, byrow = TRUE)
 colnames(dat.m01) <- c("L1-pos","L1-neg")
 rownames(dat.m01) <- c("L2-pos","L2-neg")
 
-epi.kappa(dat.m01, method = "fleiss", alternative = "greater", 
-   conf.level = 0.95)
+dat.kap01 <- epi.kappa(dat.m01, method = "fleiss", 
+   alternative = "greater", conf.level = 0.95)
+dat.kap01
 
 ## The z test statistic is 11.53 (P < 0.01). We accept the alternative
 ## hypothesis that the kappa statistic is greater than zero.
@@ -123,6 +127,15 @@ epi.kappa(dat.m01, method = "fleiss", alternative = "greater",
 
 ## The prevalence and bias corrected kappa statistic (PABAK) is 0.89
 ## (95\% CI 0.82 to 0.94).
+
+## Compare Fleisss confidence intervals for kappa with Fleiss-Everitt 
+## confidence intervals:
+dat.m02 <- dat.m01
+dat.kap02 <- epi.kappa(dat.m02, method = "fleiss.everitt", 
+   alternative = "greater", conf.level = 0.95)
+
+dat.kap01$kappa
+dat.kap02$kappa
 
 
 ## EXAMPLE 2 (from Watson and Petrie 2010, page 1170):
@@ -137,19 +150,19 @@ epi.kappa(dat.m01, method = "fleiss", alternative = "greater",
 ## ELISA negative, US positive: 29
 ## ELISA negative, Ul negative: 987
 
-dat.m02 <- matrix(c(596,61,29,987), nrow = 2, byrow = TRUE)
-colnames(dat.m02) <- c("US-pos","US-neg")
-rownames(dat.m02) <- c("ELISA-pos","ELISA-neg")
+dat.m03 <- matrix(c(596,61,29,987), nrow = 2, byrow = TRUE)
+colnames(dat.m03) <- c("US-pos","US-neg")
+rownames(dat.m03) <- c("ELISA-pos","ELISA-neg")
 
-dat.kap02 <- epi.kappa(dat.m02, method = "watson", alternative = "greater", 
+dat.kap03 <- epi.kappa(dat.m03, method = "watson", alternative = "greater", 
    conf.level = 0.95)
-dat.kap02$kappa
+dat.kap03$kappa
 
 ## The proportion of agreements after chance has been excluded is 
 ## 0.89 (95\% CI 0.86 to 0.91). We conclude that that there is substantial 
 ## agreement between the two pregnancy diagnostic methods.
 
-dat.kap02$pabak
+dat.kap03$pabak
 
 ## The prevalence and bias corrected kappa statistic (PABAK) is 0.89
 ## (95\% CI 0.87 to 0.91).

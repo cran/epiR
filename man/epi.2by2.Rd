@@ -51,7 +51,7 @@ Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
    
 Where method is \code{cohort.time} and \code{outcome = as.columns} the required 2 by 2 table format is:
 
-\tabular{llll}{
+\tabular{lll}{
 -----------\tab ----------\tab ------------- \cr 
  		       \tab Disease +	\tab Time at risk  \cr
 -----------\tab ----------\tab ------------- \cr                   

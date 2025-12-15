@@ -11,22 +11,22 @@ output:
   toc: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Disease surveillance}
+  %\VignetteIndexEntry{Surveillance system assessment}
   %\VignetteEncoding{UTF-8}
-
+  
+  
 ---
 ```{r, echo = FALSE, message = FALSE}
 
-# If you want to create a PDF document paste the following after line 9 above:
-#   pdf_document:
-#     toc: true
-#     highlight: tango
-#     number_sections: no
-#     latex_engine: xelatex    
-# header-includes: 
-#    - \usepackage{fontspec}
+# Use tinytex (instead of MiKTex) to generate PDFs. See -Tools -Global options -Sweave. Use tinytex.
+# tinytex::install_tinytex()
 
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+# Use this code to update packages:
+# tinytex::tlmgr_update(self = TRUE, all = TRUE)
+
+library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
+
+knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
@@ -35,8 +35,6 @@ Surveillance is defined as the on-going systematic collection, collation and int
 Surveillance is a tool for monitoring changes in health related events in a defined population with specific goals relating to: (1) the detection of disease incursions, both new and emerging; (2) the assessment of progress in terms of control or eradication of selected diseases and pathogens; (3) demonstration of disease freedom for trading partners; and (4) identification of hazards or risk factors for disease outbreaks.
 
 This vignette provides instruction on the way R and `epiR` (specifically, the surveillance functions within `epiR`) can be used for: (1) the design of disease surveillance programs; and (2) the design of surveillance programs to provide a quantitative basis for claims for disease freedom.
-
-The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the surveillance functions in `epiR` using a smart phone.
 
 ## Definitions
 
@@ -54,11 +52,11 @@ A design prevalence is not related to any actual prevalence of disease in the po
 
 **Surveillance units**. Surveillance units (SUs) are the individual units that get assessed within each surveillance system component. For the surveillance system components listed (on-farm testing, abattoir surveillance, disease hotlines) the corresponding surveillance units would be individual animals, carcasses and individual phone reports, respectively.
 
-**Surveillance unit sensitivity**. Surveillance unit sensitivity (USe) is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is actually present in the population at a level equal to or greater than the specified design prevalence.
+**Surveillance unit sensitivity**. Surveillance unit sensitivity (SUSe) is defined as the average probability that a surveillance system unit (selected from those processed) will return a positive surveillance outcome, given that disease is actually present in the population at a level equal to or greater than the specified design prevalence.
 
-**Surveillance component sensitivity**. Surveillance component sensitivity (CSe) is the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
+**Surveillance component sensitivity**. Surveillance component sensitivity (SCSe) is the average probability that a surveillance system component will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
 
-**Surveillance system sensitivity**. Surveillance system sensitivity (SSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
+**Surveillance system sensitivity**. Surveillance system sensitivity (SSSe) is defined as the average probability that a surveillance system (as a whole) will return a positive surveillance outcome, given disease is present in the population at a level equal to or greater than the specified design prevalence.
 
 ## An approach for thinking about surveillance design and assessment
 
@@ -70,7 +68,7 @@ In terms of design, firstly specify the sampling method to be used and then dete
 
 Once samples have been collected and tested or if you are making an assessment of an existing surveillance system, you then might want to answer the question: If the disease of interest is actually present in the population what is the chance that the surveillance system will actually detect it? This question can be expressed in three ways: 
 
-1. What is the surveillance system sensitivity (SSe)? or 
+1. What is the surveillance system sensitivity (SSSe)? or 
 
 2. What is the probability that the prevalence of disease is less than the specified design prevalence? or 
 
@@ -86,10 +84,8 @@ The sample size functions for surveillance representative sampling in `epiR` fal
 
 The surveillance system sensitivity sample size functions include those for simple random sampling and two stage sampling. Two stage sampling is the preferred (indeed, the only practical approach) when a population is organised in clusters (e.g., cows within herds, households within villages). With two stage sampling clusters (herds, villages) are sampled first and then, from within each selected cluster, individual surveillance units (animals, individuals) are sampled. In this context we talk about herds and villages as **primary sampling units** (PSUs) and animals and individuals as **secondary sampling units** (SSUs).  
 
-```{r ssrs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-library(dplyr); library(flextable); library(knitr); library(officer); library(tidyr)
-
-tab1.df <- data.frame(
+```{r echo = FALSE, results = 'asis'}
+tab.df01 <- data.frame(
    sampling = c("Representative","Representative","Two stage representative","Representative","Pooled representative"),
    outcome = c("Pr DF","SSe","SSe","SSe","SSe"),
    detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp", 
@@ -101,31 +97,26 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 1: Functions to estimate sample size using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
-  
-border_h = fp_border(color = "black", width = 2)
+caption.t <- "Table 1: Functions in epiR to estimate sample size using representative population sampling data."
+border_h = fp_border(color = "black", width = 1)
 
-ft <- flextable(tab1.df) %>%
-  width(j = 1, width = 2.50) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.50) %>%
-  width(j = 4, width = 2.00) %>%
-  
-  font(i = 1:5, j = 4, part = "body", fontname = "courier") %>%
-
+ft <- flextable(tab.df01) %>%
+  width(j = 1, width = 1.50) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 1.50) %>%
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
-  
+  font(j = 4, fontname = "Courier New", part = "body") %>%
+  fontsize(size = 9, part = "all") %>%
   bg(bg = "grey80", part = "header") %>%
-  hline_top(border = border_h, part = "all" ) %>%
+  hline_top(border = border_h, part = "header") %>%
+  hline_bottom(border = border_h, part = "header") %>%
   align(align = "left", part = "all") %>%
-  
+  set_caption(caption = caption.t) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  fontsize(size = 9, part = "footer") %>%
-  set_caption(caption = caption.t)
+  fontsize(size = 9, part = "footer")
 ft
 ```
-
 *EXAMPLE 1*
 
 A cross-sectional study is to be carried out to confirm the absence of brucellosis in dairy herds using a bulk milk tank test assuming a design prevalence of 5%. Assume the total number of dairy herds in your study area is unknown and large and the bulk milk tank test to be used has a diagnostic sensitivity of 0.90 and specificity of 1.00. How many herds need to be sampled to achieve a surveillance system sensitivity (`se.p`) of 95%? That is, what is the probability that disease will be detected if it is present in the population at the designated design prevalence?
@@ -152,7 +143,7 @@ A total of 63 herds need to be sampled and tested.
 
 The sample size calculations presented so far assume the use of a test with perfect specificity (that is, if a sample returns a positive result we can be 100% certain that the herd is positive and disease is actually present in the population). 
 
-Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The `rsu.ss.rsfreecalc` function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software 'Freecalc' [@cameron_baldock:1998a].
+Consider the situation where a test with imperfect specificity is used. Imperfect specificity presents problems for disease freedom surveys. If a positive test result is returned, how sure can we be that it is a true positive as opposed to a false positive? The `rsu.ss.rsfreecalc` function returns the required sample size to confirm the absence of disease using a test with imperfect diagnostic sensitivity and specificity based on the methodology implemented in the standalone software 'Freecalc' [@cameron_baldock:1998].
 
 *EXAMPLE 2*
 
@@ -176,15 +167,15 @@ rsu.sssep.rsfreecalc(N = 5000, pstar = 0.10, mse.p = 0.95,
 
 The required sample size decreases to 82 and the cut-point to 4 positives due to: (1) the expected reduction in the number of false positives; and (2) the greater difference between true and false positive rates in the first example compared with the second. 
 
+*EXAMPLE 3*
+
 Now consider the situation where individual surveillance units (e.g., animals) are aggregated within groups called 'clusters' (e.g., herds). With this type of system **two-stage cluster sampling** is a commonly used approach for disease surveillance studies. 
 
-With two stage cluster sampling herds (clusters, PSUs) are sampled first and then individual surveillance units (SSUs) are sampled from each sampled cluster. This means that we have two sample sizes to calculate: the number of PSUs and the number of SSUs from within each PSU. 
-
-*EXAMPLE 3*
+With two stage cluster sampling herds (clusters, PSUs) are sampled first and then surveillance units are sampled from each sampled cluster, as secondary sampling units (SSUs). This means that we have two sample sizes to calculate: the number of PSUs and the number of SSUs from within each PSU.
 
 For this example we assume that there are 20,000 at risk herds in our population and we do not know the number of animals present in each herd. This disease is not very common among herds but if a herd is positive the prevalence is expected to be relatively high, so we set the herd-level design prevalence to 0.005 and the within-herd design prevalence to 0.05. The test we will use at the surveillance unit level has a diagnostic sensitivity of 0.90 and a diagnostic specificity of 1.00. The target sensitivity of disease detection at the population level is 0.95. 
 
-How many PSUs (herds) need to be sampled if you want to be 95% certain of detecting at least one infected herd if the between-herd prevalence of disease is greater than or equal to 0.005?
+How many herds (PSUs) need to be sampled if you want to be 95% certain of detecting at least one infected herd if the between-herd prevalence of disease is greater than or equal to 0.005?
 
 ```{r message = FALSE}
 rsu.sssep.rs(N = 20000, pstar = 0.005, se.p = 0.95, se.u = 0.90)
@@ -206,10 +197,10 @@ rsu.sssep.rs2st(H = 20000, N = NA, pstar.c = 0.005, pstar.u = 0.05, se.p = 0.95,
 
 ### Estimation of surveillance system sensitivity and specificity
 
-```{r seprs.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-tab2.df <- data.frame(
+```{r echo = FALSE, results = 'asis'}
+tab.df02 <- data.frame(
    sampling = c("Representative","Two stage representative","Representative","Representative","Pooled  representative","Representative","Representative"),
-   outcome = c("SSe","SSe","SSe","SSe","SSe","SSe","SSp"),
+   outcome = c("SSSe","SSSe","SSSe","SSSe","SSSe","SSSe","SSSp"),
    detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp, mult comp", "Imperf Se, imperf Sp","Imperf Se, perf Sp","Imperf Se, perf Sp","Imperf Sp"),
    fun = c("rsu.sep.rs","rsu.sep.rs2st","rsu.sep.rsmult","rsu.sep.rsfreecalc","rsu.sep.rspool","rsu.sep.rsvarse","rsu.spp.rs"))
 
@@ -218,31 +209,24 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 2: Functions to estimate surveillance system sensitivity (SSe) using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- "Table 2: Functions in epiR to estimate surveillance system sensitivity (SSSe) using representative population sampling data."
+border_h = fp_border(color = "black", width = 1)
 
-border_h = fp_border(color = "black", width = 2)
-
-ft <- flextable(tab2.df) %>%
-  width(j = 1, width = 2.50) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.50) %>%
-  width(j = 4, width = 2.00) %>%
-  
-  font(i = 1:7, j = 4, part = "body", fontname = "courier") %>%
-
+ft <- flextable(tab.df02) %>%
+  width(j = 1, width = 1.50) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 1.50) %>%
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
-  
+  font(j = 4, fontname = "Courier New", part = "body") %>%
+  fontsize(size = 9, part = "all") %>%
   bg(bg = "grey80", part = "header") %>%
-  hline_top(border = border_h, part = "all" ) %>%
+  hline_top(border = border_h, part = "header") %>%
+  hline_bottom(border = border_h, part = "header") %>%
   align(align = "left", part = "all") %>%
-  
-  footnote(i = 3, j = 3, value = as_paragraph(" mult comp: Multiple components."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  fontsize(size = 9, part = "footer") %>%
   set_caption(caption = caption.t)
 ft
 ```
-
 *EXAMPLE 4*
 
 Three hundred samples are to be tested from a population of animals to confirm the absence of disease. The total size of the population is unknown. Assuming a design prevalence of 0.01 and a test with diagnostic sensitivity of 0.95 will be used what is the surveillance system sensitivity? That is, what is the probability that disease will be detected if it is present in the population at or above the specified design prevalence?
@@ -284,10 +268,10 @@ If the design prevalence is 0.05 the estimated surveillance system sensitivity i
 
 ### Estimation of the probability of disease freedom
 
-```{r pfreers.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-tab3.df <- data.frame(
+```{r echo = FALSE, results = 'asis'}
+tab.df03 <- data.frame(
    sampling = c("Representative","Representative"),
-   outcome = c("Pr DF","Equilibrium pr DF"),
+   outcome = c("Pr DF","Equ Pr DF"),
    detail = c("Imperf Se, perf Sp","Imperf Se, perf Sp"),
    fun = c("rsu.pfree.rs","rsu.pfree.equ"))
 
@@ -296,40 +280,33 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 3: Functions to estimate the probability of disease freedom using representative population sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- "Table 3: Functions in epiR to estimate the probability of disease freedom using representative population sampling data."
+border_h = fp_border(color = "black", width = 1)
 
-border_h = fp_border(color = "black", width = 2)
-
-ft <- flextable(tab3.df) %>%
-  width(j = 1, width = 2.50) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.50) %>%
-  width(j = 4, width = 2.00) %>%
-  
-  font(i = 1:2, j = 4, part = "body", fontname = "courier") %>%
-
+ft <- flextable(tab.df03) %>%
+  width(j = 1, width = 1.50) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 1.50) %>%
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
-  
+  font(j = 4, fontname = "Courier New", part = "body") %>%
+  fontsize(size = 9, part = "all") %>%
   bg(bg = "grey80", part = "header") %>%
-  hline_top(border = border_h, part = "all" ) %>%
+  hline_top(border = border_h, part = "header") %>%
+  hline_bottom(border = border_h, part = "header") %>%
   align(align = "left", part = "all") %>%
-  
+  set_caption(caption = caption.t) %>%
   footnote(i = 1, j = 2, value = as_paragraph(" Pr DF: Probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  footnote(i = 2, j = 2, value = as_paragraph(" Equilibrium pr DF: Equilibrium probability of disease freedom."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  fontsize(size = 9, part = "footer") %>%
-  set_caption(caption = caption.t)
+  fontsize(size = 9, part = "footer")
 ft
 ```
-
 *EXAMPLE 7*
 
-You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated surveillance system sensitivity (SSe) of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is greater during the warmer months of the year (June to August). 
+You are the epidemiologist for a land-locked country in central Asia. You have developed a surveillance program for a given disease which has an estimated surveillance system sensitivity (SSSe) of 0.65. The disease of interest is carried by live animals and you know that the frequency of illegal importation of animals into your country (and therefore the likelihood of disease incursion) is greater during the warmer months of the year (June to August). 
 
 Plot the probability of disease freedom assuming surveillance testing is carried out each month. Include on your plot the probability of disease incursion to show how it changes during the year. Previous surveillance work indicates that the probability that your country is actually free of disease is 0.50.
 
-```{r message = FALSE, fig.show = "hide", }
+```{r surv01, warning = FALSE, echo = TRUE, fig.cap = "\\label{fig:surv01}Figure 1: Line plot showing the probability of disease freedom (red) and the probability of disease introduction (blue) as a function of calendar date.", out.width = "80%", fig.align = "center"}
 library(ggplot2); library(lubridate); library(scales)
 
 # Define a vector disease incursion probabilities (January to December):
@@ -357,14 +334,6 @@ ggplot(data = gdat.df, aes(x = mchar, y = prob, group = class, col = class)) +
   guides(col = guide_legend(title = "")) +
   theme(legend.position = "inside", legend.position.inside = c(0.8,0.5))
 ```
-
-<figure style="text-align: center;">
-  <img src="prob_dis_freedom.png" alt="Probability of disease freedom" style="width: 60%;">
-  <figcaption>
-    Figure 1: Line plot showing the probability of disease freedom (red) and the probability of disease introduction (blue) as a function of calendar date.
-  </figcaption>
-</figure>
-
 ## Risk-based sampling
 
 With risk-based sampling we modify the intensity of sampling effort across the population of interest according to risk (as opposed to representative sampling where the probability that an individual unit is sampled is uniform across the population of interest). When our objective is to detect the presence of disease risk-based sampling makes intuitive sense: We concentrate our search effort on those sections of the population where we believe we're more likely to detect disease (i.e., where the risk of disease is high).
@@ -373,10 +342,10 @@ With risk-based sampling we modify the intensity of sampling effort across the p
 
 The sample size functions all relate to sampling to achieve a defined surveillance system sensitivity.
 
-```{r ssrb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-tab4.df <- data.frame(
+```{r echo = FALSE, results = 'asis'}
+tab.df04 <- data.frame(
    sampling = c("Risk-based","Risk-based","Risk-based","Risk-based"),
-   outcome = c("SSe","SSe","SSe","SSe"),
+   outcome = c("SSSe","SSSe","SSSe","SSSe"),
    detail = c("Single Se for RGs, perf Sp","Multiple Se within RGs, perf Sp","Two stage sampling, 1 risk factor","Two stage sampling, 2 risk factors"),
    fun = c("rsu.sssep.rbsrg","rsu.sssep.rbmrg","rsu.sssep.rb2st1rf","rsu.sssep.rb2st2rf"))
 
@@ -385,31 +354,26 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 4: Functions to estimate sample size using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- "Table 4: Functions in epiR to estimate sample size using risk based sampling data."
+border_h = fp_border(color = "black", width = 1)
 
-border_h = fp_border(color = "black", width = 2)
-
-ft <- flextable(tab4.df) %>%
-  width(j = 1, width = 2.50) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.50) %>%
-  width(j = 4, width = 2.00) %>%
-  
-  font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
-
+ft <- flextable(tab.df04) %>%
+  width(j = 1, width = 1.50) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 1.50) %>%
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
-  
+  font(j = 4, fontname = "Courier New", part = "body") %>%
+  fontsize(size = 9, part = "all") %>%
   bg(bg = "grey80", part = "header") %>%
-  hline_top(border = border_h, part = "all" ) %>%
+  hline_top(border = border_h, part = "header") %>%
+  hline_bottom(border = border_h, part = "header") %>%
   align(align = "left", part = "all") %>%
-  
-  footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  fontsize(size = 9, part = "footer") %>%
-  set_caption(caption = caption.t)
+  set_caption(caption = caption.t) %>%
+  footnote(i = 1, j = 3, value = as_paragraph("  RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
+  fontsize(size = 9, part = "footer")
 ft
 ```
-
 *EXAMPLE 8*
 
 You are working with a disease of cattle where the prevalence of disease is believed to vary according to herd type. The risk of disease is 5 times greater in dairy herds and 3 times greater in mixed herds compared with the reference category, beef herds. The proportion of dairy, mixed and beef herds in the population of interest is 0.10, 0.10 and 0.80, respectively. Assume you intend to distribute your sampling effort 0.4, 0.4 and 0.2 across dairy, mixed and beef herds, respectively.
@@ -471,13 +435,12 @@ rsu.sssep.rb2st2rf(rr.c = c(5,3,1), ppr.c = c(0.10,0.20,0.70), spr.c = c(0.40,0.
 
 A total of 82 clusters needs to be sampled: 33 from the high risk area, 33 from the medium risk area and 16 from the low risk area. A total of 9 units should be sampled from each cluster.
 
-
 ### Surveillance system sensitivity
 
-```{r seprb.tab, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-tab5.df <- data.frame(
+```{r echo = FALSE, results = 'asis'}
+tab.df05 <- data.frame(
    sampling = c("Risk-based","Risk-based","Risk-based"),
-   outcome = c("SSe","SSe","SSe"),
+   outcome = c("SSSe","SSSe","SSSe"),
    detail = c("Varying Se, perf Sp","Varying Se, perf Sp, 1 risk factor","Varying Se, perf Sp, 2 risk factors"),
    fun = c("rsu.sep.rb","rsu.sep.rb1rf","rsu.sep.rb2rf"))
 
@@ -486,33 +449,24 @@ hkey.df <- data.frame(col_keys = c("sampling","outcome","detail","fun"),
   h1 = c("Sampling","Outcome","Detail","Function"), stringsAsFactors = FALSE)
 
 # Create table:
-caption.t <- flextable::as_paragraph(as_chunk("Table 5: Functions to estimate surveillance system sensitivity using risk based sampling data.", props = fp_text(font.size = 11, font.family = "Arial", bold = TRUE)))
+caption.t <- "Table 5: Functions in epiR to estimate surveillance system sensitivity using risk based sampling data."
+border_h = fp_border(color = "black", width = 1)
 
-border_h = fp_border(color = "black", width = 2)
-
-ft <- flextable(tab4.df) %>%
-  width(j = 1, width = 2.50) %>%
-  width(j = 2, width = 2.00) %>%
-  width(j = 3, width = 2.50) %>%
-  width(j = 4, width = 2.00) %>%
-  
-  font(i = 1:4, j = 4, part = "body", fontname = "courier") %>%
-
+ft <- flextable(tab.df05) %>%
+  width(j = 1, width = 1.50) %>%
+  width(j = 2, width = 1.00) %>%
+  width(j = 3, width = 2.00) %>%
+  width(j = 4, width = 1.50) %>%
   set_header_df(mapping = hkey.df, key = "col_keys") %>%
-  
+  font(j = 4, fontname = "Courier New", part = "body") %>%
+  fontsize(size = 9, part = "all") %>%
   bg(bg = "grey80", part = "header") %>%
-  hline_top(border = border_h, part = "all" ) %>%
+  hline_top(border = border_h, part = "header") %>%
+  hline_bottom(border = border_h, part = "header") %>%
   align(align = "left", part = "all") %>%
-  
-  fontsize(i = 1, size = 8, part = "footer") %>%
-  
-  footnote(i = 1, j = 3, value = as_paragraph(" RGs: Risk groups."), ref_symbols = " a", part = "body", inline = FALSE, sep = "; ") %>%
-  
-  fontsize(size = 9, part = "footer") %>%
   set_caption(caption = caption.t)
 ft
 ```
-
 *EXAMPLE 11*
 
 You have been asked to provide an assessment of a surveillance program for *Actinobacillus hyopneumoniae* in pigs. It is known that there are high risk and low risk areas for *A. hypopneumoniae* in your country with the estimated probability of disease in the high risk area thought to be around 3.5 times that of the probability of disease in the low risk area. It is known that 10% of the 1784 pig herds in the study area are in the high risk area and 90% are in the low risk area.

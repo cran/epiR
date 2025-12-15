@@ -1,5 +1,5 @@
 ---
-title: "Sample Size Calculations using epiR"
+title: "Sample Size Estimation using epiR"
 author: "Mark Stevenson and Evan Sergeant"
 date: "`r Sys.Date()`"
 bibliography: epiR_sample_size.bib
@@ -11,26 +11,21 @@ output:
   toc: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Sample size calculations}
+  %\VignetteIndexEntry{Sample size estimation}
   %\VignetteEncoding{UTF-8}
-
+  
 ---
 ```{r, echo = FALSE, message = FALSE}
 
-# If you want to create a PDF document paste the following after line 9 above:
-#   pdf_document:
-#     toc: true
-#     highlight: tango
-#     number_sections: no
-#     latex_engine: xelatex    
-# header-includes: 
-#    - \usepackage{fontspec}
+# Use tinytex (instead of MiKTex) to generate PDFs. See -Tools -Global options -Sweave. Use tinytex.
+# tinytex::install_tinytex()
 
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+# Use this code to update packages:
+# tinytex::tlmgr_update(self = TRUE, all = TRUE)
+
+knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
-
-The EpiToolbox app for [iPhone](https://apps.apple.com/vn/app/epi-tools/id1611139482) and [Android](https://play.google.com/store/apps/details?id=au.melbourne.uni.epitools) devices provides access to many of the sample size functions in `epiR` using a smart phone.
 
 A review of sample size calculations in (veterinary) epidemiological research is provided by @stevenson:2021.
 

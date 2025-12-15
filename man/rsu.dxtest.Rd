@@ -90,7 +90,7 @@ Element           \tab Test pair         \cr
 
 How do I work out appropriate values for \code{covar.pos} and \code{covar.neg}? Assume you have two diagnostic tests --- an indirect fluorescent antibody test (IFAT) and a polymerase chain reaction (PCR). The diagnostic sensitivity and specificity of the IFAT is 0.784 and 0.951, respectively. The diagnostic sensitivity and specificity of the PCR is 0.926 and 0.979, respectively. These tests are used on a group of individuals known to be disease positive and a group of individuals known to be disease negative. Results for the disease positive group are as follows:  
 
-\tabular{lllll}{
+\tabular{llll}{
            \tab IFAT      \tab            \tab            \cr
 -----------\tab ----------\tab ---------- \tab ---------- \cr
 PCR        \tab Pos      	\tab Neg        \tab Total      \cr
@@ -104,7 +104,7 @@ Total      \tab 138     	\tab 38         \tab 176        \cr
 
 Results for the disease negative group are as follows:  
 
-\tabular{lllll}{
+\tabular{llll}{
            \tab IFAT      \tab            \tab            \cr
 -----------\tab ----------\tab ---------- \tab ---------- \cr
 PCR        \tab Pos      	\tab Neg        \tab Total      \cr

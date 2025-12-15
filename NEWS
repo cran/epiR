@@ -1,3 +1,19 @@
+CHANGES IN epiR VERSION 2.0.89
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Koopman confidence interval code corrected to resolve warnings issued when 2 by 2 table cell frequencies are large.
+    [Spotted by Stefan Hansen]
+
+    o Diagnostic test interpretation vignette added.
+    [Suggested by Mark Stevenson and the WOAH Colloborating Centre for Diagnostic Test Validation Science]
+    
+    o Further edits to statement of results for function epi.nomogram.
+    [Suggested by Mark Stevenson]
+    
+    o Fleiss Everitt method for calculating confidence intervals for kappa added to function epi.kappa.
+    [Contributed by Simon Firestone]
+    
+    
 CHANGES IN epiR VERSION 2.0.88
 SIGNIFICANT USER-VISIBLE CHANGES
 

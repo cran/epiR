@@ -1,15 +1,12 @@
 ## ----echo = FALSE, message = FALSE--------------------------------------------
 
-# If you want to create a PDF document paste the following after line 9 above:
-#   pdf_document:
-#     toc: true
-#     highlight: tango
-#     number_sections: no
-#     latex_engine: xelatex    
-# header-includes: 
-#    - \usepackage{fontspec}
+# Use tinytex (instead of MiKTex) to generate PDFs. See -Tools -Global options -Sweave. Use tinytex.
+# tinytex::install_tinytex()
 
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+# Use this code to update packages:
+# tinytex::tlmgr_update(self = TRUE, all = TRUE)
+
+knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 ## ----message = FALSE----------------------------------------------------------

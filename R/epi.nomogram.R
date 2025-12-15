@@ -211,7 +211,7 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
   # Statement of results when confidence intervals absent:
   if(verbose == FALSE & length(lratio.pos) == 1 & length(lratio.neg) == 1){
     
-    tpretest.ppos <- sprintf("%.2f", pretest.ppos)
+    tpretest.ppos <- ifelse(pretest.ppos < 0.01, sprintf("%.4f", as.numeric(pretest.ppos)), sprintf("%.2f", as.numeric(pretest.ppos)))
 
     tpostest.ppos <- ifelse(rval$postest.ppos < 0.01, sprintf("%.4f", as.numeric(rval$postest.ppos)), sprintf("%.2f", as.numeric(rval$postest.ppos)))
     
@@ -225,7 +225,7 @@ epi.nomogram <- function(pretest.ppos, se, sp, lratio.pos = NA, lratio.neg = NA,
   # Statement of results when credible intervals present:
   if(verbose == FALSE & length(lratio.pos) > 1 & length(lratio.neg) > 1){
     
-    tpretest.ppos <- sprintf("%.2f", pretest.ppos)
+    tpretest.ppos <- ifelse(pretest.ppos < 0.01, sprintf("%.4f", as.numeric(pretest.ppos)), sprintf("%.2f", as.numeric(pretest.ppos)))
     
     tpostest.ppos <- data.frame(lapply(rval$postest.ppos, function(x) {
       ifelse(x < 0.01, sprintf("%.4f", x), sprintf("%.2f", x))
