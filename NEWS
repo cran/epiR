@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.90
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.evalue computes E-values for risk, rate, odds and hazard ratio estimates. 
+    [Suggested by Mark Stevenson]
+    
+
 CHANGES IN epiR VERSION 2.0.89
 SIGNIFICANT USER-VISIBLE CHANGES
 
