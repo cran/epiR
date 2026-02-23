@@ -1,31 +1,26 @@
-epi.ssdetect <- function(N, prev, se, sp, interpretation = "series", covar = c(0,0), finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95){
-  
-  alpha <- (1 - conf.level)
-  
-  # Hypergeometric sample size:
-  n.hypergeo <- function(N, d, se = 1, conf.level){
-    n <- (N / se) * (1 - (1 - conf.level)^(1/d))
-    n[n > N] <- NA
-    return(ceiling(n))
-  } 
-  
-  # Binomial sample size:
-  n.binom <- function(pstar, se = 1, conf.level){
-    n <- log(1 - conf.level) / log(1 - pstar * se)
-    return(ceiling(n))
-  }
+# N <- c(11,350)
+# pstar <- c(0.01,0.15)
+# se <- 0.95
+# sp <- 1
+# interpretation = "series"
+# covar = c(0,0)
+# nfractional = FALSE
+# se.psu <- 0.95
+# ss.se <- 0.95
+
+epi.ssdetect <- function(N, pstar, se, sp, interpretation = "series", covar = c(0,0), nfractional = FALSE, se.psu = 0.95, ss.se = 0.95){
   
   # Covar is a vector of length two. First element is covariance for D+ group, second element is covariance for D- group. See Dohoo, Martin and Stryhn page 103.
   
-  # Work out sensitivity and specificity:
-  if (length(se) > 1 & interpretation == "series") {
+  # Sensitivity and specificity:
+  if(length(se) > 1 & interpretation == "series") {
     Ses <- se[1] * se[2] + covar[1]
     Sps <- 1 - (1 - sp[1]) * (1 - sp[2]) - covar[2]
     use <- Ses
     usp <- Sps
   }
   
-  if (length(se) > 1 & interpretation == "parallel") {
+  if(length(se) > 1 & interpretation == "parallel") {
     Sep <- 1 - (1 - se[1]) * (1 - se[2]) - covar[1]
     Spp <- sp[1] * sp[2] + covar[2]
     use <- Sep
@@ -38,68 +33,72 @@ epi.ssdetect <- function(N, prev, se, sp, interpretation = "series", covar = c(0
   }
   
   if (length(N) == 1) {
-    d <- ceiling(N * prev)
     
-    units.h <- n.hypergeo(N, d, se = use, conf.level)
-    units.b <- n.binom(pstar = prev, se = use, conf.level = conf.level)
-    units.b <- ifelse(finite.correction == TRUE, units.b / (1 + (units.b / N)), units.b)
-    units = c(hypergeo = units.h, binom = units.b)
+    # PSUs: binomial:
+    n.b <- log(1 - ss.se) / log(1 - pstar[1] * use)
+    
+    # PSUs: hypergeometric:
+    d <- N * pstar
+    n.h <- (N / use) * (1 - (1 - ss.se)^(1 / d))
+  
+    n <- ifelse(is.na(N), n.b, n.h)
+    
+    # If n > N set n to N:
+    n <- ifelse(!(is.na(N)) & n > N, N, n)
+    
+    ntotal <- n
+    sample.size <- data.frame(SUs = n, total = ntotal)
 
     if(nfractional == TRUE){
-      units <- units
+      sample.size <- sample.size
     }
     
     if(nfractional == FALSE){
-      units <- ceiling(units)
+      sample.size <- ceiling(sample.size)
     }
     
     performance <- data.frame(se = use, sp = usp)
-    sample.size <- units
-    rval <- list(performance = performance, sample.size = sample.size)
+    rval.ls <- list(performance = performance, sample.size = sample.size)
   }
   
   if (length(N) == 2) {
-    # Number of diseased units within each cluster:
-    d2 <- ceiling(N[2] * prev[2])
     
-    # Number of units to sample within each cluster:
-    units.h <- n.hypergeo(N = N[2], d = d2, se = use, conf.level = conf.level)
-    units.b <- n.binom(pstar = prev[2], se = use, conf.level = conf.level)
-    units.b <- ifelse(finite.correction == TRUE, units.b / (1 + (units.b / N[2])), units.b)
-    units = c(hypergeo = units.h, binom = units.b)
-
+    # PSUs: binomial --- note se.psu (sensitivity at the PSU level) instead of variable use:
+    npsu.b <- log(1 - ss.se) / log(1 - pstar[1] * se.psu)
+    
+    # PSUs: hypergeometric --- note se.psu (sensitivity at the PSU level instead of variable use):
+    d.psu <- N[1] * pstar[1]
+    npsu.h <- (N[1] / se.psu) * (1 - (1 - ss.se)^(1 / d.psu))
+    
+    npsu <- ifelse(is.na(N[1]), npsu.b, npsu.h)
+    
+    # If npsu > N[1] set npsu to N[1]:
+    npsu <- ifelse(npsu > N[1], N[1], npsu)
+    
+    # SSUs: binomial --- note variable use (adjusted diagnostic sensitivity):
+    nssu.b <- log(1 - ss.se) / log(1 - pstar[2] * use)
+    
+    # SSUs: hypergeometric:
+    d.ssu <- N[2] * pstar[2]
+    nssu.h <- (N[2] / use) * (1 - (1 - se.psu)^(1 / d.ssu))
+    
+    nssu <- ifelse(is.na(N[2]), nssu.b, nssu.h)
+    ntotal <- npsu * nssu
+    sample.size <- data.frame(PSUs = npsu, SSUs = nssu)
+    
     if(nfractional == TRUE){
-      units <- units
+      sample.size <- sample.size
     }
     
     if(nfractional == FALSE){
-      units <- ceiling(units)
+      sample.size <- ceiling(sample.size)
     }
     
-    # Increase the number of clusters using alpha:
-    pd <- prev[1] * (1 - alpha)
-    
-    # Expected number of disease-positive clusters:
-    d1 <- ceiling(N[1] * pd)
-    
-    clusters.h <- n.hypergeo(N = N[1], d = d1, se = use, conf.level = conf.level)
-    clusters.b <- n.binom(pstar = prev[1], se = use, conf.level = conf.level)
-    clusters.b <- ifelse(finite.correction == TRUE, clusters.b / (1 + (clusters.b / N[1])), units.b)
-    clusters = c(hypergeo = clusters.h, binom = clusters.b)
-    
-    if(nfractional == TRUE){
-      clusters <- clusters
-    }
-    
-    if(nfractional == FALSE){
-      clusters <- ceiling(clusters)
-    }
-
-    total <- c(hypergeo = (clusters[1] * units[1]), binom = c(clusters[2] * units[2]))    
+    sample.size$total <- sample.size$PSUs * sample.size$SSUs
     
     performance <- data.frame(se = use, sp = usp)
-    sample.size <- data.frame(clusters = clusters, units = units, total = total)
-    rval <- list(performance = performance, sample.size = sample.size)
+    rval.ls <- list(performance = performance, sample.size = sample.size)
   }
-  return(rval)
+  
+  return(rval.ls)
 }

@@ -20,7 +20,9 @@ epi.evalue(x, measure = "risk.ratio", rare = TRUE, conf.level = 0.95)
 }
 
 \details{
-The E-value quantifies how strong an unmeasured confounder would need to be to fully explain the observed association between an exposure variable and an outcome variable. The E-value is expressed on the risk ratio scale and represents the minimum strength of association that the confounder must have with both the exposure and the outcome. Larger E-values indicate that the observed association is more robust to potential unmeasured confounding.
+The E-value is the minimum strength of association, on the risk ratio scale, that an unmeasured confounder would need to have with both the exposure and the outcome to fully explain away a specific exposure-outcome association, conditional on the measured covariates included in a model (VanderWeele and Ding 2017). Larger E-values indicate that the observed association is more robust to potential unmeasured confounding.
+
+It is usual to calculate the E-value for only the lower bound of the 95\% CI when the risk ratio, odds ratio or hazard ratio is greater than 1 and for only the upper bound when the estimate is less than 1. The purpose of estimating the E-value of the 95\% CI is to determine the strength of confounding required to bring the confidence limits of the risk ratio, odds ratio or hazard ratio to unity. That is, to make the estimate of the odds ratio, risk ratio or hazard ratio no longer statistically significant.
 }
 
 \value{
@@ -72,19 +74,19 @@ epi.evalue(x = dat.glm, measure = "odds.ratio", rare = FALSE,
    conf.level = 0.95)
 
 ## $or
-##     var      est      low      upp
+##     var      est    lower    upper
 ## 1 smoke 3.054692 1.507644 6.432485
 ## 2  race 1.748883 1.196771 2.611134
 
 ## $rr
-##     var      est      low      upp
+##     var      est    lower    upper
 ## 1 smoke 1.747768 1.227861 2.536234
 ## 2  race 1.322453 1.093970 1.615900
 
 ## $eval
-##     var      est      low upp
-## 1 smoke 2.890975 1.756806  NA
-## 2  race 1.975469 1.414596  NA
+##     var      est    lower upper
+## 1 smoke 2.890975 1.756806    NA
+## 2  race 1.975469 1.414596    NA
 
 ## After controlling for the effect of race, the odds of delivering a low 
 ## birth weight baby for smokers was 3.05 (95\% CI 1.51 to 6.43) times that of

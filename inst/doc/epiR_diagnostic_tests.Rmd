@@ -313,9 +313,9 @@ Assuming a design prevalence of 0.001, if 290 cattle are tested using a test wit
 Test cattle in herds that are exporting to country B to confirm the absence of LSD. In the code that follows we assume there are 2500 cattle per herd and the within-herd LSD prevalence is in the order of 0.01: If LSD is present in a herd the within-herd prevalence should be reasonably high.
 
 ```{r, message = FALSE}
-epi.ssdetect(N = 2500, prev = 0.01, se = 0.96, sp = 0.92, finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
+epi.ssdetect(N = 2500, pstar = 0.01, se = 0.96, sp = 0.92, interpretation = "series", covar = c(0,0), nfractional = FALSE, se.psu = 0.95, ss.se = 0.95)
 ```
-From a herd of 2500 cattle, around 295 need to be sampled and tested to be 95% certain that, if all tests are negative, LSD is not present.
+From a herd of 2500 cattle, 298 need to be sampled and tested to be 95% certain that, if all tests are negative, LSD is not present.
 
 ## Estimate the characteristics of diagnostic tests applied at the herd (group) level
 

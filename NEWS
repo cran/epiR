@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.91
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Tidied up function epi.ssdetect.
+    [Suggested by Mark Stevenson]
+    
+    
 CHANGES IN epiR VERSION 2.0.90
 SIGNIFICANT USER-VISIBLE CHANGES
 

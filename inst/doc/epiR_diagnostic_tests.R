@@ -142,7 +142,7 @@ epi.prev(pos = 5, tested = 125, se = 0.50, sp = 0.95, method = "wilson", units =
 epi.fpos(n = 290, pstar = 0.001, se.u = 0.96, sp.u = 0.92, conf.level = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
-epi.ssdetect(N = 2500, prev = 0.01, se = 0.96, sp = 0.92, finite.correction = TRUE, nfractional = FALSE, conf.level = 0.95)
+epi.ssdetect(N = 2500, pstar = 0.01, se = 0.96, sp = 0.92, interpretation = "series", covar = c(0,0), nfractional = FALSE, se.psu = 0.95, ss.se = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rsfreecalc(N = 584, pstar = 0.05, mse.p = 0.95, msp.p = 0.95, se.u = 0.514, sp.u = 0.993, method = "hypergeometric", max.ss = 32000)$summary
