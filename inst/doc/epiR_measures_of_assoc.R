@@ -316,18 +316,18 @@ gdat.df04
 ## ----massoc06, warning = FALSE, echo = TRUE, fig.cap = "\\label{fig:massoc06}Figure 6: Risk factors for low birth weight babies. Error bar plot showing the point estimate of the odds ratio and its 95% confidence interval for maternal age, smoking and race.", out.width = "80%", fig.align = "center"----
 library(ggplot2); library(scales)
 
-xbrk <- seq(from = -2, to = 2, by = 1)
-xlab <- 2^xbrk
+xbrk <- 2^seq(from = -2, to = 2, by = 1)
 
-ggplot(data = gdat.df04, aes(x = log2(or.est), y = ybrk)) +
+ggplot(data = gdat.df04, aes(x = or.est, y = ybrk)) +
   theme_bw() +
   geom_point() + 
-  geom_errorbar(aes(xmin = log2(or.low), xmax = log2(or.upp), width = 0.2)) + 
-  scale_x_continuous(breaks = xbrk, labels = xlab, limits = range(xbrk), 
-   name = "Odds ratio") + 
+  geom_errorbar(aes(xmin = or.low, xmax = or.upp), width = 0.2, orientation = "y") + 
+  # geom_errorbar(aes(xmin = log2(or.low), xmax = log2(or.upp), width = 0.2)) + 
+  scale_x_continuous(trans = log2_trans(), breaks = xbrk, labels = xbrk, limits = range(xbrk), 
+                     name = "Odds ratio") + 
   scale_y_continuous(breaks = gdat.df04$ybrk, labels = gdat.df04$ylab, name = "Risk factor") + 
-  geom_vline(xintercept = log2(1), linetype = "dashed") + 
-  annotate("text", x = log2(0.25), y = gdat.df04$ybrk, label = gdat.df04$ref, hjust = 0, size = 3) +
+  geom_vline(xintercept = 1, linetype = "dashed") + 
+  annotate("text", x = 0.25, y = gdat.df04$ybrk, label = gdat.df04$ref, hjust = 0, size = 3) +
   coord_fixed(ratio = 0.75 / 1) + 
   theme(plot.margin = unit(c(0,0,0,0), "mm")) +
   theme(axis.title.y = element_text(vjust = 0))

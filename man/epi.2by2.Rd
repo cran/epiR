@@ -77,15 +77,17 @@ An object of class \code{epi.2by2} comprised of:
   \item{massoc.interp}{a data frame listing the interpretive statements for each computed measure of association.}
   \item{massoc.detail}{a list comprised of the computed measures of association, measures of effect in the exposed and measures of effect in the population. See below for details.}
 
-When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population are returned: 
+When method equals \code{cohort.count} the following measures of association, measures of effect in the exposed and measures of effect in the population and E-values  are returned: 
 
-  \item{\code{RR}}{Wald, Taylor, score and Koopman confidence intervals for the incidence risk ratios for each strata. Wald, Taylor, score and Koopman confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
-  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
-  \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk (risk difference) for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
-  \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
-  \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
-  \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
-  \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
+  \item{\code{RR}}{Wald, Taylor, score and Koopman point estimates and confidence intervals for the incidence risk ratios for each strata. Wald, Taylor, score and Koopman confidence intervals for the crude incidence risk ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
+  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood point estimates and confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood point estimates and confidence intervals for the crude odds ratio. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted odds ratio.}
+  \item{\code{ARisk}}{Wald and score point estimates and confidence intervals for the attributable risk (risk difference) for each strata. Wald and score point estimates and confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{NNT}}{Wald and score point estimates and confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
+  \item{\code{PARisk}}{Wald and Pirikahu point estimates and confidence intervals for the population attributable risk for each strata. Wald and Pirikahu point estimates and confidence intervals for the crude population attributable risk. The Pirikahu confidence intervals are calculated using the delta method.}
+  \item{\code{AFRisk}}{Wald point estimates and confidence intervals for the attributable fraction for each strata. Wald point estimates and confidence intervals for the crude attributable fraction.}
+  \item{\code{PAFRisk}}{Wald point estimates and confidence intervals for the population attributable fraction for each strata. Wald point estimates and confidence intervals for the crude population attributable fraction.}
+  \item{\code{E}}{E-value point estimates and confidence intervals for each strata. E-value point estimate and confidence interval for the crude incidence risk ratio. E-value point estimate and confidence interval for the Mantel-Haenszel adjusted incidence risk ratio.}
+  
   \item{\code{wald.rr}}{Wald test where the null hypothesis is that the true strata incidence risk ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence risk ratio is equal to unity.}
   \item{\code{wald.or}}{Wald test where the null hypothesis is that the true strata incidence odds ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence odds ratio is equal to unity.}
   \item{\code{chisq.strata}}{chi-squared test for a difference in exposed and non-exposed proportions for each strata.}
@@ -96,11 +98,11 @@ When method equals \code{cohort.count} the following measures of association, me
   
 When method equals \code{cohort.time} the following measures of association and effect are returned: 
 
-  \item{\code{IRR}}{Wald confidence interval for the incidence rate ratios for each strata. Wald confidence interval for the crude incidence rate ratio. Wald confidence interval for the Mantel-Haenszel adjusted incidence rate ratio.}
-  \item{\code{ARate}}{Wald confidence interval for the attributable rate for each strata. Wald confidence interval for the crude attributable rate. Wald confidence interval for the Mantel-Haenszel adjusted attributable rate.}
-  \item{\code{PARate}}{Wald confidence interval for the population attributable rate for each strata. Wald confidence intervals for the crude population attributable rate.}
-  \item{\code{AFRate}}{Wald confidence interval for the attributable fraction for each strata. Wald confidence interval for the crude attributable fraction.}
-  \item{\code{PAFRate}}{Wald confidence interval for the population attributable fraction for each strata. Wald confidence interval for the crude poulation attributable fraction.}
+  \item{\code{IRR}}{Wald point estimates and confidence intervals for the incidence rate ratios for each strata. Wald point estimate and confidence interval for the crude incidence rate ratio. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted incidence rate ratio.}
+  \item{\code{ARate}}{Wald point estimates and confidence intervals for the attributable rate for each strata. Wald point estimate and confidence interval for the crude attributable rate. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted attributable rate.}
+  \item{\code{PARate}}{Wald point estimates and confidence intervals for the population attributable rate for each strata. Wald point estimates and confidence intervals for the crude population attributable rate.}
+  \item{\code{AFRate}}{Wald point estimates and confidence intervals for the attributable fraction for each strata. Wald point estimate and confidence interval for the crude attributable fraction.}
+  \item{\code{PAFRate}}{Wald point estimates and confidence intervals for the population attributable fraction for each strata. Wald point estimate and confidence interval for the crude poulation attributable fraction.}
   \item{\code{wald.irr}}{Wald test where the null hypothesis is that the true strata incidence rate ratios are equal to unity. Wald test where the null hypothesis is that the true crude incidence rate ratio is equal to unity.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
@@ -108,11 +110,12 @@ When method equals \code{cohort.time} the following measures of association and 
 
 When method equals \code{case.control} the following measures of association and effect are returned:
 
-  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
-  \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
-  \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk.}
-  \item{\code{AFest}}{Wald confidence intervals for the estimated attributable fraction for each strata. Wald confidence intervals for the crude estimated attributable fraction.}
-  \item{\code{PAFest}}{Wald confidence intervals for the population estimated attributable fraction for each strata. Wald confidence intervals for the crude population estimated attributable fraction.}
+  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood point estimates and confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood point estimates and confidence intervals for the crude odds ratio. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted odds ratio.}
+  \item{\code{ARisk}}{Wald and score point estimates and confidence intervals for the attributable risk for each strata. Wald and score point estimates and confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{PARisk}}{Wald and Pirikahu point estimates and confidence intervals for the population attributable risk for each strata. Wald and Pirikahu point estimate and confidence intervals for the crude population attributable risk.}
+  \item{\code{AFest}}{Wald point estimates and confidence intervals for the estimated attributable fraction for each strata. Wald point estimate and confidence interval for the crude estimated attributable fraction.}
+  \item{\code{PAFest}}{Wald point estimates and confidence intervals for the population estimated attributable fraction for each strata. Wald point estimate and confidence interval for the crude population estimated attributable fraction.}
+  \item{\code{E}}{E-value point estimates and confidence intervals for each strata. E-value point estimate and confidence interval for the crude odds ratio. E-value point estimate and confidence interval for the Mantel-Haenszel adjusted odds ratio.}
   \item{\code{chisq.strata}}{chi-squared test for difference in exposed and non-exposed proportions for each strata.}
   \item{\code{chisq.crude}}{chi-squared test for difference in exposed and non-exposed proportions across all strata.}
   \item{\code{chisq.mh}}{Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1.}
@@ -120,13 +123,14 @@ When method equals \code{case.control} the following measures of association and
 
 When method equals \code{cross.sectional} the following measures of association and effect are returned: 
 
-  \item{\code{PR}}{Wald, Taylor, score and Koopman confidence intervals for the prevalence ratios for each strata. Wald, Taylor, score and Koopman confidence intervals for the crude prevalence ratio. Wald confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
-  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood confidence intervals for the crude odds ratio. Wald confidence interval for the Mantel-Haenszel adjusted odds ratio.}
-  \item{\code{ARisk}}{Wald and score confidence intervals for the attributable risk for each strata. Wald and score confidence intervals for the crude attributable risk. Wald, Sato and Greenland-Robins confidence intervals for the Mantel-Haenszel adjusted attributable risk.}
-  \item{\code{NNT}}{Wald and score confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
-  \item{\code{PARisk}}{Wald and Pirikahu confidence intervals for the population attributable risk for each strata. Wald and Pirikahu confidence intervals for the crude population attributable risk.}
-  \item{\code{AFRisk}}{Wald confidence intervals for the attributable fraction for each strata. Wald confidence intervals for the crude attributable fraction.}
-  \item{\code{PAFRisk}}{Wald confidence intervals for the population attributable fraction for each strata. Wald confidence intervals for the crude population attributable fraction.}
+  \item{\code{PR}}{Wald, Taylor, score and Koopman point estimates and confidence intervals for the prevalence ratios for each strata. Wald, Taylor, score and Koopman point estimate and confidence interval for the crude prevalence ratio. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted prevalence ratio.}
+  \item{\code{OR}}{Wald, score, Cornfield and maximum likelihood point estimates and confidence intervals for the odds ratios for each strata. Wald, score, Cornfield and maximum likelihood point estimate and confidence interval for the crude odds ratio. Wald point estimate and confidence interval for the Mantel-Haenszel adjusted odds ratio.}
+  \item{\code{ARisk}}{Wald and score point estimates and confidence intervals for the attributable risk for each strata. Wald and score point estimate and confidence interval for the crude attributable risk. Wald, Sato and Greenland-Robins point estimate and confidence interval for the Mantel-Haenszel adjusted attributable risk.}
+  \item{\code{NNT}}{Wald and score point estimates and confidence intervals for the number needed to treat for benefit (NNTB) or number needed to treat for harm (NNTH).}
+  \item{\code{PARisk}}{Wald and Pirikahu point estimates and confidence intervals for the population attributable risk for each strata. Wald and Pirikahu point estimate and confidence interval for the crude population attributable risk.}
+  \item{\code{AFRisk}}{Wald point estimates and confidence intervals for the attributable fraction for each strata. Wald point estimate and confidence interval for the crude attributable fraction.}
+  \item{\code{PAFRisk}}{Wald point estimates and confidence intervals for the population attributable fraction for each strata. Wald point estimate and confidence interval for the crude population attributable fraction.}
+  \item{\code{E}}{E-value point estimates and confidence intervals for each strata. E-value point estimate and confidence interval for the crude prevalence risk ratio. E-value point estimate and confidence interval for the Mantel-Haenszel adjusted prevalence risk ratio.}
   
   \item{\code{wald.rr}}{Wald test where the null hypothesis is that the true strata prevalence risk ratios are equal to unity. Wald test where the null hypothesis is that the true crude prevalence risk ratio is equal to unity.}
 
@@ -150,6 +154,8 @@ Variable \code{phi.coef} equals the phi coefficient (Fleiss et al. 2003, Equatio
 The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is equal to 1 uses a two-sided test without continuity correction.
 
 Interpretive statements for NNTB and NNTH follow the approach described by Altman (1998). See the examples for details. Note that number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) estimates are not computed when \code{method = "cohort.time"} or \code{method = "case.control"} because the attributable risk can't be calculated using these study designs.
+
+E-values are computed using the individual strata odds ratio Wald confidence interval estimates, crude odds ratio Wald confidence interval estimates, and Mantel-Haenszel adjusted Wald confidence interval estimates, where appropriate. When \code{method = "case.control"} the function sets the \code{rare} argument in function \code{epi.evalue} (called by \code{epi.2by2}) to \code{TRUE} when the frequency of the outcome is less than 0.05. Users wanting more control over this argument are advised to call function \code{\link{epi.evalue}} directly.
 }
 
 \references{
@@ -161,6 +167,8 @@ Anscombe F (1956). On estimating binomial response relations. Biometrika 43, 461
 
 Cornfield, J (1956). A statistical problem arising from retrospective studies. In: Proceedings of the Third Berkeley Symposium on Mathematical Statistics and Probability, University of California Press, Berkeley California 4: 135 - 148.
 
+Ding P, VanderWeele T, (2016) Sensitivity analysis without assumptions. Epidemiology 27: 368 - 377.
+                                                                                                   
 Elwood JM (2007). Critical Appraisal of Epidemiological Studies and Clinical Trials. Oxford University Press, London.
 
 Feinstein AR (2002). Principles of Medical Statistics. Chapman Hall/CRC, London, pp. 332 - 336.
@@ -205,6 +213,8 @@ Robbins AS, Chao SY, Fonesca VP (2002). What's the relative risk? A method to di
 
 Sullivan KM, Dean A, Soe MM (2009). OpenEpi: A Web-based Epidemiologic and Statistical Calculator for Public Health. Public Health Reports 124: 471 - 474.
 
+VanderWeele TJ, Ding P (2017). Sensitivity analysis in observational research: Introducing the E-value. Annals of Internal Medicine 167: 268 - 274.
+
 Wald A (1943). Tests of statistical hypotheses concerning several parameters when the number of observations is large. Transactions of the American Mathematical Society
 54: 426 - 482.
 
@@ -233,7 +243,7 @@ Measures of effect in the population include the attributable risk in the popula
 
 Point estimates and confidence intervals for the prevalence ratio and incidence risk ratio are calculated using the Wald (1943) and score methods (Miettinen and Nurminen 1985). Point estimates and confidence intervals for the incidence rate ratio are calculated using the exact method described by Kirkwood and Sterne (2003) and Juul (2004). Point estimates and confidence intervals for the odds ratio are calculated using the Wald (1943), score (Miettinen and Nurminen 1985) and maximum likelihood methods (Fleiss et al. 2003). Point estimates and confidence intervals for the population attributable risk are calculated using formulae provided by Lash et al (2021) and Pirikahu (2014). Point estimates and confidence intervals for the population attributable fraction are calculated using formulae provided by Jewell (2004, p 84 - 85). Point estimates and confidence intervals for the Mantel-Haenszel adjusted attributable risk are calculated using formulae provided by Klingenberg (2014).
 
-Wald confidence intervals are provided in the summary table simply because they are widely used and would be familiar to most users. 
+Wald confidence intervals are provided in the summary table because they are widely used and should be familiar to most users. 
 
 The Mantel-Haenszel adjusted measures of association are valid when the measures of association across the different strata are similar (homogenous), that is when the test of homogeneity of the odds (risk) ratios is not statistically significant.
 
@@ -267,11 +277,15 @@ epi.2by2(dat =  dat.v01, method = "cross.sectional", elab = "Dry food",
 ## The prevalence of FLUTD in dry food positive cats was 4.01 (95\% CI 1.43 to 
 ## 11.23) times the prevalence of FLUTD in dry food negative cats.
 
-## In dry food positive cats, 75\% (95\% CI 30\% to 91\%) of FLUTD cases were 
+## In dry food positive cats, 75\% (95\% CI 33\% to 91\%) of FLUTD cases were 
 ## attributable to feeding dry food.
 
 ## Fifty-four percent of FLUTD cases in the population was attributable 
-## to feeding dry food (95\% CI 4\% to 78\%).
+## to feeding dry food (95\% CI 32\% to 75\%).
+
+## An unmeasured confounder in this study would need to be associated with 
+## both dry food and FLUTD by a risk ratio of at least 7.48 (each) to 
+## completely account for the observed odds ratio of 4.03. 
 
 
 ## EXAMPLE 2:
@@ -299,6 +313,10 @@ epi.2by2(dat = dat.tab02, method = "cohort.count", elab = "Smoke",
 ## (95\% CI 1.08 to 3.78) times the odds of having a low birth weight child 
 ## for non-smokers.
 
+## An unmeasured confounder in this study would need to be associated with 
+## both smoking and low BW by a risk ratio of at least 2.60 (each) to 
+## completely account for the observed odds ratio of 2.02. 
+
 ## Stratify by race:
 dat.tab02 <- table(dat.df02$smoke, dat.df02$low, dat.df02$race, 
    dnn = c("Smoke", "Low BW", "Race"))
@@ -313,12 +331,18 @@ print(dat.epi02)
 
 ## The Mantel-Haenszel test of homogeneity of the strata odds ratios is not 
 ## statistically significant (chi square test statistic 2.800; df 2; 
-## p-value = 0.25). We accept the null hypothesis and conclude that the 
+## p-value = 0.25) so we accept the null hypothesis and conclude that the 
 ## odds ratios for each strata of race are the same. 
 
 ## After accounting for the confounding effect of race, the odds of 
 ## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
+
+## After controlling for the confounding effect of case, a (residual) 
+## confounder in this study would need to be associated with 
+## both smoking and low BW by a risk ratio of at least 5.62 (each) to 
+## completely account for the observed Mantel-Haenszel adjusted odds ratio 
+## of 3.09. 
 
 ## Compare the Greenland-Robins confidence intervals for the Mantel-Haenszel
 ## adjusted attributable risk with the Wald confidence intervals for the 
@@ -386,7 +410,7 @@ nstrata <- 1:dim(dat.tab02)[3]
 strata.lab <- paste("Strata ", nstrata, sep = "")
 y.at <- c(nstrata, max(nstrata) + 1)
 y.lab <- c("M-H", strata.lab)
-x.at <- c(0.25,0.5,1,2,4,8,16,32)
+x.brk <- 2^seq(from = -2, to = 5, by = 1)
 
 or.p <- c(dat.epi02$massoc.detail$OR.mh$est, 
    dat.epi02$massoc.detail$OR.strata.cfield$est)
@@ -399,10 +423,10 @@ dat.df02 <- data.frame(y.at, y.lab, or.p, or.l, or.u)
 ggplot(data = dat.df02, aes(x = or.p, y = y.at)) +
   theme_bw() +
   geom_point() + 
-  geom_errorbarh(aes(xmax = or.l, xmin = or.u, height = 0.2)) + 
+  geom_errorbar(aes(xmin = or.l, xmax = or.u), width = 0.2, orientation = "y") + 
   labs(x = "Odds ratio", y = "Strata") + 
-  scale_x_continuous(trans = log2_trans(), breaks = x.at, 
-     limits = c(0.25,32)) + 
+  scale_x_continuous(trans = log2_trans(), breaks = x.brk, 
+                     limits = range(x.brk)) + 
   scale_y_continuous(breaks = y.at, labels = y.lab) + 
   geom_vline(xintercept = 1, lwd = 1) + 
   coord_fixed(ratio = 0.75 / 1) + 

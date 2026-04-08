@@ -1,15 +1,22 @@
+CHANGES IN epiR VERSION 2.0.92
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o E-values added to the output of function epi.2by2.
+    [Mark Stevenson]
+    
+
 CHANGES IN epiR VERSION 2.0.91
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Tidied up function epi.ssdetect.
-    [Suggested by Mark Stevenson]
+    [Mark Stevenson]
     
     
 CHANGES IN epiR VERSION 2.0.90
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o New function epi.evalue computes E-values for risk, rate, odds and hazard ratio estimates. 
-    [Suggested by Mark Stevenson]
+    [Mark Stevenson]
     
 
 CHANGES IN epiR VERSION 2.0.89
@@ -19,13 +26,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     [Spotted by Stefan Hansen]
 
     o Diagnostic test interpretation vignette added.
-    [Suggested by Mark Stevenson and the WOAH Colloborating Centre for Diagnostic Test Validation Science]
+    [Mark Stevenson and the WOAH Colloborating Centre for Diagnostic Test Validation Science]
     
     o Further edits to statement of results for function epi.nomogram.
-    [Suggested by Mark Stevenson]
+    [Mark Stevenson]
     
     o Fleiss Everitt method for calculating confidence intervals for kappa added to function epi.kappa.
-    [Contributed by Simon Firestone]
+    [Simon Firestone]
     
     
 CHANGES IN epiR VERSION 2.0.88

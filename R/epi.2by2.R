@@ -138,7 +138,7 @@
   if(length(dim(dat)) == 2 & outcome == "as.columns"){
     dat <- dat}
   
-  ## If outcome == "as.rows", transpose it:
+  ## If outcome == "as.rows", transpose:
   if(length(dim(dat)) == 2 & outcome == "as.rows"){
     dat <- t(dat)}
   
@@ -247,6 +247,10 @@
   # Grand total:
   stotal <- sa + sb + sc + sd
   
+  
+  # ============================================================================
+  # Strata-level incidence and odds (no prefix to object names):
+  
   # Within-strata incidence risk in exposed:
   .tmp <- zexact(as.matrix(cbind(a, N1)), conf.level = conf.level)
   IRiske.p <- as.numeric(.tmp[,1]) * units
@@ -284,9 +288,7 @@
   IRatepop.u <- as.numeric(.tmp[,3]) * units
   
   # Within-strata odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
-  
   # American Journal of Epidemiology 100: 165 - 167.
-  
   # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69). Added 160609.
   Al <- (qbinom(1 - N., size = a + b, prob = (a / (a + b)))) / (a + b)
   Au <- (qbinom(N., size = a + b, prob = (a / (a + b)))) / (a + b)
@@ -308,7 +310,10 @@
   Opop.l <- (Al / (1 - Al))
   Opop.u <- (Au / (1 - Au))
   
-  # Crude incidence risk in exposed:
+  
+  # ============================================================================
+  # Crude incidence and odds ('c' as prefix to object names):
+  
   .tmp <- zexact(as.matrix(cbind(sa, sN1)), conf.level = conf.level)
   cIRiske.p <- as.numeric(.tmp[,1]) * units
   cIRiske.l <- as.numeric(.tmp[,2]) * units
@@ -345,9 +350,7 @@
   cIRatepop.u <- as.numeric(.tmp[,3]) * units
   
   # Crude odds in exposed (based on Ederer F and Mantel N (1974) Confidence limits on the ratio of two Poisson variables.
-  
   # American Journal of Epidemiology 100: 165 - 167.
-  
   # Cited in Altman, Machin, Bryant, and Gardner (2000) Statistics with Confidence, British Medical Journal, page 69). Added 160609:
   Al <- (qbinom(1 - N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
   Au <- (qbinom(N., size = sa + sb, prob = (sa / (sa + sb)))) / (sa + sb)
@@ -369,10 +372,12 @@
   cOpop.l <- Al / (1 - Al)
   cOpop.u <- Au / (1 - Au)
   
-  
+
   ## =========================================
   ## INDIVIDUAL STRATA MEASURES OF ASSOCIATION
   ## =========================================
+  
+  # No prefix to object names:
   
   # Individual strata incidence risk ratio - Wald confidence limits (Rothman p 135 equation 7-3):
   wRR.ctype <- "Wald"
@@ -753,7 +758,7 @@
   # Individual strata attributable fraction for rate data (from Hanley 2001):
   AFRate.ctype <- ""
   AFRate.p <- (IRR.p - 1) / IRR.p
-  # Bug found 031013. The following two lines of code replace those on lines 762 and 763:
+  # Bug found 031013. The following two lines of code replace those on lines 759 and 760:
   AFRate.l <- (IRR.l - 1) / IRR.l
   AFRate.u <- (IRR.u - 1) / IRR.u
   # AFRate.l <- min((IRR.l - 1) / IRR.l, (IRR.u - 1) / IRR.u)
@@ -764,7 +769,7 @@
   AFest.p <- (mOR.p - 1) / mOR.p
   AFest.l <- (mOR.l - 1) / mOR.l
   AFest.u <- (mOR.u - 1) / mOR.u
-  # Bug found 031013. The following two lines of code replace those on lines 457 and 458.
+  # Bug found 031013. The following two lines of code replace those on lines 768 and 769.
   # AFest.l <- min((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
   # AFest.u <- max((OR.l - 1) / OR.l, (OR.u - 1) / OR.u)
   
@@ -841,6 +846,40 @@
   PAFest.u <- 1 - exp(log(1 - PAFest.p) - (z * sqrt(PAFest.var)))
   
   
+  # Individual strata E-values. If method = cohort.count, cohort.time, cross.sectional, use the Wald risk ratio (avoiding the need to make a decision about whether or not the odds ratio is a valid measure of the risk ratio). If method = case.control, use the Wald odds ratio. If outcome frequency is less than 0.05 set rare to TRUE and FALSE otherwise:
+  
+  if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
+    # Risk ratio:
+    x <- data.frame(var = "", est = wRR.p, low = wRR.l, upp = wRR.u)
+    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+    eval.p    <- as.numeric(.tmp$eval[[2]])
+    eval.l    <- as.numeric(.tmp$eval[[3]])
+    eval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal < 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = wOR.p, low = wOR.l, upp = wOR.u)
+    
+    # rare == TRUE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
+    eval.p    <- as.numeric(.tmp$eval[[2]])
+    eval.l    <- as.numeric(.tmp$eval[[3]])
+    eval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal >= 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = wOR.p, low = wOR.l, upp = wOR.u)
+    
+    # rare == FALSE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
+    eval.p    <- as.numeric(.tmp$eval[[2]])
+    eval.l    <- as.numeric(.tmp$eval[[3]])
+    eval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+
+  
   ## =============================
   ## CRUDE MEASURES OF ASSOCIATION
   ## =============================
@@ -902,7 +941,7 @@
     ccfOR.u     <- .tmp[3]
   }
   
-  # Return NAs for ccfOR.p if Haldane Anscombe correction used (i.e. non-integer cell frequencies):
+  # Return NAs for ccfOR.p if Haldane Anscombe correction used (i.e., non-integer cell frequencies):
   if(sum(total) < 500 & is.integer(dat) == FALSE){
     ccfOR.ctype <- "Cornfield"
     .tmp        <- c(NA,NA,NA)
@@ -1062,12 +1101,45 @@
   cPAFest.l <- min((cOpop.l - cOo.l) / cOpop.l, (cOpop.u - cOo.u) / cOpop.u)
   cPAFest.u <- max((cOpop.l - cOo.l) / cOpop.l, (cOpop.u - cOo.u) / cOpop.u)
   
+  # Crude E-values. If method = cohort.count, cohort.time, cross.sectional, use the Wald risk ratio (avoiding the need to make a decision about whether or not the odds ratio is a valid measure of the risk ratio). If method = case.control, use the Wald odds ratio. If outcome frequency is less than 0.05 set rare to TRUE and FALSE otherwise:
+    
+  if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
+    # Risk ratio:
+    x <- data.frame(var = "", est = cwRR.p, low = cwRR.l, upp = cwRR.u)
+    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+    ceval.p    <- as.numeric(.tmp$eval[[2]])
+    ceval.l    <- as.numeric(.tmp$eval[[3]])
+    ceval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal < 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = cwOR.p, low = cwOR.l, upp = cwOR.u)
+    
+    # rare == TRUE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
+    ceval.p    <- as.numeric(.tmp$eval[[2]])
+    ceval.l    <- as.numeric(.tmp$eval[[3]])
+    ceval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal >= 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = cwOR.p, low = cwOR.l, upp = cwOR.u)
+    
+    # rare == FALSE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
+    ceval.p    <- as.numeric(.tmp$eval[[2]])
+    ceval.l    <- as.numeric(.tmp$eval[[3]])
+    ceval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
   
   ## ===============================
   ## MANTEL-HAENZEL SUMMARY MEASURES
   ## ===============================
   
-  # Summary incidence risk ratio (Rothman 2002 p 148 and 152, equation 8-2):
+  # Mantel-Haenszel summary incidence risk ratio (Rothman 2002 p 148 and 152, equation 8-2):
   sRR.p <- sum((a * N0 / total)) / sum((c * N1 / total))
   varLNRR.s <- sum(((M1 * N1 * N0) / total^2) - ((a * c)/ total)) / (sum((a * N0)/total) * sum((c * N1)/total))
   lnRR.s <- log(sRR.p)
@@ -1075,7 +1147,7 @@
   sRR.l <- exp(lnRR.s - (z * sqrt(varLNRR.s)))
   sRR.u <- exp(lnRR.s + (z * sqrt(varLNRR.s)))
   
-  # Summary incidence rate ratio (Rothman 2002 p 153, equation 8-5):
+  # Mantel-Haenszel summary incidence rate ratio (Rothman 2002 p 153, equation 8-5):
   sIRR.p <- sum((a * d) / M0) / sum((c * b) / M0)
   lnIRR.s <- log(sIRR.p)
   varLNIRR.s <- (sum((M1 * b * d) / M0^2)) / (sum((a * d) / M0) * sum((c * b) / M0))
@@ -1083,7 +1155,7 @@
   sIRR.l <- exp(lnIRR.s - (z * sqrt(varLNIRR.s)))
   sIRR.u <- exp(lnIRR.s + (z * sqrt(varLNIRR.s)))
   
-  # Summary odds ratio (Cord Heuer 211004):
+  # Mantel-Haenszel summary odds ratio (Cord Heuer 211004):
   sOR.p <- sum((a * d / total)) / sum((b * c / total))
   G <- a * d / total
   H <- b * c / total
@@ -1106,7 +1178,7 @@
   sOR.l <- exp(lnOR.s - z * sqrt(varLNOR.s))
   sOR.u <- exp(lnOR.s + z * sqrt(varLNOR.s))
 
-  # Summary attributable risk (Rothman 2002 p 147 and p 152, equation 8-1):
+  # Mantel-Haenszel summary attributable risk (Rothman 2002 p 147 and p 152, equation 8-1):
   sARisk.p <- (sum(((a * N0) - (c * N1)) / total) / sum((N1 * N0) / total)) * units
   w <- (N1 * N0) / total
   var.p1 <- (((a * d) / (N1^2 * (N1 - 1))) + ((c * b) / (N0^2 * (N0 - 1))))
@@ -1117,49 +1189,84 @@
   sARisk.l <- sARisk.p - (z * sARisk.se)
   sARisk.u <- sARisk.p + (z * sARisk.se)
   
-  # Summary NNTB-NNTH:
+  # Mantel-Haenszel summary NNTB-NNTH:
   sNNT.p <- 1 / (sARisk.p / units)
   .sNNT.l <- 1 / (sARisk.l / units)
   .sNNT.u <- 1 / (sARisk.u / units)
   sNNT.l <- min(c(.sNNT.l, .sNNT.u))
   sNNT.u <- max(c(.sNNT.l, .sNNT.u))
   
-  # Summary attributable risk (Klingenberg 2014, Statistics in Medicine 33: 2968 - 2983).
+  # Mantel-Haenszel summary attributable risk (Klingenberg 2014, Statistics in Medicine 33: 2968 - 2983).
   SatoARisk.ctype <- "Sato"
   .tmp        <- zMHRD.Sato(dat, conf.level, units)
   SatoARisk.p <- ifelse(is.null(.tmp), NA, .tmp[1])
   SatoARisk.l <- ifelse(is.null(.tmp), NA, .tmp[2])
   SatoARisk.u <- ifelse(is.null(.tmp), NA, .tmp[3])
   
-  # Summary NNTB-NNTH - Sato confidence limits:
+  # Mantel-Haenszel summary NNTB-NNTH - Sato confidence limits:
   SatoNNT.p <- 1 / (SatoARisk.p / units)
   .SatoNNT.l <- 1 / (SatoARisk.l / units)
   .SatoNNT.u <- 1 / (SatoARisk.u / units)
   SatoNNT.l <- min(c(.SatoNNT.l, .SatoNNT.u))
   SatoNNT.u <- max(c(.SatoNNT.l, .SatoNNT.u))
   
-  # Summary attributable risk (Klingenberg (2014, Statistics in Medicine 33: 2968 - 2983).
+  # Mantel-Haenszel summary attributable risk (Klingenberg (2014, Statistics in Medicine 33: 2968 - 2983).
   GRARisk.ctype <- "Greenland-Robins"
   .tmp        <- zMHRD.GR(dat, conf.level, units)
   GRARisk.p <- ifelse(is.null(.tmp), NA, .tmp[1])
   GRARisk.l <- ifelse(is.null(.tmp), NA, .tmp[2])
   GRARisk.u <- ifelse(is.null(.tmp), NA, .tmp[3])
   
-  # Summary NNTB-NNTH - Greenland-Robins confidence limits:
+  # Mantel-Haenszel summary NNTB-NNTH - Greenland-Robins confidence limits:
   GRNNT.p <- 1 / (GRARisk.p / units)
   .GRNNT.l <- 1 / (GRARisk.l / units)
   .GRNNT.u <- 1 / (GRARisk.u / units)
   GRNNT.l <- min(c(.GRNNT.l, .GRNNT.u))
   GRNNT.u <- max(c(.GRNNT.u, .GRNNT.u))
 
-  # Summary attributable rate (Rothman 2002 p 153, equation 8-4):
+  # Mantel-Haenszel summary attributable rate (Rothman 2002 p 153, equation 8-4):
   sARate.p <- sum(((a * d) - (c * b)) / M0) / sum((b * d) / M0) * units
   varARate.s <- sum(((b * d) / M0)^2 * ((a / b^2) + (c / d^2 ))) / sum((b * d) / M0)^2
   sARate.se <- sqrt(varARate.s) * units
   sARate.l <- sARate.p - (z * sARate.se)
   sARate.u <- sARate.p + (z * sARate.se)
   
+
+  # Mantel-Haenszel summary E-values. If method = cohort.count, cohort.time, cross.sectional, use the Wald risk ratio (avoiding the need to make a decision about whether or not the odds ratio is a valid measure of the risk ratio). If method = case.control, use the Wald odds ratio. If outcome frequency is less than 0.05 set rare to TRUE and FALSE otherwise:
   
+  if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
+    # Risk ratio:
+    x <- data.frame(var = "", est = sRR.p, low = sRR.l, upp = sRR.u)
+    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+    seval.p    <- as.numeric(.tmp$eval[[2]])
+    seval.l    <- as.numeric(.tmp$eval[[3]])
+    seval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal < 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = sOR.p, low = sOR.l, upp = sOR.u)
+    
+    # rare == TRUE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
+    seval.p    <- as.numeric(.tmp$eval[[2]])
+    seval.l    <- as.numeric(.tmp$eval[[3]])
+    seval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+  if(method == "case.control" & sM1 / stotal >= 0.05){
+    # Odds ratio:
+    x <- data.frame(var = "", est = sOR.p, low = sOR.l, upp = sOR.u)
+    
+    # rare == FALSE:
+    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
+    seval.p    <- as.numeric(.tmp$eval[[2]])
+    seval.l    <- as.numeric(.tmp$eval[[3]])
+    seval.u    <- as.numeric(.tmp$eval[[4]])
+  }
+  
+
+
   ## ===============================
   ## EFFECT OF CONFOUNDING
   ## ===============================
@@ -1489,6 +1596,11 @@
     RR.strata.score = data.frame(est = scRR.p, lower = scRR.l, upper = scRR.u),
     RR.strata.koopman = data.frame(est = kRR.p, lower = kRR.l, upper = kRR.u),
 
+    ## E-value for each strata, crude and M-H:
+    E.strata.wald = data.frame(est = eval.p, lower = eval.l, upper = eval.u),
+    E.crude.wald = data.frame(est = ceval.p, lower = ceval.l, upper = ceval.u),
+    E.mh.wald = data.frame(est = seval.p, lower = seval.l, upper = seval.u),
+    
     ## Crude incidence risk ratio:
     RR.crude.wald = data.frame(est = as.numeric(cwRR.p), lower = as.numeric(cwRR.l), upper = as.numeric(cwRR.u)),
     RR.crude.taylor = data.frame(est = ctRR.p, lower = ctRR.l, upper = ctRR.u),
@@ -1498,7 +1610,7 @@
     ## Mantel-Haenszel incidence risk ratio:
     RR.mh.wald = data.frame(est = sRR.p, lower = sRR.l, upper = sRR.u),
     
-    
+
     # --------------------------------------------------------------------------
     ## Strata incidence rate ratio:
     IRR.strata.wald = data.frame(est = IRR.p, lower = IRR.l, upper = IRR.u),
@@ -1775,6 +1887,10 @@
   cohort.count.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
   
+  # E-value interpretation:
+  cohort.count.ss.evalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.strata.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
+  
   # ----------------------------------------------------------------------------
   ## Cohort count multiple strata:
   
@@ -1882,7 +1998,12 @@
   
   cohort.count.ms.mnnt <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted incidence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
   
+  # E-value interpretation:
+  cohort.count.ms.cevalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.crude.wald$est, digits = 2), nsmall = 2), ".", sep = "")
   
+  cohort.count.ms.mevalue <- paste("After adjusting for the stratification variable an unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.mh.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.mh.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
+
   # ----------------------------------------------------------------------------
   # Cohort time single strata:
   
@@ -2007,7 +2128,10 @@
   
   case.control.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, ".", sep = "")
   
+  # E-value interpretation:
+  case.control.ss.evalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.crude.wald$est, digits = 2), nsmall = 2), ".", sep = "")
   
+
   # ----------------------------------------------------------------------------
   # Case-control multiple strata:
   
@@ -2041,7 +2165,12 @@
   pafupp <- round(res$PAFest.crude.wald[3] * 100, digits = 0)
   
   case.control.ms.cpaf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were estimated to be attributable to ", texp, " (unadjusted).", sep = "")
-
+  
+  # E-value interpretation:
+  case.control.ms.cevalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.crude.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
+  case.control.ms.mevalue <- paste("After adjusting for the stratification variable an unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.mh.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.mh.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
 
   # ----------------------------------------------------------------------------
   # Cross sectional single strata:
@@ -2118,6 +2247,9 @@
   
   cross.sectional.ss.paf <- paste("Among those that were ", texp, " positive and ", texp, " negative ", pafest, "% (", conf.level * 100, "% CI ", paflow, "% to ", pafupp, "%) of ", tout, " cases were attributable to ", texp, ".", sep = "")
   
+  
+  # E-value interpretation:
+  cross.sectional.ss.evalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed odds ratio of ", format(round(res$OR.crude.wald$est, digits = 2), nsmall = 2), ".", sep = "")
 
   # ---------------------------------------------------------------------------- 
   # Cross sectional multiple strata:       
@@ -2209,6 +2341,11 @@
   
   cross.sectional.ms.mnnt <- paste("Exposure to ", texp, " changed the Mantel-Haenszel adjusted prevalence risk of ", tout, " among those that were ", texp, " positive by ", arest," (", conf.level * 100,"% CI ", arlow, " to ", arupp, ") ", res$units.count[2], ". The number needed to expose to ", texp, " to ", change, " ", tout, " frequency by one was ", nntest, " (", conf.level * 100,"% CI ", nntlow," to ", nntupp, ").", sep = "")
   
+  # E-value interpretation:
+  cross.sectional.ms.cevalue <- paste("An unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.crude.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the observed crude odds ratio of ", format(round(res$OR.crude.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
+  cross.sectional.ms.mevalue <- paste("After adjusting for the stratification variable an unmeasured confounder in this study would need to be associated with both ", texp, " and ", tout, " by a risk ratio of at least ", format(round(res$E.mh.wald$est, digits = 2), nsmall = 2), " (each) to completely account for the Mantel-Haenszel adjusted odds ratio of ", format(round(res$OR.mh.wald$est, digits = 2), nsmall = 2), ".", sep = "")
+  
   
 # Compile all interpretative statements into a list:  
 interp.txt <- list(
@@ -2219,6 +2356,7 @@ interp.txt <- list(
   cohort.count.ss.af = cohort.count.ss.af, 
   cohort.count.ss.par = cohort.count.ss.par, 
   cohort.count.ss.paf = cohort.count.ss.paf, 
+  cohort.count.ss.evalue = cohort.count.ss.evalue,
   
   cohort.count.ms.crr = cohort.count.ms.crr, 
   cohort.count.ms.mrr = cohort.count.ms.mrr, 
@@ -2227,7 +2365,9 @@ interp.txt <- list(
   cohort.count.ms.car = cohort.count.ms.car, 
   cohort.count.ms.mar = cohort.count.ms.mar, 
   cohort.count.ms.cnnt = cohort.count.ms.cnnt, 
-  cohort.count.ms.mnnt = cohort.count.ms.mnnt, 
+  cohort.count.ms.mnnt = cohort.count.ms.mnnt,
+  cohort.count.ms.cevalue = cohort.count.ms.cevalue,
+  cohort.count.ms.mevalue = cohort.count.ms.mevalue,
   
   cohort.time.ss.rr = cohort.time.ss.rr, 
   cohort.time.ss.ar = cohort.time.ss.ar, 
@@ -2241,11 +2381,15 @@ interp.txt <- list(
 
   case.control.ss.or = case.control.ss.or, 
   case.control.ss.af = case.control.ss.af, 
-  case.control.ss.paf = case.control.ss.paf, 
+  case.control.ss.paf = case.control.ss.paf,
+  case.control.ss.evalue = case.control.ss.evalue,
+  
   case.control.ms.cor = case.control.ms.cor, 
   case.control.ms.mor = case.control.ms.mor, 
   case.control.ms.caf = case.control.ms.caf, 
-  case.control.ms.cpaf = case.control.ms.cpaf, 
+  case.control.ms.cpaf = case.control.ms.cpaf,
+  case.control.ms.cevalue = case.control.ms.cevalue, 
+  case.control.ms.mevalue = case.control.ms.mevalue,
   
   cross.sectional.ss.rr = cross.sectional.ss.rr, 
   cross.sectional.ss.or = cross.sectional.ss.or, 
@@ -2254,7 +2398,8 @@ interp.txt <- list(
   cross.sectional.ss.af = cross.sectional.ss.af, 
   cross.sectional.ss.par = cross.sectional.ss.par, 
   cross.sectional.ss.paf = cross.sectional.ss.paf, 
-  
+  cross.sectional.ss.evalue = cross.sectional.ss.evalue, 
+    
   cross.sectional.ms.crr = cross.sectional.ms.crr, 
   cross.sectional.ms.mrr = cross.sectional.ms.mrr, 
   cross.sectional.ms.cor = cross.sectional.ms.cor, 
@@ -2262,7 +2407,9 @@ interp.txt <- list(
   cross.sectional.ms.car = cross.sectional.ms.car, 
   cross.sectional.ms.mar = cross.sectional.ms.mar,
   cross.sectional.ms.cnnt = cross.sectional.ms.cnnt,
-  cross.sectional.ms.mnnt = cross.sectional.ms.mnnt)
+  cross.sectional.ms.mnnt = cross.sectional.ms.mnnt,
+  cross.sectional.ms.cevalue = cross.sectional.ms.cevalue,
+  cross.sectional.ms.mevalue = cross.sectional.ms.mevalue)
 
 
   ## ===============================
@@ -2274,6 +2421,7 @@ interp.txt <- list(
     
     ## Verbose part:
     massoc.detail <- list(
+      
       # Crude estimates labelled as strata estimates:
       RR.strata.wald     = res$RR.crude.wald,
       RR.strata.taylor   = res$RR.crude.taylor,
@@ -2296,7 +2444,9 @@ interp.txt <- list(
       PARisk.strata.wald = res$PARisk.crude.wald,
       PARisk.strata.piri = res$PARisk.crude.piri,
       
-      PAFRisk.strata.wald= res$PAFRisk.crude.wald,
+      PAFRisk.strata.wald = res$PAFRisk.crude.wald,
+      
+      E.strata.wald = res$E.crude.wald,
       
       wald.strata.rr     = res$wald.strata.rr,
       wald.strata.or     = res$wald.strata.or,
@@ -2307,13 +2457,13 @@ interp.txt <- list(
       chi2.correction    = res$chi2.correction)
     
     massoc.summary <- data.frame(
-       var = c("Inc risk ratio", "Inc odds ratio", "Attrib inc risk *", "Attrib fraction in exposed (%)", "Attrib inc risk in population *", "Attrib fraction in population (%)"), 
+       var = c("Inc risk ratio", "Inc odds ratio", "Attrib inc risk *", "Attrib fraction in exposed (%)", "Attrib inc risk in population *", "Attrib fraction in population (%)", "E-value"), 
        
-       est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100)), 
+       est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100, res$E.crude.wald[1])), 
        
-       lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100)), 
+       lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100, res$E.crude.wald[2])), 
        
-       upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100)))
+       upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100, res$E.crude.wald[3])))
     
     massoc.interp <- data.frame(
       var = c("Inc risk ratio", 
@@ -2322,7 +2472,8 @@ interp.txt <- list(
               "NNTB NNTH", 
               "Attrib fraction in exposed (%)", 
               "Attrib inc risk in population *", 
-              "Attrib fraction in population (%)"),
+              "Attrib fraction in population (%)",
+              "E-value"),
       
       text = c(interp.txt$cohort.count.ss.rr, 
                interp.txt$cohort.count.ss.or, 
@@ -2330,7 +2481,8 @@ interp.txt <- list(
                interp.txt$cohort.count.ss.nnt, 
                interp.txt$cohort.count.ss.af, 
                interp.txt$cohort.count.ss.par, 
-               interp.txt$cohort.count.ss.paf))
+               interp.txt$cohort.count.ss.paf,
+               interp.txt$cohort.count.ss.evalue))
     
     ## Define tab:
     if(outcome == "as.columns"){
@@ -2431,6 +2583,10 @@ interp.txt <- list(
 
       PAFRisk.strata.wald= res$PAFRisk.strata.wald,
       PAFRisk.crude.wald = res$PAFRisk.crude.wald,
+      
+      E.strata.wald = res$E.strata.wald,
+      E.crude.wald  = res$E.crude.wald,
+      E.mh.wald     = res$E.mh.wald,
 
       wald.strata.rr     = res$wald.strata.rr,
       wald.crude.rr      = res$wald.crude.rr,
@@ -2454,13 +2610,13 @@ interp.txt <- list(
       bOR.homog          = res$bOR.homog)
 
     massoc.summary <- data.frame(
-      var = c("Inc risk ratio (crude)", "Inc risk ratio (M-H)", "Inc risk ratio (crude:M-H)", "Inc odds ratio (crude)", "Inc odds ratio (M-H)", "Inc odds ratio (crude:M-H)", "Attrib inc risk (crude) *", "Attrib inc risk (M-H) *", "Attrib inc risk (crude:M-H)"), 
+      var = c("Inc risk ratio (crude)", "Inc risk ratio (M-H)", "Inc risk ratio (crude:M-H)", "Inc odds ratio (crude)", "Inc odds ratio (M-H)", "Inc odds ratio (crude:M-H)", "Attrib inc risk (crude) *", "Attrib inc risk (M-H) *", "Attrib inc risk (crude:M-H)","E-value (crude)", "E-value (M-H)"), 
       
-      est = as.numeric(c(res$RR.crude.wald[1], res$RR.mh.wald[1], res$RR.crude.wald[1] / res$RR.mh.wald[1], res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$ARisk.crude.wald[1], res$ARisk.mh.wald[1], res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1])),
+      est = as.numeric(c(res$RR.crude.wald[1], res$RR.mh.wald[1], res$RR.crude.wald[1] / res$RR.mh.wald[1], res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$ARisk.crude.wald[1], res$ARisk.mh.wald[1], res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1], res$E.crude.wald[1], res$E.mh.wald[1])),
 
-      lower = as.numeric(c(res$RR.crude.wald[2], res$RR.mh.wald[2], NA, res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$ARisk.crude.wald[2], res$ARisk.mh.wald[2], NA)),
+      lower = as.numeric(c(res$RR.crude.wald[2], res$RR.mh.wald[2], NA, res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$ARisk.crude.wald[2], res$ARisk.mh.wald[2], NA, res$E.crude.wald[2], res$E.mh.wald[2])),
       
-      upper = as.numeric(c(res$RR.crude.wald[3], res$RR.mh.wald[3], NA, res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$ARisk.crude.wald[3], res$ARisk.mh.wald[3], NA)))
+      upper = as.numeric(c(res$RR.crude.wald[3], res$RR.mh.wald[3], NA, res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$ARisk.crude.wald[3], res$ARisk.mh.wald[3], NA, res$E.crude.wald[3], res$E.mh.wald[3])))
 
     massoc.interp <- data.frame(
       var = c("Inc risk ratio (crude)", 
@@ -2473,7 +2629,9 @@ interp.txt <- list(
               "Attrib inc risk (M-H) *", 
               "Attrib inc risk (crude:M-H)",
               "NNTB NNTH (crude)",
-              "NNTB NNTH (M-H)"), 
+              "NNTB NNTH (M-H)",
+              "E-value (crude)",
+              "E-value (M-H)"), 
       
       text = c(interp.txt$cohort.count.ms.crr, 
                interp.txt$cohort.count.ms.mrr, 
@@ -2485,7 +2643,10 @@ interp.txt <- list(
                interp.txt$cohort.count.ms.mar,
                NA, 
                interp.txt$cohort.count.ms.cnnt,
-               interp.txt$cohort.count.ms.mnnt))
+               interp.txt$cohort.count.ms.mnnt,
+               
+               interp.txt$cohort.count.ms.cevalue,
+               interp.txt$cohort.count.ms.mevalue))
 
     ## Define tab:
     if(outcome == "as.columns"){
@@ -2714,24 +2875,26 @@ interp.txt <- list(
       AFest.strata.wald   = res$AFest.crude.wald,
       PAFest.strata.wald  = res$PAFest.crude.wald,
       
+      E.strata.wald = res$E.strata.wald,
+      
       chi2.strata.uncor  = res$chi2.strata.uncor,
       chi2.strata.yates  = res$chi2.strata.yates,
       chi2.strata.fisher = res$chi2.strata.fisher,
       chi2.correction    = res$chi2.correction)
     
     massoc.summary <- data.frame(
-      var = c("Exposure odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
+      var = c("Exposure odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)", "E-value"), 
       
-      est = as.numeric(c(res$OR.crude.wald[1], res$AFest.crude.wald[1] * 100, res$PAFest.crude.wald[1] * 100)), 
+      est = as.numeric(c(res$OR.crude.wald[1], res$AFest.crude.wald[1] * 100, res$PAFest.crude.wald[1] * 100, res$E.crude.wald[1])), 
       
-      lower = as.numeric(c(res$OR.crude.wald[2], res$AFest.crude.wald[2] * 100, res$PAFest.crude.wald[2] * 100)), 
+      lower = as.numeric(c(res$OR.crude.wald[2], res$AFest.crude.wald[2] * 100, res$PAFest.crude.wald[2] * 100, res$E.crude.wald[2])), 
       
-      upper = as.numeric(c(res$OR.crude.wald[3], res$AFest.crude.wald[3] * 100, res$PAFest.crude.wald[3] * 100)))
+      upper = as.numeric(c(res$OR.crude.wald[3], res$AFest.crude.wald[3] * 100, res$PAFest.crude.wald[3] * 100, res$E.crude.wald[3])))
     
     massoc.interp <- data.frame(
-      var = c("Exposures odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)"), 
+      var = c("Exposures odds ratio (W)", "Attrib fraction (est) in exposed (%)", "Attrib fraction (est) in population (%)", "E-value"), 
       
-      text = c(interp.txt$case.control.ss.or, interp.txt$case.control.ss.af, interp.txt$case.control.ss.paf))
+      text = c(interp.txt$case.control.ss.or, interp.txt$case.control.ss.af, interp.txt$case.control.ss.paf, interp.txt$case.control.ss.evalue))
     
     ## Define tab:
     if(outcome == "as.columns"){
@@ -2795,7 +2958,11 @@ interp.txt <- list(
       
       PAFest.strata.wald  = res$PAFest.strata.wald,
       PAFest.crude.wald   = res$PAFest.crude.wald,
-
+      
+      E.strata.wald = res$E.strata.wald,
+      E.crude.wald  = res$E.crude.wald,
+      E.mh.wald     = res$E.mh.wald,
+      
       chi2.strata.uncor   = res$chi2.strata.uncor,
       chi2.strata.yates   = res$chi2.strata.yates,
       chi2.strata.fisher  = res$chi2.strata.fisher,
@@ -2811,18 +2978,49 @@ interp.txt <- list(
       OR.homog.brday      = res$bOR.homog)
     
     massoc.summary <- data.frame(
-      var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
+      var = c("Exposure odds ratio (crude)", 
+              "Exposure odds ratio (M-H)", 
+              "Exposure odds ratio (crude:M-H)", 
+              "Attrib fraction (est) in exposed (crude %)", 
+              "Attrib fraction (est) in population (crude %) *", 
+              "E-value (crude)", 
+              "E-value (M-H)"), 
       
-      est = as.numeric(c(res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$AFest.crude.wald[1] * 100, res$PAFest.crude.wald[1] * 100)), 
+      est = as.numeric(c(res$OR.crude.wald[1], 
+                         res$OR.mh.wald[1], 
+                         res$OR.crude.wald[1] / res$OR.mh.wald[1], 
+                         res$AFest.crude.wald[1] * 100, 
+                         res$PAFest.crude.wald[1] * 100, 
+                         res$E.crude.wald[1], 
+                         res$E.mh.wald[1])), 
       
-      lower = as.numeric(c(res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$AFest.crude.wald[2] * 100, res$PAFest.crude.wald[2] * 100)), 
+      lower = as.numeric(c(res$OR.crude.wald[2], 
+                           res$OR.mh.wald[2], 
+                           NA, 
+                           res$AFest.crude.wald[2] * 100, 
+                           res$PAFest.crude.wald[2] * 100,
+                           res$E.crude.wald[2], 
+                           res$E.mh.wald[2])), 
       
-      upper = as.numeric(c(res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$AFest.crude.wald[3] * 100, res$PAFest.crude.wald[3] * 100)))
+      upper = as.numeric(c(res$OR.crude.wald[3], 
+                           res$OR.mh.wald[3], 
+                           NA, 
+                           res$AFest.crude.wald[3] * 100, 
+                           res$PAFest.crude.wald[3] * 100,
+                           res$E.crude.wald[3], 
+                           res$E.mh.wald[3])))
     
     massoc.interp <- data.frame(
-      var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *"), 
+      var = c("Exposure odds ratio (crude)", "Exposure odds ratio (M-H)", "Exposure odds ratio (crude:M-H)", "Attrib fraction (est) in exposed (crude %)", "Attrib fraction (est) in population (crude %) *", "E-value (crude)", "E-value (M-H)"), 
       
-      text = c(interp.txt$case.control.ms.cor, interp.txt$case.control.ms.mor, NA, interp.txt$case.control.ms.caf, interp.txt$case.control.ms.cpaf))
+      text = c(interp.txt$case.control.ms.cor, 
+               interp.txt$case.control.ms.mor, 
+               NA, 
+               interp.txt$case.control.ms.caf, 
+               interp.txt$case.control.ms.cpaf,
+               
+               interp.txt$case.control.ms.cevalue,
+               interp.txt$case.control.ms.mevalue))
     
     ## Define tab:
     if(outcome == "as.columns"){
@@ -2895,6 +3093,8 @@ interp.txt <- list(
       
       PAFRisk.strata.wald = res$PAFRisk.crude.wald,
       
+      E.strata.wald = res$E.strata.wald,
+
       wald.strata.rr      = res$wald.strata.rr,
       wald.strata.or      = res$wald.strata.or,
       
@@ -2904,13 +3104,13 @@ interp.txt <- list(
       chi2.correction     = res$chi2.correction)
     
     massoc.summary <- data.frame(
-      var = c("Prev risk ratio", "Prev odds ratio", "Attrib prev *", "Attrib fraction in exposed (%)", "Attrib prev in population *", "Attrib fraction in population (%)"), 
+      var = c("Prev risk ratio", "Prev odds ratio", "Attrib prev *", "Attrib fraction in exposed (%)", "Attrib prev in population *", "Attrib fraction in population (%)", "E-value"), 
       
-      est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100)), 
+      est = as.numeric(c(res$RR.crude.wald[1], res$OR.crude.wald[1], res$ARisk.crude.wald[1], res$AFRisk.crude.wald[1] * 100, res$PARisk.crude.wald[1], res$PAFRisk.crude.wald[1] * 100, res$E.crude.wald[1])), 
       
-      lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100)), 
+      lower = as.numeric(c(res$RR.crude.wald[2], res$OR.crude.wald[2], res$ARisk.crude.wald[2], res$AFRisk.crude.wald[2] * 100, res$PARisk.crude.wald[2], res$PAFRisk.crude.wald[2] * 100, res$E.crude.wald[2])), 
       
-      upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100)))
+      upper = as.numeric(c(res$RR.crude.wald[3], res$OR.crude.wald[3], res$ARisk.crude.wald[3], res$AFRisk.crude.wald[3] * 100, res$PARisk.crude.wald[3], res$PAFRisk.crude.wald[3] * 100, res$E.crude.wald[3])))
     
     massoc.interp <- data.frame(
       var = c("Prev risk ratio", 
@@ -2919,7 +3119,8 @@ interp.txt <- list(
               "NNTB NNTH", 
               "Attrib fraction in exposed (%)", 
               "Attrib prev in population *", 
-              "Attrib fraction in population (%)"),
+              "Attrib fraction in population (%)",
+              "E-value"),
       
       text = c(interp.txt$cross.sectional.ss.rr, 
                interp.txt$cross.sectional.ss.or, 
@@ -2927,7 +3128,8 @@ interp.txt <- list(
                interp.txt$cross.sectional.ss.nnt, 
                interp.txt$cross.sectional.ss.af, 
                interp.txt$cross.sectional.ss.par, 
-               interp.txt$cross.sectional.ss.paf))
+               interp.txt$cross.sectional.ss.paf,
+               interp.txt$cross.sectional.ss.evalue))
 
     ## Define tab:
     if(outcome == "as.columns"){
@@ -3031,6 +3233,10 @@ interp.txt <- list(
 
       PAFRisk.strata.wald = res$PAFRisk.strata.wald,
       PAFRisk.crude.wald  = res$PAFRisk.crude.wald,
+      
+      E.strata.wald = res$E.strata.wald,
+      E.crude.wald  = res$E.crude.wald,
+      E.mh.wald     = res$E.mh.wald,
 
       wald.strata.rr      = res$wald.strata.rr,
       wald.crude.rr       = res$wald.crude.rr,
@@ -3055,38 +3261,80 @@ interp.txt <- list(
       OR.homog.brday      = res$bOR.homog)
     
     massoc.summary <- data.frame(
-      var = c("Prev risk ratio (crude)", "Prev risk ratio (M-H)", "Prev risk ratio (crude:M-H)", "Prev odds ratio (crude)", "Prev odds ratio (M-H)", "Prev odds ratio (crude:M-H)", "Attributable prev (crude) *", "Attributable prev (M-H) *", "Attributable prev (crude:M-H)"),  
+      var = c("Prev risk ratio (crude)", "Prev risk ratio (M-H)", "Prev risk ratio (crude:M-H)", "Prev odds ratio (crude)", "Prev odds ratio (M-H)", "Prev odds ratio (crude:M-H)", "Attributable prev (crude) *", "Attributable prev (M-H) *", "Attributable prev (crude:M-H)", "E-value (crude)", "E-value (M-H)"),  
       
-      est = as.numeric(c(res$RR.crude.wald[1], res$RR.mh.wald[1], res$RR.crude.wald[1] / res$RR.mh.wald[1], res$OR.crude.wald[1], res$OR.mh.wald[1], res$OR.crude.wald[1] / res$OR.mh.wald[1], res$ARisk.crude.wald[1], res$ARisk.mh.wald[1], res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1])),
+      est = as.numeric(c(res$RR.crude.wald[1], 
+                         res$RR.mh.wald[1], 
+                         res$RR.crude.wald[1] / res$RR.mh.wald[1], 
+                         res$OR.crude.wald[1], 
+                         res$OR.mh.wald[1], 
+                         res$OR.crude.wald[1] / res$OR.mh.wald[1], 
+                         res$ARisk.crude.wald[1], 
+                         res$ARisk.mh.wald[1], 
+                         res$ARisk.crude.wald[1] / res$ARisk.mh.wald[1], 
+                         res$E.crude.wald[1], 
+                         res$E.mh.wald[1])),
       
-      lower = as.numeric(c(res$RR.crude.wald[2], res$RR.mh.wald[2], NA, res$OR.crude.wald[2], res$OR.mh.wald[2], NA, res$ARisk.crude.wald[2], res$ARisk.mh.wald[2], NA)),
+      lower = as.numeric(c(res$RR.crude.wald[2], 
+                           res$RR.mh.wald[2], 
+                           NA, 
+                           res$OR.crude.wald[2], 
+                           res$OR.mh.wald[2], 
+                           NA, 
+                           res$ARisk.crude.wald[2], 
+                           res$ARisk.mh.wald[2], 
+                           NA,
+                           res$E.crude.wald[2], 
+                           res$E.mh.wald[2])),
       
-      upper = as.numeric(c(res$RR.crude.wald[3], res$RR.mh.wald[3], NA, res$OR.crude.wald[3], res$OR.mh.wald[3], NA, res$ARisk.crude.wald[3], res$ARisk.mh.wald[3], NA)))
+      upper = as.numeric(c(res$RR.crude.wald[3], 
+                           res$RR.mh.wald[3], 
+                           NA, 
+                           res$OR.crude.wald[3], 
+                           res$OR.mh.wald[3], 
+                           NA, 
+                           res$ARisk.crude.wald[3], 
+                           res$ARisk.mh.wald[3], 
+                           NA,
+                           res$E.crude.wald[3], 
+                           res$E.mh.wald[3])))
     
     massoc.interp <- data.frame(
       var = c("Prev risk ratio (crude)", 
               "Prev risk ratio (M-H)", 
               "Prev risk ratio (crude:M-H)", 
+              
               "Prev odds ratio (crude)", 
               "Prev odds ratio (M-H)", 
               "Prev odds ratio (crude:M-H)", 
+              
               "Attrib prev (crude) *", 
               "Attrib prev (M-H) *", 
               "Attrib prev (crude:M-H)",
+              
               "NNTB NNTH (crude)",
-              "NNTB NNTH (M-H)"), 
+              "NNTB NNTH (M-H)",
+              
+              "E-value (crude)",
+              "E-value (M-H)"), 
       
       text = c(interp.txt$cohort.count.ms.crr, 
                interp.txt$cohort.count.ms.mrr, 
                NA, 
+               
                interp.txt$cohort.count.ms.cor, 
                interp.txt$cohort.count.ms.mor, 
                NA, 
+               
                interp.txt$cohort.count.ms.car, 
                interp.txt$cohort.count.ms.mar,
                NA, 
+               
                interp.txt$cohort.count.ms.cnnt,
-               interp.txt$cohort.count.ms.mnnt))
+               interp.txt$cohort.count.ms.mnnt,
+
+               interp.txt$cohort.count.ms.cevalue,
+               interp.txt$cohort.count.ms.mevalue))
 
     ## Define tab:
     if(outcome == "as.columns"){
@@ -3160,6 +3408,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)"
       tpar  <- "\nAttrib risk in the population *                %.2f (%.2f, %.2f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)"
+      teval <- "\nE-value                                        %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
@@ -3169,6 +3418,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.3f (%.3f, %.3f)"
       tpar  <- "\nAttrib risk in the population *                %.3f (%.3f, %.3f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.3f (%.3f, %.3f)"
+      teval <- "\nE-value                                        %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
@@ -3178,6 +3428,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.4f (%.4f, %.4f)"
       tpar  <- "\nAttrib risk in the population *                %.4f (%.4f, %.4f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.4f (%.4f, %.4f)"
+      teval <- "\nE-value                                        %.4f (%.4f, %.4f)"
     }
     
     with(x$massoc.summary, {
@@ -3217,7 +3468,14 @@ print.epi.2by2 <- function(x, ...) {
                   lower[6],
                   upper[6]
       ))
+      
+      cat(sprintf(teval,
+                  est[7],
+                  lower[7],
+                  upper[7]
+      ))
     })
+    
     cat("\n-------------------------------------------------------------------")
 
     # Which chi2 test to report?
@@ -3237,11 +3495,10 @@ print.epi.2by2 <- function(x, ...) {
     
     cat("\n", chi2.name, " chi2 test that OR = 1: chi2(", chi2.df,   ") = ", sprintf("%.3f", chi2.statistic),  " Pr>chi2 = ", chi2.pvalue, sep = "")
     
-    cat("\n", "Fisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
-    
-    cat("\n", "Wald confidence limits")
-    cat("\n", "CI: confidence interval") 
-    cat("\n", "*", x$units[1], "\n")
+    cat("\nFisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
+    cat("\nWald confidence limits")
+    cat("\nCI: confidence interval") 
+    cat("\n*", x$units[1], "\n")
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3255,6 +3512,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Measures of effect in the population:")
       cat("\n", x$massoc.interp$text[6], x$massoc.interp$text[7], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[8], "\n")
     }
   }
 
@@ -3280,6 +3540,8 @@ print.epi.2by2 <- function(x, ...) {
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.2f (%.2f, %.2f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.2f (%.2f, %.2f)"
         tarcm   <- "\nAttrib risk (crude:M-H)                        %.2f"
+        tevalc  <- "\nE-value (crude)                                %.2f (%.2f, %.2f)"
+        tevalm  <- "\nE-value (M-H)                                  %.2f (%.2f, %.2f)"
       }
       
       else if(x$digits == 3){
@@ -3294,6 +3556,8 @@ print.epi.2by2 <- function(x, ...) {
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.3f (%.3f, %.3f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.3f (%.3f, %.3f)"
         tarcm   <- "\nAttrib risk (crude:M-H)                        %.3f"
+        tevalc  <- "\nE-value (crude)                                %.3f (%.3f, %.3f)"
+        tevalm  <- "\nE-value (M-H)                                  %.3f (%.3f, %.3f)"
       }
       
       else if(x$digits == 4){
@@ -3308,6 +3572,8 @@ print.epi.2by2 <- function(x, ...) {
         tarc    <- "\nAttrib risk in the exposed (crude) *           %.4f (%.4f, %.4f)"
         tarm    <- "\nAttrib risk in the exposed (M-H) *             %.4f (%.4f, %.4f)"
         tarcm   <- "\nAttrib risk (crude:M-H)                        %.4f"
+        tevalc  <- "\nE-value (crude)                                %.4f (%.4f, %.4f)"
+        tevalm  <- "\nE-value (M-H)                                  %.4f (%.4f, %.4f)"
       }
 
       cat(sprintf(tirrc,
@@ -3357,7 +3623,20 @@ print.epi.2by2 <- function(x, ...) {
       cat(sprintf(tarcm,
                   est[9]
       ))
+      
+      cat(sprintf(tevalc,
+                  est[10],
+                  lower[10],
+                  upper[10]
+      ))
+      
+      cat(sprintf(tevalm,
+                  est[11],
+                  lower[11],
+                  upper[11]
+      ))
     })
+    
     cat("\n-------------------------------------------------------------------")
     # M-H test of homogeneity of RRs:
     wrr.st <- as.numeric(x$massoc.detail$wRR.homog[1])
@@ -3373,15 +3652,13 @@ print.epi.2by2 <- function(x, ...) {
     mh.df <-  as.numeric(x$massoc.detail$chi2.mh[2])
     mh.p <-  ifelse(as.numeric(x$massoc.detail$chi2.mh)[4] < 0.001, "<0.001", sprintf("%.3f", x$massoc.detail$chi2.mh[4]))
     
-    cat("\n", " M-H test of homogeneity of IRRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
+    cat("\nM-H test of homogeneity of IRRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
+    cat("\nM-H test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
+    cat("\nTest that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
+    cat("\nWald confidence limits")
+    cat("\nM-H: Mantel-Haenszel; CI: confidence interval")
+    cat("\n*", x$units[1], "\n")
     
-    cat("\n", " M-H test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
-    
-    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
-
-    cat("\n", "Wald confidence limits")
-    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval")        
-    cat("\n", "*", x$units[1], "\n")
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3392,6 +3669,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[10], x$massoc.interp$text[11], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[8], "\n")
     }
   }
 
@@ -3459,9 +3739,9 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    cat("\n", "Wald confidence limits")
-    cat("\n", "CI: confidence interval")
-    cat("\n", "*", x$units[1], "\n")
+    cat("\nWald confidence limits")
+    cat("\nCI: confidence interval")
+    cat("\n*", x$units[1], "\n")
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3546,9 +3826,9 @@ print.epi.2by2 <- function(x, ...) {
       ))
     })
     cat("\n-------------------------------------------------------------------")
-    cat("\n", "Wald confidence limits")
-    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval")
-    cat("\n", "*", x$units[1], "\n")
+    cat("\nWald confidence limits")
+    cat("\nM-H: Mantel-Haenszel; CI: confidence interval")
+    cat("\n*", x$units[1], "\n")
   
     if(x$interp == TRUE){  
       cat("\n Measures of association strength:")
@@ -3567,18 +3847,21 @@ print.epi.2by2 <- function(x, ...) {
       tor   <- "\nExposure odds ratio                            %.2f (%.2f, %.2f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.2f (%.2f, %.2f)"
+      teval <- "\nE-value                                        %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
       tor   <- "\nExposure odds ratio                            %.3f (%.3f, %.3f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.3f (%.3f, %.3f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.3f (%.3f, %.3f)"
+      teval <- "\nE-value                                        %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
       tor   <- "\nExposure ratio                                 %.4f (%.4f, %.4f)"
       taf   <- "\nAttrib fraction (est) in the exposed (%%)      %.4f (%.4f, %.4f)"
       tpaf  <- "\nAttrib fraction (est) in the population (%%)   %.4f (%.4f, %.4f)"
+      teval <- "\nE-value                                        %.4f (%.4f, %.4f)"
     }
     
     print(x$tab)
@@ -3604,8 +3887,16 @@ print.epi.2by2 <- function(x, ...) {
                   lower[3],
                   upper[3]
       ))
+      
+      cat(sprintf(teval,
+                  est[4],
+                  lower[4],
+                  upper[4]
+      ))
+      
     })
     cat("\n-------------------------------------------------------------------")
+    
     # Which chi2 test to report?
     chi2.name <- ifelse(x$massoc.detail$chi2.correction == TRUE, "Yates corrected", "Uncorrected")
     chi2.statistic <- ifelse(x$massoc.detail$chi2.correction == TRUE, as.numeric(x$massoc.detail$chi2.strata.yates)[1], as.numeric(x$massoc.detail$chi2.strata.uncor)[1])
@@ -3620,9 +3911,9 @@ print.epi.2by2 <- function(x, ...) {
     
     cat("\n", chi2.name, " chi2 test that OR = 1: chi2(", chi2.df,   ") = ", sprintf("%.3f", chi2.statistic),  " Pr>chi2 = ", chi2.pvalue, sep = "")
     
-    cat("\n", "Fisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
-    cat("\n", "Wald confidence limits")
-    cat("\n", "CI: confidence interval", "\n")
+    cat("\nFisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
+    cat("\nWald confidence limits")
+    cat("\nCI: confidence interval", "\n")
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3633,6 +3924,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Measures of effect in the population:")
       cat("\n", x$massoc.interp$text[3], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[4], "\n")
     }
   }    
 
@@ -3647,6 +3941,10 @@ print.epi.2by2 <- function(x, ...) {
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.2f (%.2f, %.2f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.2f (%.2f, %.2f)"
+      teval   <- "\nE-value                                        %.2f (%.2f, %.2f)"
+      
+      tevalc  <- "\nE-value (crude)                                %.2f (%.2f, %.2f)"
+      tevalm  <- "\nE-value (M-H)                                  %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
@@ -3656,6 +3954,10 @@ print.epi.2by2 <- function(x, ...) {
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.3f (%.3f, %.3f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.3f (%.3f, %.3f)"
+      teval   <- "\nE-value                                        %.3f (%.3f, %.3f)"
+      
+      tevalc  <- "\nE-value (crude)                                %.3f (%.3f, %.3f)"
+      tevalm  <- "\nE-value (M-H)                                  %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
@@ -3665,6 +3967,10 @@ print.epi.2by2 <- function(x, ...) {
       
       tafc    <- "\nAttrib fraction (est) in the exposed (%%)      %.4f (%.4f, %.4f)"
       tpafc   <- "\nAttrib fraction (est) in the population (%%) * %.4f (%.4f, %.4f)"
+      teval   <- "\nE-value                                        %.4f (%.4f, %.4f)"
+      
+      tevalc  <- "\nE-value (crude)                                %.4f (%.4f, %.4f)"
+      tevalm  <- "\nE-value (M-H)                                  %.4f (%.4f, %.4f)"
     }
     
     print(x$tab)
@@ -3700,6 +4006,18 @@ print.epi.2by2 <- function(x, ...) {
                   upper[5]
       ))
       
+      cat(sprintf(tevalc,
+                  est[6],
+                  lower[6],
+                  upper[6]
+      ))
+      
+      cat(sprintf(tevalm,
+                  est[7],
+                  lower[7],
+                  upper[7]
+      ))
+      
     })
     cat("\n-------------------------------------------------------------------")
     # M-H test of homogeneity of ORs:
@@ -3711,12 +4029,12 @@ print.epi.2by2 <- function(x, ...) {
     mh.df <-  as.numeric(x$massoc.detail$chi2.mh[2])
     mh.p <-  ifelse(as.numeric(x$massoc.detail$chi2.mh)[4] < 0.001, "<0.001", sprintf("%.3f", x$massoc.detail$chi2.mh[4]))
     
-    cat("\n", " Woolf test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
+    cat("\nWoolf test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
     
-    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
+    cat("\nTest that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
     
-    cat("\n", "Wald confidence limits")
-    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval", "\n") 
+    cat("\nWald confidence limits")
+    cat("\nM-H: Mantel-Haenszel; CI: confidence interval", "\n") 
 
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3727,6 +4045,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Measures of effect in the population:")
       cat("\n", x$massoc.interp$text[5], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[6], x$massoc.interp$text[7], "\n")
     }
   }
  
@@ -3741,6 +4062,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.2f (%.2f, %.2f)"
       tpap  <- "\nAttrib prev in the population *                %.2f (%.2f, %.2f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.2f (%.2f, %.2f)"
+      teval <- "\nE-value                                        %.2f (%.2f, %.2f)"
     }
     
     else if(x$digits == 3){
@@ -3750,6 +4072,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.3f (%.3f, %.3f)"
       tpap  <- "\nAttrib prev in the population *                %.3f (%.3f, %.3f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.3f (%.3f, %.3f)"
+      teval <- "\nE-value                                        %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
@@ -3759,6 +4082,7 @@ print.epi.2by2 <- function(x, ...) {
       taf   <- "\nAttrib fraction in the exposed (%%)            %.4f (%.4f, %.4f)"
       tpap  <- "\nAttrib prev in the population *                %.4f (%.4f, %.4f)"
       tpaf  <- "\nAttrib fraction in the population (%%)         %.4f (%.4f, %.4f)"
+      teval <- "\nE-value                                        %.4f (%.4f, %.4f)"
     }
     
     print(x$tab)
@@ -3801,6 +4125,12 @@ print.epi.2by2 <- function(x, ...) {
                   lower[6],
                   upper[6]
       ))
+      
+      cat(sprintf(teval,
+                  est[7],
+                  lower[7],
+                  upper[7]
+      ))
     })
     cat("\n-------------------------------------------------------------------")
     # Which chi2 test to report?
@@ -3816,12 +4146,10 @@ print.epi.2by2 <- function(x, ...) {
     chi2.fpvalue <- ifelse(x$massoc.detail$chi2.strata.fisher$p.value.2s < 0.001, "<0.001", sprintf("%.3f", x$massoc.detail$chi2.strata.fisher$p.value.2s))
     
     cat("\n", chi2.name, " chi2 test that OR = 1: chi2(", chi2.df,   ") = ", sprintf("%.3f", chi2.statistic),  " Pr>chi2 = ", chi2.pvalue, sep = "")
-    
-    cat("\n", "Fisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
-    
-    cat("\n", "Wald confidence limits")
-    cat("\n", "CI: confidence interval")
-    cat("\n", "*", x$units[1], "\n")
+    cat("\nFisher exact", " test that OR = 1:", " Pr>chi2 = ", chi2.fpvalue, sep = "")
+    cat("\nWald confidence limits")
+    cat("\nCI: confidence interval")
+    cat("\n*", x$units[1], "\n")
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3835,6 +4163,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Measures of effect in the population:")
       cat("\n", x$massoc.interp$text[6], x$massoc.interp$text[7], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[8], "\n")
     }
   }    
 
@@ -3854,6 +4185,10 @@ print.epi.2by2 <- function(x, ...) {
       tapc    <- "\nAttrib prev in the exposed (crude) *           %.2f (%.2f, %.2f)"
       tapm    <- "\nAttrib prev in the exposed (M-H) *             %.2f (%.2f, %.2f)"
       tapcm   <- "\nAttrib prev (crude:M-H)                        %.2f"
+      
+      tevalc  <- "\nE-value (crude)                                %.2f (%.2f, %.2f)"
+      tevalm  <- "\nE-value (M-H)                                  %.2f (%.2f, %.2f)"
+      
     }
     
     else if(x$digits == 3){
@@ -3868,6 +4203,9 @@ print.epi.2by2 <- function(x, ...) {
       tapc    <- "\nAttrib prev in the exposed (crude) *           %.3f (%.3f, %.3f)"
       tapm    <- "\nAttrib prev in the exposed (M-H) *             %.3f (%.3f, %.3f)"
       tapcm   <- "\nAttrib prev (crude:M-H)                        %.3f"
+      
+      tevalc  <- "\nE-value (crude)                                %.3f (%.3f, %.3f)"
+      tevalm  <- "\nE-value (M-H)                                  %.3f (%.3f, %.3f)"
     }
     
     else if(x$digits == 4){
@@ -3882,6 +4220,9 @@ print.epi.2by2 <- function(x, ...) {
       tapc    <- "\nAttrib prev in the exposed (crude) *           %.4f (%.4f, %.4f)"
       tapm    <- "\nAttrib prev in the exposed (M-H) *             %.4f (%.4f, %.4f)"
       tapcm   <- "\nAttrib prev (crude:M-H)                        %.4f"
+      
+      tevalc  <- "\nE-value (crude)                                %.4f (%.4f, %.4f)"
+      tevalm  <- "\nE-value (M-H)                                  %.4f (%.4f, %.4f)"
     }
 
     print(x$tab)
@@ -3936,6 +4277,18 @@ print.epi.2by2 <- function(x, ...) {
       cat(sprintf(tapcm,
                   est[9]
       ))
+      
+      cat(sprintf(tevalc,
+                  est[10],
+                  lower[10],
+                  upper[10]
+      ))
+      
+      cat(sprintf(tevalm,
+                  est[11],
+                  lower[11],
+                  upper[11]
+      ))
     })
     
     cat("\n-------------------------------------------------------------------")
@@ -3953,15 +4306,12 @@ print.epi.2by2 <- function(x, ...) {
     mh.df <-  as.numeric(x$massoc.detail$chi2.mh[2])
     mh.p <-  ifelse(as.numeric(x$massoc.detail$chi2.mh)[4] < 0.001, "<0.001", sprintf("%.3f", x$massoc.detail$chi2.mh[4]))
     
-    cat("\n", " Woolf test of homogeneity of PRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
-
-    cat("\n", " Woolf test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
-    
-    cat("\n", " Test that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
-
-    cat("\n", "Wald confidence limits")
-    cat("\n", "M-H: Mantel-Haenszel; CI: confidence interval") 
-    cat("\n", "*", x$units[1], "\n")
+    cat("\nWoolf test of homogeneity of PRs: chi2(", wrr.df, ") = ", sprintf("%.3f", wrr.st), " Pr>chi2 = ", wrr.p, sep = "")
+    cat("\nWoolf test of homogeneity of ORs: chi2(", wor.df, ") = ", sprintf("%.3f", wor.st), " Pr>chi2 = ", wor.p, sep = "")
+    cat("\nTest that M-H adjusted OR = 1:  chi2(", mh.df, ") = ",  sprintf("%.3f", mh.st),  " Pr>chi2 = ", mh.p, sep = "")
+    cat("\nWald confidence limits")
+    cat("\nM-H: Mantel-Haenszel; CI: confidence interval") 
+    cat("\n*", x$units[1], "\n")
     
     if(x$interp == TRUE){
       cat("\n Measures of association strength:")
@@ -3972,6 +4322,9 @@ print.epi.2by2 <- function(x, ...) {
       
       cat("\n Number needed to treat:")
       cat("\n", x$massoc.interp$text[10], x$massoc.interp$text[11], "\n")
+      
+      cat("\n E-value:")
+      cat("\n", x$massoc.interp$text[8], "\n")
     }
   }
 }
