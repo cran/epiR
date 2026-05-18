@@ -212,7 +212,7 @@ round(epi.conf(dat = dat.m08, ctype = "smr"), digits = 2)
 ## EXAMPLE 9:
 ## A survey has been conducted to determine the proportion of broilers
 ## protected from a given disease following vaccination. We assume that 
-## the intra-cluster correlation coefficient for protection (also known as the 
+## the intracluster correlation coefficient for protection (also known as the 
 ## rate of homogeneity, rho) is 0.4 and the average number of birds per
 ## flock is 30. A total of 5898 birds from a total of 10363 were identified
 ## as protected. What proportion of birds are protected and what is the 95\%

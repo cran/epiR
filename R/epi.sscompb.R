@@ -27,17 +27,21 @@
     # T3 <- lambda * control * (1 - lambda * control) + r * control * (1 - control)
     # n <- T1 * (z.alpha * sqrt(T2) + z.beta * sqrt(T3))^2
     
-    n1 <- (n / (1 + r)) * design
-    n0 <- r * n1
-    n.total <- n0 + n1
+    n1c <- (n / (1 + r)) * design
+    n0c <- r * n1c
+    n.totalc <- n0c + n1c
     
-    p1 <- n1 / n.total
-    p0 <- n0 / n.total
+    p1c <- n1c / n.totalc
+    p0c <- n0c / n.totalc
     
     # Finite population correction:
-    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
-    n1 <- ifelse(is.na(N), n1, p1 * n.total)
-    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+    ntotala <- n.totalc / (1 + (n.totalc / N))
+    n1a <- p1c * ntotala
+    n0a <- p0c * ntotala
+    
+    # If N missing, return the crude sample size estimates, otherwise adjusted:    
+    n1 <- ifelse(is.na(N), n1c, n1a)
+    n0 <- ifelse(is.na(N), n0c, n0a)
     
     # Fractional:
     n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))

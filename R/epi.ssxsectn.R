@@ -26,14 +26,20 @@ epi.ssxsectn <- function(N = NA, pdexp1, pdexp0, pexp = NA, n, power, r = 1, des
     p3 <- z.beta * sqrt((lambda * pi * (1 - (lambda * pi))) + (r * pi * (1 - pi)))
     n0 <- p1 * (p2 + p3)^2
     
-    # Account for the design effect:
-    n0 <- n0 * design
+    # Infinite population, accounting for the design effect:
+    nc <- n0 * design
     
     # Finite population correction:
-    n <- ifelse(is.na(N), n0, (n0 * N) / (n0 + (N - 1)))
+    na <- nc / (1 + (nc / N))
     
-    n.exp1 <- ifelse(nfractional == TRUE, n / (r + 1) * r, ceiling(n / (r + 1) * r))
-    n.exp0 <- ifelse(nfractional == TRUE, n / (r + 1) * 1, ceiling(n / (r + 1) * 1))
+    # If N missing, return the crude sample size estimate, otherwise adjusted:
+    n <- ifelse(is.na(N), nc, na)
+    
+    n.exp1 <- n / (r + 1) * r
+    n.exp0 <-  n / (r + 1) * 1
+    
+    n.exp1 <- ifelse(nfractional == TRUE, n.exp1, ceiling(n.exp1))
+    n.exp0 <- ifelse(nfractional == TRUE, n.exp0, ceiling(n.exp0))
     n.total <- n.exp1 + n.exp0
         
     rval <- list(n.total = n.total, n.exp1 = n.exp1, n.exp0 = n.exp0, power = power, pr = lambda, or = psi)

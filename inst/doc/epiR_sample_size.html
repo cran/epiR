@@ -11,7 +11,7 @@
 
 <meta name="author" content="Mark Stevenson and Evan Sergeant" />
 
-<meta name="date" content="2026-04-08" />
+<meta name="date" content="2026-05-18" />
 
 <title>Sample Size Estimation using epiR</title>
 
@@ -381,7 +381,7 @@ pre code {
 
 <h1 class="title toc-ignore">Sample Size Estimation using epiR</h1>
 <h4 class="author">Mark Stevenson and Evan Sergeant</h4>
-<h4 class="date">2026-04-08</h4>
+<h4 class="date">2026-05-18</h4>
 
 </div>
 
@@ -458,7 +458,7 @@ subjects are required to detect an odds ratio of 2.0 with 0.80 power
 using a two-sided 0.05 test? Previous surveys have shown that around
 0.30 of Hereford cattle without squamous cell carcinoma have white
 pigmentation around the eyes.</p>
-<pre class="r"><code>epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
+<pre class="r"><code>epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
    r = 1, phi.coef = 0, design = 1, sided.test = 2, conf.level = 0.95, 
    method = &quot;unmatched&quot;, nfractional = FALSE, fleiss = FALSE)$n.total
 #&gt; [1] 282</code></pre>
@@ -501,7 +501,7 @@ is in the order of 0.20. If the donor wanted to be 95% confident that
 the survey estimate of stove usage was within 10% of the true population
 value, how many villages (primary sampling units) need to be
 sampled?</p>
-<pre class="r"><code>epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = &quot;relative&quot;, rho = 0.20, conf.level = 0.95)$n.psu
+<pre class="r"><code>epi.ssclus1estb(N.psu = NA, b = 75, Py = 0.46, epsilon = 0.10, error = &quot;relative&quot;, rho = 0.20, nfractional = FALSE, conf.level = 0.95)$n.psu
 #&gt; [1] 96</code></pre>
 <p>A total of 96 villages need to be sampled to meet the requirements of
 the study.</p>
@@ -512,7 +512,7 @@ quartile of 180. Assuming the number of households per village follows a
 normal distribution the expected standard deviation of the number of
 households per village is in the order of (180 - 40) <span class="math inline">\(\div\)</span> 4 = 35. How many villages (primary
 sampling units) need to be sampled?</p>
-<pre class="r"><code>epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = &quot;relative&quot;, rho = 0.20, conf.level = 0.95)$n.psu
+<pre class="r"><code>epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = &quot;relative&quot;, rho = 0.20, nfractional = FALSE, conf.level = 0.95)$n.psu
 #&gt; [1] 115</code></pre>
 <p>A total of 115 villages need to be sampled to meet the requirements
 of the study.</p>
@@ -556,7 +556,7 @@ ceiling(n.adj / b)
 # A total of 17 villages need to be sampled to meet the requirements of the study.
 
 # Do all of the above using epi.ssclus2estb:
-epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = &quot;relative&quot;, 
+epi.ssclus2estb(N.psu = NA, b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = &quot;relative&quot;, 
    rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 #&gt; Warning: The calculated number of primary sampling units (n.psu) is 17. At
 #&gt; least 25 primary sampling units are recommended for two-stage cluster sampling
@@ -599,7 +599,7 @@ n.adj
 #&gt; [1] 987
 
 # Similar to the example above, we can do all of these calculations using epi.ssclus2estb:
-epi.ssclus2estb(b = 10, Py = 0.15, epsilon = 0.20, error = &quot;relative&quot;, 
+epi.ssclus2estb(N.psu = NA, b = 10, Py = 0.15, epsilon = 0.20, error = &quot;relative&quot;, 
    rho = 0.09, nfractional = FALSE, conf.level = 0.95)
 #&gt; $n.psu
 #&gt; [1] 99

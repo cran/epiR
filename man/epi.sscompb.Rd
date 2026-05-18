@@ -35,7 +35,9 @@ With this function it is assumed that one of the two proportions is known and we
 
 Because there is much more uncertainty in the two sample problem where neither proportion is known, \code{epi.sscohortc} returns much larger sample size estimates. This function (\code{epi.sscompb}) should be used in particular situations such as when a politician claims that at least 90\% of the population use seatbelts and we want to see if the data supports this claim.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -48,6 +50,8 @@ A list containing the following:
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Fleiss JL (1981). Statistical Methods for Rates and Proportions. Wiley, New York.
 
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.

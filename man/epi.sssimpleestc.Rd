@@ -26,7 +26,9 @@ epi.sssimpleestc(N = NA, xbar, sigma, epsilon, error = "relative",
 }
 
 \details{
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -34,6 +36,8 @@ Returns an integer defining the required sample size.
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wiley Series in Probability and Statistics, London, pp. 70 - 75.
 
 Scheaffer RL, Mendenhall W, Lyman Ott R (1996). Elementary Survey Sampling. Duxbury Press, New York, pp. 95.

@@ -22,7 +22,7 @@ epi.ssclus1estc(N.psu = NA, b, xbar, xsigma, epsilon, error = "relative",
   \item{xsigma}{scalar number, the expected standard deviation of the continuous variable to be estimated.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
   \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
-  \item{rho}{scalar number, the intracluster correlation.}
+  \item{rho}{scalar number, the intracluster correlation coefficient.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar number, the level of confidence in the computed result.}
 }
@@ -32,7 +32,7 @@ A list containing the following:
   \item{n.psu}{the total number of primary sampling units (clusters) to be sampled for the specified level of confidence and relative error.}
   \item{n.ssu}{the total number of secondary sampling units to be sampled for the specified level of confidence and relative error.}
   \item{DEF}{the design effect.}
-  \item{rho}{the intracluster correlation, as entered by the user.}  
+  \item{rho}{the intracluster correlation coefficient, as entered by the user.}  
 }
 
 \details{
@@ -40,10 +40,14 @@ In many situations it is common for sampling units to be aggregated into cluster
 
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Levy PS, Lemeshow S (1999). Sampling of Populations Methods and Applications. Wiley Series in Probability and Statistics, London, pp. 258.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory ad Epidemiological Studies, Fourth Edition. Wiley Blackwell, London, pp. 195 - 214.

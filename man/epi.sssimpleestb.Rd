@@ -27,7 +27,9 @@ epi.sssimpleestb(N = NA, Py, epsilon, error = "relative",
 }
 
 \details{
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -35,6 +37,8 @@ Returns an integer defining the required sample size.
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Getachew T, Getachew G, Sintayehu G, Getenet M, Fasil A (2016). Bayesian estimation of sensitivity and specificity of Rose Bengal, complement fixation, and indirect ELISA tests for the diagnosis of bovine brucellosis in Ethiopia. Veterinary Medicine International. DOI: 10.1155/2016/8032753
 
 Humphry RW, Cameron A, Gunn GJ (2004). A practical approach to calculate sample size for herd prevalence surveys. Preventive Veterinary Medicine 65: 173 - 188.
@@ -103,7 +107,7 @@ n.crude
 
 ## EXAMPLE 1 (continued):
 ## Being seropositive to brucellosis is likely to cluster within herds.
-## Otte and Gumm (1997) cite the intraclass correlation coefficient (rho) of
+## Otte and Gumm (1997) cite the intracluster correlation coefficient (rho) of
 ## Brucella abortus to be in the order of 0.09. Adjust the sample size
 ## estimate to account for clustering at the herd level. Assume that, on
 ## average, 20 animals will be sampled per herd:

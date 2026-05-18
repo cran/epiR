@@ -350,13 +350,13 @@ You conclude that the Johne's disease positive and the within-herd prevalence is
 
 You want to test dairy herds for Johne's disease using faecal culture which has a sensitivity and specificity of 0.647 and 0.981, respectively. 
 
-You pool faecal samples from five cows together and collect six pooled samples per herd. Assuming the prevalence of Johne's disease in the herd is 0.10 and homogenous mixing, what is the herd level sensitivity and specificity? 
+You pool faecal samples from five cows together and collect six pooled samples per herd. Assuming the prevalence of Johne's disease in the herd is 0.10 and homogenous mixing, what is the herd level sensitivity and specificity? Assume that pooling of faeces results results in dilution of *Mycobacterium avium* subspecies *paratuberculosis* in the pooled sample. 
 
 ```{r, message = FALSE}
-epi.pooled(se = 0.647, sp = 0.981, P = 0.10, m = 5, r = 6)
+epi.pooled(Se = 0.647, Sp = 0.981, P = 0.10, m = 5, r = 6, dilution = TRUE)
 ```
 
-Herd level sensitivity is 0.900, herd level specificity is 0.562. Sensitivity at the herd level is increased using the pooled sampling approach. Herd level specificity is decreased. 
+Herd level sensitivity is 0.916, herd level specificity is 0.562. Sensitivity at the herd level is increased using the pooled sampling approach. Herd level specificity is decreased. 
 
 *EXAMPLE 8*
 

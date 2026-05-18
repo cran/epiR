@@ -30,8 +30,8 @@ epi.sscohortc <- function(N = NA, irexp1 = 0.25, irexp0 = 0.10, pexp = NA, n, po
     n0 <- n0 * design
 
     # Finite population correction:
-    n <- ifelse(is.na(N), n0, (n0 * N) / (n0 + (N - 1)))
-    
+    n <- ifelse(is.na(N), n0, n0 / (1 + (n0 / N)))
+
     if(nfractional == TRUE){
       n.crude <- n
       n.exp1 <- n / (r + 1) * r

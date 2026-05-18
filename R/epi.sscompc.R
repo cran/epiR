@@ -17,24 +17,28 @@
     # Account for the design effect:
     n <- n * design
 
-    n.treat <- (n / (r + 1)) * r
-    n.control <- (n / (r + 1)) * 1
-    n.total <- n.treat + n.control
+    n1c <- (n / (r + 1)) * r
+    n0c <- (n / (r + 1)) * 1
+    n.totalc <- n1c + n0c
 
-    p.treat <- n.treat / n.total
-    p.control <- n.control / n.total
+    p1c <- n1c / n.totalc
+    p0c <- n0c / n.totalc
     
-    # Finite population correction:
-    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
-    n.treat <- ifelse(is.na(N), n.treat, p.treat * n.total)
-    n.control <- ifelse(is.na(N), n.control, p.control * n.total)
+    # Finite corrected number of primary and secondary sampling units:
+    ntotala <- n.totalc / (1 + (n.totalc / N))
+    n1a <- p1c * ntotala
+    n0a <- p0c * ntotala
+    
+    # If N missing, return the crude sample size estimates, otherwise adjusted:    
+    n1 <- ifelse(is.na(N), n1c, n1a)
+    n0 <- ifelse(is.na(N), n0c, n1a)
     
     # Fractional:
-    n.treat <- ifelse(nfractional == TRUE, n.treat, ceiling(n.treat))
-    n.control <- ifelse(nfractional == TRUE, n.control, ceiling(n.control))
-    n.total <- n.treat + n.control
+    n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
+    n0 <- ifelse(nfractional == TRUE, n0, ceiling(n0))
+    n.total <- n1 + n0
     
-    rval <- list(n.total = n.total, n.treat = n.treat, n.control = n.control, power = power, delta = delta)
+    rval <- list(n.total = n.total, n.treat = n1, n.control = n0, power = power, delta = delta)
   }
   
   # Power:

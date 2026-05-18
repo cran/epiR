@@ -25,7 +25,7 @@ epi.sscohortt(irexp1 = 70/1000, irexp0 = 50/1000, FT = 5, n = 1500, power = NA, 
    design = 1, sided.test = 2, nfractional = FALSE, conf.level = 0.95)$power
 
 ## ----message = FALSE----------------------------------------------------------
-epi.sscc(OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
+epi.sscc(N = NA, OR = 2.0, p1 = NA, p0 = 0.30, n = NA, power = 0.80, 
    r = 1, phi.coef = 0, design = 1, sided.test = 2, conf.level = 0.95, 
    method = "unmatched", nfractional = FALSE, fleiss = FALSE)$n.total
 
@@ -34,10 +34,10 @@ epi.ssninfb(treat = 0.85, control = 0.65, delta = 0.10, n = NA,
    r = 1, power = 0.80, nfractional = FALSE, alpha = 0.05)$n.total
 
 ## ----message = FALSE----------------------------------------------------------
-epi.ssclus1estb(b = 75, Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, conf.level = 0.95)$n.psu
+epi.ssclus1estb(N.psu = NA, b = 75, Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, nfractional = FALSE, conf.level = 0.95)$n.psu
 
 ## ----message = FALSE----------------------------------------------------------
-epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, conf.level = 0.95)$n.psu
+epi.ssclus1estb(b = c(75,35), Py = 0.46, epsilon = 0.10, error = "relative", rho = 0.20, nfractional = FALSE, conf.level = 0.95)$n.psu
 
 ## ----message = FALSE----------------------------------------------------------
 # From first principles:
@@ -59,7 +59,7 @@ ceiling(n.adj / b)
 # A total of 17 villages need to be sampled to meet the requirements of the study.
 
 # Do all of the above using epi.ssclus2estb:
-epi.ssclus2estb(b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = "relative", 
+epi.ssclus2estb(N.psu = NA, b = 20, Py = 0.20, epsilon = 0.05 / 0.20, error = "relative", 
    rho = 0.02, nfractional = FALSE, conf.level = 0.95)
 
 ## ----message = FALSE----------------------------------------------------------
@@ -74,6 +74,6 @@ n.adj <- ceiling(n.crude * D)
 n.adj
 
 # Similar to the example above, we can do all of these calculations using epi.ssclus2estb:
-epi.ssclus2estb(b = 10, Py = 0.15, epsilon = 0.20, error = "relative", 
+epi.ssclus2estb(N.psu = NA, b = 10, Py = 0.15, epsilon = 0.20, error = "relative", 
    rho = 0.09, nfractional = FALSE, conf.level = 0.95)
 

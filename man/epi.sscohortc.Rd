@@ -34,7 +34,9 @@ epi.sscohortc(N = NA, irexp1, irexp0, pexp = NA, n, power, r = 1,
 \details{
 The methodology in this function follows the methodology described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -48,6 +50,8 @@ A list containing the following:
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
 Woodward M (2014). Epidemiology Study Design and Data Analysis. Chapman & Hall/CRC, New York, pp. 295 - 329.
@@ -113,7 +117,7 @@ epi.sscohortc(N = NA, irexp1 = 0.30, irexp0 = 0.15, pexp = NA, n = NA,
 ## number of herds. What is the required sample size when you account for the 
 ## observation that response to treatment is likely to cluster within herds? 
 
-## For the exercise, assume that the intra-cluster correlation coefficient 
+## For the exercise, assume that the intracluster correlation coefficient 
 ## (the rate of homogeneity, rho) for this treatment is 0.05 and the 
 ## average number of cows sampled per herd will be 30. 
 

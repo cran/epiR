@@ -151,7 +151,7 @@ rsu.sssep.rsfreecalc(N = 584, pstar = 0.05, mse.p = 0.95, msp.p = 0.95, se.u = 0
 rsu.sep.rsfreecalc(N = 584, n = 584, c = 11, pstar = 0.05, se.u = 0.514, sp.u = 0.993)
 
 ## ----message = FALSE----------------------------------------------------------
-epi.pooled(se = 0.647, sp = 0.981, P = 0.10, m = 5, r = 6)
+epi.pooled(Se = 0.647, Sp = 0.981, P = 0.10, m = 5, r = 6, dilution = TRUE)
 
 ## ----message = FALSE----------------------------------------------------------
 rsu.sssep.rspool(k = 5, pstar = 0.01, pse = 0.90, psp = 0.95, se.p = 0.95)

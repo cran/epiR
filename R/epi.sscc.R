@@ -52,17 +52,22 @@
       n <- n.
     }
     
-    n1 <- (n / (1 + r)) * design
-    n0 <- r * n1
-    n.total <- n0 + n1
+    # Crude sample size estimates:
+    n1c <- (n / (1 + r)) * design
+    n0c <- r * n1c
+    n.totalc <- n0c + n1c
     
-    p1 <- n1 / n.total
-    p0 <- n0 / n.total
+    p1c <- n1c / n.totalc
+    p0c <- n0c / n.totalc
 
     # Finite population correction:
-    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
-    n1 <- ifelse(is.na(N), n1, p1 * n.total)
-    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+    n.totala <- n.totalc / (1 + (n.totalc / N))
+    n1a <- p1c * n.totala
+    n0a <- p0c * n.totala
+    
+    # If N missing, return the crude sample size estimates, otherwise adjusted:
+    n1 <- ifelse(is.na(N), n1c, n1a)
+    n0 <- ifelse(is.na(N), n0c, n0a)
         
     # Fractional:
     n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
@@ -209,23 +214,27 @@
       n <- n.
     }
     
-    n1 <- n * design
-    n0 <- r * n1
-    n.total <- n0 + n1
+    n1c <- n * design
+    n0c <- r * n1c
+    n.totalc <- n0c + n1c
     
-    p1 <- n1 / n.total
-    p0 <- n0 / n.total
+    p1c <- n1c / n.totalc
+    p0c <- n0c / n.totalc
     
     # Finite population correction:
-    n.total <- ifelse(is.na(N), n.total, (n.total * N) / (n.total + (N - 1)))
-    n1 <- ifelse(is.na(N), n1, p1 * n.total)
-    n0 <- ifelse(is.na(N), n0, p0 * n.total)
+    n.totala <- n.totalc / (1 + (n.totalc / N))
+    n1a <- p1c * n.totala
+    n0a <- p0c * n.totala
     
-    # Fractional:
+    # If N missing, return the crude sample size estimates, otherwise adjusted:
+    n1 <- ifelse(is.na(N), n1c, n1a)
+    n0 <- ifelse(is.na(N), n0c, n0a)
+    
+    # Round after you've calculated n.ssu and n.psu, after Machin et al. (2018) pp. 205: 
     n1 <- ifelse(nfractional == TRUE, n1, ceiling(n1))
-    n0 <- ifelse(nfractional == TRUE, r * n1, ceiling(r * n1))
+    n0 <- ifelse(nfractional == TRUE, n1, ceiling(n0))
     n.total <- n1 + n0
-
+    
     rval <- list(n.total = n.total, n.case = n1, n.control = n0, power = power, OR = OR)
   }
   

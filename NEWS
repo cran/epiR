@@ -1,3 +1,12 @@
+CHANGES IN epiR VERSION 2.0.93
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Function epi.pooled revised to include dilution argument. If dilution = TRUE the function calculates a value for pooled diagnostic sensitivity dependent on the expected number of positives in the pool. If dilution = FALSE pooled diagnostic sensitivity is assumed to be the same as individual sample sensitivity.
+    [Sarai Silaban and Mark Stevenson]
+    
+    o For each of the sample size calculations consistent coding for finite correction applied.
+    [Mark Stevenson]
+
 CHANGES IN epiR VERSION 2.0.92
 SIGNIFICANT USER-VISIBLE CHANGES
 

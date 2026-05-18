@@ -242,7 +242,7 @@ ft
 ```
 The odds ratio for a case-control study is defined as exposure odds in the cases $O_{[E+|D+]}$ divided by the exposure odds in the controls $O_{[E+|D-]}$. 
 
-Note that the numeric estimate of the odds ratio for a case-contrl study is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:
+Note that the numeric estimate of the odds ratio for a case-control study is exactly the same as that calculated for a cohort study. The expression of the result is the only thing that differs. Key points:
 
 * In a *cohort study* we talk about the outcome odds being $x$ times greater (or less) in *the exposed*, compared with the unexposed. 
 * In a *case-control study* we talk about the exposure odds being $x$ times greater (or less) in *cases*, compared with controls.
@@ -514,7 +514,7 @@ The Mantel-Haenszel test of homogeneity of the strata odds ratios is not signifi
 
 After accounting for the confounding effect of race, the odds of having a low birth weight baby for smokers was 3.1 (95% CI 1.5 to 6.4) times that of non-smokers.
 
-An unmeasured confounder would need to be associated with both smoking and low birth weight by a risk ratio of at least 5.62 to fully explain away the observed Mantel-Haenszel adjusted odds ratio of 3.1. A confounder of this magnitude would likely already be known from the literature, so if no such variable has been identified, it is unlikely that the observed association is entirely attributable to residual confounding.
+An unmeasured confounder would need to be associated with both smoking and low birth weight by a risk ratio of at least 3.7 to fully explain away the observed Mantel-Haenszel incidence risk ratio of 2.1. A confounder of this magnitude would likely already be known from the literature, so if no such variable has been identified, it is unlikely that the observed association is entirely attributable to residual confounding.
 
 ### Stratified two by two table preparation using tidyverse
 

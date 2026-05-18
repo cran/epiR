@@ -20,7 +20,7 @@ epi.ssclus2estb(N.psu = NA, b, Py, epsilon, error = "relative",
   \item{Py}{scalar number, an estimate of the unknown population proportion.}
   \item{epsilon}{scalar number, the maximum difference between the estimate and the unknown population value expressed in absolute or relative terms.}
   \item{error}{character string. Options are \code{absolute} for absolute error and \code{relative} for relative error.}
-  \item{rho}{scalar number, the intracluster correlation.}
+  \item{rho}{scalar number, the intracluster correlation coefficient.}
   \item{nfractional}{logical, return fractional sample size.}
   \item{conf.level}{scalar, defining the level of confidence in the computed result.}
 }
@@ -30,11 +30,13 @@ In many situations it is common for sampling units to be aggregated into cluster
 
 \code{b} as a scalar integer represents the total number of individual listing units from each cluster to be sampled. If \code{b} is a vector of length two the first element represents the mean number of individual listing units to be sampled from each cluster and the second element represents the standard deviation of the number of individual listing units to be sampled from each cluster.
 
-The methodology used in this function follows closely the approach described by Bennett et al. (1991). At least 25 PSUs are recommended for two-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
+The methodology used in this function follows the approach described by Bennett et al. (1991). At least 25 PSUs are recommended for two-stage cluster sampling designs. If less than 25 PSUs are returned by the function a warning is issued.
 
 As a rule of thumb, around 30 PSUs will provide good estimates of the true population value with an acceptable level of precision (Binkin et al. 1992) when: (1) the true population value is between 10\% and 90\%; and (2) the desired absolute error is around 5\%. For a fixed number of individual listing units selected per cluster (e.g., 10 individuals per cluster or 30 individuals per cluster), collecting information on more than 30 clusters can improve the precision of the final population estimate, however, beyond around 60 clusters the improvement in precision is minimal.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -42,13 +44,15 @@ A list containing the following:
   \item{n.psu}{the total number of primary sampling units (clusters) to be sampled for the specified level of confidence and relative error.}
   \item{n.ssu}{the total number of secondary sampling units to be sampled for the specified level of confidence and relative error.}
   \item{DEF}{the design effect.}
-  \item{rho}{the intracluster correlation, as entered by the user.}  
+  \item{rho}{the intracluster correlation coefficient, as entered by the user.}  
 }
 
 \references{
 Bennett S, Woods T, Liyanage W, Smith D (1991). A simplified general method for cluster-sample surveys of health in developing countries. World Health Statistics Quarterly 44: 98 - 106.
 
 Binkin N, Sullivan K, Staehling N, Nieburg P (1992). Rapid nutrition surveys: How many clusters are enough? Disasters 16: 97 - 103.
+
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
 
 Machin D, Campbell MJ, Tan SB, Tan SH (2018). Sample Sizes for Clinical, Laboratory ad Epidemiological Studies, Fourth Edition. Wiley Blackwell, London, pp. 195 - 214.
 }

@@ -32,7 +32,9 @@ epi.ssxsectn(N = NA, pdexp1, pdexp0, pexp = NA, n, power, r = 1,
 \details{
 The methodology in this function follows the methodology described in Chapter 8 of Woodward (2014), pp. 295 - 329.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N.psu} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 }
 
 \value{
@@ -46,6 +48,8 @@ A list containing the following:
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Kelsey JL, Thompson WD, Evans AS (1986). Methods in Observational Epidemiology. Oxford University Press, London, pp. 254 - 284.
 
 Mittleman MA (1995). Estimation of exposure prevalence in a population at risk using data from cases and an external estimate of the relative risk. Epidemiology 6: 551 - 553. 

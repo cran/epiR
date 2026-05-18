@@ -44,7 +44,9 @@ The methodology described in Woodward (2014), pp. 295 - 329 uses the proportion 
 
 When no estimate of \code{phi.coef} is available, investigators may prefer to perform their power calculations under the assumption that \code{phi.coef} equals, say, 0.2 rather than make the questionable independence assumption required by most other methods.
 
-A finite population correction factor is applied to the sample size estimates when a value for \code{N} is provided.
+If a value is entered for \code{N} a finite population correction factor (Cochran 1977) is applied to the calculated sample size estimate. That is:
+
+\deqn{n_{adj} = \frac{n}{1 + \left(\frac{n}{N}\right)}}{nadj = n / [1 + (n / N)]}
 
 Power calculations used in this function are based on the uncorrected chi-square (as opposed to Fisher's exact) test.
 
@@ -61,6 +63,8 @@ A list containing the following:
 }
 
 \references{
+Cochran WG (1977). Sampling Techniques. John Wiley and Sons, London.
+
 Dupont WD (1988) Power calculations for matched case-control studies. Biometrics 44: 1157 - 1168.
 
 Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportions. John Wiley and Sons, New York. 
