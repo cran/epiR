@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.94
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Floating point error corrected in epi.2by2.
+    [Spotted by Mark Stevenson]
+
+
 CHANGES IN epiR VERSION 2.0.93
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -6,6 +13,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o For each of the sample size calculations consistent coding for finite correction applied.
     [Mark Stevenson]
+
 
 CHANGES IN epiR VERSION 2.0.92
 SIGNIFICANT USER-VISIBLE CHANGES

@@ -1,4 +1,5 @@
 zORscore <- function(dat, conf.level){
+  
   x1 <- dat[1]; n1 <- dat[1] + dat[3]
   x2 <- dat[2]; n2 <- dat[2] + dat[4]
   
@@ -26,9 +27,9 @@ zORscore <- function(dat, conf.level){
   
   else{
     theta = px / (1 - px) / (py / (1 - py)) / 1.1
-    ll = zlimit(x1, n1, x2, n2, conf.level, theta, 0)       
+    ll = zlimit(x1, n1, x2, n2, conf.level, lim = theta, ta = 0)       
     theta = px / (1 - px) / (py / (1 - py)) * 1.1
-    ul = zlimit(x1, n1, x2, n2, conf.level, theta, 1)      
+    ul = zlimit(x1, n1, x2, n2, conf.level, lim = theta, ta = 1)      
   }
   rval <- c(scOR.p, ll,ul)  
   return(rval)
