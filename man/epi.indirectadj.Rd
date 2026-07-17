@@ -23,7 +23,7 @@ epi.indirectadj(obs, pop, std, units, conf.level = 0.95)
 \details{
 Indirect standardisation can be performed when stratum-specific incidence risk estimates are either unknown or unreliable. If the stratum-specific incidence risk estimates are known, direct standardisation is preferred.
 
-Confidence intervals for the standardised mortality ratio estimates are based on the Poisson distribution (see Breslow and Day 1987, p 69 - 71 for details).
+Confidence intervals for the standardised mortality ratio estimates are calculated using the Ulm (1990) method.
 }
 
 \value{
@@ -43,6 +43,8 @@ Lash TL, VanderWeele TJ, Haneuse S, Rothman KJ (2021). Modern Epidemiology. Lipp
 Sahai H, Khurshid A (1993). Confidence intervals for the mean of a Poisson distribution: A review. Biometrical Journal 35: 857 - 867. 
 
 Sahai H, Khurshid A (1996). Statistics in Epidemiology. Methods, Techniques and Applications. CRC Press, Baton Roca. 
+
+Ulm K (1990) A simple method to calculate the confidence interval of a standardized mortality ratio. American Journal of Epidemiology 131: 373 - 375. DOI: 10.1093/oxfordjournals.aje.a115507
 }
 
 \author{
@@ -77,7 +79,7 @@ epi.indirectadj(obs = obs.m01, pop = pop.m01, std = std.m01, units = 100,
    conf.level = 0.95)
    
 ## In area A the observed number of TB positive herds was 0.97 (95\% CI 
-## 0.73 to 1.22) times the number expected. In area B the observed number
+## 0.73 to 1.25) times the number expected. In area B the observed number
 ## of TB positive herds was 1.1 (95\% CI 0.90 to 1.3) times the number expected. 
 
 ## EXAMPLE 2 (with covariates):
@@ -108,8 +110,8 @@ epi.indirectadj(obs = obs.m02, pop = pop.m02, std = std.m02, units = 100,
 
 ## > $smr.strata
 ## >   obs exp       est     lower    upper
-## > A  58  52 1.1153846 0.8461538 1.403846
-## > B 130 140 0.9285714 0.7714286 1.092857
+## > A  58  52 1.1153846 0.8469583 1.441893
+## > B 130 140 0.9285714 0.7758190 1.102603
 
 ## The crude herd level incidence risk of TB in area A was 5.8 (95\% CI 4.0 
 ## to 7.5) per 100 herds at risk. The crude herd level incidence risk 

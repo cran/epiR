@@ -27,7 +27,7 @@
     # crude.se <- crude.p / sqrt(t.pop)                            ## Incorrect.
     crude.se <- crude.p / sqrt(t.obs)                              ## replaced pop by obs
     crude.l <- qchisq(alpha / 2, 2 * t.obs) / 2 / t.pop            ## next 2 lines changed
-    crude.u <- qchisq(1 - alpha / 2, 2 *(t.obs + 1)) / 2 / t.pop
+    crude.u <- qchisq(1 - alpha / 2, 2 * (t.obs + 1)) / 2 / t.pop
     crude.strata <- data.frame(est = as.vector(crude.p) * units, lower = as.vector(crude.l) * units, 
        upper = as.vector(crude.u) * units)
     rownames(crude.strata) <- names(t.exp)
@@ -53,10 +53,22 @@
       rownames(adj.strata) <- names(t.exp)
       }
 
-    # Crude standardised mortality ratio (confidence intervals based on Breslow and Day 1987 p 69-71): 
+    # Crude standardised mortality ratio. Confidence intervals calculated using the exact method:
     smr.p <- t.obs / t.exp
-    smr.l <- qpois((1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
-    smr.u <- qpois(1 - (1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
+    
+    count.l <- qgamma(alpha / 2, shape = t.obs)
+    count.u <- qgamma(1 - alpha / 2, shape = t.obs + 1)
+    
+    # Convert to SMR scale:
+    smr.l <- count.l / t.exp
+    smr.u <- count.u / t.exp
+    
+    # If t.obs == 0, smr.l is set to zero:
+    smr.l[t.obs == 0] <- 0
+    
+    # smr.l <- qpois((1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
+    # smr.u <- qpois(1 - (1 - conf.level) / 2, lambda = t.obs, log.p = FALSE) / t.exp
+    
     smr.strata <- data.frame(obs = as.vector(t.obs), exp = as.vector(t.exp), est = as.vector(smr.p), lower = as.vector(smr.l), upper = as.vector(smr.u))
     rownames(smr.strata) <- names(t.exp)   
     

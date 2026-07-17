@@ -1,3 +1,16 @@
+CHANGES IN epiR VERSION 2.0.95
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Bug in epi.ssdetect where calculated number of SSUs to sample was greater than the total number of SSUs per PSU corrected.
+    [Spotted by Kona Adhikary]
+
+    o Inconsistency in documentation for epi.indirectadj re confidence intervals for standardised mortality ratios corrected.
+    [Spotted by Tamas Ferenci]
+
+    o New function epi.mbf calculates the minimum Bayes factor using Goodman (1999) or Sellke, Bayarri and Berger (2001) method.
+    [Mark Stevenson for ANZCVSc Science Week course July 2026]
+        
+
 CHANGES IN epiR VERSION 2.0.94
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -8,7 +21,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 CHANGES IN epiR VERSION 2.0.93
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Function epi.pooled revised to include dilution argument. If dilution = TRUE the function calculates a value for pooled diagnostic sensitivity dependent on the expected number of positives in the pool. If dilution = FALSE pooled diagnostic sensitivity is assumed to be the same as individual sample sensitivity.
+    o Function epi.pooled revised to include dilution argument. If dilution = TRUE the function calculates a value for pooled diagnostic sensitivity dependent on the expected number of positives in the pool. If dilution = FALSE pooled diagnostic sensitivity is assumed to be the same as the individual sample sensitivity.
     [Sarai Silaban and Mark Stevenson]
     
     o For each of the sample size calculations consistent coding for finite correction applied.

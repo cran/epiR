@@ -1,13 +1,3 @@
-# N <- c(11,350)
-# pstar <- c(0.01,0.15)
-# se <- 0.95
-# sp <- 1
-# interpretation = "series"
-# covar = c(0,0)
-# nfractional = FALSE
-# se.psu <- 0.95
-# ss.se <- 0.95
-
 epi.ssdetect <- function(N, pstar, se, sp, interpretation = "series", covar = c(0,0), nfractional = FALSE, se.psu = 0.95, ss.se = 0.95){
   
   # Covar is a vector of length two. First element is covariance for D+ group, second element is covariance for D- group. See Dohoo, Martin and Stryhn page 103.
@@ -70,11 +60,13 @@ epi.ssdetect <- function(N, pstar, se, sp, interpretation = "series", covar = c(
     d.psu <- N[1] * pstar[1]
     npsu.h <- (N[1] / se.psu) * (1 - (1 - ss.se)^(1 / d.psu))
     
+    # If N[2] missing set nssu tp nssu.b:
     npsu <- ifelse(is.na(N[1]), npsu.b, npsu.h)
     
-    # If npsu > N[1] set npsu to N[1]:
-    npsu <- ifelse(npsu > N[1], N[1], npsu)
+    # If !is.na(N[1]) and npsu > N[1] set npsu to N[1]:
+    npsu <- ifelse(!is.na(N[1]) & npsu > N[1], N[1], npsu)  
     
+
     # SSUs: binomial --- note variable use (adjusted diagnostic sensitivity):
     nssu.b <- log(1 - ss.se) / log(1 - pstar[2] * use)
     
@@ -82,8 +74,12 @@ epi.ssdetect <- function(N, pstar, se, sp, interpretation = "series", covar = c(
     d.ssu <- N[2] * pstar[2]
     nssu.h <- (N[2] / use) * (1 - (1 - se.psu)^(1 / d.ssu))
     
+    # If N[2] missing set nssu tp nssu.b:
     nssu <- ifelse(is.na(N[2]), nssu.b, nssu.h)
-    ntotal <- npsu * nssu
+
+    # If !is.na(N[2]) and nssu > N[2] set nssu to N[2]:
+    nssu <- ifelse(!is.na(N[2]) & nssu > N[2], N[2], nssu)  
+    
     sample.size <- data.frame(PSUs = npsu, SSUs = nssu)
     
     if(nfractional == TRUE){
