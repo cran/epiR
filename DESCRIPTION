@@ -1,10 +1,12 @@
 Package: epiR
-Version: 2.0.95
-Date: 2026-07-17
+Version: 2.0.96
+Date: 2026-08-01
 Title: Tools for the Analysis of Epidemiological Data
 Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
    person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
    person(given = "Cord", family = "Heuer", role = "ctb"),
+   person(given = "Ian",  family = "Kopacka", role = "ctb"),
+   person(given = "Klemens", family = "Fuchs", role = "ctb"),   
    person(given = "Telmo", family = "Nunes", role = "ctb"),
    person(given = "Cord", family = "Heuer", role = "ctb"),
    person(given = "Jonathon", family = "Marshall", role = "ctb"),
@@ -29,19 +31,22 @@ Maintainer: Mark Stevenson <mark.stevenson1@unimelb.edu.au>
 Description: Tools for the analysis of epidemiological and surveillance data. Contains functions for directly and indirectly adjusting measures of disease frequency, quantifying measures of association on the basis of single or multiple strata of count data presented in a contingency table, computation of confidence intervals around incidence risk and incidence rate estimates and sample size calculations for cross-sectional, case-control and cohort studies. Surveillance tools include functions to calculate an appropriate sample size for 1- and 2-stage representative freedom surveys, functions to estimate surveillance system sensitivity and functions to support scenario tree modelling analyses.   
 Depends: R (>= 3.0.0), survival
 Imports: BiasedUrn, pander, methods, sf, lubridate, zoo, flextable,
-        stats, officer
+        stats, officer, DFBA
 Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, rmarkdown,
         bookdown, plyr, RColorBrewer, scales, sp, spData (>= 2.3.0),
         spatstat, tidyr
 VignetteBuilder: knitr
+Encoding: UTF-8
 License: GPL (>= 2)
-Packaged: 2026-07-17 04:20:40 UTC; marks1
+Packaged: 2026-07-31 23:50:31 UTC; mstev
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Author: Mark Stevenson [aut, cre] (ORCID:
     <https://orcid.org/0000-0003-1890-9784>),
   Evan Sergeant [aut],
   Cord Heuer [ctb],
+  Ian Kopacka [ctb],
+  Klemens Fuchs [ctb],
   Telmo Nunes [ctb],
   Cord Heuer [ctb],
   Jonathon Marshall [ctb],
@@ -63,4 +68,4 @@ Author: Mark Stevenson [aut, cre] (ORCID:
   Aniko Szabo [ctb],
   Ahmad Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2026-07-17 08:40:02 UTC
+Date/Publication: 2026-08-03 16:30:02 UTC

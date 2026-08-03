@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.96
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.prev function updated to provide the option to compute a Bayesian estimate of true prevalence using the methodology described by Kopacka and Fuchs (2026).
+    [Code and documentation provided by Ian Kopacka and Klemens Fuchs]
+    
+
 CHANGES IN epiR VERSION 2.0.95
 SIGNIFICANT USER-VISIBLE CHANGES
 

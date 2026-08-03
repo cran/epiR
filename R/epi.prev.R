@@ -1,122 +1,194 @@
-"epi.prev" <- function(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95){
-
-   # Confidence intervals:
-   if(method == "c-p") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "exact", alpha = 1 - conf.level)
-   else if (method == "sterne") ap.cl <- tp.cl <- .sterne.ci(x = pos, n = tested, alpha = 1 - conf.level)
-   else if (method == "blaker") ap.cl <- tp.cl <- .blaker.ci(x = pos, n = tested, conf.level)
-   else if (method == "wilson") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)
-   else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')
-   
-   # Apparent prevalence and true prevalence:
-   if(length(pos) == 1){
-     ap.est <- pos / tested
-     ap.low <- ap.cl[1]
-     ap.upp <- ap.cl[2]
-     
-     tp.est <- (ap.est + sp - 1) / (se + sp - 1)
-     tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
-     tp.low <- tp.cl[1]
-     tp.upp <- tp.cl[2]     
-   }
-   
-   if(length(pos) > 1){
-     ap.est <- pos / tested
-     ap.low <- ap.cl[,1]
-     ap.upp <- ap.cl[,2]
-     
-     tp.est <- (ap.est + sp - 1) / (se + sp - 1)
-     tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
-     tp.low <- tp.cl[,1]
-     tp.upp <- tp.cl[,2]     
-   }
-
-   ap = data.frame(est = ap.est * units, lower = ap.low * units, upper = ap.upp * units)
-   tp = data.frame(est = tp.est * units, lower = tp.low * units, upper = tp.upp * units)
-
-   if(length(pos) == 1 & sum(ap.est < (1 - sp)) > 0){
-       warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
-       rval <- list(ap = ap, tp = tp)
-   }
-   
-   else if(length(pos) == 1 & sum(ap.est > se) > 0){
-       warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
-       rval <- list(ap = ap, tp = tp)
-   }
-   
-   else if(length(pos) > 1 & sum(as.numeric(ap.est < (1 - sp))) > 0){
-       warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
-       rval <- list(ap = ap, tp = tp)
-     }
-   
-   else if(length(pos) > 1 & sum(as.numeric(ap.est > se)) > 0){
-       warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
-       rval <- list(ap = ap, tp = tp)
-   }
+"epi.prev" <- function(pos, tested, se, sp, method = "wilson", tp.method = "rogan.gladen", bayes.variant = NULL, units = 100, conf.level = 0.95){
   
-   else{   
-     p.low <- (1 - conf.level) / 2
-     p.upp <- (1 - (1 - conf.level) / 2)
-     
-     
-     # Expected number test positive:
-     tp.p <- (tp.est * se) + (1 - tp.est) * (1 - sp)
-     tp.nest <- qbinom(p = 0.50, size = tested, prob = tp.p)
-     tp.nlow <- qbinom(p = p.low, size = tested, prob = tp.p)
-     tp.nupp <- qbinom(p = p.upp, size = tested, prob = tp.p)
-     
-     
-     # Expected number test positive, disease positive (true positives):
-     tpdp.p <- (tp.est * se)
-     tpdp.nest <- qbinom(p = 0.50, size = tested, prob = tpdp.p)
-     tpdp.nlow <- qbinom(p = p.low, size = tested, prob = tpdp.p)
-     tpdp.nupp <- qbinom(p = p.upp, size = tested, prob = tpdp.p)
-     
-     
-     # Expected number test positive, disease negative (false positives):
-     tpdn.p <- (1 - tp.est) * (1 - sp)
-     tpdn.nest <- qbinom(p = 0.50, size = tested, prob = tpdn.p)
-     tpdn.nlow <- qbinom(p = p.low, size = tested, prob = tpdn.p)
-     tpdn.nupp <- qbinom(p = p.upp, size = tested, prob = tpdn.p)
-     
-     
-     # Expected number test negative:
-     tn.p <- (tp.est * (1 - se)) + ((1 - tp.est) * sp)
-     tn.nest <- qbinom(p = 0.50, size = tested, prob = tn.p)
-     tn.nlow <- qbinom(p = p.low, size = tested, prob = tn.p)
-     tn.nupp <- qbinom(p = p.upp, size = tested, prob = tn.p)
-     
-     
-     # Expected number test negative, disease negative (true negatives):
-     tndn.p <- (1 - tp.est) * sp
-     tndn.nest <- qbinom(p = 0.50, size = tested, prob = tndn.p)
-     tndn.nlow <- qbinom(p = p.low, size = tested, prob = tndn.p)
-     tndn.nupp <- qbinom(p = p.upp, size = tested, prob = tndn.p)
-     
-     
-     # Expected number test negative, disease positive (false negatives):
-     tndp.p <- (tp.est * (1 - se))
-     tndp.nest <- qbinom(p = 0.50, size = tested, prob = tndp.p)
-     tndp.nlow <- qbinom(p = p.low, size = tested, prob = tndp.p)
-     tndp.nupp <- qbinom(p = p.upp, size = tested, prob = tndp.p)
-     
-     test.positive = data.frame(est = tp.nest, lower = tp.nlow, upper = tp.nupp)
-     true.positive = data.frame(est = tpdp.nest, lower = tpdp.nlow, upper = tpdp.nupp)
-     false.positive = data.frame(est = tpdn.nest, lower = tpdn.nlow, upper = tpdn.nupp)
-     
-     test.negative = data.frame(est = tn.nest, lower = tn.nlow, upper = tn.nupp)
-     true.negative = data.frame(est = tndn.nest, lower = tndn.nlow, upper = tndn.nupp)
-     false.negative = data.frame(est = tndp.nest, lower = tndp.nlow, upper = tndp.nupp)
-     
-     rval <- list(ap = ap, tp = tp, 
-                  test.positive = test.positive, true.positive = true.positive, false.positive = false.positive,
-                  test.negative = test.negative, true.negative = true.negative, false.negative = false.negative)
-     
-   }
+  if (tp.method == "rogan.gladen"){
+    
+    # Confidence intervals:
+    if(method == "c-p") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "exact", alpha = 1 - conf.level)
+    else if (method == "sterne") ap.cl <- tp.cl <- .sterne.ci(x = pos, n = tested, alpha = 1 - conf.level)
+    else if (method == "blaker") ap.cl <- tp.cl <- .blaker.ci(x = pos, n = tested, conf.level)
+    else if (method == "wilson") ap.cl <- tp.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)
+    else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')
+    
+    if(!is.null(bayes.variant)){
+      warning('bayes.variant ignored when p.method = "rogan.gladen"')
+    }
+    
+    # Apparent prevalence and true prevalence:
+    if(length(pos) == 1){
+      ap.est <- pos / tested
+      ap.low <- ap.cl[1]
+      ap.upp <- ap.cl[2]
+      
+      tp.est <- (ap.est + sp - 1) / (se + sp - 1)
+      tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
+      tp.low <- tp.cl[1]
+      tp.upp <- tp.cl[2]     
+    }
+    
+    if(length(pos) > 1){
+      ap.est <- pos / tested
+      ap.low <- ap.cl[,1]
+      ap.upp <- ap.cl[,2]
+      
+      tp.est <- (ap.est + sp - 1) / (se + sp - 1)
+      tp.cl <- (tp.cl + sp - 1) / (se + sp - 1) 
+      tp.low <- tp.cl[,1]
+      tp.upp <- tp.cl[,2]     
+    }
+  } else if (tp.method == "simplified.bayes"){
+    
+    # Confidence intervals:
+    if(method == "c-p") ap.cl <- .bin.ci(x = pos, n = tested, method = "exact", alpha = 1 - conf.level)
+    else if (method == "sterne") ap.cl <- .sterne.ci(x = pos, n = tested, alpha = 1 - conf.level)
+    else if (method == "blaker") ap.cl <- .blaker.ci(x = pos, n = tested, conf.level)
+    else if (method == "wilson") ap.cl <- .bin.ci(x = pos, n = tested, method = "wilson", alpha = 1 - conf.level)
+    else stop('Valid methods are "c-p", "sterne", "blaker", or "wilson"')    
+    
+    if(is.null(bayes.variant)) bayes.variant <- "mode.hpd"
+    
+    if (
+        (length(bayes.variant) != 1) ||
+        is.null(bayes.variant) || 
+        !(bayes.variant %in% c("mode.hpd", "median.equaltail"))
+        ){
+      stop('Valid values for bayes.variant are "mode.hpd", or "median.equaltail"')
+    }
+    
+    # Apparent prevalence and true prevalence:
+    if(length(pos) == 1){
+      ap.est <- pos / tested
+      ap.low <- ap.cl[1]
+      ap.upp <- ap.cl[2]
+      
+      tp.correction <- .simplified_bayes(
+          n = tested, 
+          y = pos, 
+          se = se, 
+          sp = sp, 
+          conf.level = conf.level, 
+          bayes.variant = bayes.variant
+      )
+      tp.est <- tp.correction[1]
+      tp.low <- tp.correction[2]
+      tp.upp <- tp.correction[3]
+    }
+    
+    if(length(pos) > 1){
+      ap.est <- pos / tested
+      ap.low <- ap.cl[,1]
+      ap.upp <- ap.cl[,2]
+      
+      if (length(se) == 1) se <- rep(se, length(pos))
+      if (length(sp) == 1) sp <- rep(sp, length(pos))
+      tp.correction <- vapply(
+          seq(along.with = pos),
+          function(i){
+            .simplified_bayes(
+                n = tested[i], 
+                y = pos[i], 
+                se = se[i], 
+                sp = sp[i], 
+                conf.level = conf.level, 
+                bayes.variant = bayes.variant
+            )
+          },
+          numeric(3)
+      )
+      tp.est <- tp.correction[1,]
+      tp.low <- tp.correction[2,]
+      tp.upp <- tp.correction[3,]         
+    }
+  } else {
+    stop('Valid values for tp.method are "rogan.gladen", or "simplified.bayes"')
+  }
+  
+  ap = data.frame(est = ap.est * units, lower = ap.low * units, upper = ap.upp * units)
+  tp = data.frame(est = tp.est * units, lower = tp.low * units, upper = tp.upp * units)
+  
+  if((tp.method == "rogan.gladen") & length(pos) == 1 & sum(ap.est < (1 - sp)) > 0){
+    warning('Apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+    rval <- list(ap = ap, tp = tp)
+  }
+  
+  else if((tp.method == "rogan.gladen") & length(pos) == 1 & sum(ap.est > se) > 0){
+    warning('Apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+    rval <- list(ap = ap, tp = tp)
+  }
+  
+  else if((tp.method == "rogan.gladen") & length(pos) > 1 & sum(as.numeric(ap.est < (1 - sp))) > 0){
+    warning('At least one apparent prevalence is less than (1 - Sp). Rogan Gladen estimate of true prevalence invalid.')
+    rval <- list(ap = ap, tp = tp)
+  }
+  
+  else if((tp.method == "rogan.gladen") & length(pos) > 1 & sum(as.numeric(ap.est > se)) > 0){
+    warning('At least one apparent prevalence greater than Se. Rogan Gladen estimate of true prevalence invalid.')
+    rval <- list(ap = ap, tp = tp)
+  }
+  
+  else{   
+    p.low <- (1 - conf.level) / 2
+    p.upp <- (1 - (1 - conf.level) / 2)
+    
+    
+    # Expected number test positive:
+    tp.p <- (tp.est * se) + (1 - tp.est) * (1 - sp)
+    tp.nest <- qbinom(p = 0.50, size = tested, prob = tp.p)
+    tp.nlow <- qbinom(p = p.low, size = tested, prob = tp.p)
+    tp.nupp <- qbinom(p = p.upp, size = tested, prob = tp.p)
+    
+    
+    # Expected number test positive, disease positive (true positives):
+    tpdp.p <- (tp.est * se)
+    tpdp.nest <- qbinom(p = 0.50, size = tested, prob = tpdp.p)
+    tpdp.nlow <- qbinom(p = p.low, size = tested, prob = tpdp.p)
+    tpdp.nupp <- qbinom(p = p.upp, size = tested, prob = tpdp.p)
+    
+    
+    # Expected number test positive, disease negative (false positives):
+    tpdn.p <- (1 - tp.est) * (1 - sp)
+    tpdn.nest <- qbinom(p = 0.50, size = tested, prob = tpdn.p)
+    tpdn.nlow <- qbinom(p = p.low, size = tested, prob = tpdn.p)
+    tpdn.nupp <- qbinom(p = p.upp, size = tested, prob = tpdn.p)
+    
+    
+    # Expected number test negative:
+    tn.p <- (tp.est * (1 - se)) + ((1 - tp.est) * sp)
+    tn.nest <- qbinom(p = 0.50, size = tested, prob = tn.p)
+    tn.nlow <- qbinom(p = p.low, size = tested, prob = tn.p)
+    tn.nupp <- qbinom(p = p.upp, size = tested, prob = tn.p)
+    
+    
+    # Expected number test negative, disease negative (true negatives):
+    tndn.p <- (1 - tp.est) * sp
+    tndn.nest <- qbinom(p = 0.50, size = tested, prob = tndn.p)
+    tndn.nlow <- qbinom(p = p.low, size = tested, prob = tndn.p)
+    tndn.nupp <- qbinom(p = p.upp, size = tested, prob = tndn.p)
+    
+    
+    # Expected number test negative, disease positive (false negatives):
+    tndp.p <- (tp.est * (1 - se))
+    tndp.nest <- qbinom(p = 0.50, size = tested, prob = tndp.p)
+    tndp.nlow <- qbinom(p = p.low, size = tested, prob = tndp.p)
+    tndp.nupp <- qbinom(p = p.upp, size = tested, prob = tndp.p)
+    
+    test.positive = data.frame(est = tp.nest, lower = tp.nlow, upper = tp.nupp)
+    true.positive = data.frame(est = tpdp.nest, lower = tpdp.nlow, upper = tpdp.nupp)
+    false.positive = data.frame(est = tpdn.nest, lower = tpdn.nlow, upper = tpdn.nupp)
+    
+    test.negative = data.frame(est = tn.nest, lower = tn.nlow, upper = tn.nupp)
+    true.negative = data.frame(est = tndn.nest, lower = tndn.nlow, upper = tndn.nupp)
+    false.negative = data.frame(est = tndp.nest, lower = tndp.nlow, upper = tndp.nupp)
+    
+    rval <- list(ap = ap, tp = tp, 
+        test.positive = test.positive, true.positive = true.positive, false.positive = false.positive,
+        test.negative = test.negative, true.negative = true.negative, false.negative = false.negative)
+    
+  }
+  
+  return(rval)
+}   
 
-   return(rval)
-   }   
 
-   
 # -----------------------------------
 # Exact confidence intervals
 # -----------------------------------
@@ -128,13 +200,13 @@
     nu1 <- 2 * (n - x + 1)
     nu2 <- 2 * x
     ll <- if (x > 0)
-      x / (x + qf(1 - alpha/2, nu1, nu2) * (n - x + 1))
-    else 0
+          x / (x + qf(1 - alpha/2, nu1, nu2) * (n - x + 1))
+        else 0
     nu1p <- nu2 + 2
     nu2p <- nu1 - 2
     pp <- if (x < n)
-      qf(1 - alpha/2, nu1p, nu2p)
-    else 1
+          qf(1 - alpha/2, nu1p, nu2p)
+        else 1
     ul <- ((x + 1) * pp)/(n - x + (x + 1) * pp)
     zcrit <- -qnorm(alpha/2)
     z2 <- zcrit * zcrit
@@ -160,7 +232,7 @@
   
   if (length(x) == 1 & length(n) == 1 & method == "all") {
     mat <- bc(x, n, alpha, method)
-    dimnames(mat) <- list(c("Exact", "Wilson", "Asymptotic"), c("PointEst", "Lower", "Upper"))
+    dimnames(mat) <- list(c("Exact", "Wilson", "Asymptotic"), c("est", "lower", "upper"))
     
     # if (include.n)
     #  mat <- cbind(N = n, mat)
@@ -184,70 +256,70 @@
 # Sterne confidence intervals:
 .sterne.ci <- function(x, n, alpha, del = 10^-5){
   lower <- c(); upper <- c()
-
-  for(i in 1:length(x)){
   
-  # Lower bound a_alpha^st(X)
-  if (x[i] == 0){tlower <- 0} else {
-    J <- c(0:(x[i] - 1), (x[i] + 1):n[i])
-    k1 <- min(J)
-    pi1 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k1, x. = x[i], n. = n[i]))
+  for(i in 1:length(x)){
     
-    # Calculation of k_alpha(X)
-    if (pi1 >= alpha){kal <- k1} else {
-      k <- x[i] - 1
-      while (k1 < k - 1){
-        k2 <- floor((k + k1) / 2)
-        pi2 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k2, x. = x[i], n. = n[i]))
-        if (pi2 >= alpha){k <- k2} 
-        else {k1 <- k2}
+    # Lower bound a_alpha^st(X)
+    if (x[i] == 0){tlower <- 0} else {
+      J <- c(0:(x[i] - 1), (x[i] + 1):n[i])
+      k1 <- min(J)
+      pi1 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k1, x. = x[i], n. = n[i]))
+      
+      # Calculation of k_alpha(X)
+      if (pi1 >= alpha){kal <- k1} else {
+        k <- x[i] - 1
+        while (k1 < k - 1){
+          k2 <- floor((k + k1) / 2)
+          pi2 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k2, x. = x[i], n. = n[i]))
+          if (pi2 >= alpha){k <- k2} 
+          else {k1 <- k2}
+        }
+        kal <- k
       }
-      kal <- k
-    }
-    
-    # Calculation of a_alpha^st(X):
-    b1 <- .theta(k = kal, x. = x[i], n. = n[i])
-    pi1 <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b1) + .Feta(y. = kal - 1, n. = n[i], eta = b1)
-    if (pi1 <= alpha){b <- b1} else {
-      b <- max(.theta(k = kal - 1, x. = x[i], n. = n[i]), .logit(del))
-      pi <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b) + .Feta(y. = kal - 1, n. = n[i], eta = b)
-      while (b1 - b > del || pi1 - pi > del){
-        b2 <- (b + b1) / 2
-        pi2 <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b2) + .Feta(y. = kal - 1, n. = n[i], eta = b2)
-        if (pi2 > alpha){
-          b1 <- b2
-          pi1 <- pi2} else {
+      
+      # Calculation of a_alpha^st(X):
+      b1 <- .theta(k = kal, x. = x[i], n. = n[i])
+      pi1 <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b1) + .Feta(y. = kal - 1, n. = n[i], eta = b1)
+      if (pi1 <= alpha){b <- b1} else {
+        b <- max(.theta(k = kal - 1, x. = x[i], n. = n[i]), .logit(del))
+        pi <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b) + .Feta(y. = kal - 1, n. = n[i], eta = b)
+        while (b1 - b > del || pi1 - pi > del){
+          b2 <- (b + b1) / 2
+          pi2 <- 1 - .Feta(y. = x[i] - 1, n. = n[i], eta = b2) + .Feta(y. = kal - 1, n. = n[i], eta = b2)
+          if (pi2 > alpha){
+            b1 <- b2
+            pi1 <- pi2} else {
             b <- b2
             pi <- pi2}}}
-    tlower <- .invlogit(b)
+      tlower <- .invlogit(b)
     }
-  
-  # Upper bound b_alpha^st(X):
-  if (x[i] == n[i]){tupper <- 1} else {
-    J <- c(0:(x[i] - 1),(x[i] + 1):n[i])
-    k1 <- max(J)
-    pi1 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k1, x. = x[i], n. = n[i]))
     
-    # Calculation of k_alpha(X):
-    if (pi1 >= alpha){kau <- k1} else {
-      k <- x[i] + 1
-      pi <- 1
-      while (k1 > k + 1){
-        k2 <- floor((k + k1) / 2)
-        pi2 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k2, x. = x[i], n. = n[i]))
-        if (pi2 >= alpha){k <- k2} 
-        else {k1 <- k2}
+    # Upper bound b_alpha^st(X):
+    if (x[i] == n[i]){tupper <- 1} else {
+      J <- c(0:(x[i] - 1),(x[i] + 1):n[i])
+      k1 <- max(J)
+      pi1 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k1, x. = x[i], n. = n[i]))
+      
+      # Calculation of k_alpha(X):
+      if (pi1 >= alpha){kau <- k1} else {
+        k <- x[i] + 1
+        pi <- 1
+        while (k1 > k + 1){
+          k2 <- floor((k + k1) / 2)
+          pi2 <- .piXeta(x. = x[i], n. = n[i], eta = .theta(k = k2, x. = x[i], n. = n[i]))
+          if (pi2 >= alpha){k <- k2} 
+          else {k1 <- k2}
+        }
+        kau <- k
       }
-      kau <- k
-    }
-    
-    # Calculation of b_alpha^st(X):
-    b1 <- .theta(k = kau, x. = x[i], n. = n[i])
-    pi1 <- 1 - .Feta(y. = kau, n. = n[i], eta = b1) + .Feta(y. = x[i], n. = n[i], eta = b1)
-
-    if (pi1 <= alpha){
-      b <- b1
-      po <- pi1} else {
+      
+      # Calculation of b_alpha^st(X):
+      b1 <- .theta(k = kau, x. = x[i], n. = n[i])
+      pi1 <- 1 - .Feta(y. = kau, n. = n[i], eta = b1) + .Feta(y. = x[i], n. = n[i], eta = b1)
+      
+      if (pi1 <= alpha){
+        b <- b1
+        po <- pi1} else {
         b <- min(.theta(k = kau + 1, x. = x[i], n. = n[i]), b1 + n[i])
         pi <- 1 - .Feta(y. = kau, n. = n[i], eta = b) + .Feta(y. = x[i], n. = n[i], eta = b)
         while (b - b1 > del || pi1 - pi > del){
@@ -256,14 +328,14 @@
           if (pi2 > alpha){
             b1 <- b2
             pi1 <- pi2} else {
-              b <- b2
-              pi <- pi2}}}
-    tupper <- .invlogit(b)
+            b <- b2
+            pi <- pi2}}}
+      tupper <- .invlogit(b)
     }
-  
-  # c("a_alpha^St" = pu, "b_alpha^St" = po)
-  lower <- c(lower, tlower)
-  upper <- c(upper, tupper)
+    
+    # c("a_alpha^St" = pu, "b_alpha^St" = po)
+    lower <- c(lower, tlower)
+    upper <- c(upper, tupper)
   }
   
   rval <- data.frame(lower = lower, upper = upper)
@@ -274,26 +346,26 @@
 # Blaker confidence intervals:
 .blaker.ci <- function(x, n, conf.level, tolerance = 1e-04){
   lower <- c(); upper <- c()
-
+  
   for(i in 1:length(x)){
     tlower = 0; tupper = 1
     
     if (x[i] != 0){
       tlower = qbeta((1 - conf.level) / 2, x[i], n[i] - x[i] + 1)
       while (.acceptbin(x. = x[i], n. = n[i], p = tlower + tolerance) < (1 - conf.level))
-      tlower = tlower + tolerance
+        tlower = tlower + tolerance
     }
     
     if (x[i] != n[i]){
       tupper = qbeta(1 - (1 - conf.level) / 2, x[i] + 1, n[i] - x[i])
       while (.acceptbin(x. = x[i], n. = n[i], p = tupper - tolerance) < (1 - conf.level))
-      tupper = tupper - tolerance
+        tupper = tupper - tolerance
     }
     
     lower <- c(lower, tlower)
     upper <- c(upper, tupper)
   }
-
+  
   rval <- data.frame(lower = lower, upper = upper)
   return(rval)
 }  
@@ -301,12 +373,12 @@
 
 # Support functions:
 .acceptbin = function(x., n., p){
-   # Computes the Blaker acceptability of p when x is observed and X is bin(n, p)
-   p1 = 1 - pbinom(q = (x. - 1), size = n., prob = p)
-   p2 = pbinom(q = x., size = n., prob = p)
-   a1 = p1 + pbinom(q = (qbinom(p = p1, size = n., prob = p) - 1), size = n., prob = p)
-   a2 = p2 + 1 - pbinom(q = qbinom(p = (1 - p2), size = n., prob = p), size = n., prob = p)
-   return(min(a1, a2))
+  # Computes the Blaker acceptability of p when x is observed and X is bin(n, p)
+  p1 = 1 - pbinom(q = (x. - 1), size = n., prob = p)
+  p2 = pbinom(q = x., size = n., prob = p)
+  a1 = p1 + pbinom(q = (qbinom(p = p1, size = n., prob = p) - 1), size = n., prob = p)
+  a2 = p2 + 1 - pbinom(q = qbinom(p = (1 - p2), size = n., prob = p), size = n., prob = p)
+  return(min(a1, a2))
 }
 
 .logit <- function(p){log(p / (1 - p))}
@@ -358,7 +430,161 @@
   f}
 
 
+# Function to compute simplified Bayes correction.
+# Requires DFBA::dfba_beta_descriptive()
+.simplified_bayes <- function(
+    n, y, se, sp, conf.level, bayes.variant = c("mode.hpd", "median.equaltail")
+){
 
-
+    
+  # Check Inputs ===============================================================
+  
+  is_scalar <- function(x) length(x) == 1L && !is.na(x)
+  is_whole_number <- function(x) is.numeric(x) && isTRUE(all.equal(x, round(x)))
+  
+  # Check n:
+  if (!is_scalar(n) || !is_whole_number(n)) stop("'n' must be a single integer value")  
+  if (n <= 0) stop("'n' must be > 0")
+  
+  # Check y:
+  if (!is_scalar(y) || !is_whole_number(y)) stop("'y' must be a single integer value")
+  if (y < 0 || y > n) stop("'y' must satisfy 0 <= y <= n")
+  
+  # Check se:
+  if (!is_scalar(se) || !is.numeric(se)) stop("'se' must be a single numeric value")
+  if (se < 0 || se > 1) stop("'se' must be between 0 and 1")
+  
+  # Check sp:
+  if (!is_scalar(sp) || !is.numeric(sp)) stop("'sp' must be a single numeric value")
+  if (sp < 0 || sp > 1) stop("'sp' must be between 0 and 1")
+  
+  # Check conf.level:
+  if (!is_scalar(conf.level) || !is.numeric(conf.level)) stop("'conf.level' must be a single numeric value")
+  if (conf.level <= 0 || conf.level >= 1) stop("'conf.level' must be between 0 and 1 (exclusive)")
+  
+  # Check bayes.variant:
+  bayes.variant <- match.arg(bayes.variant)
+  
+  if (bayes.variant == "mode.hpd"){
+    # Variant mode / HPD CI ====================================================
+    
+    # Point estimate: mode -----------------------------------------------------
+    
+    # Shape parameters of beta:
+    shape1 <- y + 1
+    shape2 <- n - y + 1
+    # Limits and CDF of restricted beta:
+    lower_limit <- 1 - sp 
+    upper_limit <- se  
+    
+    # Compute mode of untruncated Beta:
+    mode_ap_untrunc <- (shape1 - 1) / (shape1 + shape2 - 2)  
+    # project Mode onto [lower_limit, upper_limit]:
+    mode_ap_trunc <- min(
+        max(mode_ap_untrunc, lower_limit), 
+        upper_limit
+    )
+    # Transformation:
+    point_est <- (mode_ap_trunc + sp - 1) / (se + sp - 1)    
+    
+    
+    # Interval estimate: HPD ---------------------------------------------------
+    
+    f_lower <- stats::pbeta(lower_limit, shape1, shape2)
+    f_upper <- stats::pbeta(upper_limit, shape1, shape2)
+    
+    if (abs(f_upper - f_lower) >= .Machine$double.eps^0.5){
+      
+      # Compute HPD interval of untruncated Beta:
+      prob_mass_weighted <-  conf.level * (f_upper - f_lower) 
+      object_dfba_beta_descriptive <- 
+          DFBA::dfba_beta_descriptive(
+              a = shape1, 
+              b = shape2, 
+              prob_interval = prob_mass_weighted
+          )
+      lower_ap_untrunc <- 
+          object_dfba_beta_descriptive@.Data[[10]]
+      upper_ap_untrunc <- 
+          object_dfba_beta_descriptive@.Data[[11]] 
+      
+      # Project HPD interval limits onto 
+      # the interval[lower_limit, upper_limit]:
+      if (upper_ap_untrunc > upper_limit){
+        upper_ap_trunc <- upper_limit
+        lower_ap_trunc <- stats::qbeta(
+            f_upper - prob_mass_weighted, shape1, shape2
+        ) 
+      } else if (lower_ap_untrunc < lower_limit){
+        lower_ap_trunc <- lower_limit
+        upper_ap_trunc <- stats::qbeta(
+            f_lower + prob_mass_weighted, shape1, shape2
+        )     
+      } else {
+        lower_ap_trunc <- lower_ap_untrunc
+        upper_ap_trunc <- upper_ap_untrunc
+      }
+      
+      # Transform limits:    
+      interval_est <- 
+          (c(lower_ap_trunc, upper_ap_trunc) + sp - 1) / 
+          (se + sp - 1)   
+    } else {
+      warning(
+          "Interval estimate for true prevalence not computed due to numeric instability"
+      )
+      interval_est <- c(NA, NA)
+    }
+    
+  } else {
+    # Variant median / equal tail CI ===========================================
+    
+    # Shape parameters of beta:
+    shape1 <- y + 1
+    shape2 <- n - y + 1
+    # Parameters for linear transformation:
+    alpha <- se + sp - 1
+    beta <- 1 - sp
+    
+    diff_beta <- 
+        pbeta(alpha + beta, shape1, shape2) - 
+        pbeta(beta, shape1, shape2)
+    
+    if (abs(diff_beta) >= .Machine$double.eps^0.5){
+      # Point estimate: median -------------------------------------------------
+      
+      point_est <- 
+          (qbeta(
+                pbeta(beta, shape1, shape2) + 0.5 * diff_beta,
+                shape1, shape2
+            ) - beta) / alpha   
+      
+      
+      # Interval estimate: equal tail ------------------------------------------
+      
+      percentiles <- c(
+          (1 - conf.level)/2, 
+          1 - (1 - conf.level)/2
+      )
+      interval_est <- 
+          (qbeta(
+                pbeta(beta, shape1, shape2) + 
+                    percentiles * diff_beta,
+                shape1, shape2
+            ) - beta) / alpha    
+      
+    } else {
+      warning(
+          "Point and interval estimates for true prevalence not computed due to numeric instability"
+      )
+      point_est <- NA
+      interval_est <- c(NA, NA)
+    }     
+    
+  }
+  
+  # Return value:
+  c(point_est, interval_est)  
+}
 
 

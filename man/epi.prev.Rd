@@ -3,15 +3,16 @@
 \alias{epi.prev}
 
 \title{
-Estimate true prevalence and the expected number of false positives
+Estimate true prevalence based on test data and the expected number of false positive and false negative test results 
 }
 
 \description{
-Compute the true prevalence of a disease and the estimated number of false positive tests on the basis of an imperfect test.
+Compute the true prevalence of a disease and the estimated number of false positive and false negative test results on the basis of an imperfect test. True prevalence can be estimated using either the Rogan Gladen correction or a simplified Bayesian approach.
 }
 
 \usage{
-epi.prev(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95)
+epi.prev(pos, tested, se, sp, method = "wilson", tp.method = "rogan.gladen",
+   bayes.variant = NULL, units = 100, conf.level = 0.95)
 }
 
 \arguments{
@@ -19,7 +20,9 @@ epi.prev(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95)
   \item{tested}{a vector listing the count of subjects tested for each population.}
   \item{se}{test sensitivity (0 - 1). \code{se} can either be a single number or a vector of the same length as \code{pos}. See the examples, below, for details.}
   \item{sp}{test specificity (0 - 1). \code{sp} can either be a single number or a vector of the same length as \code{pos}. See the examples, below, for details.}
-  \item{method}{a character string indicating the confidence interval calculation method to use. Options are \code{"c-p"} (Cloppper-Pearson), \code{"sterne"} (Sterne), \code{"blaker"} (Blaker) and \code{"wilson"} (Wilson).}
+  \item{method}{a character string indicating the confidence interval calculation method to use. Options are \code{"c-p"} (Clopper-Pearson), \code{"sterne"} (Sterne), \code{"blaker"} (Blaker) and \code{"wilson"} (Wilson; default).}
+  \item{tp.method}{a character string indicating the method used to estimate true prevalence. Options are \code{"rogan.gladen"} (Rogan Gladen correction; default) and \code{"simplified.bayes"} (simplified Bayesian approach).}
+  \item{bayes.variant}{a character string indicating the variant of the simplified Bayesian estimator, used only when \code{tp.method = "simplified.bayes"}. Options are \code{"mode.hpd"} (using the posterior mode as the point estimate and highest posterior density credible intervals) and \code{"median.equaltail"} (using the posterior median as the point estimate and equal tail credible intervals). If \code{NULL}, \code{"mode.hpd"} is used. Ignored when \code{tp.method = "rogan.gladen"}.}
   \item{units}{multiplier for the prevalence estimates.}
   \item{conf.level}{magnitude of the returned confidence interval. Must be a single number between 0 and 1.}
 }
@@ -27,13 +30,15 @@ epi.prev(pos, tested, se, sp, method = "wilson", units = 100, conf.level = 0.95)
 \details{
 Appropriate confidence intervals for the adjusted prevalence estimate are provided, accounting for the change in variance that arises from imperfect test sensitivity and specificity (see Reiczigel et al. 2010 for details). 
 
-The Clopper-Pearson method is known to be too conservative for two-sided intervals (Blaker 2000, Agresti and Coull 1998). Blaker's and Sterne's methods (Blaker 2000, Sterne 1954) provide smaller exact two-sided confidence interval estimates. 
+The Clopper-Pearson method is known to be too conservative for two-sided intervals (Blaker 2000, Agresti and Coull 1998). Blaker's and Sterne's methods (Blaker 2000, Sterne 1954) provide smaller exact two-sided confidence interval estimates.
+
+When \code{tp.method = "simplified.bayes"}, true prevalence is estimated using a simplified Bayesian approach (Kopacka and Fuchs 2026) that accounts for uncertainty in test sensitivity and specificity. Credible intervals are derived from the posterior distribution, using either equal-tailed intervals (posterior median) or highest posterior density (HPD) intervals (posterior mode), depending on \code{bayes.variant}. Apparent prevalence and its confidence interval are unaffected and continue to be computed using the method specified by \code{method}. 
 }
 
 \value{
 A list containing the following: 
    \item{ap}{the point estimate of apparent prevalence and the lower and upper bounds of the confidence interval around the apparent prevalence estimate.}
-   \item{tp}{the point estimate of the true prevalence and the lower and upper bounds of the confidence interval around the true prevalence estimate.}
+   \item{tp}{the point estimate of the true prevalence and the lower and upper bounds of the confidence interval around the true prevalence estimate. For the simplified Bayesian method, intervals reported for true prevalence are Bayesian credible intervals rather than frequentist confidence intervals.}
    \item{test.positive}{the point estimate of the expected number of positive test results and the lower and upper quantiles of the estimated number of positive test results computed using \code{conf.level}.}
    \item{true.positive}{the point estimate of the expected number of true positive test results and the lower and upper quantiles of the estimated number of true positive test results computed using \code{conf.level}.}
    \item{false.positive}{the point estimate of the expected number of false positive test results and the lower and upper quantiles of the estimated number of false positive test results computed using \code{conf.level}.}
@@ -43,7 +48,7 @@ A list containing the following:
 }
 
 \references{
-Abel U (1993). DieBewertung Diagnostischer Tests. Hippokrates, Stuttgart. 
+Abel U (1993). Die Bewertung Diagnostischer Tests. Hippokrates, Stuttgart. 
 
 Agresti A, Coull BA (1998). Approximate is better than 'exact' for interval estimation of binomial proportions. American Statistician 52: 119 - 126. 
 
@@ -52,6 +57,8 @@ Blaker H (2000). Confidence curves and improved exact confidence intervals for d
 Clopper CJ, Pearson ES (1934). The use of confidence of fiducial limits illustrated in the case of the binomial. Biometrika 26: 404 - 413. 
 
 Gardener IA, Greiner M (1999). Advanced Methods for Test Validation and Interpretation in Veterinary Medicince. Freie Universitat Berlin, ISBN 3-929619-22-9; 80 pp. 
+
+Kopacka I, Fuchs K (2026). Overcoming limitations of the Rogan-Gladen correction: A closed-form solution to a simplified Bayesian method for true prevalence estimation. Preventive Veterinary Medicine 253: DOI: 10.1016/j.prevetmed.2026.106891.
 
 Messam L, Branscum A, Collins M, Gardner I (2008) Frequentist and Bayesian approaches to prevalence estimation using examples from Johne's disease. Animal Health Research Reviews 9: 1 - 23. 
 
@@ -69,6 +76,10 @@ Sterne TE (1954). Some remarks on confidence or fiducial limits. Biometrika 41: 
 If apparent prevalence is less than (1 - diagnostic test specificity) the Rogan Gladen estimate of true prevalence will be less than zero (Speybroeck et al. 2012). If the apparent prevalence is greater than the diagnostic test sensitivity the Rogan Gladen estimate of true prevalence will be greater than one.
  
 When AP < (1 - Sp) the function issues a warning to alert the user that the estimate of true prevalence is invalid. A similar warning is issued when AP > Se. In both situations the estimated number of true positives, false positives, true negatives and false negatives is not returned by the function. Where AP < (1 - Sp) or AP > Se a Bayesian approach for estimation of true prevalence is recommended. See Messam et al. (2008) for a concise introduction to this topic.    
+}
+
+\author{
+Code and documentation for the simplified Bayesian method for this function has been generously provided by Ian Kopacka and Klemens Fuchs, AGES - Osterreichische Agentur fur Gesundheit und Ernahrungssicherheit GmbH, Spargelfeldstrasse 191, 1220 Wien.
 }
 
 \examples{
@@ -104,7 +115,15 @@ epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
 ## The estimated true prevalence of Helicobacter pylori in 1 -- 4 year olds is
 ## -4 (95\% CI -6 to 1) cases per 100. The function issues a warning to alert 
 ## the user that estimate of true prevalence invalid. True positive, false
-## positive, true negative and false negative counts are not returned. 
+## positive, true negative and false negative counts are not returned. Switch
+## tp.method to "simplified.bayes":
+
+epi.prev(pos = 6, tested = 151, se = 0.964, sp = 0.927, method = "c-p",
+   tp.method = "simplified.bayes", bayes.variant = "mode.hpd",
+   units = 100, conf.level = 0.95)
+
+## The simplified Bayes method allows a valid estimation of true prevalence. 
+## The estimated true prevalence is 0 (95\% CI 0 to 3) cases per 100. 
 
 
 ## EXAMPLE 3:
