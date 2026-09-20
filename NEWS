@@ -1,3 +1,17 @@
+CHANGES IN epiR VERSION 2.0.98
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.2by2 and epi.evalue functions updated to return NAs for the e-value estimates when there are zero cell frequencies in one or more tables of a stratified analysis.
+    [Suggested by Alexander Mathis]
+    
+    
+CHANGES IN epiR VERSION 2.0.97
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o epi.kappa function updated to return a point estimate, standard error and lower and upper confidence interval limits for maximum kappa.
+    [Mark Stevenson, based on Kowalska et al. 2026]
+    
+
 CHANGES IN epiR VERSION 2.0.96
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -14,7 +28,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Inconsistency in documentation for epi.indirectadj re confidence intervals for standardised mortality ratios corrected.
     [Spotted by Tamas Ferenci]
 
-    o New function epi.mbf calculates the minimum Bayes factor using Goodman (1999) or Sellke, Bayarri and Berger (2001) method.
+    o New function epi.mbf calculates the minimum Bayes factor using the Goodman (1999) or Sellke, Bayarri and Berger (2001) method.
     [Mark Stevenson for ANZCVSc Science Week course July 2026]
         
 

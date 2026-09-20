@@ -49,6 +49,7 @@ Where the number of rows and columns of argument \code{dat} is equal to 2 a list
   \item{bindex}{a data frame with the bias index, the standard error of the bias index and the lower and upper bounds of the confidence interval for the bias index.}
   \item{pabak}{a data frame with the prevalence and bias corrected kappa statistic and the lower and upper bounds of the confidence interval for the prevalence and bias corrected kappa statistic.}
   \item{kappa}{a data frame with the kappa statistic, the standard error of the kappa statistic and the lower and upper bounds of the confidence interval for the kappa statistic.}
+  \item{max.kappa}{a data frame listing the maximum attainable kappa, the standard error of the maximum attainable kappa and the lower and upper bounds of the confidence interval for the the maximum attainable kappa.}
   \item{z}{a data frame containing the z test statistic for kappa and its associated P-value.}
   \item{mcnemar}{a data frame containing the McNemar test statistic for kappa and its associated P-value.}
 }
@@ -70,13 +71,20 @@ Fleiss JL, Levin B, Paik MC (2003). Statistical Methods for Rates and Proportion
 
 Fleiss JL, Cohen J, Everitt BS (1969). Large sample standard errors of kappa and weighted kappa. Psychological Bulletin, 72: 323 - 327.
 
+Graham D (1992) Review papers: Design and analysis of reliability studies. Statistical Methods in Medical Research, 1: 123 - 157. DOI: 10. 1177/ 09622 80292 00100202.
+
+Holz N, Kowalska M, Pot S, Rampazzo A (2026) Interexaminer agreement of gonioscopy examinations in dogs using the European College of Veterinary Ophthalmologists Hereditary Eye Diseases grading scheme. Veterinary Ophthalmology 29: e13292. DOI: 10.1111/vop.13292.
+                                                  
+Kowalska M, Holz N, Pot S, Rampazzo A, Hartnack S (2026) Challenges and misinterpretations of Cohen's kappa in agreement studies in ophthalmology. Veterinary Ophthalmology 29: e70208. DOI: 10.1111/vop.70208.
+
 Rothman KJ (2012). Epidemiology An Introduction. Oxford University Press, London, pp. 164 - 175.
 
 Silva E, Sterry RA, Kolb D, Mathialagan N, McGrath MF, Ballam JM, Fricke PM (2007) Accuracy of a pregnancy-associated glycoprotein ELISA to determine pregnancy status of lactating dairy cows twenty-seven days after timed artificial insemination. Journal of Dairy Science 90: 4612 - 4622.
 
-Sim J, Wright CC (2005) The kappa statistic in reliability studies: Use, interpretation, and sample size requirements. Physical Therapy 85: 257 - 268.
+Sim J, Wright CC (2005) The kappa statistic in reliability studies: Use, interpretation, and sample size requirements. Physical Therapy 85: 257 - 268. DOI: 10. 1093/ ptj/ 85.3. 257.
 
 Watson PF, Petrie A (2010) Method agreement analysis: A review of correct methodology. Theriogenology 73: 1167 - 1179.
+
 }
 
 \note{
@@ -94,6 +102,8 @@ Total		        \tab \code{a+c}  	   \tab \code{b+d}  	  \tab \code{a+b+c+d=N}   
 The kappa coefficient is influenced by the prevalence of the condition being assessed. A prevalence effect exists when the proportion of agreements on the positive classification differs from that of the negative classification. If the prevalence index is high (that is, the prevalence of a positive rating is very high or very low) chance agreement is also high and the value of kappa is reduced accordingly. The effect of prevalence on kappa is greater for large values of kappa than for small values (Byrt et al. 1993). Using the notation above, the prevalence index is calculated as \code{((a/N) - (d/N))}. Confidence intervals for the prevalence index are based on methods used for a difference in two proportions. See Rothman (2012, p 167 equation 9-2) for details.
 
 Bias is the extent to which raters disagree on the proportion of positive (or negative) cases. Bias affects interpretation of the kappa coefficient. When there is a large amount of bias, kappa is higher than when bias is low or absent. In contrast to prevalence, the effect of bias is greater when kappa is small than when it is large (Byrt et al. 1993). Using the notation above, the bias index is calculated as \code{((a + b)/N - (a + c)/N)}. Confidence intervals for the bias index are based on methods used for a difference in two proportions. See Rothman (2012, p 167 equation 9-2) for details.
+
+The maximum kappa represents the greatest possible kappa value within the unchanged marginal totals (Graham 1992; Sim and Wright 2005). This method is used to understand the upper bound of agreement between examiners. Because the marginal totals are fixed, when the difference between kappa and maximum kappa is high, individual examiner tendencies, assessment methods, or differences in assessment methods should be considered as relevant sources of disagreement. When there is a marked difference between kappa and maximum kappa, kappa values should be interpreted with caution.
 
 The McNemar test is used to test for the presence of bias. A statistically significant McNemar test (generally if P < 0.05) shows that there is evidence of a systematic difference between the proportion of `positive' responses from the two methods. If one method provides the `true values' (i.e., it is regarded as the gold standard method) the absence of a systematic difference implies that there is no bias. However, a non-significant result indicates only that there is no evidence of a systematic effect. A systematic effect may be present, but the power of the test may be inadequate to determine its presence.
 }
@@ -113,8 +123,8 @@ dat.m01 <- matrix(c(19,10,6,256), nrow = 2, byrow = TRUE)
 colnames(dat.m01) <- c("L1-pos","L1-neg")
 rownames(dat.m01) <- c("L2-pos","L2-neg")
 
-dat.kap01 <- epi.kappa(dat.m01, method = "fleiss", 
-   alternative = "greater", conf.level = 0.95)
+dat.kap01 <- epi.kappa(dat.m01, method = "fleiss", alternative = "greater", 
+   conf.level = 0.95)
 dat.kap01
 
 ## The z test statistic is 11.53 (P < 0.01). We accept the alternative
@@ -167,6 +177,29 @@ dat.kap03$pabak
 ## The prevalence and bias corrected kappa statistic (PABAK) is 0.89
 ## (95\% CI 0.87 to 0.91).
 
+
+## EXAMPLE 3 (from Kowalska et al. 2026):
+## In pre-breeding assessments the European College of Veterinary 
+## Ophthamology Hereditary Eye Diseases) gonioscopy grading scheme is
+## typically undertaken by a single ophthalmologist. The study by Holz et al.
+## (2026) aimed to evaluate inter-examiner agreement using this grading 
+## scheme. Two ophthalmologists with similar clinical expertise independently 
+## assessed 60 dogs using the ECVO- HED 2022 gonioscopy grading scheme and its
+## guidelines for evaluating the iridocorneal angle. The following results
+## were obtained for left eyes (Table 4, Kowalska et al. 2026):
+
+dat.m04 <- matrix(c(52,6,1,1), nrow = 2, byrow = TRUE)
+colnames(dat.m04) <- c("Pass","Fail")
+rownames(dat.m04) <- c("Pass","Fail")
+
+dat.kap04 <- epi.kappa(dat = dat.m04, method = "fleiss", 
+   alternative = c("two.sided"), conf.level = 0.95)
+
+dat.kap04$kappa
+dat.kap04$kappa.max
+
+## Cohen's kappa: 0.18 (95\% CI -0.02 to 0.38)
+## Maximum kappa: 0.41 (95\% CI -0.08 to 0.90)
 }
 
 \keyword{univar}

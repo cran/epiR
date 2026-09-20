@@ -62,50 +62,53 @@ epi.evalue <- function(x, measure = "risk.ratio", rare = TRUE, conf.level = 0.95
     
     for(i in 1:nrow(ecoef.df)){
 
-      if(measure == "odds.ratio" & rare == FALSE){
-        rr.df[i,2:4] <- sqrt(ecoef.df[i,2:4])
+      if(!is.na(ecoef.df$est[i])){
+        
+        if(measure == "odds.ratio" & rare == FALSE){
+          rr.df[i,2:4] <- sqrt(ecoef.df[i,2:4])
+        }
+        
+        if(measure == "hazard.ratio" & rare == FALSE){
+          rr.df[i,2:4] <- (1 - 0.5^sqrt(ecoef.df[i,2:4])) / (1 - 0.5^sqrt(1 / ecoef.df[i,2:4]))
+        } 
+        
+        # Point estimate of risk ratio >= 1:
+        est <- ifelse(rr.df[i,2] >= 1, rr.df[i,2], 1 / rr.df[i,2])
+        lower <- ifelse(rr.df[i,2] >= 1, rr.df[i,3], 1 / rr.df[i,3])
+        upper <- ifelse(rr.df[i,2] >= 1, rr.df[i,4], 1 / rr.df[i,4])      
+        
+        eval.df[i,2] <- suppressWarnings(as.numeric(est + (sqrt(est * (est - 1)))))
+        eval.df[i,3] <- suppressWarnings(as.numeric(lower + (sqrt(lower * (lower - 1)))))
+        eval.df[i,4] <- suppressWarnings(as.numeric(upper + (sqrt(upper * (upper - 1)))))
+        
+        # flag == TRUE if confidence interval for RR includes one:
+        flag <- includes_null(lower = rr.df[i,3], upper = rr.df[i,4], null = 1)
+        
+        if(rr.df[i,2] >= 1 & flag == TRUE){
+          # Point estimate of RR greater than 1, CI for RR includes 1:
+          eval.df[i,3] <- 1
+          eval.df[i,4] <- NA
+        } 
+        
+        if(rr.df[i,2] >= 1 & flag == FALSE){
+          # Point estimate of RR greater than 1, CI for RR doesn't include 1:
+          eval.df[i,4] <- NA
+        }
+        
+        if(rr.df[i,2] < 1 & flag == TRUE){
+          # Point estimate of RR less than 1, CI for RR includes 1:
+          eval.df[i,3] <- NA
+          eval.df[i,4] <- 1
+        } 
+        
+        if(rr.df[i,2] < 1 & flag == FALSE){
+          # Point estimate of RR less than 1, CI for RR doesn't include 1:
+          eval.df[i,3] <- NA
+        }
+        
       }
-      
-      if(measure == "hazard.ratio" & rare == FALSE){
-        rr.df[i,2:4] <- (1 - 0.5^sqrt(ecoef.df[i,2:4])) / (1 - 0.5^sqrt(1 / ecoef.df[i,2:4]))
-      } 
-      
-      # Point estimate of risk ratio >= 1:
-      est <- ifelse(rr.df[i,2] >= 1, rr.df[i,2], 1 / rr.df[i,2])
-      lower <- ifelse(rr.df[i,2] >= 1, rr.df[i,3], 1 / rr.df[i,3])
-      upper <- ifelse(rr.df[i,2] >= 1, rr.df[i,4], 1 / rr.df[i,4])      
-       
-      eval.df[i,2] <- suppressWarnings(as.numeric(est + (sqrt(est * (est - 1)))))
-      eval.df[i,3] <- suppressWarnings(as.numeric(lower + (sqrt(lower * (lower - 1)))))
-      eval.df[i,4] <- suppressWarnings(as.numeric(upper + (sqrt(upper * (upper - 1)))))
-
-      # flag == TRUE if confidence interval for RR includes one:
-      flag <- includes_null(lower = rr.df[i,3], upper = rr.df[i,4], null = 1)
-
-      if(rr.df[i,2] >= 1 & flag == TRUE){
-        # Point estimate of RR greater than 1, CI for RR includes 1:
-        eval.df[i,3] <- 1
-        eval.df[i,4] <- NA
-      } 
-      
-      if(rr.df[i,2] >= 1 & flag == FALSE){
-        # Point estimate of RR greater than 1, CI for RR doesn't include 1:
-        eval.df[i,4] <- NA
-      }
-      
-      if(rr.df[i,2] < 1 & flag == TRUE){
-        # Point estimate of RR less than 1, CI for RR includes 1:
-        eval.df[i,3] <- NA
-        eval.df[i,4] <- 1
-      } 
-      
-      if(rr.df[i,2] < 1 & flag == FALSE){
-        # Point estimate of RR less than 1, CI for RR doesn't include 1:
-        eval.df[i,3] <- NA
-      }
-      
     }
-    
+      
     # Results:
     if(measure == "risk.ratio" | measure == "rate.ratio"){
       rval.ls <- list(rr = rr.df, eval = eval.df)

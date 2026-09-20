@@ -145,7 +145,7 @@ When method equals \code{cross.sectional} the following measures of association 
 
 The point estimates of the \code{wald}, \code{score} and \code{cfield} odds ratios are calculated using the cross product method. Method \code{mle} computes the conditional maximum likelihood estimate of the odds ratio.
 
-Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times are slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of event frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the total number of observations is less than 2E09. 
+Confidence intervals for the Cornfield (\code{cfield}) odds ratios are computed using the hypergeometric distribution and computation times can be slow when the cell frequencies are large. For this reason, Cornfield confidence intervals are only calculated if the total number of cell frequencies is less than 500. Maximum likelihood estimates of the odds ratio and Fisher's exact test are only calculated when the cell frequency total is less than 2E09. 
 
 If the Haldane-Anscombe (Haldane 1940, Anscombe 1956) correction is applied (i.e., addition of 0.5 to each cell of the 2 by 2 table when at least one of the cell frequencies is zero) Cornfield (\code{cfield}) odds ratios are not computed. 
 
@@ -156,6 +156,8 @@ The Mantel-Haenszel chi-squared test that the combined odds ratio estimate is eq
 Interpretive statements for NNTB and NNTH follow the approach described by Altman (1998). See the examples for details. Note that number needed to treat to benefit (NNTB) and number needed to treat to harm (NNTH) estimates are not computed when \code{method = "cohort.time"} or \code{method = "case.control"} because the attributable risk can't be calculated using these study designs.
 
 E-values are computed using the individual strata odds ratio Wald confidence interval estimates, crude odds ratio Wald confidence interval estimates, and Mantel-Haenszel adjusted Wald confidence interval estimates, where appropriate. When \code{method = "case.control"} the function sets the \code{rare} argument in function \code{epi.evalue} (called by \code{epi.2by2}) to \code{TRUE} when the frequency of the outcome is less than 0.05. Users wanting more control over this argument are advised to call function \code{\link{epi.evalue}} directly.
+
+\code{NAs} are returned for the e-value estimates when there are zero cell frequencies in one or more tables of a stratified analysis.
 }
 
 \references{

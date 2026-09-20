@@ -1,16 +1,16 @@
 epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less", "greater"), conf.level = 0.95) {
   
-  # Helper function to check for whole numbers
+  # Helper function to check for whole numbers:
   is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
     abs(x - round(x)) < tol
   }
   
-  # Helper function for trace
+  # Helper function for trace:
   tr <- function(x) {
     sum(diag(x))
   }
   
-  # Input validation
+  # Input validation:
   if (sum(is.wholenumber(dat)) != nrow(dat) * ncol(dat)) 
     stop("Error: epi.kappa requires whole numbers in each cell of the input table dat")
   
@@ -29,7 +29,7 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
   #   return(data.frame(est = p, lower = lower, upper = upper))
   # }
   
-  # Common calculations for all methods
+  # Common calculations for all methods:
   tmp <- zexact(dat = as.matrix(cbind(sum(diag(dat)), sum(dat))), conf.level = conf.level)
   pO.p <- as.numeric(tmp[, 1])
   pO.l <- as.numeric(tmp[, 2])
@@ -37,11 +37,11 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
   
   r.totals <- apply(X = dat, MARGIN = 1, FUN = sum)
   c.totals <- apply(X = dat, MARGIN = 2, FUN = sum)
-  pE.p <- sum(r.totals * c.totals)/n^2
+  pE.p <- sum(r.totals * c.totals) / n^2
   
   kappa.p <- (pO.p - pE.p) / (1 - pE.p)
   
-  # Method-specific SE calculations
+  # Method-specific SE calculations:
   if (method == "fleiss") {
     
     ndat <- dat / n
@@ -120,7 +120,7 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
   }
   
   else {
-    stop("Method must be one of: fleiss, fleiss.everitt, watson, altman, or cohen")
+    stop("Method must be one of: fleiss, fleiss.everitt, watson, altman or cohen")
   }
   
   # Calculate additional indices for 2 x 2 tables:
@@ -138,9 +138,34 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
     pi.se <- (sqrt(((a * (n - a)) / n^3) + ((d * (n - d)) / n^3)))
     pi.l <- (pi.p - (z * pi.se))
     pi.u <- (pi.p + (z * pi.se))
+    
+    # Create the 'Maximum Agreement' Table (Dunn's Logic). Maximise diagonal cells by taking the smaller of the two marginals:
+    a.max <- min(r.totals[1], c.totals[1])
+    d.max <- min(r.totals[2], c.totals[2])
+    n <- sum(dat)
+    
+    # Fill in disagreement cells to maintain fixed marginals:
+    b.max <- r.totals[1] - a.max 
+    c.max <- r.totals[2] - d.max
+    
+    max.tab <- matrix(c(a.max, b.max, c.max, d.max), nrow = 2, byrow = TRUE)
+    
+    # Calculate expected agreement (Pe) based on fixed marginals:
+    pe <- sum((r.totals * c.totals) / n) / n
+    
+    # Calculate max possible observed agreement (Po_max):
+    po.max <- (a.max + d.max) / n
+    po.max.var <- (po.max * (1 - po.max)) / n
+    
+    # Final maxK calculation:
+    maxk.se <- sqrt(po.max.var) / (1 - pe)
+    
+    maxk.est <- (po.max - pe) / (1 - pe)
+    maxk.low <- maxk.est - (z * maxk.se)
+    maxk.upp <- maxk.est + (z * maxk.se)
   }
   
-  # PABAK
+  # PABAK:
   pabak.p <- 2 * pO.p - 1
   pabak.l <- 2 * pO.l - 1
   pabak.u <- 2 * pO.u - 1
@@ -154,7 +179,7 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
                      less = pnorm(effect.z), 
                      greater = pnorm(effect.z, lower.tail = FALSE))
   
-  # McNemar test for 2x2 tables:
+  # McNemar test for 2 x 2 tables:
   if (nrow(dat) == 2) {
     mcnemar <- (dat[1,2] - dat[2,1])^2 / (dat[1,2] + dat[2,1])
     p.chi2 <- 1 - pchisq(mcnemar, df = 1)
@@ -168,6 +193,8 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
     bindex <- data.frame(est = bi.p, se = bi.se, lower = bi.l, upper = bi.u)
     pabak <- data.frame(est = pabak.p, lower = pabak.l, upper = pabak.u)
     kappa <- data.frame(est = kappa.p, se = kappa.se, lower = kappa.l, upper = kappa.u)
+    kappa.max <- data.frame(est = maxk.est, se = maxk.se, lower = maxk.low, upper = maxk.upp)
+    
     z <- data.frame(test.statistic = effect.z, p.value = p.effect)
     mcnemar <- data.frame(test.statistic = mcnemar, df = 1, p.value = p.chi2)
     
@@ -176,7 +203,9 @@ epi.kappa <- function(dat, method = "fleiss", alternative = c("two.sided", "less
                  pindex = pindex, 
                  bindex = bindex, 
                  pabak = pabak, 
-                 kappa = kappa, 
+                 kappa = kappa,
+                 kappa.max = kappa.max,
+                 
                  z = z, 
                  mcnemar = mcnemar)
   } else {

@@ -2,10 +2,10 @@
 
 \alias{epi.mbf}
 
-\title{Minimum Bayes Factor using the Goodman or Sellke et al. method.}
+\title{Minimum Bayes factor using the Goodman or Sellke et al. method.}
 
 \description{
-A function to calculate the Minimum Bayes Factor using the Goodman or Sellke et al. method.
+A function to calculate the minimum Bayes factor using the Goodman or Sellke et al. method.
 }
 
 \usage{

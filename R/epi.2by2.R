@@ -851,10 +851,11 @@
   if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
     # Risk ratio:
     x <- data.frame(var = "", est = wRR.p, low = wRR.l, upp = wRR.u)
-    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
-    eval.p    <- as.numeric(.tmp$eval[[2]])
-    eval.l    <- as.numeric(.tmp$eval[[3]])
-    eval.u    <- as.numeric(.tmp$eval[[4]])
+    
+      .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+      eval.p    <- as.numeric(.tmp$eval[[2]])
+      eval.l    <- as.numeric(.tmp$eval[[3]])
+      eval.u    <- as.numeric(.tmp$eval[[4]])
   }
   
   if(method == "case.control" & sM1 / stotal < 0.05){
@@ -877,8 +878,9 @@
     eval.p    <- as.numeric(.tmp$eval[[2]])
     eval.l    <- as.numeric(.tmp$eval[[3]])
     eval.u    <- as.numeric(.tmp$eval[[4]])
+    
   }
-
+  
   
   ## =============================
   ## CRUDE MEASURES OF ASSOCIATION
@@ -1106,33 +1108,67 @@
   if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
     # Risk ratio:
     x <- data.frame(var = "", est = cwRR.p, low = cwRR.l, upp = cwRR.u)
-    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
-    ceval.p    <- as.numeric(.tmp$eval[[2]])
-    ceval.l    <- as.numeric(.tmp$eval[[3]])
-    ceval.u    <- as.numeric(.tmp$eval[[4]])
+    
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
+    
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{
+      .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+      ceval.p    <- as.numeric(.tmp$eval[[2]])
+      ceval.l    <- as.numeric(.tmp$eval[[3]])
+      ceval.u    <- as.numeric(.tmp$eval[[4]])
+    }
   }
   
   if(method == "case.control" & sM1 / stotal < 0.05){
     # Odds ratio:
     x <- data.frame(var = "", est = cwOR.p, low = cwOR.l, upp = cwOR.u)
     
-    # rare == TRUE:
-    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
-    ceval.p    <- as.numeric(.tmp$eval[[2]])
-    ceval.l    <- as.numeric(.tmp$eval[[3]])
-    ceval.u    <- as.numeric(.tmp$eval[[4]])
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
+    
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{
+      # rare == TRUE:
+      .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
+      ceval.p    <- as.numeric(.tmp$eval[[2]])
+      ceval.l    <- as.numeric(.tmp$eval[[3]])
+      ceval.u    <- as.numeric(.tmp$eval[[4]])
+    }
   }
   
   if(method == "case.control" & sM1 / stotal >= 0.05){
     # Odds ratio:
     x <- data.frame(var = "", est = cwOR.p, low = cwOR.l, upp = cwOR.u)
+  
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
     
-    # rare == FALSE:
-    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
-    ceval.p    <- as.numeric(.tmp$eval[[2]])
-    ceval.l    <- as.numeric(.tmp$eval[[3]])
-    ceval.u    <- as.numeric(.tmp$eval[[4]])
-  }
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{  
+      # rare == FALSE:
+      .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
+      ceval.p    <- as.numeric(.tmp$eval[[2]])
+      ceval.l    <- as.numeric(.tmp$eval[[3]])
+      ceval.u    <- as.numeric(.tmp$eval[[4]])
+    }
+  }  
   
   
   ## ===============================
@@ -1237,35 +1273,68 @@
   if(method == "cohort.count" | method == "cohort.time" | method == "cross.sectional"){
     # Risk ratio:
     x <- data.frame(var = "", est = sRR.p, low = sRR.l, upp = sRR.u)
-    .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
-    seval.p    <- as.numeric(.tmp$eval[[2]])
-    seval.l    <- as.numeric(.tmp$eval[[3]])
-    seval.u    <- as.numeric(.tmp$eval[[4]])
+    
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
+    
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{
+      .tmp <- epi.evalue(x = x, measure = "risk.ratio", rare = TRUE, conf.level = conf.level)
+      seval.p    <- as.numeric(.tmp$eval[[2]])
+      seval.l    <- as.numeric(.tmp$eval[[3]])
+      seval.u    <- as.numeric(.tmp$eval[[4]])
+    }
   }
   
   if(method == "case.control" & sM1 / stotal < 0.05){
     # Odds ratio:
     x <- data.frame(var = "", est = sOR.p, low = sOR.l, upp = sOR.u)
     
-    # rare == TRUE:
-    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
-    seval.p    <- as.numeric(.tmp$eval[[2]])
-    seval.l    <- as.numeric(.tmp$eval[[3]])
-    seval.u    <- as.numeric(.tmp$eval[[4]])
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
+    
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{
+      # rare == TRUE:
+      .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = TRUE, conf.level = conf.level)
+      seval.p    <- as.numeric(.tmp$eval[[2]])
+      seval.l    <- as.numeric(.tmp$eval[[3]])
+      seval.u    <- as.numeric(.tmp$eval[[4]])
+    }
   }
   
   if(method == "case.control" & sM1 / stotal >= 0.05){
     # Odds ratio:
     x <- data.frame(var = "", est = sOR.p, low = sOR.l, upp = sOR.u)
     
-    # rare == FALSE:
-    .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
-    seval.p    <- as.numeric(.tmp$eval[[2]])
-    seval.l    <- as.numeric(.tmp$eval[[3]])
-    seval.u    <- as.numeric(.tmp$eval[[4]])
+    # Check for rows with NAs:
+    has_na <- any(is.na(x))
+    
+    if(has_na == TRUE){
+      eval.p    <- NA
+      eval.l    <- NA
+      eval.u    <- NA
+    }
+    
+    else{
+      # rare == FALSE:
+      .tmp <- epi.evalue(x = x, measure = "odds.ratio", rare = FALSE, conf.level = conf.level)
+      seval.p    <- as.numeric(.tmp$eval[[2]])
+      seval.l    <- as.numeric(.tmp$eval[[3]])
+      seval.u    <- as.numeric(.tmp$eval[[4]])
+    }
   }
   
-
 
   ## ===============================
   ## EFFECT OF CONFOUNDING
