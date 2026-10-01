@@ -1,3 +1,10 @@
+CHANGES IN epiR VERSION 2.0.99
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o New function epi.iref calculates diagnostic sensitivity and specificity using an imperfect reference test.
+    [Suggested by Ahmad Rabiee]
+
+
 CHANGES IN epiR VERSION 2.0.98
 SIGNIFICANT USER-VISIBLE CHANGES
 

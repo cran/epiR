@@ -1,6 +1,6 @@
 Package: epiR
-Version: 2.0.98
-Date: 2026-09-19
+Version: 2.0.99
+Date: 2026-10-01
 Title: Tools for the Analysis of Epidemiological Data
 Authors@R: c(person(given = "Mark", family = "Stevenson", role = c("aut", "cre"), email = "mark.stevenson1@unimelb.edu.au", comment = c(ORCID = "0000-0003-1890-9784")),
    person(given = "Evan", family = "Sergeant", role = "aut", email = "evansergeant@gmail.com"),
@@ -38,7 +38,7 @@ Suggests: MASS (>= 3.1-20), dplyr, foreign, ggplot2, knitr, rmarkdown,
 VignetteBuilder: knitr
 Encoding: UTF-8
 License: GPL (>= 2)
-Packaged: 2026-09-19 03:50:01 UTC; mstev
+Packaged: 2026-10-01 03:02:35 UTC; marks1
 RoxygenNote: 7.1.0
 NeedsCompilation: no
 Author: Mark Stevenson [aut, cre] (ORCID:
@@ -68,4 +68,4 @@ Author: Mark Stevenson [aut, cre] (ORCID:
   Aniko Szabo [ctb],
   Ahmad Rabiee [ctb]
 Repository: CRAN
-Date/Publication: 2026-09-20 02:30:37 UTC
+Date/Publication: 2026-10-01 09:20:02 UTC

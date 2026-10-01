@@ -39,29 +39,29 @@ epi.2by2(dat, method = "cohort.count", elab = NA, olab = NA, digits = 2,
 Where method is \code{cohort.count}, \code{case.control}, or \code{cross.sectional} and \code{outcome = as.columns} the required 2 by 2 table format is:
 
 \tabular{llll}{
------------\tab ----------\tab ---------- \tab ----------\cr 
- 		       \tab Disease +	\tab Disease -  \tab Total     \cr
------------\tab ----------\tab ---------- \tab ----------\cr                  
-Expose +	 \tab a		      \tab b		      \tab a+b       \cr
-Expose -   \tab c		      \tab d		      \tab c+d       \cr
------------\tab ----------\tab ---------- \tab ----------\cr 
-Total      \tab a+c       \tab b+d        \tab a+b+c+d   \cr
------------\tab ----------\tab ---------- \tab ----------\cr 
-   }
-   
+------------ \tab ------------ \tab ------------ \tab ------------ \cr 
+ 		         \tab Disease +    \tab Disease -    \tab Total        \cr
+------------ \tab ------------ \tab ------------ \tab ------------ \cr                  
+Exposure +   \tab a		         \tab b		         \tab a+b          \cr
+Exposure -   \tab c		         \tab d		         \tab c+d          \cr
+------------ \tab ------------ \tab ------------ \tab ------------ \cr 
+Total        \tab a + c        \tab b + d        \tab a + b + c + d\cr
+------------ \tab ------------ \tab ------------ \tab ------------ \cr 
+}
+
+ 
 Where method is \code{cohort.time} and \code{outcome = as.columns} the required 2 by 2 table format is:
 
-\tabular{lll}{
------------\tab ----------\tab ------------- \cr 
- 		       \tab Disease +	\tab Time at risk  \cr
------------\tab ----------\tab ------------- \cr                   
-Expose +	 \tab a		      \tab b		  	     \cr
-Expose -   \tab c		      \tab d             \cr
------------\tab ----------\tab ------------- \cr 
-Total      \tab a+c     	\tab b+d           \cr
------------\tab ----------\tab ------------- \cr
-   }
-
+\tabular{llll}{
+------------ \tab ------------ \tab ------------ \cr 
+ 		         \tab Disease +    \tab Time at risk \cr
+------------ \tab ------------ \tab ------------ \cr                  
+Exposure +   \tab a		         \tab b		         \cr
+Exposure -   \tab c		         \tab d		         \cr
+------------ \tab ------------ \tab ------------ \cr 
+Total        \tab a + c        \tab b + d        \cr
+------------ \tab ------------ \tab ------------ \cr 
+}
 }
 
 \value{
@@ -340,9 +340,9 @@ print(dat.epi02)
 ## having a low birth weight child for smokers was 3.09 (95\% CI 1.49 to 6.39)
 ## times that of non-smokers.
 
-## After controlling for the confounding effect of case, a (residual) 
+## After controlling for the confounding effect of race, a (residual) 
 ## confounder in this study would need to be associated with 
-## both smoking and low BW by a risk ratio of at least 5.62 (each) to 
+## both smoking and low BW by a risk ratio of at least 3.73 (each) to 
 ## completely account for the observed Mantel-Haenszel adjusted odds ratio 
 ## of 3.09. 
 

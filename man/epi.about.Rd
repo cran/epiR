@@ -69,6 +69,7 @@ The functions in \pkg{epiR} can be categorised into two main groups: tools for e
     \code{\link{epi.directadj}}         \tab Directly adjusted incidence rate estimates. \cr
     \code{\link{epi.edr}}               \tab Compute estimated dissemination ratios from outbreak event data. \cr
     \code{\link{epi.empbayes}}          \tab Empirical Bayes estimates of observed event counts. \cr
+    \code{\link{epi.evalue}}            \tab Compute E-value for risk, rate, odds and hazard ratio estimates. \cr
     \code{\link{epi.indirectadj}}       \tab Indirectly adjusted incidence risk estimates. \cr
     \code{\link{epi.insthaz}}           \tab Instantaneous hazard estimates based on Kaplan-Meier survival estimates. \cr
     \code{\link{epi.smr}}               \tab Confidence intervals and tests of statistical significance of the standardised mortality [morbidity] ratio. \cr    
@@ -83,6 +84,7 @@ The functions in \pkg{epiR} can be categorised into two main groups: tools for e
     \code{\link{epi.blcm.paras}}         \tab Number of parameters to be inferred and number of informative priors for a BLCA. \cr
     \code{\link{epi.fpos}}               \tab Calculate the expected number of false positive and false negative test results. \cr
     \code{\link{epi.herdtest}}           \tab Estimate the characteristics of diagnostic tests applied at the herd (group) level. \cr
+    \code{\link{epi.iref}}               \tab Calculate diagnostic sensitivity and specificity using an imperfect reference test. \cr    
     \code{\link{epi.nomogram}}           \tab Compute the post-test probability of disease given characteristics of a diagnostic test. \cr
     \code{\link{epi.pooled}}             \tab Estimate herd test characteristics when samples are pooled. \cr
     \code{\link{epi.prev}}               \tab Compute the true prevalence of a disease in a population on the basis of an imperfect test. \cr
